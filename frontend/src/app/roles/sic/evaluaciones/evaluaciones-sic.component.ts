@@ -12,9 +12,7 @@ export class EvaluacionesSicComponent implements OnInit {
 
   // evaluaciones: Usuario[] = [];
 
-  evaluaciones: any[] = [{
-    "nombrePrestador": "dhash"
-  }];
+  evaluaciones: any[] = [];
   
 
   
