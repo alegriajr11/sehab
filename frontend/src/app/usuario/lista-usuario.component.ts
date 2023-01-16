@@ -1,13 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { Usuario } from '../models/usuario';
 import { TokenService } from '../services/token.service';
 import { UsuarioService } from '../services/usuario.service';
-import jsPDF from 'jspdf'
 import 'jspdf-autotable'
-import autoTable from 'jspdf-autotable'
-import { Rol } from '../models/roles';
+
 
 
 
