@@ -1,0 +1,12 @@
+.titulo2{
+    text-align: center;
+    color: white;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 12fr;
+    align-content: center;
+    justify-content: center;
+}
+

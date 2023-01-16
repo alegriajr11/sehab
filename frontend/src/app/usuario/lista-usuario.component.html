@@ -1,0 +1,74 @@
+<app-menu></app-menu>
+
+<div class="container" *ngIf="!listaVacia">
+  <div class="table-wrapper">
+    <div class="table-title">
+      <div class="row">
+        <div class="">
+          <h2><b>Usuarios</b></h2>
+        </div>
+        <div class="">
+          <button class="btn btn-secondary" routerLink="/usuarios/nuevo" title="Nuevo Usuario">
+            <i class="material-icons">&#xE147;</i>
+            <span>Agregar Nuevo Usuario</span></button>
+
+            <button class="btn btn-secondary" title="Exportar Pdf" (click)="crearPDF()">
+              <i class="material-icons">&#xE24D;</i>
+              <span>Exportar a Pdf</span></button>
+
+          <!-- <a class="btn btn-secondary" (click)="crearPDF()"><i class="material-icons">&#xE24D;</i>
+            <span>Exportar a Pdf</span></a> -->
+        </div>
+      </div>
+    </div>
+    <table class="table table-wrapper text-center table-hover" id="usuarios">
+      <thead>
+        <tr>
+          <th scope="col">Cod</th>
+          <th scope="col">Nombres</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Rol</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Fecha de Creación</th>
+          <th scope="col" *ngIf="isAdmin">Editar</th>
+          <th scope="col" *ngIf="isAdmin">Borrar</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr *ngFor="let usuario of this.usuarios; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ usuario.usu_nombre }}</td>
+          <td>{{ usuario.usu_apellido }}</td>
+          <td class="usu">{{ usuario.usu_nombreUsuario }}</td>
+          <!-- <td>Rol</td> -->
+          <td *ngFor="let rol of this.usuario.roles">{{rol.rol_nombre | uppercase}}</td>
+          <!-- <td *ngFor="let rol of this.usuario.roles;"><span>{{rol.rol_nombre | uppercase}}</span></td> -->
+          <!-- <td><span>{{rol.rol_nombre | uppercase}}</span></td> -->
+          <td *ngIf="usuario.usu_estado == 'true'"><span class="active">ACTIVO</span></td>
+          <td *ngIf="usuario.usu_estado == 'false'"><span class="inactive">INACTIVO</span></td>
+          <td>{{usuario.usu_creado | date: 'dd/MM/yyyy' }}</td>
+          <td *ngIf="isAdmin">
+            <button class="btn btn-outline-warning" routerLink="/usuarios/editar/{{usuario.usu_id}}">
+              <i class="far fa-edit"></i>
+            </button>
+          </td>
+          <td *ngIf="isAdmin">
+            <button class="btn btn-outline-danger" (click)="borrar(usuario.usu_id)">
+              <i class="far fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="container" *ngIf="listaVacia">
+  <div class="p-3 mb-2 bg-dark text-white text-center">
+    <h2>{{ listaVacia }}</h2>
+  </div>
+</div>
+
+<app-footer></app-footer>
