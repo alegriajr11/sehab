@@ -12,7 +12,7 @@ export class GenerarpdfController {
         
     ) { }
 
-
+    //DECORADOR SOLICITANDO SERVICIO GENERAR PDF
     @Get('usuarios')
     async descargarPdf(@Res() res): Promise<void> {
         const buffer = await this.generarPdfService.generarPdf()
