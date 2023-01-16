@@ -338,8 +338,6 @@ export class ActaSicComponent implements OnInit {
     var valorCargoPres = cargoPres.value
 
 
-    const fechaGenerada = Date()
-
     const fechaGenrada = new Date();
     const formatoFecha = new Intl.DateTimeFormat('es-ES').format(fechaGenrada);
 

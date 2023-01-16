@@ -12,8 +12,11 @@ export class EvaluacionesSicComponent implements OnInit {
 
   // evaluaciones: Usuario[] = [];
 
-  evaluaciones: any[] = [];
-    
+  evaluaciones: any[] = [{
+    "nombrePrestador": "dhash"
+  }];
+  
+
   
   searchText: any;
 
@@ -26,5 +29,6 @@ export class EvaluacionesSicComponent implements OnInit {
   ngOnInit(): void {
     
   }
+
 
 }
