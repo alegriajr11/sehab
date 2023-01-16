@@ -1,0 +1,221 @@
+<app-menu></app-menu>
+
+<div class="grid-container">
+    <button class="btn btn-light esp btn-circle btn-xl" routerLink="/pamec">
+        <i class="fa fa-reply fa-lg"></i>
+    </button>
+    <h1 class="text-center">Programa de auditoria para el mejoramiento de la calidad (PAMEC)</h1>
+</div>
+
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="col-12">
+                <h3 class="text-center">ACTA DE VISITA</h3>
+            </div>
+            <hr class="medio">
+            <form class="row g-3" #f="ngForm" novalidate (ngSubmit)="onRegister()">
+
+                <div class="col-md-2">
+                    <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
+                    <input type="number" min="0" class="form-control" id="inputN_Acta" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">FECHA DE LA VISITA</label>
+                    <input type="date" class="form-control" id="fecha-visita">
+                </div>
+
+                <div class="col-7">
+                    <label for="" class="form-label">TIPO DE VISITA</label>
+                    <select id="tip_visita" class="form-select form-control" (change)="tipoVisita()">
+                        <option hidden selected>Tipo de Visita...</option>
+                        <option value="1">PRIMERA VEZ</option>
+                        <option value="2">SEGUIMIENTO A IPS CRITICA</option>
+                        <option value="3">SEGUIMIENTO A IPS VISITADA EN LOS ÚLTIMOS 4 AÑOS</option>
+                        <option value="4">AÑO DE FORMULACION DEL PAMEC</option>
+                        <option value="5">CICLO DE MEJORAMIENTO</option>
+                    </select>
+                </div>
+                <div class="col-3" *ngIf="formulacion">
+                    <label for="" class="form-label text-center">AÑO DE FORMULACION:</label>
+                    <input type="number" class="form-control" ngModel="number"
+                        onkeypress="if(this.value.length==4) return false;">
+                </div>
+
+                <div class="col-3" *ngIf="mejoramiento">
+                    <label for="" class="form-label text-center">CICLO DE MEJORAMIENTO</label>
+                    <select id="id_mejora" class="form-select form-control">
+                        <option hidden selected>Selecciona el Ciclo...</option>
+                        <option value="1">1°</option>
+                        <option value="2">2°</option>
+                        <option value="3">3°</option>
+                    </select>
+                </div>
+
+
+
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <h3>INFORMACION DEL PRESTADOR</h3>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="habilitado" class="form-label">Municipio:</label>
+                    <select id="mun_id" name="mun_id" class="form-select form-control"
+                        (change)="cargarPrestadoresByMun()">
+                        <option hidden selected>Selecciona un Municipio...</option>
+                        <option *ngFor="let municipio of municipio" value="{{municipio.mun_id}}">
+                            {{municipio.mun_nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="inputAddress" class="form-label">Prestador:</label>
+                    <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()">
+                        <option hidden selected>Selecciona un Prestador...</option>
+                        <option *ngFor="let prestador of prestador" value="{{prestador.pre_cod_habilitacion}}">
+                            {{prestador.pre_nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="col-6">
+                    <label for="inputAddress2" class="form-label">Nit:</label>
+                    <input type="text" class="form-control" id="nit" placeholder="Nit" readonly>
+                </div>
+
+
+                <div class="col-6">
+                    <label for="inputAddress2" class="form-label">Dirección:</label>
+                    <input type="text" class="form-control" id="direccion" placeholder="Dirección Prestador" readonly>
+                </div>
+
+                <div class="col-6">
+                    <label for="inputAddress2" class="form-label">Barrio:</label>
+                    <input type="text" class="form-control" id="barrio" placeholder="Barrio" required>
+                </div>
+
+                <div class="col-6">
+                    <label for="inputAddress2" class="form-label">Telefono:</label>
+                    <input type="tel" class="form-control" id="telefono" placeholder="Telefono" readonly>
+                </div>
+
+                <div class="col-12">
+                    <label for="inputAddress2" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" placeholder="E-mail" readonly>
+                </div>
+
+                <div class="col-12">
+                    <label for="inputAddress" class="form-label">Sede Principal:</label>
+
+                    <select id="sedep" class="form-select form-control" (change)="sedePrincipal()" required>
+                        <option hidden selected>Sede Principal...</option>
+                        <option value="si">Si</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+
+                <div class="col-md-12" id="msj">
+                </div>
+                <div class="col-md-6" *ngIf="sedPrincipal">
+                    <label for="inputAddress2" class="form-label">Localidad:</label>
+                    <input type="text" class="form-control" id="localidad" placeholder="Localidad" required>
+                </div>
+                <div class="col-md-6" *ngIf="sedPrincipal">
+                    <label for="inputAddress2" class="form-label">Dirección:</label>
+                    <input type="text" class="form-control" id="dirubic" placeholder="Dirección" required>
+                </div>
+
+                <div class="container row">
+                    <div class="col-md-6">
+                        <label for="" class="form-label">Representante Legal:</label>
+                        <input type="text" class="form-control" id="repleg" readonly>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label for="" class="form-label">Código Prestador:</label>
+                        <input type="text" class="form-control" id="codpres" readonly>
+                    </div>
+                </div>
+
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <h3 class="text-center sizeh3">FIRMAS</h3>
+                </div>
+
+                <div class="col-12 bg-h3 contenedor-form">
+                    <h3 class="text-center sizeh3">FUNCIONARIOS DESIGNADOS</h3>
+                </div>
+
+                <div class="container row" id="contenedor">
+                    <div class="col-md-6" id="nom_secre">
+                        <label for="" class="form-label">Nombre:</label>
+                        <select id="usu_secretaria" class="form-select form-control">
+                            <option hidden selected>Selecciona el Nombre...</option>
+                            <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
+                                {{usuario.usu_apellido}}</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6" id="cargo_secre">
+                        <label for="" class="form-label">Cargo:</label>
+                        <input type="text" class="form-control" id="" placeholder="Cargo...">
+                    </div>
+
+                </div>
+
+                <div class="container row">
+                    <div class="col-md-6" *ngIf="botonAgregar">
+                        <button id="newList" class="btn btn-dark btn-circle btn-xlm newList" title="Mas"
+                            (click)="agregarNuevoUser()">
+                            <i class='fa fa-plus'></i></button>
+                    </div>
+
+                    <div class="col-md-6" *ngIf="botonCerrar">
+                        <button id="newList" class="btn btn-dark btn-circle btn-xlm newList" title="Mas"
+                            (click)="eliminarDivUser()">
+                            <i class='fa fa-close'></i></button>
+                    </div>
+                </div>
+
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
+                    <select id="inputState" class="form-select form-control">
+                        <option hidden selected>Objeto de visita...</option>
+                        <option>REALIZAR SEGUIMIENTO A LA IMPLEMENTACION DE LA AUDITORIA PARA EL MEJORAMIENTO DE LA
+                            CALIDAD Y LA APLICACIÓN DEL PAMEC</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <textarea name="" id="" rows="5">EN EL S.O.G.C LA AUDITORÍA ES UN COMPONENTE DE MEJORAMIENTO CONTINUO, Y SE ENTIENDE COMO EL MECANISMO SISTEMÁTICO Y CONTINUO DE EVALUACIÓN DEL CUMPLIMIENTO DE ESTÁNDARES DE CALIDAD, CONCORDANTES CON LA INTENCIONALIDAD DE LOS ESTÁNDARES DE ACREDITACIÓN Y SUPERIORES A LOS QUE SE DETERMINAN COMO BÁSICOS EN EL SISTEMA ÚNICO DE HABILITACIÓN. EL PAMEC ES LA FORMA A TRAVÉS DE LA CUAL LA IPS IMPLEMENTA ESTE COMPONENTE.</textarea>
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
+                        [disabled]="!f.valid">
+                        <i class='fa fa-save fa-lg'></i></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!--Fin Div Container-->
+
+<app-footer></app-footer>

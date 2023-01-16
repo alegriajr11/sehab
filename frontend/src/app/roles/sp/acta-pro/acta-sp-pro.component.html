@@ -1,0 +1,201 @@
+<app-menu></app-menu>
+
+<div class="grid-container">
+    <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sp">
+        <i class="fa fa-reply fa-lg"></i>
+    </button>
+    <h1 class="text-center">Evaluación de Seguridad del Paciente - Profesionales Independientes</h1>
+</div>
+
+<br>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title text-center">ACTA DE VISITA DE VERIFICACIÓN DEL CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES</h2>
+            <hr class="up">
+            <form #f="ngForm" novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()">
+                <div class="col-md-1">
+                    <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
+                    <input type="number" min="0" class="form-control" id="inputN_Acta">
+                </div>
+                <div class="col-md-2">
+                    <label for="inicial" class="form-label">VISITA INICIAL</label>
+                    <label class="switch">
+                        <input type="checkbox" id="inicial" onclick="unsoloCheckbox()" name="inicial">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="segumiento" class="form-label">VISITA DE SEGUIMIENTO</label>
+                    <label class="switch">
+                        <input type="checkbox" id="segumiento" onclick="unsoloCheckbox()" name="segumiento">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">FECHA INICIAL</label>
+                    <input type="date" class="form-control" id="">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">FECHA FINAL</label>
+                    <input type="date" class="form-control" id="">
+                </div>
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <h3>INFORMACION DEL PRESTADOR</h3>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="habilitado" class="form-label">Municipio:</label>
+                    <select id="mun_id" name="mun_id" class="form-select form-control" (change)="cargarPrestadoresByMun()">
+                        <option hidden selected>Selecciona un Municipio...</option>
+                        <option *ngFor="let municipio of municipio" value="{{municipio.mun_id}}">{{municipio.mun_nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="inputAddress" class="form-label">Prestador:</label>
+                    <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()">
+                        <option hidden selected>Selecciona un Prestador...</option>
+                        <option *ngFor="let prestador of prestador" value="{{prestador.pre_cod_habilitacion}}">{{prestador.pre_nombre}}</option>
+                    </select>
+                </div>
+
+                <div class="col-6">
+                    <label for="inputAddress2" class="form-label">Nit:</label>
+                    <input type="text" class="form-control" id="nit"
+                        placeholder="Nit" readonly>
+                </div>
+                
+
+                <div class="col-6">
+                    <label for="inputAddress2" class="form-label">Dirección:</label>
+                    <input type="text" class="form-control" id="direccion"
+                        placeholder="Dirección Prestador" readonly>
+                </div>
+                
+                <div class="col-6">
+                    <label for="inputAddress2" class="form-label">Barrio:</label>
+                    <input type="text" class="form-control" id="barrio"
+                        placeholder="Barrio Prestador" required>
+                </div>
+
+                <div class="col-6">
+                    <label for="inputAddress2" class="form-label">Telefono:</label>
+                    <input type="tel" class="form-control" id="telefono"
+                        placeholder="Telefono" readonly>
+                </div>
+
+                <div class="col-12">
+                    <label for="inputAddress2" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email"
+                        placeholder="E-mail" readonly>
+                </div>
+
+                <div class="col-12">
+                    <label for="inputAddress" class="form-label">Sede Principal:</label>
+                    
+                    <select id="sedep" class="form-select form-control" (change)="sedePrincipal()">
+                        <option hidden selected>Sede Principal...</option>
+                        <option value="si">Si</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="col-md-12" id="msj">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputAddress2" class="form-label">Localidad:</label>
+                    <input type="text" class="form-control" id="localidad"
+                        placeholder="Localidad" disabled>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputAddress2" class="form-label">Dirección:</label>
+                    <input type="text" class="form-control" id="dirubic"
+                        placeholder="Dirección" disabled>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Representante Legal:</label>
+                    <input type="text" class="form-control" id="repleg"
+                    placeholder="Representante Legal" readonly>
+                </div>
+
+                
+                <div class="col-md-6">
+                    <label for="" class="form-label">Código Prestador:</label>
+                    <input type="text" class="form-control" id="codpres"
+                    placeholder="Código Prestador" readonly>
+                </div>
+
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
+                    <select id="inputState" class="form-select form-control">
+                        <option hidden selected>Objeto de visita...</option>
+                        <option>Realizar seguimiento a la implementación del programa de seguridad del paciente para profesionales independientes.</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <h3 class="text-center sizeh3">FIRMAS</h3>
+                </div>
+
+                <div class="col-12 bg-h3 contenedor-form">
+                    <h3 class="text-center sizeh3">POR SECRETARIA DE SALUD DEPARTAMENTAL</h3>
+                </div>
+
+                <div class="col-12">
+                    <label for="" class="form-label">Nombre:</label>
+                    <select id="usu_secretaria" class="form-select form-control">
+                        <option hidden selected>Selecciona el Nombre...</option>
+                        <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}} {{usuario.usu_apellido}}</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label for="" class="form-label">Cargo:</label>
+                    <input type="text" class="form-control" id="" placeholder="Cargo...">
+                </div>
+
+                <div class="col-12 bg-h3 contenedor-form">
+                    <h3 class="text-center sizeh3">PRESTADOR DE SERVICIOS DE SALUD</h3>
+                </div>
+
+                <div class="col-12">
+                    <label for="" class="form-label">Nombre:</label>
+                    <select id="" class="form-select form-control">
+                        <option selected>Nombre...</option>
+                        <option>...</option>
+                        <option>...</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label for="" class="form-label">Cargo:</label>
+                    <input type="text" class="form-control" id="" placeholder="Cargo...">
+                </div>
+
+
+                <div class="col-12">
+                    <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit">
+                        <i class='fa fa-save fa-lg'></i>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!--Fin Div Container-->
+
+<app-footer></app-footer>

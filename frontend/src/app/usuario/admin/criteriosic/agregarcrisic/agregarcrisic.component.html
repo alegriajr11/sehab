@@ -1,0 +1,66 @@
+<app-menu></app-menu>
+
+<div class="grid-container">
+    <button class="btn btn-light esp btn-circle btn-xl" routerLink="/criteriosic">
+        <i class="fa fa-reply fa-lg"></i>
+    </button>
+    <h1>AGREGAR CRITERIOS - SISTEMA DE INFORMACION DE CALIDAD</h1>
+</div>
+
+
+<div class="container_head">
+    <div class="col">
+        <label for="">Dominio:</label>
+        <select class="form-select form-control" name="dom_id" id="dom_id" (change)="cargarIndicadoresByDom()">
+            <option hidden selected value="">Selecciona el Dominio...</option>
+            <option *ngFor="let dominio of dominio" value="{{dominio.dom_id}}">{{dominio.dom_nombre}}</option>
+        </select>
+    </div>
+    <div class="col">
+        <label for="">Indicador:</label>
+        <select class="form-select form-control" name="ind_id" id="ind_id" (change)="llenarSpan()">
+            <option hidden selected value="">Selecciona el Indicador...</option>
+            <option *ngFor="let indicador of indicador" value="{{indicador.ind_id}}">{{indicador.ind_nombre}}</option>
+        </select>
+    </div>
+
+</div>
+
+
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h5><b>Dominio:</b></h5>
+                    <span id="dom_nombre"></span>
+                </div>
+                <div class="col-sm-6">
+                    <h5><b>Indicador:</b></h5>
+                    <span id="ind_nombre"></span>
+                </div>
+            </div>
+        </div>
+        <form #f="ngForm" novalidate (ngSubmit)="onRegister()">
+            <div>
+                <h4>Criterio:</h4>
+            </div>
+            <div class="">
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-dark btn-block col-sm-2" type="submit" [disabled]="!f.valid">
+                    <i class='fa fa-user-plus'></i> Crear Criterio
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- <div class="container" *ngIf="listaVacia">
+    <div class="p-3 mb-2 bg-dark text-white text-center">
+        <h2>{{ listaVacia }}</h2>
+    </div>
+</div> -->
+
+<app-footer></app-footer>
