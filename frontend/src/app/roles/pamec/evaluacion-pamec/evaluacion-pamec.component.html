@@ -25,7 +25,7 @@
                         <th class="col-md-3 borderVertical" scope="col">Criterio</th>
                         <th class="col-md-3 borderVertical" scope="col">Desarrollo por Etapas</th>
                         <th class="col-md-1 borderVertical" scope="col">Calificación</th>
-                        <th class="col-md-1 borderVertical" scope="col">N/A</th>
+                        <th class="col-md-1 borderVertical" scope="col">APLICA</th>
                         <th class="col-md-7 borderVertical" scope="col">Observaciones</th>
                     </tr>
                 </thead>
@@ -34,15 +34,18 @@
                         <td style="border-top: 1px solid black;" class="borderHorizontal num" >{{i+1}}</td>
                         <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">{{criterio.crip_nombre}}</td>
                         <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">{{criterio.crip_desarrollo_etapas}}</td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"><select class="form-control" name="" id="">
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
+                            <select class="form-control" name="" id="sel-calificacion">
                             <option hidden></option>
                             <option value="5">5</option>
                             <option value="3">3</option>
                             <option value="1">1</option>
                         </select></td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"><select class="form-control" name="" id="">
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
+                            <select class="form-control" name="" id="sel-aplica">
                             <option hidden></option>
-                            <option value="no">No Aplica</option>
+                            <option value="Si">Si</option>
+                            <option value="No">No</option>
                         </select></td>
                         <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"> <textarea type="text" class="form-control" name="crip_desarrollo_etapas" id="crip_desarrollo_etapas"
                             required autocomplete="off"></textarea></td>
