@@ -42,6 +42,7 @@ import { GenerarpdfModule } from './generarpdf/generarpdf.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
         logging: false,
+        
       }),
       inject: [ConfigService],
     }),

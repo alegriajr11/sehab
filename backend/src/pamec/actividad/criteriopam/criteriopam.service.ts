@@ -28,6 +28,12 @@ export class CriteriopamService {
         return criterios;
     }
 
+    async getall(): Promise<CriteriopamEntity[]>{
+        const usuario = await this.criteriopamRepository.find()
+        if(!usuario.length) throw new NotFoundException(new MessageDto('No hay Criterios en la lista'))
+        return usuario
+    }
+
     async findByCri(crip_id: number): Promise<CriteriopamEntity> {
         const criterio = await this.criteriopamRepository.findOne({ where: { crip_id } })
         if (!criterio) {
@@ -57,6 +63,7 @@ export class CriteriopamService {
             throw new NotFoundException(new MessageDto('El Criterio No Existe'));
 
         dto.crip_nombre ? criterio.crip_nombre = dto.crip_nombre : criterio.crip_nombre = criterio.crip_nombre;
+        dto.crip_desarrollo_etapas ? criterio.crip_desarrollo_etapas = dto.crip_desarrollo_etapas : criterio.crip_desarrollo_etapas = criterio.crip_desarrollo_etapas;
 
         await this.criteriopamRepository.save(criterio);
 

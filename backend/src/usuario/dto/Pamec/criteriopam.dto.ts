@@ -7,8 +7,12 @@ export class CriterioPamDto {
     
     @IsNotBlank()
     @IsString()
-    @MaxLength(650, {message: 'el criterio debe tener: longitud máxima de 650 caracteres'})
+    @MaxLength(700, {message: 'el criterio debe tener: longitud máxima de 700 caracteres'})
     crip_nombre: string;
 
+    @IsNotBlank()
+    @IsString()
+    @MaxLength(700, {message: 'el desarrollo etapas debe tener: longitud máxima de 700 caracteres'})
+    crip_desarrollo_etapas: string;
 
 }

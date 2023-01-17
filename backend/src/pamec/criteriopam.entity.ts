@@ -9,6 +9,9 @@ export class CriteriopamEntity {
 
     @Column({type: 'varchar', length: 700, nullable: false, unique: false})
     crip_nombre: string;
+    
+    @Column({type: 'varchar', length: 700, nullable: false, unique: false})
+    crip_desarrollo_etapas: string;
 
 
     @ManyToOne(type => ActividadEntity, actividad => actividad.act_criteriopam)

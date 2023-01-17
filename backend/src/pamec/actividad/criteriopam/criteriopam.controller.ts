@@ -18,6 +18,13 @@ export class CriteriopamController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @Get()
+    async getAll(){
+        return await this.criteriopamService.getall()
+    }
+
+
+    @UseGuards(JwtAuthGuard)
     @Get('criterio/:id')
     async getOneCriterio(@Param('id', ParseIntPipe) id: number){
         return await this.criteriopamService.findByCri(id);
