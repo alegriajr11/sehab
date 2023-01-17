@@ -30,6 +30,8 @@ export class ActaPamecComponent implements OnInit {
 
   pre_municipio: { mun_id: number }
 
+  boton_acta_pamec = false;
+
 
 
 
@@ -213,6 +215,31 @@ export class ActaPamecComponent implements OnInit {
 
   
 
+  obtenerNombres(): void {
+    //OBTENER NOMBRE DEL PRESTADOR
+    var idp = (document.getElementById('prestador')) as HTMLSelectElement
+    var selp = idp.selectedIndex;
+    var optp = idp.options[selp]
+    var valorPrestador = (<HTMLSelectElement><unknown>optp);
+    sessionStorage.setItem("nombre-pres-pamec", valorPrestador.textContent);
+
+    //USUARIO SECRETARIA
+    var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
+    var selUsuSecre = idUsuSecre.selectedIndex;
+    var optUsuSecre = idUsuSecre.options[selUsuSecre]
+    var valorUsuSecre = (<HTMLSelectElement><unknown>optUsuSecre);
+    sessionStorage.setItem("nombre-usuario-pamec", valorUsuSecre.textContent);
+
+    //CARGO USUARIO SECRETARIA
+    var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
+    var valorCargoSecre = cargoSecre.value
+    sessionStorage.setItem("cargo-usuario-pamec", valorCargoSecre);
+
+    //CARGO PRESTADOR
+    var cargoPres = (document.getElementById('cargoPres')) as HTMLInputElement
+    var valorCargoPres = cargoPres.value
+    sessionStorage.setItem("cargo-prestador-pamec", valorCargoPres);
+  }
 
   onRegister(): void {
 

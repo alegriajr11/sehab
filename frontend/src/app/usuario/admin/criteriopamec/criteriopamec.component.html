@@ -21,7 +21,7 @@
 
 
 
-<div class="container">
+<div class="container size">
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
@@ -41,6 +41,7 @@
                 <tr *ngIf="controlCriterio">
                     <th scope="col">Cod</th>
                     <th scope="col">Criterio</th>
+                    <th scope="col">Desarrollo Etapas</th>
                     <th scope="col">Editar</th>
                     <th scope="col">Borrar</th>
                 </tr>
@@ -49,6 +50,7 @@
                 <tr *ngFor="let criterio of criteriopam; let i = index">
                     <td>{{i+1}}</td>
                     <td>{{criterio.crip_nombre}}</td>
+                    <td>{{criterio.crip_desarrollo_etapas}}</td>
                     <td>
                         <button class="btn btn-outline-warning" routerLink="/criteriopam/editar/{{criterio.crip_id}}" (click)="obtenerNombreActividad();">
                         <i class="far fa-edit"></i>

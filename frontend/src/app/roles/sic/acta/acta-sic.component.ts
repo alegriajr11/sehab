@@ -197,24 +197,24 @@ export class ActaSicComponent implements OnInit {
     var selp = idp.selectedIndex;
     var optp = idp.options[selp]
     var valorPrestador = (<HTMLSelectElement><unknown>optp);
-    sessionStorage.setItem("nombre-pres", valorPrestador.textContent);
+    sessionStorage.setItem("nombre-pres-sic", valorPrestador.textContent);
 
     //USUARIO SECRETARIA
     var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
     var selUsuSecre = idUsuSecre.selectedIndex;
     var optUsuSecre = idUsuSecre.options[selUsuSecre]
     var valorUsuSecre = (<HTMLSelectElement><unknown>optUsuSecre);
-    sessionStorage.setItem("nombre-usuario", valorUsuSecre.textContent);
+    sessionStorage.setItem("nombre-usuario-sic", valorUsuSecre.textContent);
 
     //CARGO USUARIO SECRETARIA
     var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
     var valorCargoSecre = cargoSecre.value
-    sessionStorage.setItem("cargo-usuario", valorCargoSecre);
+    sessionStorage.setItem("cargo-usuario-sic", valorCargoSecre);
 
     //CARGO PRESTADOR
     var cargoPres = (document.getElementById('cargoPres')) as HTMLInputElement
     var valorCargoPres = cargoPres.value
-    sessionStorage.setItem("cargo-prestador", valorCargoPres);
+    sessionStorage.setItem("cargo-prestador-sic", valorCargoPres);
   }
 
 

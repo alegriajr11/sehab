@@ -63,11 +63,9 @@ import { EditarcriteipsverifComponent } from './usuario/admin/criterio-sp-ips/ed
 import { EditarcriteipsimplComponent } from './usuario/admin/criterio-sp-ips/editarcriteipsimpl/editarcriteipsimpl.component';
 import { EditarcriteipsplanComponent } from './usuario/admin/criterio-sp-ips/editarcriteipsplan/editarcriteipsplan.component';
 import { ListaVerificacionComponent } from './roles/reso/lista-verificacion/lista-verificacion.component';
-
-
-
-
-
+import { EvaluacionSpIpsComponent } from './roles/sp/evaluacion-sp-ips/evaluacion-sp-ips.component';
+import { EvaluacionSpProComponent } from './roles/sp/evaluacion-sp-pro/evaluacion-sp-pro.component';
+import { EvaluacionPamecComponent } from './roles/pamec/evaluacion-pamec/evaluacion-pamec.component';
 
 
 @NgModule({
@@ -122,7 +120,10 @@ import { ListaVerificacionComponent } from './roles/reso/lista-verificacion/list
     EditarcriteipsverifComponent,
     EditarcriteipsimplComponent,
     EditarcriteipsplanComponent,
-    ListaVerificacionComponent
+    ListaVerificacionComponent,
+    EvaluacionSpIpsComponent,
+    EvaluacionSpProComponent,
+    EvaluacionPamecComponent
   ],
   imports: [
     BrowserModule,

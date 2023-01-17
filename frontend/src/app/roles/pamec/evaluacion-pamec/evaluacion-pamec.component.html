@@ -1,0 +1,69 @@
+<app-menu></app-menu>
+<div class="container">
+    <h1>Programa de auditoria para el mejoramiento de la calidad (PAMEC)</h1>
+</div>
+
+<div class="t2">
+    <h2>VERIFICACION AL PAMEC DE LAS INSTITUCIONES PRESTADORAS DE SERVICIOS DE SALUD - IPS</h2>
+</div>
+<div class="container size">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h5><b>Prestador:</b></h5>
+                    <span id="nombre-prestador">a</span>
+                </div>
+                <div class="col-sm-7"></div>
+            </div>
+        </div>
+        <form class="row g-3" #f="ngForm" novalidate (ngSubmit)="onRegister()">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-md-1 " scope="col">Nro</th>
+                        <th class="col-md-4 borderVertical" scope="col">Criterio</th>
+                        <th class="col-md-4 borderVertical" scope="col">Desarrollo por Etapas</th>
+                        <th class="col-md-1 borderVertical" scope="col">Calificacion</th>
+                        <th class="col-md-1 borderVertical" scope="col">N/A</th>
+                        <th class="col-md-4 borderVertical" scope="col">Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let criterio of criteriopam; let i = index">
+                        <td style="border-top: 1px solid black;" class="borderHorizontal num" >{{i+1}}</td>
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">{{criterio.crip_nombre}}</td>
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">{{criterio.crip_desarrollo_etapas}}</td>
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"><select class="form-control" name="" id="">
+                            <option hidden></option>
+                            <option value="5">5</option>
+                            <option value="3">3</option>
+                            <option value="1">1</option>
+                        </select></td>
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"><select class="form-control" name="" id="">
+                            <option hidden></option>
+                            <option value="no">No Aplica</option>
+                        </select></td>
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"> <textarea type="text" class="form-control" name="crip_desarrollo_etapas" id="crip_desarrollo_etapas"
+                            required autocomplete="off"></textarea></td>
+                    </tr>
+                    
+                    <div class="col-12">
+                        <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
+                            [disabled]="!f.valid">
+                            <i class='fa fa-save fa-lg'></i></button>
+                    </div>
+                </tbody>
+            </table>
+
+        </form>
+        <div class="container" *ngIf="listaVacia">
+            <div class="p-3 mb-2 bg-dark text-white text-center">
+                <h2>{{ listaVacia }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-footer></app-footer>

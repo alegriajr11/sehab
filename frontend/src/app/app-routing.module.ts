@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { ListaPrestadorComponent } from './prestador/lista-prestador.component';
 import { NuevoPrestadorComponent } from './prestador/nuevo-prestador.component';
 import { ActaPamecComponent } from './roles/pamec/acta/acta-pamec.component';
+import { EvaluacionPamecComponent } from './roles/pamec/evaluacion-pamec/evaluacion-pamec.component';
 import { EvaluacionesPamecComponent } from './roles/pamec/evaluaciones/evaluaciones-pamec.component';
 import { HomePamecComponent } from './roles/pamec/home-pamec.component';
 import { HomeResoComponent } from './roles/reso/home-reso.component';
@@ -20,6 +21,8 @@ import { ActaSpComponent } from './roles/sp/acta-ips/acta-sp-ips.component';
 import { ActaSpProComponent } from './roles/sp/acta-pro/acta-sp-pro.component';
 import { EvaluacionesSpIpsComponent } from './roles/sp/eva-ips/evaluaciones-sp-ips.component';
 import { EvaluacionesSpProComponent } from './roles/sp/eva-pro/evaluaciones-sp-pro.component';
+import { EvaluacionSpIpsComponent } from './roles/sp/evaluacion-sp-ips/evaluacion-sp-ips.component';
+import { EvaluacionSpProComponent } from './roles/sp/evaluacion-sp-pro/evaluacion-sp-pro.component';
 import { HomeSpComponent } from './roles/sp/home-sp.component';
 import { AgregarIndComponent } from './usuario/admin/criterio-sp-ind/agregar-ind/agregar-ind.component';
 import { CriterioSpIndComponent } from './usuario/admin/criterio-sp-ind/criterio-sp-ind.component';
@@ -92,11 +95,15 @@ const routes: Routes = [
   {path: 'sp/acta-pro', component: ActaSpProComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sp']}},
   {path: 'sp/evaluaciones-pro', component: EvaluacionesSpProComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sp']}},
   {path: 'sp/evaluaciones-ips', component: EvaluacionesSpIpsComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sp']}},
+  {path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: {expectedRol: ['admin', 'sp']}},
+  {path: 'sp/evaluacion-pro', component: EvaluacionSpProComponent, canActivate: [UsuarioGuard, ButtonGuard], data: {expectedRol: ['admin', 'sp']}},
 
   //Rutas PAMEC
   {path: 'pamec', component: HomePamecComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'pamec']}},
   {path: 'pamec/acta', component: ActaPamecComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'pamec']}},
   {path: 'pamec/evaluaciones', component: EvaluacionesPamecComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'pamec']}},
+  {path: 'pamec/evaluacion', component: EvaluacionPamecComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'pamec']}},
+
   
   //Rutas RESOLUCIÓN
   {path: 'reso', component: HomeResoComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'res']}},

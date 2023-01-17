@@ -131,6 +131,11 @@ h1, h5 {
 hr{
     background-color: white;
 }
+
+.size{
+    max-width: 1598px;
+}
+
 .container_head {
     display: flex;
     width: 100%;

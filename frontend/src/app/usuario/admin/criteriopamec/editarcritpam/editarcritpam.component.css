@@ -9,15 +9,22 @@ h2 {
     font-weight: bold;
 }
 
-h3{
+h3 {
     color: black;
 }
- .sizeh3{
+
+.sizeh3 {
     font-size: large;
     font-weight: bold;
     margin-top: 0.19rem;
     margin-bottom: 0.19rem;
- }
+}
+
+.size {
+    margin-right: 2rem;
+    margin-left: 2rem;
+}
+
 label {
     color: black;
     font-weight: bold;
@@ -41,16 +48,17 @@ hr.medio {
     justify-content: center;
 }
 
-textarea{
+textarea {
     resize: none;
     width: 100%;
     height: 100px;
 }
 
-.col-12{
+.col-12 {
     margin-top: 0.06rem;
     margin-bottom: 1rem;
 }
+
 .col-md-6 {
     margin-bottom: 1rem;
 }
@@ -86,11 +94,12 @@ textarea{
     column-gap: 2rem;
 }
 
-.contenedor-form{
+.contenedor-form {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .card {
     width: 100%;
 }
@@ -156,4 +165,3 @@ input:checked+.slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
-

@@ -18,7 +18,8 @@ export class AgregarcripamComponent implements OnInit {
   newCriteriopam: CriterioPam = null
 
   crip_nombre: string;
-  crip_actividad:number
+  crip_desarrollo_etapas: string
+  crip_actividad:number;
 
   listaVacia: any = undefined;
 
@@ -71,7 +72,8 @@ export class AgregarcripamComponent implements OnInit {
     var ValorAct = (<HTMLSelectElement><unknown>opt).value;
     
     this.newCriteriopam = new CriterioPam(
-      this.crip_nombre
+      this.crip_nombre,
+      this.crip_desarrollo_etapas
     );
     this.criteriopamService.save(ValorAct,this.newCriteriopam).subscribe(
       (data) => {

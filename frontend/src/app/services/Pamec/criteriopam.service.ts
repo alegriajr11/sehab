@@ -24,6 +24,10 @@ export class CriteriopamService {
     return this.httpClient.get<CriterioPam>(`${this.criteriopam1URL}${id}`);
   }
 
+  public lista(): Observable<CriterioPam[]> {
+    return this.httpClient.get<CriterioPam[]>(`${this.criteriopamURL}`);
+  }
+
   public listAct(act: string): Observable<CriterioPam[]>{
     return this.httpClient.get<CriterioPam[]>(this.criteriopamURL + act)
   }

@@ -67,17 +67,17 @@ export class EvaluacionSicComponent implements OnInit {
   capturarNombres(): void {
     //CAPURAR NOMBRE DEL PRESTADOR
     var copy = document.getElementById("nombre-prestador");
-    var captPrestador = sessionStorage.getItem("nombre-pres");
+    var captPrestador = sessionStorage.getItem("nombre-pres-sic");
     copy.textContent = " " + captPrestador + "."
 
     //CAPTURAR NOMBRE DE USUARIO
-    this.captUsuario = sessionStorage.getItem("nombre-usuario");
+    this.captUsuario = sessionStorage.getItem("nombre-usuario-sic");
     
     //CAPTURAR CARGO DEL USUARIO
-    this.captCargoUsuario = sessionStorage.getItem("cargo-usuario");
+    this.captCargoUsuario = sessionStorage.getItem("cargo-usuario-sic");
     
     //CAPTURAR CARGO DEL PRESTADOR
-    this.captCargoPres = sessionStorage.getItem("cargo-prestador")
+    this.captCargoPres = sessionStorage.getItem("cargo-prestador-sic")
     
   }
 
