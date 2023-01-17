@@ -52,7 +52,6 @@ export class EvaluacionSicComponent implements OnInit {
     var opt = id.options[sel]
     var Valor = (<HTMLSelectElement><unknown>opt).value;
 
-    console.log(Valor);
 
     this.indicadorService.listDom(Valor).subscribe(
       data => {
@@ -73,17 +72,16 @@ export class EvaluacionSicComponent implements OnInit {
 
     //CAPTURAR NOMBRE DE USUARIO
     this.captUsuario = sessionStorage.getItem("nombre-usuario");
-    console.log(this.captUsuario)
+    
     //CAPTURAR CARGO DEL USUARIO
     this.captCargoUsuario = sessionStorage.getItem("cargo-usuario");
-    console.log(this.captCargoUsuario)
+    
     //CAPTURAR CARGO DEL PRESTADOR
     this.captCargoPres = sessionStorage.getItem("cargo-prestador")
-    console.log(this.captCargoPres)
+    
   }
 
   agregarIndicador(): void {
-    console.log(this.captCargoUsuario)
 
     // <div class="container_head" id="indicador">
     // <p class="ind_title">Dominio:</p>

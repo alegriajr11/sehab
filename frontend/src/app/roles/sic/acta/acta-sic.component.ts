@@ -30,6 +30,7 @@ export class ActaSicComponent implements OnInit {
 
   title = 'Probando-PDF';
 
+  boton_acta_sic = false;
 
 
   listaVacia: any = undefined;
@@ -216,9 +217,7 @@ export class ActaSicComponent implements OnInit {
     sessionStorage.setItem("cargo-prestador", valorCargoPres);
   }
 
-  obtenerEstadoButton(): void {
-    localStorage.setItem('boton-acta-sic', 'true');
-  }
+
 
   onRegister(): void {
     //FORMULARIO
@@ -648,13 +647,19 @@ export class ActaSicComponent implements OnInit {
       }
     }
 
-    console.log(valorSede)
+
 
     //VALIDANDO POR VALOR DE SEDE Y ENVIAR SOLICITUD DE DESCARGA DE ACTA
     if (valorSede === 'Si') {
       if (valorActa && valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
         valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede
         && valorVisitaInicial || valorVisitaSeguim) {
+
+        //OBTENER EL ESTADO DEL BOTON A TRUE 
+        this.boton_acta_sic = true
+        localStorage.setItem('boton-acta-sic', 'true');
+        console.log(localStorage.setItem('boton-acta-sic', 'true'))
+
         Swal.fire({
           title: '¿Desea descargar el acta?',
           showCancelButton: true,
@@ -693,6 +698,10 @@ export class ActaSicComponent implements OnInit {
       if (valorActa && valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
         valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede
         && valorLocalidad && valorDirSede && valorVisitaInicial || valorVisitaSeguim) {
+        //OBTENER EL ESTADO DEL BOTON A TRUE 
+        this.boton_acta_sic = true
+        localStorage.setItem('boton-acta-sic', 'true');
+
         Swal.fire({
           title: '¿Desea descargar el acta?',
           showCancelButton: true,

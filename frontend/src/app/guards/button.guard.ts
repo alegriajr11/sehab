@@ -15,8 +15,7 @@ export class ButtonGuard implements CanActivate {
         }
         if (localStorage.getItem('boton-acta-pamec') === 'true') {
             return true;
-        } 
-        
+        }
         else {
             this.router.navigate(['/']);
             return false;
