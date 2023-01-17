@@ -151,24 +151,24 @@ export class ActaSpComponent implements OnInit {
     var selp = idp.selectedIndex;
     var optp = idp.options[selp]
     var valorPrestador = (<HTMLSelectElement><unknown>optp);
-    sessionStorage.setItem("nombre-pres", valorPrestador.textContent);
+    sessionStorage.setItem("nombre-presips", valorPrestador.textContent);
 
     //USUARIO SECRETARIA
     var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
     var selUsuSecre = idUsuSecre.selectedIndex;
     var optUsuSecre = idUsuSecre.options[selUsuSecre]
     var valorUsuSecre = (<HTMLSelectElement><unknown>optUsuSecre);
-    sessionStorage.setItem("nombre-usuario", valorUsuSecre.textContent);
+    sessionStorage.setItem("nombre-usuarioips", valorUsuSecre.textContent);
 
     //CARGO USUARIO SECRETARIA
     var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
     var valorCargoSecre = cargoSecre.value
-    sessionStorage.setItem("cargo-usuario", valorCargoSecre);
+    sessionStorage.setItem("cargo-usuarioips", valorCargoSecre);
 
     //CARGO PRESTADOR
     var cargoPres = (document.getElementById('cargoPres')) as HTMLInputElement
     var valorCargoPres = cargoPres.value
-    sessionStorage.setItem("cargo-prestador", valorCargoPres);
+    sessionStorage.setItem("cargo-prestadorips", valorCargoPres);
   }
 
 
@@ -597,7 +597,7 @@ export class ActaSpComponent implements OnInit {
         cancelButtonText: 'No'
       }).then((result) => {
         if (result.value) {
-          // doc.output('dataurlnewwindow', { filename: 'acta-sic.pdf' });
+          // doc.output('dataurlnewwindow', { filename: 'acta-sp-ips.pdf' });
           doc.save('acta-sp-ips.pdf')
           Swal.fire({
             title: '¿Desea Evaluar al Prestador?',
