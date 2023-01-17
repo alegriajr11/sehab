@@ -32,6 +32,8 @@ table td.num{
     padding-left: 3rem;
 }
 
+table tr:hover td{background:#ecf0f1;}
+
 
 .size {
     margin-right: 2rem;
@@ -40,6 +42,8 @@ table td.num{
 
 table td{
     text-align: justify;
+    color: black;
+    font-weight: normal;
     padding-right: 1rem;
     padding-top: 1rem;
     margin-top: auto;
