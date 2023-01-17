@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-evaluaciones-sp-ips',
@@ -7,7 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EvaluacionesSpIpsComponent implements OnInit {
 
-  constructor() { }
+  evaluaciones: any[] = [];
+
+  searchText: any;
+
+  public page!: number;
+
+  constructor(tokenService: TokenService) { }
 
   ngOnInit(): void {
   }

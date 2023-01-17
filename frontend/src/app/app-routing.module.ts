@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login.component';
+import { ButtonGuard } from './guards/button.guard';
 import { LoginGuard } from './guards/login.guard';
 import { UsuarioGuard } from './guards/usuario.guard';
 import { HomeComponent } from './home/home.component';
@@ -83,7 +84,7 @@ const routes: Routes = [
   {path: 'sic', component: HomeSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
   {path: 'sic/acta', component: ActaSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
   {path: 'sic/evaluaciones', component: EvaluacionesSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
-  {path: 'sic/evaluacion', component: EvaluacionSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
+  {path: 'sic/evaluacion', component: EvaluacionSicComponent, canActivate: [UsuarioGuard, ButtonGuard], data: {expectedRol: ['admin', 'sic']}},
 
   //Rutas SP
   {path: 'sp', component: HomeSpComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sp']}},

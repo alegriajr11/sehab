@@ -7,6 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EvaluacionesSpProComponent implements OnInit {
 
+  evaluaciones: any[] = [];
+
+  searchText: any;
+
+  public page!: number;
+
   constructor() { }
 
   ngOnInit(): void {

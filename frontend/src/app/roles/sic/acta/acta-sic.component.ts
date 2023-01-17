@@ -216,6 +216,10 @@ export class ActaSicComponent implements OnInit {
     sessionStorage.setItem("cargo-prestador", valorCargoPres);
   }
 
+  obtenerEstadoButton(): void {
+    localStorage.setItem('boton-acta-sic', 'true');
+  }
+
   onRegister(): void {
     //FORMULARIO
     //NÚMERO DE ACTA

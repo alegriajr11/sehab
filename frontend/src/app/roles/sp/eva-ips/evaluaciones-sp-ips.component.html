@@ -13,39 +13,37 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-10">
-                        <h2><b>Evaluaciones Realizadas - Pendientes</b></h2>
+                        <h2><b>Evaluaciones Realizadas</b></h2>
                     </div>
                 </div>
+            </div>
+            <div class="search-hero">
+                <input class="form-control" type="text" name="search" [(ngModel)]="searchText"
+                    placeholder="Buscar Prestador">
             </div>
             <table class="table table-wrapper table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">Prestador</th>
-                        <th scope="col"></th>
-                        <!-- <th scope="col"></th> -->
+                        <th scope="col">PRESTADOR</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>CLINICA AYNAN LTDA</td>
+                    <tr
+                        *ngFor="let evaluacion of evaluaciones | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page}">
+                        <td>{{evaluacion.nombrePrestador}}</td>
                         <td>
                             <span class="fas fa-clipboard-check"></span>
-                        </td>
-                        <!-- <td>
-                            <span class="fa fa-pie-chart"></span>
-                        </td> -->
-                    </tr>
-                    <tr>
-                        <td>ASOCIACION IPS INDIGENA INGA KAMENTSA</td>
-                        <!-- <td>
-                            <span class="fas fa-clipboard-check"></span>
-                        </td> -->
-                        <td>
-                            <span class="fas fa-sync"></span>
                         </td>
                     </tr>
                 </tbody>
+                <div class="container" *ngIf="!evaluaciones.length">
+                    <div class="p-3 mb-2 bg-dark text-white text-center">
+                        <h2>No Hay Evaluaciones Realizadas</h2>
+                    </div>
+                </div>
             </table>
+            <pagination-controls (pageChange)="page =$event" previousLabel="Anterior" nextLabel="Siguiente">
+            </pagination-controls>
         </div>
     </div>
 
