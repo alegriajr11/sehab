@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Criterio } from 'src/app/models/Sic/criterio.dto';
 import { Indicador } from 'src/app/models/Sic/indicador.dto';
 import { Dominio } from 'src/app/models/Sic/sic.dto';
 import { CriterioService } from 'src/app/services/Sic/criterio.service';
@@ -14,12 +15,17 @@ export class EvaluacionSicComponent implements OnInit {
 
   dominio: Dominio[]
   indicador: Indicador[]
+  criterio: Criterio[];
+
 
   captUsuario: string
   captCargoUsuario: string
   captCargoPres: string
 
   listaVacia: any = undefined;
+
+  mostrarDiv: boolean = false;
+  mostrarDivCriterios: boolean = false
 
   addInd: boolean;
   addDomInd: boolean;
@@ -81,58 +87,74 @@ export class EvaluacionSicComponent implements OnInit {
     
   }
 
-  agregarIndicador(): void {
-
-    // <div class="container_head" id="indicador">
-    // <p class="ind_title">Dominio:</p>
-    // <select class="form-select form-control" name="dom_id" id="dom_id" (change)="cargarIndicadoresByDom()">
-    //   <option hidden selected value="">Selecciona el Dominio...</option>
-    //   <option *ngFor="let dominio of dominio" value="{{dominio.dom_id}}">{{dominio.dom_nombre}}</option>
-    // </select>
-
-    // <p class="ind_title">Indicador:</p>
-    // <select class="form-select form-control" name="ind_id" id="ind_id">
-    //   <option hidden selected value="">Selecciona el Indicador...</option>
-    //   <option *ngFor="let indicador of indicador" value="{{indicador.ind_id}}">{{indicador.ind_nombre}}</option>
-    // </select>
-
-    // <!-- Agregar -->
-    // <div class="botones">
-    //   <button (click)="addIndi()" class="btn-dark plus">
-    //     <i class="fa fa-plus"></i>
-    //   </button>
-    // </div>
-
-    var creardiv = (document.createElement("div")) as HTMLElement;
-    // creardiv.innerHTML = " <button onclick='borrarUno(this)'>Eliminar</button>";
-
-
-    creardiv.innerHTML = '<p>Dominio:</p>'
-    creardiv.innerHTML = '<p>Indicador:</p>'
-    var div = (document.getElementById("dominio")) as HTMLElement
-
-
-    // const ind_id = (document.getElementById('indicador')) as HTMLDivElement;
-    // const dominio = document.createElement('div')
-    // dominio.innerHTML = "<strong>Importante</strong>"
-    // // ind_id.innerHTML = 
-    // this.addInd = true
+  enableDiv() {
+    this.mostrarDiv = true;
   }
+
+  
 
   cerrarIndicador(): void {
-    this.addInd = false
+    this.mostrarDiv = false
   }
+
+  cargarCriteriosByInd(): any{
+
+    
+  }
+
 
   addIndi(): void {
-    var dom_id = (document.getElementById('dom_id')) as HTMLSelectElement
-    var sel = dom_id.selectedIndex;
-    var opt = dom_id.options[sel]
-    var ValorDom = (<HTMLSelectElement><unknown>opt).value;
+    var id = (document.getElementById('ind_id')) as HTMLSelectElement
+    var sel = id.selectedIndex;
+    var opt = id.options[sel]
+    var Valor = (<HTMLSelectElement><unknown>opt).value;
 
-    this.addDomInd = true
-    this.addInd = false
+    this.criterioService.listInd(Valor).subscribe(
+      data => {
+        this.criterio = data;
+        this.listaVacia = undefined
+      },
+      err => {
+        this.listaVacia = err.error.message;
+      }
+    );
 
+    this.mostrarDiv = false
+    this.mostrarDivCriterios = true
   }
 
+  llenarSpan(): void{
+    var id = (document.getElementById('dom_id')) as HTMLSelectElement
+    var sel = id.selectedIndex;
+    var opt = id.options[sel]
+    var ValorDom = (<HTMLSelectElement><unknown>opt).value;
 
+    this.dominioService.listaOne(ValorDom).subscribe(
+      data => {
+        for(const doms of this.dominio){
+          if(doms.dom_id.toString() === ValorDom){
+            var dom_nombre = (document.getElementById('dom_nombre')) as HTMLSpanElement
+            dom_nombre.textContent = doms.dom_nombre
+          }
+        }
+      }
+    )
+
+    var id = (document.getElementById('ind_id')) as HTMLSelectElement
+    var sel = id.selectedIndex;
+    var opt = id.options[sel]
+    var ValorInd = (<HTMLSelectElement><unknown>opt).value;
+
+
+    this.indicadorService.listIndOne(ValorInd).subscribe(
+      data => {
+        for(const inds of this.indicador){
+          if(inds.ind_id === ValorInd){
+            var ind_nombre = (document.getElementById('ind_nombre')) as HTMLSpanElement
+            ind_nombre.textContent = inds.ind_nombre
+          }
+        }
+      }
+    )
+  }
 }

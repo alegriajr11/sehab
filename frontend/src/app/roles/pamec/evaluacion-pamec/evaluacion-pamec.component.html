@@ -10,51 +10,65 @@
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-6">
                     <h5><b>Prestador:</b></h5>
                     <span id="nombre-prestador">a</span>
+                </div>
+                <div class="col-md-6">
+                    <h5><b>Actividad:</b></h5>
+                    <select class="form-control" name="act_id" id="act_id" (change)="cargarCriterios()">
+                        <option hidden selected value="">Selecciona la Actividad...</option>
+                        <option *ngFor="let actividad of actividad" value="{{actividad.act_id}}">{{actividad.act_nombre}}</option>
+                    </select>
                 </div>
                 <div class="col-sm-7"></div>
             </div>
         </div>
         <form class="row g-3" #f="ngForm" novalidate (ngSubmit)="onRegister()">
-            <table>
+            <table id="tabla-evaluacion">
                 <thead>
-                    <tr>
-                        <th class="col-md-1 " scope="col">Nro</th>
-                        <th class="col-md-3 borderVertical" scope="col">Criterio</th>
-                        <th class="col-md-3 borderVertical" scope="col">Desarrollo por Etapas</th>
-                        <th class="col-md-1 borderVertical" scope="col">Calificación</th>
-                        <th class="col-md-1 borderVertical" scope="col">APLICA</th>
-                        <th class="col-md-7 borderVertical" scope="col">Observaciones</th>
+                    <tr *ngIf="controlCriterio">
+                        <th class="col-md-1 borderHorizontal" scope="col">Nro</th>
+                        <th class="col-md-3 borderVertical borderHorizontal" scope="col">Criterio</th>
+                        <th class="col-md-3 borderVertical borderHorizontal" scope="col">Desarrollo por Etapas</th>
+                        <th class="col-md-1 borderVertical borderHorizontal" scope="col">Aplica</th>
+                        <th class="col-md-1 borderVertical borderHorizontal" scope="col">Calificación</th>
+                        <th class="col-md-7 borderVertical borderHorizontal" scope="col">Observaciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let criterio of criteriopam; let i = index">
-                        <td style="border-top: 1px solid black;" class="borderHorizontal num" >{{i+1}}</td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">{{criterio.crip_nombre}}</td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">{{criterio.crip_desarrollo_etapas}}</td>
+                        <td style="border-top: 1px solid black;" class="borderHorizontal num">{{i+1}}</td>
                         <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
-                            <select class="form-control" name="" id="sel-calificacion">
-                            <option hidden></option>
-                            <option value="5">5</option>
-                            <option value="3">3</option>
-                            <option value="1">1</option>
-                        </select></td>
+                            {{criterio.crip_nombre}}</td>
                         <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
-                            <select class="form-control" name="" id="sel-aplica">
-                            <option hidden></option>
-                            <option value="Si">Si</option>
-                            <option value="No">No</option>
-                        </select></td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"> <textarea type="text" class="form-control" name="crip_desarrollo_etapas" id="crip_desarrollo_etapas"
-                            required autocomplete="off"></textarea></td>
+                            {{criterio.crip_desarrollo_etapas}}</td>
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
+                            <select id="sel-aplica-{{i+1}}" class="form-control" name="" (change)="activarSelect()">
+                                <option hidden></option>
+                                <option *ngFor="let aplica of optionsAplica" [value]="aplica.value">{{aplica.label}}
+                                </option>
+                            </select>
+                        </td>
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
+                            <select class="form-control" name="" id="sel-calificacion-{{i+1}}">
+                                <option hidden></option>
+                                <option *ngFor="let calificacion of optionsCalificacion" [value]="calificacion.value">{{calificacion.nota}}</option>
+                            </select>
+                        </td>
+
+                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"> <textarea
+                                type="text" class="form-control" name="crip_desarrollo_etapas"
+                                id="crip_desarrollo_etapas" required autocomplete="off"></textarea></td>
                     </tr>
-                    
-                    <div class="col-12">
+
+                    <div class="col-12" *ngIf="controlCriterio">
                         <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
-                            [disabled]="!f.valid">
+                            [disabled]="!f.valid" (click)="disableItem()">
                             <i class='fa fa-save fa-lg'></i></button>
+                    </div>
+                    <div class="col-12">
+                        <button (click)="obtenerValor()">Probando</button>
                     </div>
                 </tbody>
             </table>

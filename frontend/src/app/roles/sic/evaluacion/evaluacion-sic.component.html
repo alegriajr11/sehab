@@ -10,7 +10,7 @@
   </h2>
 </div>
 
-<div class="container" >
+<div class="container">
   <div class="table-wrapper" id="dominio">
     <div class="table-title">
       <div class="row">
@@ -156,39 +156,50 @@
         <textarea name="" id="" cols="30" rows="10"></textarea>
       </div>
 
-      <hr>
+      <hr style="border-top: 1px solid black;">
 
-      <div>
-        <div>
-          <div class="grid-container-title">
-            <p class="sp_title" style="font-weight: bold; text-align: end;">Dominio:</p>
-            <p>Nombre Dominio</p>
-            <p class="sp_title" style="font-weight: bold; text-align: end;">Indicador:</p>
-            <p>Tiempo promedio de espera para la asignación de cita de Ginecología</p>
-          </div>
-          <hr>
-          <div class="grid-container">
-            <p class="nro">1</p>
-            <p align="left">
-              Se ha definido y
-              documentado el
-              procedimiento para la
-              implementación del
-              indicador.
-            </p>
-            <select name="" id="" class="form-select form-control select">
-              <option value="" hidden selected>Selecciona...</option>
-              <option value="">Si</option>
-              <option value="">No</option>
-            </select>
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-          </div>
-          <hr>
+      <div class="container" #myDiv2 [style.display]="mostrarDivCriterios ? 'block' : 'none'">
+        
+        <div class="row">
+          <div class="col-sm-2"><span class="ind_title" for="">Dominio:</span></div>
+          <div class="col-sm-4"><span id="dom_nombre"></span></div>
+          <div class="col-sm-2"><span class="ind_title" for="">Indicador:</span></div>
+          <div class="col-sm-4"><span id="ind_nombre"></span></div>
+        </div>
+        <hr style="border-bottom: 1px solid black;">
+        <div class="container">
+          <table class="table table-wrapper table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Cod</th>
+                <th scope="col">Criterio</th>
+                <th scope="col">Cumple</th>
+                <th scope="col">Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let criterio of criterio">
+                <td>{{criterio.cri_id}}</td>
+                <td>{{criterio.cri_nombre}}</td>
+                <td>
+                  <select name="" id="" class="form-select form-control select">
+                    <option value="" hidden selected>Selecciona...</option>
+                    <option value="si">Si Cumple</option>
+                    <option value="no">No Cumple</option>
+                  </select>
+                </td>
+                <td>
+                  <textarea name="" id="" cols="30" rows="10"></textarea>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </form>
 
-    <div *ngIf="addInd">
+
+    <div #myDiv [style.display]="mostrarDiv ? 'block' : 'none'">
       <div class="container_head" id="indicador">
         <p class="ind_title">Dominio:</p>
         <select class="form-select form-control" name="dom_id" id="dom_id" (change)="cargarIndicadoresByDom()">
@@ -204,17 +215,16 @@
 
         <!-- Agregar -->
         <div class="botones">
-          <button (click)="addIndi()" class="btn-dark plus">
+          <button (click)="addIndi()" class="btn-dark plus" (click)="llenarSpan()">
             <i class="fa fa-plus"></i>
           </button>
         </div>
 
+        <!-- Cerrar -->
         <div class="botones">
-          <!-- Cerrar -->
           <button (click)="cerrarIndicador()" class="btn-dark plus">
             <i class="fas fa-close"></i>
           </button>
-
         </div>
 
       </div>
@@ -222,9 +232,10 @@
       <hr>
     </div>
 
+
+
     <div class="grid-boton">
-      <button (click)="agregarIndicador()" class="btn-dark plus sp" title="Agregar Indicador"> <span
-          class="size_span_plus">
+      <button (click)="enableDiv()" class="btn-dark plus sp" title="Agregar Indicador"> <span class="size_span_plus">
           <i class='fas fa-plus-circle'></i>
         </span>
       </button>

@@ -49,7 +49,7 @@ p {
 
 
 .size {
-    max-width: max-content;
+    max-width: 125rem;
 
 }
 
@@ -265,4 +265,10 @@ select{
 table td.num{
     font-size: 20px;
     padding-left: 3rem;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
 }
