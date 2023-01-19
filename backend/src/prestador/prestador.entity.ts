@@ -8,8 +8,6 @@ import { DominioEntity } from "src/sic/dominio.entity";
 import { ActividadEntity } from "src/pamec/actividad.entity";
 import { EvaluacionipsEntity } from "src/sp/sp_ips/evaluacionips.entity";
 import { EtapaInd } from "src/sp/sp_ind/etapaind.entity";
-import { ServiciosEspecificadosResEntity } from "src/resolucion/condiciones_capacidad_tecng_cientificas/servEspecificados.entity";
-import { ServiciosResEntity } from "src/resolucion/condiciones_capacidad_tecng_cientificas/servicios.entity";
 import { RequisitoResEntity } from "src/resolucion/requisitos_condiciones_habilitacion/requisito_res.entity";
 import { ServiciosVerificadosEntity } from "src/resolucion/servicios_capacidad/servicios_verificados.entity";
 import { CapacidadInstaladaEntity } from "src/resolucion/servicios_capacidad/capacidad_instalada.entity";
@@ -84,14 +82,7 @@ export class PrestadorEntity {
     @ManyToMany(type => EtapaInd, etapa => etapa.prestadores)
     etapaInd: EtapaInd[];
 
-    //Relacion Uno a Muchos PRESTADOR - SERVICIOS ESPECIFICADOS
-    @OneToMany(type => ServiciosEspecificadosResEntity, ser_especificados => ser_especificados.prestadores)
-    ser_especificados_res: ServiciosEspecificadosResEntity;
 
-
-    //Relacion Uno a Muchos PRESTADORES - SERVICIOS
-    @OneToMany(type => ServiciosResEntity, servicios => servicios.prestadores)
-    servicios: ServiciosResEntity;
 
     //Relacion Uno a Muchos PRESTADORES - REQUISITOS
     @OneToMany(type => RequisitoResEntity, requisitos => requisitos.prestadores)
