@@ -31,13 +31,6 @@ export class UsuarioService {
         return usuario;
       }
 
-    // async getall(): Promise<UsuarioEntity[]>{
-    //     const usuario = await this.usuarioRepository.find({
-    //       relations: ['roles']
-    //     });
-    //     if(!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
-    //     return usuario
-    // }
 
     /*LISTANDO USUARIOS */
     async getall(): Promise<UsuarioEntity[]>{

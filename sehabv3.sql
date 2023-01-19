@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `criteriopam` (
   CONSTRAINT `FK_6199af2fce493ec55dde52bdd4e` FOREIGN KEY (`cripActividadActId`) REFERENCES `actividad` (`act_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla sehab.criteriopam: ~31 rows (aproximadamente)
+-- Volcando datos para la tabla sehab.criteriopam: ~30 rows (aproximadamente)
 DELETE FROM `criteriopam`;
 INSERT INTO `criteriopam` (`crip_id`, `cripActividadActId`, `crip_nombre`, `crip_desarrollo_etapas`) VALUES
 	(1, 1, 'La organización ha desarrollado con sus miembros actividades de sensibilización en el proceso.', '•5• = Existen evidencias que la organización ha planeado y desarrollado de manera sistemática actividades de sensibilización frente al PAMEC y al mejoramiento continuo\n•3• = Existen algunas evidencias aisladas del desarrollo de algunas actividades de sensibilización del proceso\n•1• = No se encuentran evidencias del desarrollo de actividades de sensibilización frente al PAMEC, ni frente a los procesos de mejoramiento'),
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `criterio_implementacion` (
   CONSTRAINT `FK_a226df9f79a2839ea92a58c627c` FOREIGN KEY (`criImpEvaEvipsId`) REFERENCES `evaluacionips` (`evips_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla sehab.criterio_implementacion: ~24 rows (aproximadamente)
+-- Volcando datos para la tabla sehab.criterio_implementacion: ~25 rows (aproximadamente)
 DELETE FROM `criterio_implementacion`;
 INSERT INTO `criterio_implementacion` (`cri_imp_id`, `cri_imp_nombre`, `cri_imp_verificacion`, `criImpEvaEvipsId`) VALUES
 	(1, 'La organización ha desplegado entre los colaboradores la intención de trabajar por la seguridad del paciente desde la estrategia corporativa, así como la política de seguridad del paciente y el programa de seguridad del paciente', 'Solicite actas de despliegue, fotos y otros mecanismos evidenciables de despliegue.', 1),
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `criterio_planeacion` (
   CONSTRAINT `FK_8d6604e124f7b9d2256c0796a26` FOREIGN KEY (`criPlaEvaEvipsId`) REFERENCES `evaluacionips` (`evips_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla sehab.criterio_planeacion: ~31 rows (aproximadamente)
+-- Volcando datos para la tabla sehab.criterio_planeacion: ~34 rows (aproximadamente)
 DELETE FROM `criterio_planeacion`;
 INSERT INTO `criterio_planeacion` (`cri_pla_id`, `cri_pla_nombre`, `criPlaEvaEvipsId`, `cri_pla_verificacion`) VALUES
 	(1, 'La organización ha definido una política de seguridad de la paciente alineada con el direccionamiento estratégico.', 1, 'Solicite Política de seguridad y acto de adopción por la alta gerencia. '),
@@ -305,7 +305,7 @@ CREATE TABLE IF NOT EXISTS `criterio_verificacion` (
   CONSTRAINT `FK_807e47344a9c743d41ef75af1e2` FOREIGN KEY (`criVerEvaEvipsId`) REFERENCES `evaluacionips` (`evips_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla sehab.criterio_verificacion: ~23 rows (aproximadamente)
+-- Volcando datos para la tabla sehab.criterio_verificacion: ~24 rows (aproximadamente)
 DELETE FROM `criterio_verificacion`;
 INSERT INTO `criterio_verificacion` (`cri_ver_id`, `cri_ver_nombre`, `cri_ver_verificacion`, `criVerEvaEvipsId`) VALUES
 	(1, 'Se cuenta con un grupo de indicadores que evalúan el cumplimiento de la política de seguridad y el programa de seguridad del paciente.', 'Tablero de mando', 1),

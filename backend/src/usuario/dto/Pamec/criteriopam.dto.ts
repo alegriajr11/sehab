@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, MaxLength, MinLength } from "class-validator";
+import { IsNumber, IsString, MaxLength, MinLength } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 
 
@@ -15,4 +15,6 @@ export class CriterioPamDto {
     @MaxLength(700, {message: 'el desarrollo etapas debe tener: longitud máxima de 700 caracteres'})
     crip_desarrollo_etapas: string;
 
+    @IsNumber()
+    calificacionpam
 }

@@ -21,7 +21,7 @@
         <div class="col-sm-7"></div>
       </div>
     </div>
-    <form action="">
+    <form id="form">
       <div class="grid-container">
         <span class="titulo">Nro.</span>
         <span class="titulo">Criterios</span>
@@ -158,84 +158,12 @@
 
       <hr style="border-top: 1px solid black;">
 
-      <div class="container" #myDiv2 [style.display]="mostrarDivCriterios ? 'block' : 'none'">
-        
-        <div class="row">
-          <div class="col-sm-2"><span class="ind_title" for="">Dominio:</span></div>
-          <div class="col-sm-2"><span id="dom_nombre"></span></div>
-          <div class="col-sm-2"><span class="ind_title" for="">Indicador:</span></div>
-          <div class="col-sm-4"><span id="ind_nombre"></span></div>
-        </div>
-        <hr style="border-bottom: 1px solid black;">
-        <div class="container">
-          <table class="table table-wrapper table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Cod</th>
-                <th scope="col">Criterio</th>
-                <th scope="col">Cumple</th>
-                <th scope="col">Observaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let criterio of criterio">
-                <td>{{criterio.cri_id}}</td>
-                <td>{{criterio.cri_nombre}}</td>
-                <td>
-                  <select name="" id="" class="form-select form-control select">
-                    <option value="" hidden selected>Selecciona...</option>
-                    <option value="si">Si Cumple</option>
-                    <option value="no">No Cumple</option>
-                  </select>
-                </td>
-                <td>
-                  <textarea name="" id="" cols="30" rows="10"></textarea>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </form>
-
-
-    <div #myDiv [style.display]="mostrarDiv ? 'block' : 'none'">
-      <div class="container_head" id="indicador">
-        <p class="ind_title">Dominio:</p>
-        <select class="form-select form-control" name="dom_id" id="dom_id" (change)="cargarIndicadoresByDom()">
-          <option hidden selected value="">Selecciona el Dominio...</option>
-          <option *ngFor="let dominio of dominio" value="{{dominio.dom_id}}">{{dominio.dom_nombre}}</option>
-        </select>
-
-        <p class="ind_title">Indicador:</p>
-        <select class="form-select form-control" name="ind_id" id="ind_id">
-          <option hidden selected value="">Selecciona el Indicador...</option>
-          <option *ngFor="let indicador of indicador" value="{{indicador.ind_id}}">{{indicador.ind_nombre}}</option>
-        </select>
-
-        <!-- Agregar -->
-        <div class="botones">
-          <button (click)="addIndi()" class="btn-dark plus" (click)="llenarSpan()">
-            <i class="fa fa-plus"></i>
-          </button>
-        </div>
-
-        <!-- Cerrar -->
-        <div class="botones">
-          <button (click)="cerrarIndicador()" class="btn-dark plus">
-            <i class="fas fa-close"></i>
-          </button>
-        </div>
-
-      </div>
-
-      <hr>
-    </div>
 
 
 
     <div class="grid-boton">
-      <button (click)="enableDiv()" class="btn-dark plus sp" title="Agregar Indicador"> <span class="size_span_plus">
+      <button id="button-add" (click)="enableDiv()" class="btn-dark plus sp" title="Agregar Indicador"> <span class="size_span_plus">
           <i class='fas fa-plus-circle'></i>
         </span>
       </button>

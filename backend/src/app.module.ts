@@ -21,6 +21,7 @@ import { CriterioverifModule } from './sp/sp_ips/criterioverif/criterioverif.mod
 import { ItemipsModule } from './sp/sp_ips/itemips/itemips.module';
 import { PlaneacionModule } from './sp/sp_ips/planeacion/planeacion.module';
 import { GenerarpdfModule } from './generarpdf/generarpdf.module';
+import { CalificacionpamecModule } from './pamec/calificacionpamec/calificacionpamec.module';
 
 
 
@@ -40,8 +41,8 @@ import { GenerarpdfModule } from './generarpdf/generarpdf.module';
         password: configService.get<string>(DB_PASSWORD),
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
-        logging: false,
+        synchronize: true,
+        logging: true,
         
       }),
       inject: [ConfigService],
@@ -60,7 +61,8 @@ import { GenerarpdfModule } from './generarpdf/generarpdf.module';
     CriterioimpleModule,
     CriterioverifModule,
     PlaneacionModule,
-    GenerarpdfModule
+    GenerarpdfModule,
+    CalificacionpamecModule
 
   ],
   controllers: [AppController],

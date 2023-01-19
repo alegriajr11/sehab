@@ -88,13 +88,13 @@ export class EvaluacionSicComponent implements OnInit {
   }
 
   enableDiv() {
-    this.mostrarDiv = true;
+
   }
 
   
 
   cerrarIndicador(): void {
-    this.mostrarDiv = false
+
   }
 
   cargarCriteriosByInd(): any{
@@ -104,24 +104,40 @@ export class EvaluacionSicComponent implements OnInit {
 
 
   addIndi(): void {
-    var id = (document.getElementById('ind_id')) as HTMLSelectElement
-    var sel = id.selectedIndex;
-    var opt = id.options[sel]
-    var Valor = (<HTMLSelectElement><unknown>opt).value;
+    // var id = (document.getElementById('ind_id')) as HTMLSelectElement
+    // var sel = id.selectedIndex;
+    // var opt = id.options[sel]
+    // var Valor = (<HTMLSelectElement><unknown>opt).value;
 
-    this.criterioService.listInd(Valor).subscribe(
-      data => {
-        this.criterio = data;
-        this.listaVacia = undefined
-      },
-      err => {
-        this.listaVacia = err.error.message;
-      }
-    );
+    // let originalDiv = (document.getElementById("myDiv2")) as HTMLDivElement
+    // let cloneButton = document.getElementById("botonPlus");
+    // let counter = 1;
+    
+    // cloneButton.addEventListener("click", function() {
+    //   let newDiv = (originalDiv.cloneNode(true)) as HTMLElement;
+    //   newDiv.id = "myDiv2-" + counter;
+    //   newDiv.innerHTML = "Este es el div clonado número " + counter;
+    //   document.body.appendChild(newDiv);
+    //   counter++;
+    // });
 
-    this.mostrarDiv = false
-    this.mostrarDivCriterios = true
+    // this.criterioService.listInd(Valor).subscribe(
+    //   data => {
+    //     this.criterio = data;
+    //     this.listaVacia = undefined
+    //   },
+    //   err => {
+    //     this.listaVacia = err.error.message;
+    //   }
+    // );
+
+    // this.mostrarDiv = false
+    // this.mostrarDivCriterios = true
+
   }
+
+
+
 
   llenarSpan(): void{
     var id = (document.getElementById('dom_id')) as HTMLSelectElement

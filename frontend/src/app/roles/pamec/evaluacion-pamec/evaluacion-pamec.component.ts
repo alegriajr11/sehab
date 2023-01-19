@@ -3,6 +3,9 @@ import { Actividad } from 'src/app/models/Pamec/actividad.dto';
 import { CriterioPam } from 'src/app/models/Pamec/criteriopam.dto';
 import { ActividadService } from 'src/app/services/Pamec/actividad.service';
 import { CriteriopamService } from 'src/app/services/Pamec/criteriopam.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-evaluacion-pamec',
@@ -132,10 +135,54 @@ export class EvaluacionPamecComponent {
       var selAplica = (table.querySelector(valorIdAplica + i)) as HTMLSelectElement
       var selCalificacion = (table.querySelector(valorIdCalificacion + i)) as HTMLSelectElement
       if (selAplica.value) {
-        console.log(selAplica.value)
-      }if(selCalificacion.value){
-        console.log(selCalificacion.value)
+        var id = (document.getElementById('act_id')) as HTMLSelectElement
+        var sel = id.selectedIndex;
+        var opt = id.options[sel]
+        var ValorActividad = (<HTMLSelectElement><unknown>opt).value;
+
+        const doc = new jsPDF()
+
+        if(ValorActividad === '1'){
+          let array1 = []
+          array1.push(selAplica.value, selCalificacion.value)
+          doc.text("AUTOEVALUACIÓN", 65, 85);
+          autoTable(doc,{
+            margin: { top: 72 },
+            body: [{aplica: array1[0], calificacion: array1[1]}],
+            columns: [
+              { header: 'Aplica', dataKey: 'aplica' },
+              { header: 'Calificacion', dataKey: 'calificacion' },]
+          })
+          doc.text("ACTIVIDADES PREVIAS", 65, 45);
+          
+          
+          // console.log('Array Posicion 0 -', array[0])
+          // console.log('Array Posicion 1 -', array[1])
+        }
+
+        if(ValorActividad === '2'){
+          let array2 = []
+          array2.push(selAplica.value, selCalificacion.value)
+          doc.text("AUTOEVALUACIÓN", 65, 85);
+          autoTable(doc,{
+            margin: { top: 72 },
+            body: [{aplica: array2[0], calificacion: array2[1]}],
+            columns: [
+              { header: 'Aplica', dataKey: 'aplica' },
+              { header: 'Calificacion', dataKey: 'calificacion' },]
+          })
+        }        
+        
+
+        if(ValorActividad === '3'){
+          let array3 = []
+          array3.push(selAplica.value, selCalificacion.value)
+          console.log(array3)
+        }
+        
+        // console.log(selAplica.value)
       }
+
       // var resultado = console.log(sel.value)
     }
   }

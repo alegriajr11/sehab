@@ -1,17 +1,22 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CumplimientoSicEntity } from "./cumplimientosic.entity";
 import { IndicadorEntity } from "./indicador.entity";
 
-@Entity({name: 'criteriosic'})
+@Entity({ name: 'criteriosic' })
 export class CriteriosicEntity {
     @PrimaryGeneratedColumn('increment')
     cri_id: number;
 
-    @Column({type: 'varchar', length: 120, nullable: false, unique: false})
+    @Column({ type: 'varchar', length: 120, nullable: false, unique: false })
     cri_nombre: string;
-    
+
 
     //Relacion Muchos a Muchos CRITERIOSIC - INDICADOR
     @ManyToMany(type => IndicadorEntity, indicador => indicador.criterios)
     indicadores: IndicadorEntity[];
+
+    //Relacion UNO a MUCHOS CRITERIOS SIC - CUMPLIMIENTOSIC
+    @OneToMany(type => CumplimientoSicEntity, cumplimiento => cumplimiento.criterio_estandar)
+    cumplimiento_sic: CumplimientoSicEntity;
 }
