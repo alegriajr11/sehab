@@ -15,6 +15,4 @@ export class CriterioPamDto {
     @MaxLength(700, {message: 'el desarrollo etapas debe tener: longitud máxima de 700 caracteres'})
     crip_desarrollo_etapas: string;
 
-    @IsNumber()
-    calificacionpam
 }

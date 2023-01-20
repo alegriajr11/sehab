@@ -12,6 +12,8 @@ import { JWT_SECRET } from 'src/config/constants';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { EncoderService } from './encoder.service';
+import { UsuarioService } from 'src/usuario/usuario.service';
+import { MailerservicesService } from './mailerservices/mailerservices.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsuarioEntity, RolEntity, AuthRepository]),
@@ -29,7 +31,7 @@ import { EncoderService } from './encoder.service';
     inject: [ConfigService],
   }),
 ],
-  providers: [AuthService, ConfigService, JwtStrategy, EncoderService],
+  providers: [AuthService, ConfigService, JwtStrategy, EncoderService, UsuarioService, MailerservicesService],
   controllers: [AuthController],
   exports: [PassportModule, JwtStrategy]
 })

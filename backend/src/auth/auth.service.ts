@@ -9,13 +9,15 @@ import { RolNombre } from 'src/rol/rol.enum';
 import { RolRepository } from 'src/rol/rol.repository';
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
 import { UsuarioRepository } from 'src/usuario/usuario.repository';
-import { ChangePasswordDto } from './dto/change-password.dto';
+import { UsuarioService } from 'src/usuario/usuario.service';
 import { LoginUsuarioDto } from './dto/login.dto';
 import { NuevoUsuarioDto } from './dto/nuevo-usuario.dto';
+import { RequestResetPasswordDTO } from './dto/request-reset-password.dto';
 import { TokenDto } from './dto/token.dto';
 import { EncoderService } from './encoder.service';
 import { PayloadInterface } from './payload.interface';
-
+import { v4 } from 'uuid';
+import { RessetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +29,7 @@ export class AuthService {
         @InjectRepository(UsuarioEntity)
         private readonly authRepository: UsuarioRepository,
         private readonly jwtService: JwtService,
+        private readonly usuarioService: UsuarioService,
         private readonly encoderService: EncoderService,
     ) { }
 
@@ -107,7 +110,7 @@ export class AuthService {
             usu_roles: usuario.roles.map(rol => rol.rol_nombre as RolNombre)
         }
         const token = await this.jwtService.sign(payload);
-        if(payload.usu_estado == 'false'){
+        if (payload.usu_estado == 'false') {
             return new UnauthorizedException(new MessageDto('Acceso Denegado Comunicarse con el Administrador'));
         }
         return { token };
@@ -128,18 +131,22 @@ export class AuthService {
         return { token };
     }
 
-    async changePassword(
-        changePasswordDto: ChangePasswordDto,
-        user: UsuarioEntity,
-    ): Promise<void> {
-        const { usu_oldPassword, usu_newPassword } = changePasswordDto;
-        if (await this.encoderService.checkPassword(usu_oldPassword, user.usu_password)) {
-            user.usu_password = await this.encoderService.encodePassword(usu_newPassword);
-            console.log(user);
-            this.authRepository.save(user);
-        } else {
-            throw new BadRequestException('La contraseña antigua no coincide');
-        }
+    async requestResetPassword(requestResetPasswordDTO: RequestResetPasswordDTO): Promise<void> {
+        const { usu_email } = requestResetPasswordDTO;
+        const usuario: UsuarioEntity = await this.usuarioService.findByOneEmail(usu_email)
+        usuario.resetPasswordToken = v4();
+        this.authRepository.save(usuario);
+        //ENVIAR EMAIL
     }
+
+    async resetPassword(resetPasswordDto: RessetPasswordDto): Promise<void> {
+        const { resetPasswordToken, password } = resetPasswordDto
+        const usuario: UsuarioEntity = await this.usuarioService.findOneByResetPasswordToken(resetPasswordToken);
+
+        usuario.usu_password = await this.encoderService.encodePassword(password)
+        usuario.resetPasswordToken = null
+        this.authRepository.save(usuario)
+    }
+
 
 }
