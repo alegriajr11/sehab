@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login.component';
+import { PasswordcComponent } from './auth/passwordc.component';
+import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
 import { ButtonGuard } from './guards/button.guard';
 import { LoginGuard } from './guards/login.guard';
 import { UsuarioGuard } from './guards/usuario.guard';
@@ -82,6 +84,10 @@ const routes: Routes = [
   {path: 'usuarios/nuevo/reso', component: NuevoUsuarioResoComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin']}},
   {path: 'usuarios/nuevo/admin', component: NuevoUsuarioAdminComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin']}},
   {path: 'usuarios/editar/:id', component: EditarUsuarioComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin']}},
+
+  {path: 'usuarios/restablecer/:id', component: ResetpasswordComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin']}},
+
+  {path: 'usuario/cambiar-contraseña', component: PasswordcComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic', 'sp', 'pamec', 'res']}},
 
   //Rutas SIC
   {path: 'sic', component: HomeSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},

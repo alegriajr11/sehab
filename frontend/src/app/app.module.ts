@@ -66,6 +66,7 @@ import { ListaVerificacionComponent } from './roles/reso/lista-verificacion/list
 import { EvaluacionSpIpsComponent } from './roles/sp/evaluacion-sp-ips/evaluacion-sp-ips.component';
 import { EvaluacionSpProComponent } from './roles/sp/evaluacion-sp-pro/evaluacion-sp-pro.component';
 import { EvaluacionPamecComponent } from './roles/pamec/evaluacion-pamec/evaluacion-pamec.component';
+import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
 
 
 @NgModule({
@@ -123,7 +124,8 @@ import { EvaluacionPamecComponent } from './roles/pamec/evaluacion-pamec/evaluac
     ListaVerificacionComponent,
     EvaluacionSpIpsComponent,
     EvaluacionSpProComponent,
-    EvaluacionPamecComponent
+    EvaluacionPamecComponent,
+    ResetpasswordComponent
   ],
   imports: [
     BrowserModule,

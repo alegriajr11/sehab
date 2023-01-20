@@ -4,6 +4,10 @@ import Swal from 'sweetalert2';
 import { TokenService } from '../services/token.service';
 import { UsuarioService } from '../services/usuario.service';
 import 'jspdf-autotable'
+import { AuthService } from '../services/auth.service';
+import { Usuario } from '../models/usuario';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -20,6 +24,7 @@ export class ListaUsuarioComponent implements OnInit {
   usuarios: any[] = [];
 
 
+  usu_id: number
 
   listaVacia: any = undefined;
 
@@ -33,7 +38,10 @@ export class ListaUsuarioComponent implements OnInit {
 
   constructor(
     private usuarioService: UsuarioService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private authService: AuthService,
+    private toastrService: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -82,6 +90,10 @@ export class ListaUsuarioComponent implements OnInit {
         );
       }
     });
+  }
+
+  restablecer(usu_id: number): void{
+    this.authService.requestPassword(usu_id).subscribe(res =>this.router.navigate(['/usuarios']))
   }
 
   crearPDF(): void {

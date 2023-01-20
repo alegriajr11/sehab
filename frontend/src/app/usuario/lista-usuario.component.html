@@ -34,6 +34,7 @@
           <th scope="col">Fecha de Creación</th>
           <th scope="col" *ngIf="isAdmin">Editar</th>
           <th scope="col" *ngIf="isAdmin">Borrar</th>
+          <th scope="col" *ngIf="isAdmin">Restablecer Contraseña</th>
         </tr>
       </thead>
       <tbody>
@@ -58,6 +59,11 @@
           <td *ngIf="isAdmin">
             <button class="btn btn-outline-danger" (click)="borrar(usuario.usu_id)">
               <i class="far fa-trash-alt"></i>
+            </button>
+          </td>
+          <td *ngIf="isAdmin">
+            <button class="btn btn-outline-primary" routerLink="/usuarios/restablecer/{{usuario.usu_id}}" >
+              <i class='fa fa-key'></i>
             </button>
           </td>
         </tr>

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { NuevoUsuarioDto } from '../models/nuevo-usuario.dto';
 import { TokenDto } from '../models/token.dto';
 import { CambiarPasswordDto } from '../models/cambiar-password.dto';
+import { RestablecerPasswordDto } from '../models/reset-password.dto';
 
 
 @Injectable({
@@ -13,7 +14,10 @@ import { CambiarPasswordDto } from '../models/cambiar-password.dto';
 })
 export class AuthService {
 
+  //authURL: 'http://localhost:8080/auth/',
+
   authURL = environment.authURL;
+  restablecerContraseña = environment.restablecerContraseña;
   usuarioNewURL = environment.usuarioNewURL;
   usuarioAdmin = environment.usuarioURL;
 
@@ -48,6 +52,18 @@ export class AuthService {
   }
 
   cambiarPassword(dto: CambiarPasswordDto) {
-    return this.httpClient.post<any>(this.authURL + 'cambiar-contraseña', dto);
+    return this.httpClient.patch<any>(this.authURL + 'change-password', dto);
+  }
+
+  requestPassword(id: number): Observable<any>{
+    return this.httpClient.patch<any>(`${this.restablecerContraseña}${id}`, null);
+  }
+
+  restablecerPassword(dto: RestablecerPasswordDto) {
+    return this.httpClient.patch<any>(this.authURL + 'reset-password', dto);
+  }
+
+  resetPassword(dto: RestablecerPasswordDto){
+    return this.httpClient.patch<any>(this.authURL + 'reset-password', dto)
   }
 }

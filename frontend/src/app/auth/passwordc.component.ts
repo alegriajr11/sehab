@@ -17,6 +17,8 @@ export class PasswordcComponent implements OnInit {
   oldPassword: string;
   newPassword: string;
 
+  hide: boolean;
+
   
   constructor(
     private authService: AuthService,
@@ -35,7 +37,7 @@ export class PasswordcComponent implements OnInit {
           timeOut: 3000,
           positionClass: 'toast-top-center',
         });
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
       },
       (err) => {
         this.toastrService.error(err.error.message, 'Error', {
@@ -45,4 +47,21 @@ export class PasswordcComponent implements OnInit {
       }
     );
   }
+
+  mostrarPassword() {
+    var tipo = document.getElementById('newPassword') as HTMLInputElement
+  
+    if(tipo.type == 'password'){
+      tipo.type = 'text';
+      return this.hide = true
+    } else {
+      tipo.type = 'password'
+      return this.hide = false
+    }
+
+
+    
+  }
+
+
 }
