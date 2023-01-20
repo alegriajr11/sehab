@@ -18,6 +18,7 @@ import { EncoderService } from './encoder.service';
 import { PayloadInterface } from './payload.interface';
 import { v4 } from 'uuid';
 import { RessetPasswordDto } from './dto/reset-password.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -131,22 +132,33 @@ export class AuthService {
         return { token };
     }
 
-    async requestResetPassword(requestResetPasswordDTO: RequestResetPasswordDTO): Promise<void> {
-        const { usu_email } = requestResetPasswordDTO;
-        const usuario: UsuarioEntity = await this.usuarioService.findByOneEmail(usu_email)
+    async requestResetPassword(usu_id: number ): Promise<void> {
+        const usuario: UsuarioEntity = await this.usuarioService.findById(usu_id)
         usuario.resetPasswordToken = v4();
         this.authRepository.save(usuario);
         //ENVIAR EMAIL
     }
 
-    async resetPassword(resetPasswordDto: RessetPasswordDto): Promise<void> {
+    async resetPassword(resetPasswordDto: RessetPasswordDto): Promise<any> {
         const { resetPasswordToken, password } = resetPasswordDto
         const usuario: UsuarioEntity = await this.usuarioService.findOneByResetPasswordToken(resetPasswordToken);
 
         usuario.usu_password = await this.encoderService.encodePassword(password)
         usuario.resetPasswordToken = null
         this.authRepository.save(usuario)
+        return new MessageDto('Contraseña Restablecida');
     }
 
+
+    async changePassword(changePasswordDto: ChangePasswordDto, usuario: UsuarioEntity): Promise<any>{
+        const { oldPassword, newPassword} = changePasswordDto; 
+        if(await this.encoderService.checkPassword(oldPassword, usuario.usu_password)){
+            usuario.usu_password = await this.encoderService.encodePassword(newPassword);
+            this.authRepository.save(usuario);
+            return new MessageDto('La contraseña ha sido cambiada exitosamente');
+        } else {
+            throw new BadRequestException('La contraseña antigua no es correcta');
+        }
+    }
 
 }

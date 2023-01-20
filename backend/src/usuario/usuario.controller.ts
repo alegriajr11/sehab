@@ -13,6 +13,7 @@ export class UsuarioController {
 
     constructor(private readonly usuarioService: UsuarioService){}
 
+    //LISTAR TODOS LOS USUARIOS
     @RolDecorator(RolNombre.ADMIN)
     @UseGuards(JwtAuthGuard)
     @Get()
@@ -20,6 +21,7 @@ export class UsuarioController {
         return await this.usuarioService.getall()
     }
 
+    //LISTAR USUARIO POR ID
     @RolDecorator(RolNombre.ADMIN)
     @UseGuards(JwtAuthGuard)
     @Get(':id')
@@ -27,21 +29,23 @@ export class UsuarioController {
         return await this.usuarioService.findById(id);
     }
     
-
+    //ELIMINAR USUARIO
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number) {
         return await this.usuarioService.delete(id);
     }
 
+    //CREAR USUARIO ADMINISTRADOR
     // @RolDecorator(RolNombre.ADMIN)
-    // @UseGuards(JwtAuthGuard, RolesGuard)
+    // @UseGuards(JwtAuthGuard, RolesGuard) => GUARD
     @UsePipes(new ValidationPipe({whitelist: true}))
     @Post()
     async create(@Body() dto: CreateUsuarioDto){
         return this.usuarioService.create(dto);
     }
-    
+
+    //ACTUALIZAR USUARIO
     @RolDecorator(RolNombre.ADMIN)
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({whitelist: true, transformOptions: {enableImplicitConversion: true}}))

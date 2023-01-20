@@ -31,14 +31,6 @@ export class UsuarioService {
         return usuario;
       }
     
-    //BUSCANDO USUARIO POR EMAIL
-    async findByOneEmail(usu_email: string): Promise<UsuarioEntity> {
-      const usuario = await this.usuarioRepository.findOne({ where: { usu_email } });
-      if (!usuario) {
-        throw new NotFoundException(new MessageDto(`El Usuario con email: ${usu_email} no existe`));
-      }
-      return usuario;
-    }
 
     /*LISTANDO USUARIOS */
     async getall(): Promise<UsuarioEntity[]>{
