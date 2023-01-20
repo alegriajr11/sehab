@@ -12,14 +12,15 @@
     <div class="card">
         <div class="card-body">
             <div class="col-12">
-                <h3 class="text-center">ACTA DE VISITA</h3>
+                <h3 class="text-center">ACTA DE VERIFICACIÓN AL PAMEC DE LAS INSTITUCIONES PRESTADORAS
+                    DE SERVICIOS DE SALUD - IPS</h3>
             </div>
             <hr class="medio">
-            <form class="row g-3" #f="ngForm" novalidate (ngSubmit)="onRegister()">
+            <form #f="ngForm" novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()" id="form">
 
                 <div class="col-md-2">
                     <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
-                    <input type="number" min="0" class="form-control" id="inputN_Acta" required>
+                    <input type="number" min="0" class="form-control" id="acta" required>
                 </div>
 
                 <div class="col-md-3">
@@ -41,12 +42,12 @@
                 <div class="col-3" *ngIf="formulacion">
                     <label for="" class="form-label text-center">AÑO DE FORMULACION:</label>
                     <input type="number" class="form-control" ngModel="number"
-                        onkeypress="if(this.value.length==4) return false;">
+                        onkeypress="if(this.value.length==4) return false;" id="año_formulacion">
                 </div>
 
                 <div class="col-3" *ngIf="mejoramiento">
                     <label for="" class="form-label text-center">CICLO DE MEJORAMIENTO</label>
-                    <select id="id_mejora" class="form-select form-control">
+                    <select id="id_mejoramiento" class="form-select form-control">
                         <option hidden selected>Selecciona el Ciclo...</option>
                         <option value="1">1°</option>
                         <option value="2">2°</option>
@@ -55,14 +56,12 @@
                 </div>
 
 
-
-
                 <div class="col-12">
                     <hr class="medio">
                 </div>
 
                 <div class="col-12">
-                    <h3>INFORMACION DEL PRESTADOR</h3>
+                    <h3>INFORMACIÓN DEL PRESTADOR</h3>
                 </div>
 
                 <div class="col-md-6">
@@ -110,37 +109,20 @@
                     <input type="email" class="form-control" id="email" placeholder="E-mail" readonly>
                 </div>
 
-                <div class="col-12">
-                    <label for="inputAddress" class="form-label">Sede Principal:</label>
-
-                    <select id="sedep" class="form-select form-control" (change)="sedePrincipal()" required>
-                        <option hidden selected>Sede Principal...</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
 
                 <div class="col-md-12" id="msj">
-                </div>
-                <div class="col-md-6" *ngIf="sedPrincipal">
-                    <label for="inputAddress2" class="form-label">Localidad:</label>
-                    <input type="text" class="form-control" id="localidad" placeholder="Localidad" required>
-                </div>
-                <div class="col-md-6" *ngIf="sedPrincipal">
-                    <label for="inputAddress2" class="form-label">Dirección:</label>
-                    <input type="text" class="form-control" id="dirubic" placeholder="Dirección" required>
                 </div>
 
                 <div class="container row">
                     <div class="col-md-6">
                         <label for="" class="form-label">Representante Legal:</label>
-                        <input type="text" class="form-control" id="repleg" readonly>
+                        <input type="text" class="form-control" id="repleg" placeholder="Representante legal" readonly>
                     </div>
 
 
                     <div class="col-md-6">
                         <label for="" class="form-label">Código Prestador:</label>
-                        <input type="text" class="form-control" id="codpres" readonly>
+                        <input type="text" class="form-control" id="codpres" placeholder="Codigo Prestador" readonly>
                     </div>
                 </div>
 
@@ -160,31 +142,107 @@
                 <div class="container row" id="contenedor">
                     <div class="col-md-6" id="nom_secre">
                         <label for="" class="form-label">Nombre:</label>
-                        <select id="usu_secretaria" class="form-select form-control">
+                        <select id="usu_secretaria1" class="form-select form-control">
                             <option hidden selected>Selecciona el Nombre...</option>
                             <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
                                 {{usuario.usu_apellido}}</option>
                         </select>
                     </div>
 
-                    <div class="col-md-6" id="cargo_secre">
+                    <div class="col-md-6">
                         <label for="" class="form-label">Cargo:</label>
-                        <input type="text" class="form-control" id="" placeholder="Cargo...">
+                        <input type="text" class="form-control" id="cargosecre1" placeholder="Cargo...">
                     </div>
 
                 </div>
 
-                <div class="container row">
-                    <div class="col-md-6" *ngIf="botonAgregar">
-                        <button id="newList" class="btn btn-dark btn-circle btn-xlm newList" title="Mas"
-                            (click)="agregarNuevoUser()">
-                            <i class='fa fa-plus'></i></button>
+                <div class="col-md-12" *ngIf="usuarioAgregado">
+                    <p>Clic en el boton para agregar un nuevo usuario si así lo requiere</p>
+                    <button id="button-add" class="btn-dark plus sp" title="Agregar Usuario" (click)="nuevoUsuario()">
+                        <span class="size_span_plus">
+                            <i class='fas fa-plus-circle'></i>
+                        </span>
+                    </button>
+                    <hr>
+                </div>
+
+
+                <div class="container row" id="contenedor" *ngIf="agregarUsuario">
+                    <div class="col-md-6" id="nom_secre">
+                        <label for="" class="form-label">Nombre:</label>
+                        <select id="usu_secretaria2" class="form-select form-control">
+                            <option hidden selected>Selecciona el Nombre Opcional...</option>
+                            <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
+                                {{usuario.usu_apellido}}</option>
+                        </select>
                     </div>
 
-                    <div class="col-md-6" *ngIf="botonCerrar">
-                        <button id="newList" class="btn btn-dark btn-circle btn-xlm newList" title="Mas"
-                            (click)="eliminarDivUser()">
-                            <i class='fa fa-close'></i></button>
+                    <div class="col-md-6">
+                        <label for="" class="form-label">Cargo:</label>
+                        <input type="text" class="form-control" id="cargosecre2" placeholder="Cargo Opcional...">
+                    </div>
+
+                    <div class="col-md-6">
+                        <button id="button-add" class="btn-dark plus sp" title="Eliminar Usuario" (click)="eliminarUsuario()">
+                            <span class="size_span_plus">
+                                <i class='fa fa-close'></i>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <hr>
+                    </div>
+                </div>
+                
+                <div class="col-12 bg-h3 contenedor-form">
+                    <h3 class="text-center sizeh3">PRESTADOR DE SERVICIOS DE SALUD</h3>
+                </div>
+
+
+                <div class="container row" id="contenedor">
+                    <div class="col-md-6" id="nom_secre">
+                        <label for="" class="form-label">Prestador:</label>
+                        <input type="text" class="form-control" id="nombrePrestador1" placeholder="Prestador...">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="" class="form-label">Cargo:</label>
+                        <input type="text" class="form-control" id="cargoPres1" placeholder="Cargo...">
+                    </div>
+                </div>
+
+
+                <div class="col-md-12" *ngIf="prestadorAgregado">
+                    <p>Clic en el boton para agregar una nueva firma prestador si así lo requiere</p>
+                    <button id="button-add" class="btn-dark plus sp" title="Agregar Prestador" (click)="nuevoPrestador()">
+                        <span class="size_span_plus">
+                            <i class='fas fa-plus-circle'></i>
+                        </span>
+                    </button>
+                    <hr>
+                </div>
+
+
+                <div class="container row" id="contenedor" *ngIf="agregarPrestador">
+                    <div class="col-md-6" id="nom_secre">
+                        <label for="" class="form-label">Prestador:</label>
+                        <input type="text" class="form-control" id="nombrePrestador2" placeholder="Prestador Opcional...">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="" class="form-label">Cargo:</label>
+                        <input type="text" class="form-control" id="cargoPres2" placeholder="Cargo Opcional...">
+                    </div>
+
+                    <div class="col-md-6">
+                        <button id="button-add" class="btn-dark plus sp" title="Eliminar Prestador" (click)="eliminarPrestador()">
+                            <span class="size_span_plus">
+                                <i class='fa fa-close'></i>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <hr>
                     </div>
                 </div>
 
@@ -195,7 +253,7 @@
 
                 <div class="col-12">
                     <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
-                    <select id="inputState" class="form-select form-control">
+                    <select id="inputState" class="form-select form-control" id="obj_visita">
                         <option hidden selected>Objeto de visita...</option>
                         <option>REALIZAR SEGUIMIENTO A LA IMPLEMENTACION DE LA AUDITORIA PARA EL MEJORAMIENTO DE LA
                             CALIDAD Y LA APLICACIÓN DEL PAMEC</option>
@@ -203,12 +261,18 @@
                 </div>
 
                 <div class="col-12">
-                    <textarea name="" id="" rows="5">EN EL S.O.G.C LA AUDITORÍA ES UN COMPONENTE DE MEJORAMIENTO CONTINUO, Y SE ENTIENDE COMO EL MECANISMO SISTEMÁTICO Y CONTINUO DE EVALUACIÓN DEL CUMPLIMIENTO DE ESTÁNDARES DE CALIDAD, CONCORDANTES CON LA INTENCIONALIDAD DE LOS ESTÁNDARES DE ACREDITACIÓN Y SUPERIORES A LOS QUE SE DETERMINAN COMO BÁSICOS EN EL SISTEMA ÚNICO DE HABILITACIÓN. EL PAMEC ES LA FORMA A TRAVÉS DE LA CUAL LA IPS IMPLEMENTA ESTE COMPONENTE.</textarea>
+                    <textarea id="desc_obj_visita" disabled
+                        rows="5">EN EL S.O.G.C LA AUDITORÍA ES UN COMPONENTE DE MEJORAMIENTO CONTINUO, Y SE ENTIENDE COMO EL MECANISMO SISTEMÁTICO Y CONTINUO DE EVALUACIÓN DEL CUMPLIMIENTO DE ESTÁNDARES DE CALIDAD, CONCORDANTES CON LA INTENCIONALIDAD DE LOS ESTÁNDARES DE ACREDITACIÓN Y SUPERIORES A LOS QUE SE DETERMINAN COMO BÁSICOS EN EL SISTEMA ÚNICO DE HABILITACIÓN. EL PAMEC ES LA FORMA A TRAVÉS DE LA CUAL LA IPS IMPLEMENTA ESTE COMPONENTE.</textarea>
+                </div>
+
+                <div class="col-12">
+                    <label for="">Descripción del Acta</label>
+                    <textarea id="desc_acta" rows="8"></textarea>
                 </div>
 
                 <div class="col-12">
                     <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
-                        [disabled]="!f.valid">
+                        [disabled]="!f.valid" >
                         <i class='fa fa-save fa-lg'></i></button>
                 </div>
 
