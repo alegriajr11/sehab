@@ -93,7 +93,8 @@ const routes: Routes = [
   {path: 'sic', component: HomeSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
   {path: 'sic/acta', component: ActaSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
   {path: 'sic/evaluaciones', component: EvaluacionesSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
-  {path: 'sic/evaluacion', component: EvaluacionSicComponent, canActivate: [UsuarioGuard, ButtonGuard], data: {expectedRol: ['admin', 'sic']}},
+  {path: 'sic/evaluacion', component: EvaluacionSicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
+  //, ButtonGuard => Guard Acceso a evaluación
 
   //Rutas SP
   {path: 'sp', component: HomeSpComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sp']}},

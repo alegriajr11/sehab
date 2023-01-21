@@ -42,7 +42,7 @@ import { CalificacionpamecModule } from './pamec/calificacionpamec/calificacionp
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize:false,
-        logging: false,
+        logging: false
         
       }),
       inject: [ConfigService],

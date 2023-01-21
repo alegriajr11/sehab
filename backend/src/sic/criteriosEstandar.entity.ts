@@ -8,7 +8,7 @@ export class CriterioEstandarSicEntity {
     @PrimaryGeneratedColumn('increment')
     crie_id: number;
 
-    @Column({ type: 'varchar', length: 120, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 220, nullable: false, unique: false })
     crie_nombre: string;
 
     //Relacion UNO a MUCHOS CRITERIOS ESTANDAR - CUMPLIMIENTO

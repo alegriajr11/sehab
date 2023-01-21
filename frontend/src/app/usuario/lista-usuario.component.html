@@ -62,7 +62,7 @@
             </button>
           </td>
           <td *ngIf="isAdmin">
-            <button class="btn btn-outline-primary" routerLink="/usuarios/restablecer/{{usuario.usu_id}}" (change)="restablecer(usuario.usu_id)">
+            <button class="btn btn-outline-primary" routerLink="/usuarios/restablecer/{{usuario.usu_id}}" (click)="restablecer(usuario.usu_id)">
               <i class='fa fa-key'></i>
             </button>
           </td>

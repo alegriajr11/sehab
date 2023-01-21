@@ -93,7 +93,7 @@ export class ListaUsuarioComponent implements OnInit {
   }
 
   restablecer(usu_id: number): void{
-    this.authService.requestPassword(usu_id).subscribe(res =>this.router.navigate(['/usuarios']))
+    this.authService.requestPassword(usu_id).subscribe()
   }
 
   crearPDF(): void {
