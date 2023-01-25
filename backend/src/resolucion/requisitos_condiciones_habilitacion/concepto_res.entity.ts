@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CumplimientoHabilitacionEntity } from "./cumplimiento_habilitacion.entity";
 import { RequisitoResEntity } from "./requisito_res.entity";
 
@@ -16,7 +16,7 @@ export class ConceptoResEntity {
     @ManyToOne(type => RequisitoResEntity, requisito_res => requisito_res.concepto_res)
     requisito_res: RequisitoResEntity;
 
-    //Relacion Muchos a Uno CONCEPTO - REQUISITOS
-    @ManyToOne(type => CumplimientoHabilitacionEntity, cumplimientohab => cumplimientohab.conceptos_res)
-    cumplimientohab_res: CumplimientoHabilitacionEntity;
+    //Relacion MUCHOS a MUCHOS CONCEPTORES - CUMPLIMIENTOHAB_RES
+    @OneToMany(type => CumplimientoHabilitacionEntity, cumplimientohab => cumplimientohab.conceptos_res)
+    cumplimientohab: CumplimientoHabilitacionEntity;
 }

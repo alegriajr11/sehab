@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CumplimientoSicEntity } from "./cumplimientosic.entity";
+import { PrestadorEntity } from "src/prestador/prestador.entity";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
+
 
 
 @Entity({ name: 'criterio_estandarsic' })
@@ -11,7 +13,8 @@ export class CriterioEstandarSicEntity {
     @Column({ type: 'varchar', length: 220, nullable: false, unique: false })
     crie_nombre: string;
 
-    //Relacion UNO a MUCHOS CRITERIOS ESTANDAR - CUMPLIMIENTO
-    @OneToMany(type => CumplimientoSicEntity, cumplimiento => cumplimiento.criterio_estandar)
-    cumplimiento: CumplimientoSicEntity;
+    //Relacion UNO a MUCHOS CRITERIOS SIC - CUMPLIMIENTOSIC
+    @OneToMany(type => CumplimientoEstandarSicEntity, cumplimiento_estandar => cumplimiento_estandar.criterioestandar_sic)
+    cumplimiento_estandar: CumplimientoEstandarSicEntity;
+
 }

@@ -13,11 +13,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { MenuComponent } from './menu/menu.component';
 import { PasswordModule } from "primeng/password";
-import { DropdownComponent, DropdownModule } from '@coreui/angular';
+import { DropdownComponent, DropdownModule} from '@coreui/angular';
 import { PasswordcComponent } from './auth/passwordc.component';
 import { interceptorProvider } from './interceptors/usuario.interceptor';
 import { FooterComponent } from './footer/footer.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ModalModule, BsModalService } from 'ngx-bootstrap/modal'; 
 
 
 //USUARIOS
@@ -67,6 +68,10 @@ import { EvaluacionSpIpsComponent } from './roles/sp/evaluacion-sp-ips/evaluacio
 import { EvaluacionSpProComponent } from './roles/sp/evaluacion-sp-pro/evaluacion-sp-pro.component';
 import { EvaluacionPamecComponent } from './roles/pamec/evaluacion-pamec/evaluacion-pamec.component';
 import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
+import { CriterioestandarComponent } from './usuario/admin/criteriosic/criterioestandar/criterioestandar.component';
+import { AgregarcriterioestandarComponent } from './usuario/admin/criteriosic/agregarcriterioestandar/agregarcriterioestandar.component';
+import { EditarcriteriosicComponent } from './usuario/admin/criteriosic/editarcriteriosic/editarcriteriosic.component';
+import { ModalsicComponent } from './roles/sic/evaluacion/modalsic/modalsic.component';
 
 
 @NgModule({
@@ -125,7 +130,11 @@ import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.compo
     EvaluacionSpIpsComponent,
     EvaluacionSpProComponent,
     EvaluacionPamecComponent,
-    ResetpasswordComponent
+    ResetpasswordComponent,
+    CriterioestandarComponent,
+    AgregarcriterioestandarComponent,
+    EditarcriteriosicComponent,
+    ModalsicComponent
   ],
   imports: [
     BrowserModule,
@@ -138,10 +147,11 @@ import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.compo
     AppRoutingModule,
     NgxPaginationModule,
     Ng2SearchPipeModule,
+    ModalModule
     
 
   ],
-  providers: [interceptorProvider,],
+  providers: [interceptorProvider, BsModalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

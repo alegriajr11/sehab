@@ -1,5 +1,5 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ConceptoResEntity } from "./concepto_res.entity";
 
 
@@ -16,6 +16,8 @@ export class RequisitoResEntity {
     @OneToMany(type => ConceptoResEntity, concepto_res => concepto_res.requisito_res)
     concepto_res: ConceptoResEntity;
 
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.requisitos_hab)
-    prestadores: PrestadorEntity
+    @OneToOne(() => PrestadorEntity)
+    @JoinColumn()
+    prestador: PrestadorEntity
+
 }

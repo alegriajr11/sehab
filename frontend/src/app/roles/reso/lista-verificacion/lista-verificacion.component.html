@@ -1,11 +1,19 @@
 <app-menu></app-menu>
-<div class="grid-container">
-    <button class="btn btn-light esp btn-circle btn-xl" routerLink="/reso">
-        <i class="fa fa-reply fa-lg"></i>
-    </button>
-    <h1>Resolución 3100 de 2019</h1>
+<div class="col">
+    <div class="row">
+        <div class="col-md-1">
+            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/reso">
+                <i class="fa fa-reply fa-lg"></i>
+            </button>
+        </div>
+        <div class="col-md-10">
+            <h1>Resolución 3100 de 2019</h1>
+        </div>
+    </div>
+    <div>
 </div>
-<div>
+
+
     <h3>Selecciona el Prestador</h3>
 </div>
 
@@ -21,15 +29,17 @@
                 <h5><b> Municipio:</b></h5>
                 <select id="mun_id" name="mun_id" class="form-select form-control" (change)="cargarPrestadoresByMun()">
                     <option hidden selected>Selecciona un Municipio...</option>
-                    <option *ngFor="let municipio of municipio" value="{{municipio.mun_id}}">{{municipio.mun_nombre}}</option>
+                    <option *ngFor="let municipio of municipio" value="{{municipio.mun_id}}">{{municipio.mun_nombre}}
+                    </option>
                 </select>
             </div>
-            
+
             <div class="col-md-6">
                 <h5><b> Prestador:</b></h5>
                 <select id="prestador" name="prestador" class="form-select form-control">
                     <option hidden selected>Selecciona un Prestador...</option>
-                    <option *ngFor="let prestador of prestador" value="{{prestador.pre_cod_habilitacion}}">{{prestador.pre_nombre}}
+                    <option *ngFor="let prestador of prestador" value="{{prestador.pre_cod_habilitacion}}">
+                        {{prestador.pre_nombre}}
                     </option>
                 </select>
             </div>
@@ -62,13 +72,16 @@
                             INSTALADA</td>
                     </tr>
                     <tr>
-                        <td routerLink="/lista-verificacion"><strong>2.</strong> CONDICIONES DE CAPACIDAD TECNICO ADMINISTRATIVAS </td>
+                        <td routerLink="/lista-verificacion"><strong>2.</strong> CONDICIONES DE CAPACIDAD TECNICO
+                            ADMINISTRATIVAS </td>
                     </tr>
                     <tr>
-                        <td routerLink="/lista-verificacion"><strong>3.</strong> CONDICIONES DE CAPACIDAD TECNOLOGICA Y CIENTIFICA </td>
+                        <td routerLink="/lista-verificacion"><strong>3.</strong> CONDICIONES DE CAPACIDAD TECNOLOGICA Y
+                            CIENTIFICA </td>
                     </tr>
                     <tr>
-                        <td routerLink="/lista-verificacion"><strong>4.</strong> CONDICIONES DE CAPACIDAD TECNICO ADMINISTRATIVAS </td>
+                        <td routerLink="/lista-verificacion"><strong>4.</strong> CONDICIONES DE CAPACIDAD TECNICO
+                            ADMINISTRATIVAS </td>
                     </tr>
                     <tr>
                         <td routerLink="/lista-verificacion"><strong>5.</strong> CONCLUSIONES Y RECOMENDACIONES </td>

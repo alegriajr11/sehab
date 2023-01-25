@@ -66,6 +66,6 @@ export class CreatePrestadorDto {
     })
     pre_municipio: MunicipioEntity;
 
-
+    
 
 }

@@ -17,10 +17,12 @@ export const environment = {
   generarPdfURL: 'http://localhost:8080/generarpdf/usuarios/',
 
 //SIC
-  dominioURL: 'http://localhost:8080/criteriosic/',
+  criterioSicURL: 'http://localhost:8080/criteriosic/',
   indicadorURL: 'http://localhost:8080/indicador/',
   criterios_URL: 'http://localhost:8080/criterio/',
   criterioURL: 'http://localhost:8080/criteriosic/criterio/',
+  cumplimientoEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/estandar/',
+  cumpleEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/cumple/',
   
   
 

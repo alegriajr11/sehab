@@ -49,6 +49,7 @@ main {
 h1 {
   font-size: 2em;
   margin: 0.67em 0;
+  font-weight: bold;
 }
 
 /* Grouping content
@@ -417,5 +418,7 @@ footer {
 }
 
 
-
+.card {
+  box-shadow: 1px 10px 50px black;
+}
 

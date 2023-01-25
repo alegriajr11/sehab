@@ -11,6 +11,8 @@ import { EtapaInd } from "src/sp/sp_ind/etapaind.entity";
 import { RequisitoResEntity } from "src/resolucion/requisitos_condiciones_habilitacion/requisito_res.entity";
 import { ServiciosVerificadosEntity } from "src/resolucion/servicios_capacidad/servicios_verificados.entity";
 import { CapacidadInstaladaEntity } from "src/resolucion/servicios_capacidad/capacidad_instalada.entity";
+import { CriterioEstandarSicEntity } from "src/sic/criteriosEstandar.entity";
+import { CumplimientoEstandarSicEntity } from "src/sic/cumplimientoestandar.entity";
 
 
 
@@ -84,10 +86,6 @@ export class PrestadorEntity {
 
 
 
-    //Relacion Uno a Muchos PRESTADORES - REQUISITOS
-    @OneToMany(type => RequisitoResEntity, requisitos => requisitos.prestadores)
-    requisitos_hab: RequisitoResEntity;
-
     //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
     @OneToMany(type => ServiciosVerificadosEntity, servicios_verf => servicios_verf.prestadores)
     servicios_verificados: ServiciosVerificadosEntity
@@ -95,6 +93,9 @@ export class PrestadorEntity {
     //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
     @OneToMany(type => CapacidadInstaladaEntity, capacidad_instalada => capacidad_instalada.prestadores)
     capacidad_instalada: CapacidadInstaladaEntity
-    
 
+
+    //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
+    @OneToMany(type => CumplimientoEstandarSicEntity, cumplimientoestandar => cumplimientoestandar.prestadores)
+    cumplimientoEstandar: CumplimientoEstandarSicEntity
 }

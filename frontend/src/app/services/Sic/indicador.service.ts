@@ -21,6 +21,8 @@ export class IndicadorService {
     return this.httpClient.get<Indicador[]>(this.indicadorURL + dom)
   }
 
+
+
   public listIndOne(ind: string): Observable<Indicador[]>{
     return this.httpClient.get<Indicador[]>(this.indicadorURL + 'ind' + ind)
   }

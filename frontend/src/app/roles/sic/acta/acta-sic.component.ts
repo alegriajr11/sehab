@@ -199,6 +199,11 @@ export class ActaSicComponent implements OnInit {
     var valorPrestador = (<HTMLSelectElement><unknown>optp);
     sessionStorage.setItem("nombre-pres-sic", valorPrestador.textContent);
 
+    //CODIGO PRESTADOR
+    var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
+    var valorCodigoPres = codigoPres.value
+    sessionStorage.setItem("cod-pres-sic", valorCodigoPres);
+
     //USUARIO SECRETARIA
     var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
     var selUsuSecre = idUsuSecre.selectedIndex;
@@ -651,88 +656,89 @@ export class ActaSicComponent implements OnInit {
 
     //VALIDANDO POR VALOR DE SEDE Y ENVIAR SOLICITUD DE DESCARGA DE ACTA
     if (valorSede === 'Si') {
-      if (valorActa && valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
-        valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede
-        && valorVisitaInicial || valorVisitaSeguim) {
+      if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
+        valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede && valorActa) {
+        if (valorVisitaInicial || valorVisitaSeguim) {
+          //OBTENER EL ESTADO DEL BOTON A TRUE 
+          this.boton_acta_sic = true
+          localStorage.setItem('boton-acta-sic', 'true');
+          console.log(localStorage.setItem('boton-acta-sic', 'true'))
 
-        //OBTENER EL ESTADO DEL BOTON A TRUE 
-        this.boton_acta_sic = true
-        localStorage.setItem('boton-acta-sic', 'true');
-        console.log(localStorage.setItem('boton-acta-sic', 'true'))
-
-        Swal.fire({
-          title: '¿Desea descargar el acta?',
-          showCancelButton: true,
-          confirmButtonText: 'Si',
-          cancelButtonText: 'No'
-        }).then((result) => {
-          if (result.value) {
-            // doc.output('dataurlnewwindow', { filename: 'acta-sic.pdf' });
-            doc.save('acta-sic.pdf')
-            Swal.fire({
-              title: '¿Desea Evaluar al Prestador?',
-              showCancelButton: true,
-              confirmButtonText: 'Si',
-              cancelButtonText: 'No'
-            }).then((result => {
-              if (result.value) {
-                this.router.navigate(['/sic/evaluacion']);
-                window.scrollTo(0, 0);
-              } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                  'Ok'
-                )
-              }
-            }))
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.router.navigate(['/sic/evaluacion']);
-            window.scrollTo(0, 0);
-          }
-        })
-      } //FIN DEL SI - VALIDACIÓN SI LA SEDE ES SI
+          Swal.fire({
+            title: '¿Desea descargar el acta?',
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+          }).then((result) => {
+            if (result.value) {
+              // doc.output('dataurlnewwindow', { filename: 'acta-sic.pdf' });
+              doc.save('acta-sic.pdf')
+              Swal.fire({
+                title: '¿Desea Evaluar al Prestador?',
+                showCancelButton: true,
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+              }).then((result => {
+                if (result.value) {
+                  this.router.navigate(['/sic/evaluacion']);
+                  window.scrollTo(0, 0);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                  Swal.fire(
+                    'Ok'
+                  )
+                }
+              }))
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              this.router.navigate(['/sic/evaluacion']);
+              window.scrollTo(0, 0);
+            }
+          })
+        } //FIN DEL SI - VALIDACIÓN SI LA SEDE ES SI
+      }
     }
-
 
     //VALIDACIÓN PARA PDF
     if (valorSede === 'No') {
-      if (valorActa && valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
+      if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
         valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede
-        && valorLocalidad && valorDirSede && valorVisitaInicial || valorVisitaSeguim) {
-        //OBTENER EL ESTADO DEL BOTON A TRUE 
-        this.boton_acta_sic = true
-        localStorage.setItem('boton-acta-sic', 'true');
+        && valorLocalidad && valorDirSede && valorActa) {
+        if (valorVisitaInicial || valorVisitaSeguim) {
+          //OBTENER EL ESTADO DEL BOTON A TRUE 
+          this.boton_acta_sic = true
+          localStorage.setItem('boton-acta-sic', 'true');
 
-        Swal.fire({
-          title: '¿Desea descargar el acta?',
-          showCancelButton: true,
-          confirmButtonText: 'Si',
-          cancelButtonText: 'No'
-        }).then((result) => {
-          if (result.value) {
-            // doc.output('dataurlnewwindow', { filename: 'acta-sic.pdf' });
-            doc.save('acta-sic.pdf')
-            Swal.fire({
-              title: '¿Desea Evaluar al Prestador?',
-              showCancelButton: true,
-              confirmButtonText: 'Si',
-              cancelButtonText: 'No'
-            }).then((result => {
-              if (result.value) {
-                this.router.navigate(['/sic/evaluacion']);
-                window.scrollTo(0, 0);
-              } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                  'Ok'
-                )
-              }
-            }))
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.router.navigate(['/sic/evaluacion']);
-            window.scrollTo(0, 0);
-          }
-        })
-      } //FIN DEL SI - VALIDACIÓN SI LA SEDE ES NO
+          Swal.fire({
+            title: '¿Desea descargar el acta?',
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+          }).then((result) => {
+            if (result.value) {
+              // doc.output('dataurlnewwindow', { filename: 'acta-sic.pdf' });
+              doc.save('acta-sic.pdf')
+              Swal.fire({
+                title: '¿Desea Evaluar al Prestador?',
+                showCancelButton: true,
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+              }).then((result => {
+                if (result.value) {
+                  this.router.navigate(['/sic/evaluacion']);
+                  window.scrollTo(0, 0);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                  Swal.fire(
+                    'Ok'
+                  )
+                }
+              }))
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              this.router.navigate(['/sic/evaluacion']);
+              window.scrollTo(0, 0);
+            }
+          })
+        } //FIN DEL SI - VALIDACIÓN SI LA SEDE ES NO
+      }
+
     }
-
   }
 }

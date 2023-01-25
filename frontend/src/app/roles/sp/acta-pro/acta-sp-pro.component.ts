@@ -581,42 +581,42 @@ export class ActaSpProComponent implements OnInit {
     }
 
     //VALIDACIÓN PARA PDF
-    if (valorActa && valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
-      valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp
-      && valorVisitaInicial || valorVisitaSeguim) {
-      Swal.fire({
-        title: '¿Desea descargar el acta?',
-        showCancelButton: true,
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.value) {
-          // doc.output('dataurlnewwindow', { filename: 'acta-sp-ips.pdf' });
-          doc.save('acta-sp-ips.pdf')
-          Swal.fire({
-            title: '¿Desea Evaluar al Prestador?',
-            showCancelButton: true,
-            confirmButtonText: 'Si',
-            cancelButtonText: 'No'
-          }).then((result => {
-            if (result.value) {
-              this.router.navigate(['/']);
-              window.scrollTo(0, 0);
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-              Swal.fire(
-                'Ok'
-              )
-            }
-          }))
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.router.navigate(['/']);
-          window.scrollTo(0, 0);
-        }
-      })
-    }
+    if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
+      valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp&& valorActa) {
+      if (valorVisitaInicial || valorVisitaSeguim) {
+        Swal.fire({
+          title: '¿Desea descargar el acta?',
+          showCancelButton: true,
+          confirmButtonText: 'Si',
+          cancelButtonText: 'No'
+        }).then((result) => {
+          if (result.value) {
+            // doc.output('dataurlnewwindow', { filename: 'acta-sp-ips.pdf' });
+            doc.save('acta-sp-ips.pdf')
+            Swal.fire({
+              title: '¿Desea Evaluar al Prestador?',
+              showCancelButton: true,
+              confirmButtonText: 'Si',
+              cancelButtonText: 'No'
+            }).then((result => {
+              if (result.value) {
+                this.router.navigate(['/']);
+                window.scrollTo(0, 0);
+              } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                  'Ok'
+                )
+              }
+            }))
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            this.router.navigate(['/']);
+            window.scrollTo(0, 0);
+          }
+        })
+      }
 
+    }
   }
 
-  
 
 }

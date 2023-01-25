@@ -1,17 +1,26 @@
 <app-menu></app-menu>
 
-<div class="grid-container">
-    <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sp">
-        <i class="fa fa-reply fa-lg"></i>
-    </button>
-    <h1 class="text-center">Evaluación de Seguridad del Paciente - Instituciones Prestadoras de Servicios de Salud</h1>
+<div class="col">
+    <div class="row">
+        <div class="col-md-2">
+            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sp">
+                <i class="fa fa-reply fa-lg"></i>
+            </button>
+        </div>
+        <div class="col-md-8">
+
+            <h1 class="text-center">Evaluación de Seguridad del Paciente - Instituciones Prestadoras de Servicios de
+                Salud</h1>
+        </div>
+    </div>
 </div>
 
 <br>
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <h2 class="card-title text-center">ACTA DE VISITA DE VERIFICACIÓN DEL CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE INSTITUCIONES PRESTADORAS DE SERVICIOS DE SALUD (IPS)</h2>
+            <h2 class="card-title text-center">ACTA DE VISITA DE VERIFICACIÓN DEL CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD
+                DEL PACIENTE INSTITUCIONES PRESTADORAS DE SERVICIOS DE SALUD (IPS)</h2>
             <hr class="up">
             <form #f="ngForm" novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()" id="form">
                 <div class="col-md-1">
@@ -53,9 +62,11 @@
 
                 <div class="col-md-6">
                     <label for="habilitado" class="form-label">Municipio:</label>
-                    <select id="mun_id" name="mun_id" class="form-select form-control" (change)="cargarPrestadoresByMun()">
+                    <select id="mun_id" name="mun_id" class="form-select form-control"
+                        (change)="cargarPrestadoresByMun()">
                         <option hidden selected>Selecciona un Municipio...</option>
-                        <option *ngFor="let municipio of municipio" value="{{municipio.mun_id}}">{{municipio.mun_nombre}}</option>
+                        <option *ngFor="let municipio of municipio" value="{{municipio.mun_id}}">
+                            {{municipio.mun_nombre}}</option>
                     </select>
                 </div>
 
@@ -63,53 +74,47 @@
                     <label for="inputAddress" class="form-label">Prestador:</label>
                     <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()">
                         <option hidden selected>Selecciona un Prestador...</option>
-                        <option *ngFor="let prestador of prestador" value="{{prestador.pre_cod_habilitacion}}">{{prestador.pre_nombre}}</option>
+                        <option *ngFor="let prestador of prestador" value="{{prestador.pre_cod_habilitacion}}">
+                            {{prestador.pre_nombre}}</option>
                     </select>
                 </div>
 
                 <div class="col-6">
                     <label for="inputAddress2" class="form-label">Nit:</label>
-                    <input type="text" class="form-control" id="nit"
-                        placeholder="Nit" readonly>
+                    <input type="text" class="form-control" id="nit" placeholder="Nit" readonly>
                 </div>
-                
+
 
                 <div class="col-6">
                     <label for="inputAddress2" class="form-label">Dirección:</label>
-                    <input type="text" class="form-control" id="direccion"
-                        placeholder="Dirección Prestador" readonly>
+                    <input type="text" class="form-control" id="direccion" placeholder="Dirección Prestador" readonly>
                 </div>
-                
+
                 <div class="col-6">
                     <label for="inputAddress2" class="form-label">Barrio:</label>
-                    <input type="text" class="form-control" id="barrio"
-                        placeholder="Barrio Prestador" required>
+                    <input type="text" class="form-control" id="barrio" placeholder="Barrio Prestador" required>
                 </div>
 
                 <div class="col-6">
                     <label for="inputAddress2" class="form-label">Telefono:</label>
-                    <input type="tel" class="form-control" id="telefono"
-                        placeholder="Telefono" readonly>
+                    <input type="tel" class="form-control" id="telefono" placeholder="Telefono" readonly>
                 </div>
 
                 <div class="col-12">
                     <label for="inputAddress2" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="email"
-                        placeholder="E-mail" readonly>
+                    <input type="email" class="form-control" id="email" placeholder="E-mail" readonly>
                 </div>
 
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Representante Legal:</label>
-                    <input type="text" class="form-control" id="repleg"
-                    placeholder="Representante Legal" readonly>
+                    <input type="text" class="form-control" id="repleg" placeholder="Representante Legal" readonly>
                 </div>
 
-                
+
                 <div class="col-md-6">
                     <label for="" class="form-label">Código Prestador:</label>
-                    <input type="text" class="form-control" id="codpres"
-                    placeholder="Código Prestador" readonly>
+                    <input type="text" class="form-control" id="codpres" placeholder="Código Prestador" readonly>
                 </div>
 
 
@@ -121,7 +126,8 @@
                     <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
                     <select id="objVisita" class="form-select form-control">
                         <option hidden selected>Objeto de visita...</option>
-                        <option>Realizar seguimiento a la implementación del programa de seguridad del paciente para instituciones prestadoras de servicios de salud.</option>
+                        <option>Realizar seguimiento a la implementación del programa de seguridad del paciente para
+                            instituciones prestadoras de servicios de salud.</option>
                     </select>
                 </div>
 
@@ -137,7 +143,8 @@
                     <label for="" class="form-label">Nombre:</label>
                     <select id="usu_secretaria" class="form-select form-control">
                         <option hidden>Selecciona el Nombre...</option>
-                        <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}} {{usuario.usu_apellido}}</option>
+                        <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
+                            {{usuario.usu_apellido}}</option>
                     </select>
                 </div>
 
@@ -152,7 +159,7 @@
 
                 <div class="col-12">
                     <label for="" class="form-label">Prestador:</label>
-                    <input type="text" class="form-control" id="nombrePrestador" placeholder="Prestador..." readonly>
+                    <input type="text" class="form-control" id="nombrePrestador" placeholder="Prestador...">
                 </div>
 
 
@@ -163,7 +170,8 @@
 
 
                 <div class="col-12">
-                    <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit" (click)="obtenerNombres();">
+                    <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
+                        (click)="obtenerNombres();">
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>

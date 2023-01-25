@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { CriteriosicEntity } from "./criteriosic.entity";
+import { CumplimientoSicEntity } from "./cumplimientosic.entity";
 import { DominioEntity } from "./dominio.entity";
 
 @Entity({name: 'indicador'})
@@ -16,13 +17,7 @@ export class IndicadorEntity {
     @ManyToOne(type => DominioEntity, dominio => dominio.dom_indicador)
     ind_dominio: DominioEntity;
 
-
-    //Relacion Muchos a Muchos INDICADOR - CRITERIOSIC
-    @ManyToMany(type => CriteriosicEntity, criteriosic => criteriosic.indicadores, {eager: true})
-    @JoinTable({
-        name: 'ind_cri',
-        joinColumn: {name: 'ind_cri_id'},
-        inverseJoinColumn: {name: 'cri_ind_id'} 
-    })
-    criterios: CriteriosicEntity[];
+    //Relacion UNO a MUCHOS INDICADOR SIC - CUMPLIMIENTOSIC
+    @OneToMany(type => CumplimientoSicEntity, cumplimiento => cumplimiento.indicadorsic)
+    cumplimiento_sic: CumplimientoSicEntity;
 }

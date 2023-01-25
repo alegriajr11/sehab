@@ -1,11 +1,18 @@
 <app-menu></app-menu>
+<div class="col">
+    <div class="row">
+        <div class="col-md-2">
+            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sic">
+                <i class="fa fa-reply fa-lg"></i>
+            </button>
+        </div>
+        <div class="col-md-8">
 
-<div class="grid-container">
-    <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sic">
-        <i class="fa fa-reply fa-lg"></i>
-    </button>
-    <h1 class="text-center">Sistema de Información para la Cálidad</h1>
+            <h1 class="text-center">Sistema de Información para la Cálidad</h1>
+        </div>
+    </div>
 </div>
+
 
 <br>
 <div class="container">
@@ -176,7 +183,7 @@
 
                 <div class="col-12">
                     <label for="" class="form-label">Prestador:</label>
-                    <input type="text" class="form-control" id="nombrePrestador" placeholder="Prestador..." readonly>
+                    <input type="text" class="form-control" id="nombrePrestador" placeholder="Prestador...">
                 </div>
 
                 <div class="col-12">
@@ -186,7 +193,8 @@
 
 
                 <div class="col-12">
-                    <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit" (click)="obtenerNombres()">
+                    <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
+                        (click)="obtenerNombres()">
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>

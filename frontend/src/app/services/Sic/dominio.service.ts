@@ -9,12 +9,13 @@ import { environment } from 'src/environments/environment';
 })
 export class DominioService {
 
-  dominioURL = environment.dominioURL
+  //  criterioSicURL: 'http://localhost:8080/criteriosic/',
+  dominioURL = environment.criterioSicURL
 
   constructor(private httpClient: HttpClient) { }
 
   public lista(): Observable<Dominio[]>{
-    return this.httpClient.get<Dominio[]>(`${this.dominioURL}`)
+    return this.httpClient.get<Dominio[]>(`${this.dominioURL}` + 'dominios')
   }
 
   public listaOne(dom: string): Observable<Dominio[]>{

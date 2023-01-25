@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ConceptoResEntity } from "./concepto_res.entity";
 
 
@@ -9,10 +9,13 @@ export class CumplimientoHabilitacionEntity {
 
     @Column({ type: 'varchar', length: 11, nullable: false, unique: false })
     cumpl_estado: string;
-    
 
-    //Relacion MUCHOS a MUCHOS CUMPLIMIENTORES - CRITERIOSRES
-    @OneToMany(type => ConceptoResEntity, conceptos_res => conceptos_res.cumplimientohab_res)
+
+    //Relacion Muchos a Uno CONCEPTO - REQUISITOS
+    @ManyToOne(type => ConceptoResEntity, conceptoRes => conceptoRes.cumplimientohab)
     conceptos_res: ConceptoResEntity;
+
+
+
 
 }

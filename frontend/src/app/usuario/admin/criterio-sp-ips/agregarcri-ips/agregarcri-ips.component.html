@@ -13,7 +13,7 @@
     <div class="col">
         <label for="">Evaluación:</label>
         <select class="form-control" name="" id="">
-            <option selected disabled value="">Evaluación...</option>
+            <option hidden value="">Evaluación...</option>
             <option value="">EVALUACION DE HERRAMIENTAS PARA LA IDENTIFICACIÓN Y GESTIÓN DE EVENTOS ADVERSO</option>
             <option value="">MONITORIZACIÓN DE ASPECTOS RELACIONADOS CON LA SEGURIDAD DEL PACIENTE</option>
             <option value="">DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO</option>
@@ -29,7 +29,7 @@
     <div class="col">
         <label for="">Item:</label>
         <select class="form-control" name="" id="">
-            <option selected disabled value="">Item...</option>
+            <option hidden value="">Item...</option>
             <option value="">PLANEACIÓN</option>
             <option value="">IMPLEMENTACIÓN</option>
             <option value="">VERIFICACIÓN</option>
@@ -47,11 +47,11 @@
             <div class="row">
                 <div class="col-sm-3">
                     <h5><b>Evaluación:</b></h5>
-                    <span>....</span>
+                    <span></span>
                 </div>
                 <div class="col-sm-9">
                     <h5><b>Item:</b></h5>
-                    <span>.....</span>
+                    <span></span>
                 </div>
             </div>
         </div>
@@ -62,6 +62,7 @@
             <div class="">
                 <textarea name="" id="" cols="30" rows="10"></textarea>
             </div>
+            <hr>
             <div class="form-group">
                 <button class="btn btn-dark btn-block col-sm-2" type="submit" [disabled]="!f.valid">
                     <i class='fa fa-user-plus'></i> Crear Criterio

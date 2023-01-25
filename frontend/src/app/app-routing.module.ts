@@ -7,6 +7,7 @@ import { ButtonGuard } from './guards/button.guard';
 import { LoginGuard } from './guards/login.guard';
 import { UsuarioGuard } from './guards/usuario.guard';
 import { HomeComponent } from './home/home.component';
+import { CriterioSicEstandarDto } from './models/Sic/criterioSicEstandar.dto';
 import { ListaPrestadorComponent } from './prestador/lista-prestador.component';
 import { NuevoPrestadorComponent } from './prestador/nuevo-prestador.component';
 import { ActaPamecComponent } from './roles/pamec/acta/acta-pamec.component';
@@ -17,6 +18,7 @@ import { HomeResoComponent } from './roles/reso/home-reso.component';
 import { ListaVerificacionComponent } from './roles/reso/lista-verificacion/lista-verificacion.component';
 import { ActaSicComponent } from './roles/sic/acta/acta-sic.component';
 import { EvaluacionSicComponent } from './roles/sic/evaluacion/evaluacion-sic.component';
+import { ModalsicComponent } from './roles/sic/evaluacion/modalsic/modalsic.component';
 import { EvaluacionesSicComponent } from './roles/sic/evaluaciones/evaluaciones-sic.component';
 import { HomeSicComponent } from './roles/sic/home-sic.component';
 import { ActaSpComponent } from './roles/sp/acta-ips/acta-sp-ips.component';
@@ -39,7 +41,10 @@ import { AgregarcripamComponent } from './usuario/admin/criteriopamec/agregarcri
 import { CriteriopamecComponent } from './usuario/admin/criteriopamec/criteriopamec.component';
 import { EditarcritpamComponent } from './usuario/admin/criteriopamec/editarcritpam/editarcritpam.component';
 import { AgregarcrisicComponent } from './usuario/admin/criteriosic/agregarcrisic/agregarcrisic.component';
+import { AgregarcriterioestandarComponent } from './usuario/admin/criteriosic/agregarcriterioestandar/agregarcriterioestandar.component';
+import { CriterioestandarComponent } from './usuario/admin/criteriosic/criterioestandar/criterioestandar.component';
 import { CriteriosicComponent } from './usuario/admin/criteriosic/criteriosic.component';
+import { EditarcriteriosicComponent } from './usuario/admin/criteriosic/editarcriteriosic/editarcriteriosic.component';
 import { NuevoUsuarioAdminComponent } from './usuario/admin/nuevo-usuario-admin.component';
 import { EditarUsuarioComponent } from './usuario/editar-usuario.component';
 import { ListaUsuarioComponent } from './usuario/lista-usuario.component';
@@ -54,7 +59,10 @@ const routes: Routes = [
 
   //Rutas ADMIN - SIC
   {path: 'criteriosic', component: CriteriosicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
+  {path: 'criteriosic/estandar', component: CriterioestandarComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
+  {path: 'criteriosic/estandar/agregar', component: AgregarcriterioestandarComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
   {path: 'criteriosic/agregar', component: AgregarcrisicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
+  {path: 'criteriosic/editarsic/:id', component: EditarcriteriosicComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'sic']}},
   
   //Rutas ADMIN - PAM
   {path: 'criteriopam', component: CriteriopamecComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'pamec']}},

@@ -9,9 +9,10 @@ import { CriterioController } from './criterio/criterio.controller';
 import { CriterioService } from './criterio/criterio.service';
 import { CriterioModule } from './criterio/criterio.module';
 import { CriteriosicEntity } from '../criteriosic.entity';
+import { CriterioEstandarSicEntity } from '../criteriosEstandar.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DominioEntity]), TypeOrmModule.forFeature([IndicadorEntity]), TypeOrmModule.forFeature([CriteriosicEntity]), IndicadorModule, CriterioModule],
+  imports: [TypeOrmModule.forFeature([DominioEntity]), TypeOrmModule.forFeature([IndicadorEntity]), TypeOrmModule.forFeature([CriteriosicEntity, CriterioEstandarSicEntity]), IndicadorModule, CriterioModule],
   providers: [CriteriosicService, CriterioService],
   controllers: [CriteriosicController, CriterioController]
 })

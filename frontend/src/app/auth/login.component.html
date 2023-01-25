@@ -6,6 +6,7 @@
                     <span class="h1 fw-bold mb-0 text-center text-light">SISTEMA DE EVALUACIÓN PARA LA
                         HABILITACIÓN</span>
                 </div>
+                <br>
                 <div class="card" style="border-radius: 1rem;">
                     <div class="row g-0">
                         <div class="col-md-6 col-lg-5 d-none d-md-block">
@@ -23,7 +24,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                         </div>
-                                        <input type="text" class="form-control form-control-lg" name="usu_nombreUsuario"
+                                        <input type="text" class="form-control form-control-lg" name="usu_nombreUsuario" placeholder="Usuario/Email"
                                             id="usu_nombreUsuario" autocomplete="off" required
                                             [(ngModel)]="usu_nombreUsuario">
                                     </div>
@@ -36,7 +37,7 @@
                                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                                         </div>
 
-                                        <input type="password" class="form-control form-control-lg " name="password"
+                                        <input type="password" class="form-control form-control-lg " name="password" placeholder="Contraseña:"
                                             id="usu_password" required [(ngModel)]="usu_password">
                                         <!-- <a (click)="mostrarPassword()"> <span class="fa fa-eye" style="font-size: 50px"></span></a> -->
                                         <div class="input-group-prepend">

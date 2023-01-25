@@ -12,7 +12,6 @@ import { PrestadorModule } from './prestador/prestador.module';
 import { MunicipioModule } from './municipio/municipio.module';
 import { CriteriosicModule } from './sic/criteriosic/criteriosic.module';
 import { ActividadModule } from './pamec/actividad/actividad.module';
-import { SpIndService } from './sp/sp_ind/sp_ind.service';
 import { SpIndModule } from './sp/sp_ind/sp_ind.module';
 import { EvaluacionipsModule } from './sp/sp_ips/evaluacionips/evaluacionips.module';
 import { CriterioajusteModule } from './sp/sp_ips/criterioajuste/criterioajuste.module';
@@ -22,6 +21,8 @@ import { ItemipsModule } from './sp/sp_ips/itemips/itemips.module';
 import { PlaneacionModule } from './sp/sp_ips/planeacion/planeacion.module';
 import { GenerarpdfModule } from './generarpdf/generarpdf.module';
 import { CalificacionpamecModule } from './pamec/calificacionpamec/calificacionpamec.module';
+import { CriteriosicCumplimientoController } from './sic/criteriosic-cumplimiento/criteriosic-cumplimiento.controller';
+import { CriteriosicCumplimientoModule } from './sic/criteriosic-cumplimiento/criteriosic-cumplimiento.module';
 
 
 
@@ -62,7 +63,8 @@ import { CalificacionpamecModule } from './pamec/calificacionpamec/calificacionp
     CriterioverifModule,
     PlaneacionModule,
     GenerarpdfModule,
-    CalificacionpamecModule
+    CalificacionpamecModule,
+    CriteriosicCumplimientoModule
 
   ],
   controllers: [AppController],

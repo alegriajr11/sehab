@@ -65,7 +65,6 @@ export class UsuarioService {
 
 /*ACTUALIZANDO USUARIO*/
   async update(id: number, dto: UsuarioDto): Promise<any>{
-
     const usuario = await this.findById(id);
     if(!usuario)
     throw new NotFoundException(new MessageDto('El Usuario No Existe'));

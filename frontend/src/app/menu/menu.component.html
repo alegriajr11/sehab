@@ -35,7 +35,7 @@
 
         <div class="dropdown_ser">
           <a class="nav-link bg-a"><i class="fas fa-stethoscope color_icono"></i>
-            SERVICIOS</a>
+            SERVICIOS </a>
           <div class="dropdown-content ">
             <a *ngIf="isAdmin" routerLink="/prestadores">PRESTADORES</a>
             <a *ngIf="isAdmin || isSic" routerLink="/criteriosic">CRITERIOS SIC</a>
@@ -44,6 +44,7 @@
             <a *ngIf="isAdmin || isSp" routerLink="/criterioips">CRITERIOS SP IPS</a>
           </div>
         </div>
+
       </div>
     </ul>
     <form class="d-flex" role="search">

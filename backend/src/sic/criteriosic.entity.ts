@@ -12,11 +12,7 @@ export class CriteriosicEntity {
     cri_nombre: string;
 
 
-    //Relacion Muchos a Muchos CRITERIOSIC - INDICADOR
-    @ManyToMany(type => IndicadorEntity, indicador => indicador.criterios)
-    indicadores: IndicadorEntity[];
-
     //Relacion UNO a MUCHOS CRITERIOS SIC - CUMPLIMIENTOSIC
-    @OneToMany(type => CumplimientoSicEntity, cumplimiento => cumplimiento.criterio_estandar)
+    @OneToMany(type => CumplimientoSicEntity, cumplimiento => cumplimiento.criterio_sic)
     cumplimiento_sic: CumplimientoSicEntity;
 }
