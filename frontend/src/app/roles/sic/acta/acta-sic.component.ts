@@ -539,6 +539,84 @@ export class ActaSicComponent implements OnInit {
       }
     })
 
+
+
+    //MENSAJE FIRMAS POR SECRETARIA DE SALUD
+    autoTable(doc, {
+      startY: 219,
+      headStyles: {
+        fillColor: [220, 220, 220],
+        textColor: [0, 0, 0],
+        halign: 'center'
+      },
+      columns: [
+        { header: 'POR SECRETARIA DE SALUD DEPARTAMENTAL', dataKey: 'mensaje' },
+      ],
+      tableWidth: 'auto',
+    })
+
+    //NOMBRE USUARIO1 Y 2, CARGO USUARIO1 Y 2 Y FIRMA1 Y 2
+    autoTable(doc, {
+      startY: 227,
+      columnStyles: { sede: { halign: 'left' } },
+
+      body: [
+        { nombre: valorUsuSecre, cargo: valorCargoSecre, firma: '' },
+      ],
+      columns: [
+        { header: 'Nombre:', dataKey: 'nombre' },
+        { header: 'Cargo:', dataKey: 'cargo' },
+        { header: 'Firma:', dataKey: 'firma' },
+
+      ],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0]
+      },
+      styles: {
+        fontSize: 10
+      }
+    })
+
+
+
+    autoTable(doc, {
+      startY: 252,
+      headStyles: {
+        fillColor: [220, 220, 220],
+        textColor: [0, 0, 0],
+        halign: 'center'
+      },
+      columns: [
+        { header: 'POR PRESTADOR DE SERVICIO DE SALUD', dataKey: 'mensaje' },
+      ],
+      tableWidth: 'auto',
+    })
+
+    //NOMBRE PRESTADOR 1 Y 2, CARGO PRESTADOR 1 Y 2 Y FIRMA1 Y 2
+    autoTable(doc, {
+      startY: 260,
+      columnStyles: { sede: { halign: 'left' } },
+
+      body: [
+        { nombre: valorPresNombre, cargo: valorCargoPres, firma: '' },
+      ],
+      columns: [
+        { header: 'Nombre:', dataKey: 'nombre' },
+        { header: 'Cargo:', dataKey: 'cargo' },
+        { header: 'Firma:', dataKey: 'firma' },
+
+      ],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0]
+      },
+      styles: {
+        fontSize: 10
+      }
+    })
+
+
     //VALIDAR FECHAS
     if (!valorfechaFinal && !valorfechaInicial) {
       this.toastrService.error('Las fechas no pueden estar vacias', 'Error', {

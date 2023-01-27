@@ -111,6 +111,8 @@ export class GenerarpdfService {
                 item.roles.forEach(rol => {
                     r = rol.rol_nombre
                 })
+
+                
                 var temp_list = [item.usu_nombre, item.usu_apellido, item.usu_email, item.usu_nombreUsuario, item.usu_estado, r];
                 rows_elements.push(temp_list);
             });

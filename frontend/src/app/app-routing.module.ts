@@ -14,6 +14,7 @@ import { ActaPamecComponent } from './roles/pamec/acta/acta-pamec.component';
 import { EvaluacionPamecComponent } from './roles/pamec/evaluacion-pamec/evaluacion-pamec.component';
 import { EvaluacionesPamecComponent } from './roles/pamec/evaluaciones/evaluaciones-pamec.component';
 import { HomePamecComponent } from './roles/pamec/home-pamec.component';
+import { CapacidadInstaladaComponent } from './roles/reso/capacidad-instalada/capacidad-instalada.component';
 import { HomeResoComponent } from './roles/reso/home-reso.component';
 import { ListaVerificacionComponent } from './roles/reso/lista-verificacion/lista-verificacion.component';
 import { ActaSicComponent } from './roles/sic/acta/acta-sic.component';
@@ -123,6 +124,7 @@ const routes: Routes = [
   //Rutas RESOLUCIÓN
   {path: 'reso', component: HomeResoComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'res']}},
   {path: 'lista-verificacion', component: ListaVerificacionComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'res']}},
+  {path: 'servicios-capacidad', component: CapacidadInstaladaComponent, canActivate: [UsuarioGuard], data: {expectedRol: ['admin', 'res']}},
 
 
   {path: 'login', component: LoginComponent, canActivate: [LoginGuard]},

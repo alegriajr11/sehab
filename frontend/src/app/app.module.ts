@@ -72,6 +72,8 @@ import { CriterioestandarComponent } from './usuario/admin/criteriosic/criterioe
 import { AgregarcriterioestandarComponent } from './usuario/admin/criteriosic/agregarcriterioestandar/agregarcriterioestandar.component';
 import { EditarcriteriosicComponent } from './usuario/admin/criteriosic/editarcriteriosic/editarcriteriosic.component';
 import { ModalsicComponent } from './roles/sic/evaluacion/modalsic/modalsic.component';
+import { Modalsic2Component } from './roles/sic/evaluacion/modalsic2/modalsic2.component';
+import { CapacidadInstaladaComponent } from './roles/reso/capacidad-instalada/capacidad-instalada.component';
 
 
 @NgModule({
@@ -134,7 +136,9 @@ import { ModalsicComponent } from './roles/sic/evaluacion/modalsic/modalsic.comp
     CriterioestandarComponent,
     AgregarcriterioestandarComponent,
     EditarcriteriosicComponent,
-    ModalsicComponent
+    ModalsicComponent,
+    Modalsic2Component,
+    CapacidadInstaladaComponent
   ],
   imports: [
     BrowserModule,
