@@ -13,6 +13,7 @@ export class PrestadorService {
   //prestadorURL: 'http://localhost:8080/prestador/',
   prestadorURL = environment.prestadorURL;
   prestadorMunicipioURL = environment.prestadorMunicipioURL
+  prestadorPamecMunicipioURL = environment.prestadorPamecMunicipioURL
 
 
   constructor(private httpClient: HttpClient) { }
@@ -28,6 +29,10 @@ export class PrestadorService {
 
   public listMun(mun: string): Observable<PrestadorDto[]>{
     return this.httpClient.get<PrestadorDto[]>(this.prestadorMunicipioURL + mun)
+  }
+
+  public listMunPamec(mun: string): Observable<PrestadorDto[]>{
+    return this.httpClient.get<PrestadorDto[]>(this.prestadorPamecMunicipioURL + mun)
   }
 
   public registroPrestador(prestador: PrestadorDto): Observable<any> {

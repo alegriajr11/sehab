@@ -78,7 +78,7 @@ export class ActaPamecComponent implements OnInit {
     var opt = id.options[sel]
     var Value = (<HTMLSelectElement><unknown>opt).value;
 
-    this.prestadorService.listMun(Value).subscribe(
+    this.prestadorService.listMunPamec(Value).subscribe(
       data => {
         this.prestador = data;
         this.listaVacia = undefined

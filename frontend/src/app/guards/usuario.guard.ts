@@ -18,7 +18,7 @@ export class UsuarioGuard implements CanActivate {
       let url: string = state.url;
 
       const expectedRol = next.data['expectedRol'];
-      this.realRol = this.tokenService.isAdmin() ? 'admin' : this.tokenService.IsSic() ? 'sic' : this.tokenService.IsPamec() ? 'pamec' : this.tokenService.IsSp() ? 'sp' : '';
+      this.realRol = this.tokenService.isAdmin() ? 'admin' : this.tokenService.IsSic() ? 'sic' : this.tokenService.IsPamec() ? 'pamec' : this.tokenService.IsSp() ? 'sp' : this.tokenService.IsReso() ? 'res' : '';
       if(!this.tokenService.isLogged || expectedRol.indexOf(this.realRol) < 0){
         this.router.navigate(['/']);
         return false

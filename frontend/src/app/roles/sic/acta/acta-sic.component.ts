@@ -362,7 +362,6 @@ export class ActaSicComponent implements OnInit {
 
     doc.setFontSize(9)
     doc.setTextColor(128, 128, 128);
-    doc.text(formatoFecha, 140, 25)
     doc.setFontSize(11);
     doc.setTextColor(0, 0, 0);
     doc.setFont("helvetica", "bold")

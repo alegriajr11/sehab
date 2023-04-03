@@ -1,5 +1,5 @@
 <section class="container imagen_bg">
-    <div class="py-5 h-100">
+    <div class="py-5 h-100" >
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col col-xl-10">
                 <div class="d-flex align-items-center mb-3 pb-1">
@@ -8,7 +8,7 @@
                 </div>
                 <br>
                 <div class="card" style="border-radius: 1rem;">
-                    <div class="row g-0">
+                    <div class="row g-0 ">
                         <div class="col-md-6 col-lg-5 d-none d-md-block">
                             <img src="../../assets/img/logo.png" alt="login form" class="img-fluid imagen_login"
                                 style="border-radius: 1rem 0 0 1rem;" />
@@ -19,12 +19,12 @@
                                     Sesión</h5>
                                 <div class="form-group">
                                     <label class="font-weight-bold" for="usu_nombreUsuario">Nombre de
-                                        Usuario/Email</label>
+                                        Usuario</label>
                                     <div class="input-group form-outline mb-4">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                         </div>
-                                        <input type="text" class="form-control form-control-lg" name="usu_nombreUsuario" placeholder="Usuario/Email"
+                                        <input type="text" class="form-control form-control-lg" name="usu_nombreUsuario" placeholder="Usuario"
                                             id="usu_nombreUsuario" autocomplete="off" required
                                             [(ngModel)]="usu_nombreUsuario">
                                     </div>
@@ -52,7 +52,7 @@
                                 </div>
 
                                 <div class="form-group pt-1 mb-4">
-                                    <button class="btn btn-dark btn-lg btn-block" type="submit" [disabled]="!f.valid">
+                                    <button class="btn btn-dark btn-lg btn-block send" type="submit" [disabled]="!f.valid">
                                         <i class='fas fa-sign-in-alt'></i> Inciar Sesión
                                     </button>
                                 </div>
@@ -64,5 +64,6 @@
         </div>
     </div>
 </section>
+
 
 <app-footer></app-footer>

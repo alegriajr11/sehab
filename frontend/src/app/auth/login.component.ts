@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
   usu_passwordIcon: string = 'eye-off';
 
   ngOnInit(): void {
+    
   }
 
   onLogin(): void{

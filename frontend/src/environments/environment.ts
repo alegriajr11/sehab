@@ -12,6 +12,7 @@ export const environment = {
   restablecerContraseña: 'http://localhost:8080/auth/request-reset-password/',
   prestadorURL: 'http://localhost:8080/prestador/',
   prestadorMunicipioURL: 'http://localhost:8080/prestador/mun/',
+  prestadorPamecMunicipioURL: 'http://localhost:8080/prestador/mun/pamec/',
   rolURL:'http://localhost:8080/rol/',
   claseURL: 'http://localhost:8080/clase/',
   generarPdfURL: 'http://localhost:8080/generarpdf/usuarios/',
