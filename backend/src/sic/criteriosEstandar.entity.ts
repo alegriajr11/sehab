@@ -18,3 +18,4 @@ export class CriterioEstandarSicEntity {
     cumplimiento_estandar: CumplimientoEstandarSicEntity;
 
 }
+

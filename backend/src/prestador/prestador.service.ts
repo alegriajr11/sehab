@@ -52,6 +52,20 @@ export class PrestadorService {
         return prestadores;
     }
 
+    async findByMunicipioPamec(id: string): Promise<PrestadorEntity[]> {
+        const prestadores = await this.prestadorRepository.createQueryBuilder('prestador')
+
+        .leftJoinAndSelect('prestador.pre_municipio','pre_municipio')
+        .leftJoinAndSelect('prestador.pre_clasificacion','pre_clasificacion')
+        .where('pre_municipio.mun_id = :mun', { mun: id})
+        .andWhere('pre_clasificacion.cla_id IN (:clasificacion)', {clasificacion: ['1', '2']})
+        //.where('post.status IN (:statuses)', { statuses: ['published', 'draft'] })
+        .getMany()
+        return prestadores;
+
+    }
+
+
     // async getall(): Promise<PrestadorEntity[]>{
     //     const prestadores = await this.prestadorRepository.find({
     //         relations: ['pre_municipio']

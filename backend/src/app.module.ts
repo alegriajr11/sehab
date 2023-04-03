@@ -23,6 +23,8 @@ import { GenerarpdfModule } from './generarpdf/generarpdf.module';
 import { CalificacionpamecModule } from './pamec/calificacionpamec/calificacionpamec.module';
 import { CriteriosicCumplimientoController } from './sic/criteriosic-cumplimiento/criteriosic-cumplimiento.controller';
 import { CriteriosicCumplimientoModule } from './sic/criteriosic-cumplimiento/criteriosic-cumplimiento.module';
+import { CriterioServiciosController } from './resolucion/evaluacion/todos_servicios/criterio_servicios/criterio_servicios.controller';
+import { CriterioServiciosModule } from './resolucion/evaluacion/todos_servicios/criterio_servicios/criterio_servicios.module';
 
 
 
@@ -42,8 +44,8 @@ import { CriteriosicCumplimientoModule } from './sic/criteriosic-cumplimiento/cr
         password: configService.get<string>(DB_PASSWORD),
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize:false,
-        logging: false
+        synchronize:true,
+        logging: true
         
       }),
       inject: [ConfigService],
@@ -64,10 +66,11 @@ import { CriteriosicCumplimientoModule } from './sic/criteriosic-cumplimiento/cr
     PlaneacionModule,
     GenerarpdfModule,
     CalificacionpamecModule,
-    CriteriosicCumplimientoModule
+    CriteriosicCumplimientoModule,
+    CriterioServiciosModule
 
   ],
-  controllers: [AppController],
+  controllers: [AppController, CriterioServiciosController],
   providers: [AppService],
 })
 export class AppModule {}

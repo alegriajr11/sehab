@@ -33,6 +33,14 @@ export class PrestadorController {
         return await this.prestadorService.findByMunicipio(id);
     }
 
+    //PRESTADORES PARA ROL PAMEC
+    @RolDecorator(RolNombre.ADMIN)
+    @UseGuards(JwtAuthGuard)
+    @Get('/mun/pamec/:id')
+    async getManyMunPamec(@Param('id') id: string){
+        return await this.prestadorService.findByMunicipioPamec(id);
+    }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async delete(@Param('id') id: string) {

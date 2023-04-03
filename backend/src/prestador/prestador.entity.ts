@@ -13,6 +13,7 @@ import { ServiciosVerificadosEntity } from "src/resolucion/servicios_capacidad/s
 import { CapacidadInstaladaEntity } from "src/resolucion/servicios_capacidad/capacidad_instalada.entity";
 import { CriterioEstandarSicEntity } from "src/sic/criteriosEstandar.entity";
 import { CumplimientoEstandarSicEntity } from "src/sic/cumplimientoestandar.entity";
+import { TodoServiciosEntity } from "src/resolucion/evaluacion/todos_servicios/servicios/todos_servicios.entity";
 
 
 
@@ -90,12 +91,17 @@ export class PrestadorEntity {
     @OneToMany(type => ServiciosVerificadosEntity, servicios_verf => servicios_verf.prestadores)
     servicios_verificados: ServiciosVerificadosEntity
 
-    //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
+    //Relacion Uno a Muchos PRESTADORES - CAPACIDAD INSTALADA
     @OneToMany(type => CapacidadInstaladaEntity, capacidad_instalada => capacidad_instalada.prestadores)
     capacidad_instalada: CapacidadInstaladaEntity
 
 
-    //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
+    //Relacion Uno a Muchos PRESTADORES - CUMPLIMIENTOESTANDARSIC
     @OneToMany(type => CumplimientoEstandarSicEntity, cumplimientoestandar => cumplimientoestandar.prestadores)
     cumplimientoEstandar: CumplimientoEstandarSicEntity
+
+
+    //Relación Uno a Muchos PRESTADORES - TODOS_SERVICIOS
+    @OneToMany(type => TodoServiciosEntity, todos_servicios => todos_servicios.prestador)
+    todos_servicios: TodoServiciosEntity
 }
