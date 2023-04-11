@@ -25,6 +25,14 @@ import { CriteriosicCumplimientoController } from './sic/criteriosic-cumplimient
 import { CriteriosicCumplimientoModule } from './sic/criteriosic-cumplimiento/criteriosic-cumplimiento.module';
 import { CriterioServiciosController } from './resolucion/evaluacion/todos_servicios/criterio_servicios/criterio_servicios.controller';
 import { CriterioServiciosModule } from './resolucion/evaluacion/todos_servicios/criterio_servicios/criterio_servicios.module';
+import { CriteriosExtGeneralController } from './resolucion/evaluacion/grupo_consulta_externa/externa_general/criterios_ext_general/criterios_ext_general.controller';
+import { CriteriosExtGeneralModule } from './resolucion/evaluacion/grupo_consulta_externa/externa_general/criterios_ext_general/criterios_ext_general.module';
+import { CriteriosExtEspecializadaController } from './resolucion/evaluacion/grupo_consulta_externa/externa_especializada/criterios_ext_especializada/criterios_ext_especializada.controller';
+import { CriteriosExtEspecializadaModule } from './resolucion/evaluacion/grupo_consulta_externa/externa_especializada/criterios_ext_especializada/criterios_ext_especializada.module';
+import { CriteriosVacunacionController } from './resolucion/evaluacion/grupo_consulta_externa/vacunacion/criterios_vacunacion/criterios_vacunacion.controller';
+import { CriteriosVacunacionModule } from './resolucion/evaluacion/grupo_consulta_externa/vacunacion/criterios_vacunacion/criterios_vacunacion.module';
+import { CriteriosSaludTrabajoController } from './resolucion/evaluacion/grupo_consulta_externa/seguridad_salud_trabajo/criterios_salud_trabajo/criterios_salud_trabajo.controller';
+import { CriteriosSaludTrabajoModule } from './resolucion/evaluacion/grupo_consulta_externa/seguridad_salud_trabajo/criterios_salud_trabajo/criterios_salud_trabajo.module';
 
 
 
@@ -67,10 +75,14 @@ import { CriterioServiciosModule } from './resolucion/evaluacion/todos_servicios
     GenerarpdfModule,
     CalificacionpamecModule,
     CriteriosicCumplimientoModule,
-    CriterioServiciosModule
+    CriterioServiciosModule,
+    CriteriosExtGeneralModule,
+    CriteriosExtEspecializadaModule,
+    CriteriosVacunacionModule,
+    CriteriosSaludTrabajoModule
 
   ],
-  controllers: [AppController, CriterioServiciosController],
+  controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, CriteriosSaludTrabajoController],
   providers: [AppService],
 })
 export class AppModule {}

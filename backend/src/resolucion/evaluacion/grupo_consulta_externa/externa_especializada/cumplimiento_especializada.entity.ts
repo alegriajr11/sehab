@@ -1,34 +1,33 @@
 /* eslint-disable prettier/prettier */
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Criterio_servicios } from "./criterio_servicios.entity";
-// import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
+import { CriterioEspecializadaEntity } from "./criterio_especializada.entity";
 
 
 
-@Entity({ name: 'cumplimiento_servicios' })
-export class CumplimientoServiciosEntity {
+@Entity({ name: 'cumplimiento_externa_especializada' })
+export class CumplimientoEspecializadaEntity {
     @PrimaryGeneratedColumn('increment')
-    cumps_id: number;
+    cump_exte_id: number;
 
     @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
-    cumps_cumple: string;
+    cump_exte_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })
-    cumps_hallazgo: string;
+    cump_exte_hallazgo: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })
-    cumps_accion: string;
+    cump_exte_accion: string;
 
     @Column({ type: 'varchar', length: 200, nullable: false, unique: false })
-    cumps_responsable: string;
+    cump_exte_responsable: string;
 
     @Column({ type: 'date', nullable: false, unique: false })
-    cumps_fecha_limite: string; 
+    cump_exte_fecha_limite: string;
     
 
-    @OneToOne(() => Criterio_servicios)
+    @OneToOne(() => CriterioEspecializadaEntity)
     @JoinColumn()
-    criterio_servicios: Criterio_servicios
+    criterio_externa_especializada: CriterioEspecializadaEntity
 
 }
