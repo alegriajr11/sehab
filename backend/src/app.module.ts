@@ -33,6 +33,24 @@ import { CriteriosVacunacionController } from './resolucion/evaluacion/grupo_con
 import { CriteriosVacunacionModule } from './resolucion/evaluacion/grupo_consulta_externa/vacunacion/criterios_vacunacion/criterios_vacunacion.module';
 import { CriteriosSaludTrabajoController } from './resolucion/evaluacion/grupo_consulta_externa/seguridad_salud_trabajo/criterios_salud_trabajo/criterios_salud_trabajo.controller';
 import { CriteriosSaludTrabajoModule } from './resolucion/evaluacion/grupo_consulta_externa/seguridad_salud_trabajo/criterios_salud_trabajo/criterios_salud_trabajo.module';
+import { CriterioTerapiasController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/terapias/criterio_terapias/criterio_terapias.controller';
+import { CriterioTerapiasModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/terapias/criterio_terapias/criterio_terapias.module';
+import { CriterioSFarmaceuticoController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/servicio_farmaceutico/criterio_s_farmaceutico/criterio_s_farmaceutico.controller';
+import { CriterioSFarmaceuticoModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/servicio_farmaceutico/criterio_s_farmaceutico/criterio_s_farmaceutico.module';
+import { CriterioRadioOdontController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/radiologia_odont/criterio_radio_odont/criterio_radio_odont.controller';
+import { CriterioRadioOdontModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/radiologia_odont/criterio_radio_odont/criterio_radio_odont.module';
+import { CriterioImgRadIonizantesController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/imagenes_diagnosticas_rad_ionizantes/criterio_img_rad_ionizantes/criterio_img_rad_ionizantes.controller';
+import { CriterioImgRadIonizantesModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/imagenes_diagnosticas_rad_ionizantes/criterio_img_rad_ionizantes/criterio_img_rad_ionizantes.module';
+import { CriterioImgRadNoionizantesController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/imagenes_diagnosticas_rad_noionizantes/criterio_img_rad_noionizantes/criterio_img_rad_noionizantes.controller';
+import { CriterioImgRadNoionizantesModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/imagenes_diagnosticas_rad_noionizantes/criterio_img_rad_noionizantes/criterio_img_rad_noionizantes.module';
+import { CriterioMedicinaNuclearController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/medicina_nuclear/criterio_medicina_nuclear/criterio_medicina_nuclear.controller';
+import { CriterioMedicinaNuclearModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/medicina_nuclear/criterio_medicina_nuclear/criterio_medicina_nuclear.module';
+import { CriterioRadioterapiaController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/radioterapia/criterio_radioterapia/criterio_radioterapia.controller';
+import { CriterioRadioterapiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/radioterapia/criterio_radioterapia/criterio_radioterapia.module';
+import { CriterioQuimioterapiaController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/quimioterapia/criterio_quimioterapia/criterio_quimioterapia.controller';
+import { CriterioQuimioterapiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/quimioterapia/criterio_quimioterapia/criterio_quimioterapia.module';
+import { CriterioDiagnostVascularController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/criterio_diagnost_vascular/criterio_diagnost_vascular.controller';
+import { CriterioDiagnostVascularModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/criterio_diagnost_vascular/criterio_diagnost_vascular.module';
 
 
 
@@ -79,10 +97,19 @@ import { CriteriosSaludTrabajoModule } from './resolucion/evaluacion/grupo_consu
     CriteriosExtGeneralModule,
     CriteriosExtEspecializadaModule,
     CriteriosVacunacionModule,
-    CriteriosSaludTrabajoModule
+    CriteriosSaludTrabajoModule,
+    CriterioTerapiasModule,
+    CriterioSFarmaceuticoModule,
+    CriterioRadioOdontModule,
+    CriterioImgRadIonizantesModule,
+    CriterioImgRadNoionizantesModule,
+    CriterioMedicinaNuclearModule,
+    CriterioRadioterapiaModule,
+    CriterioQuimioterapiaModule,
+    CriterioDiagnostVascularModule
 
   ],
-  controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, CriteriosSaludTrabajoController],
+  controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, CriterioImgRadNoionizantesController, CriterioMedicinaNuclearController, CriterioRadioterapiaController, CriterioQuimioterapiaController, CriterioDiagnostVascularController],
   providers: [AppService],
 })
 export class AppModule {}

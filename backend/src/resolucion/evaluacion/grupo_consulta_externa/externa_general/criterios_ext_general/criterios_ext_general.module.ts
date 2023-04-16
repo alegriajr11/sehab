@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { CriteriosExtGeneralService } from './criterios_ext_general.service';
 
