@@ -29,7 +29,7 @@
     border-radius: 2px;
     border: none;
     outline: none !important;
-    margin-left: 10px;
+    margin-left: 40px;
 }
 .table-title .btn i {
     float: left;
@@ -245,4 +245,9 @@ span.inactive {
 }	
 .modal form label {
     font-weight: normal;
+}
+
+.btn-secondary:hover {
+    transform: scale(1.1);
+    transition-duration: 0.2s;
 }

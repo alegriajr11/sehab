@@ -30,6 +30,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const usuario = await this.authRepository.findOne({where: [{usu_nombreUsuario: usu_nombreUsuario},{usu_email: usu_email}]})
     if(!usuario) return new UnauthorizedException(new MessageDto('Credenciales Erroneas'));
     return usuario;
-    //return payload;
+
 }
 }

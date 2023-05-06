@@ -147,3 +147,7 @@ input:checked+.slider:before {
     border-radius: 50%;
 }
 
+.btn-dark:hover {
+    transform: scale(1.3);
+    transition-duration: 0.2s;
+}

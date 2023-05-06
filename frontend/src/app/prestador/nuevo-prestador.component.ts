@@ -34,11 +34,11 @@ export class NuevoPrestadorComponent implements OnInit {
   pre_telefono: string;
   pre_email: string;
   pre_habilitado: string;
-  pre_clasificacion: number
   pre_representante: string;
-  pre_clase: number
-  pre_tipo: number
-  pre_municipio: number
+  pre_clasificacion_id: number;
+  pre_clase_id: number;
+  pre_tipo_id: number;
+  pre_municipio_id: number;
 
   constructor(
     private prestadorService: PrestadorService,
@@ -123,24 +123,21 @@ changeSelect(select:number){
       this.pre_telefono,
       this.pre_email,
       this.pre_habilitado,
-      this.prestador.pre_clasificacion,
+      {
+        cla_id: this.pre_clasificacion_id
+      },
       this.pre_representante,
-      this.prestador.pre_clase,
-      this.prestador.pre_tipo,
-      this.prestador.pre_municipio
+      {
+        clas_id: this.pre_clase_id
+      },
+      {
+        tip_id: this.pre_tipo_id
+      },
+      {
+        mun_id: this.pre_municipio_id
+      }
     );
-    console.log(this.pre_cod_habilitacion);
-    console.log(this.pre_nombre);
-    console.log(this.pre_nit);
-    console.log(this.pre_direccion);
-    console.log(this.pre_telefono);
-    console.log(this.pre_email);
-    console.log(this.pre_habilitado);
-    console.log(this.pre_clasificacion);
-    console.log(this.pre_representante);
-    console.log(this.pre_clase);
-    console.log(this.pre_tipo);
-    console.log(this.pre_municipio);
+    console.log(this.prestador)
     this.prestadorService.registroPrestador(this.prestador).subscribe(
       (data) => {
         this.toastrService.success(data.message, 'Ok', {
@@ -156,6 +153,7 @@ changeSelect(select:number){
         });
       }
     );
+
   }
 
 }

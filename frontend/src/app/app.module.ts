@@ -74,6 +74,14 @@ import { EditarcriteriosicComponent } from './usuario/admin/criteriosic/editarcr
 import { ModalsicComponent } from './roles/sic/evaluacion/modalsic/modalsic.component';
 import { Modalsic2Component } from './roles/sic/evaluacion/modalsic2/modalsic2.component';
 import { CapacidadInstaladaComponent } from './roles/reso/capacidad-instalada/capacidad-instalada.component';
+import { HomeEstandarComponent } from './roles/reso/home-estandar/home-estandar.component';
+import { TodosServiciosComponent } from './roles/reso/home-estandar/todos-servicios/todos-servicios.component';
+import { ConsultaExternaComponent } from './roles/reso/home-estandar/consulta-externa/consulta-externa.component';
+import { ApoyoDiagnosticoComponent } from './roles/reso/home-estandar/apoyo-diagnostico/apoyo-diagnostico.component';
+import { InternacionComponent } from './roles/reso/home-estandar/internacion/internacion.component';
+import { QuirurgicoComponent } from './roles/reso/home-estandar/quirurgico/quirurgico.component';
+import { AtencionInmediataComponent } from './roles/reso/home-estandar/atencion-inmediata/atencion-inmediata.component';
+import { EditarPrestadorComponent } from './prestador/editar-prestador/editar-prestador.component';
 
 
 @NgModule({
@@ -138,7 +146,15 @@ import { CapacidadInstaladaComponent } from './roles/reso/capacidad-instalada/ca
     EditarcriteriosicComponent,
     ModalsicComponent,
     Modalsic2Component,
-    CapacidadInstaladaComponent
+    CapacidadInstaladaComponent,
+    HomeEstandarComponent,
+    TodosServiciosComponent,
+    ConsultaExternaComponent,
+    ApoyoDiagnosticoComponent,
+    InternacionComponent,
+    QuirurgicoComponent,
+    AtencionInmediataComponent,
+    EditarPrestadorComponent
   ],
   imports: [
     BrowserModule,

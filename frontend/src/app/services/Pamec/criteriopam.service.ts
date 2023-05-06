@@ -17,8 +17,7 @@ export class CriteriopamService {
   criteriopam1URL = environment.criteriopam1URL
 
   constructor(
-    private httpClient: HttpClient,
-    private toastr: ToastrService) { }
+    private httpClient: HttpClient,) { }
 
   public detail(id: number): Observable<CriterioPam> {
     return this.httpClient.get<CriterioPam>(`${this.criteriopam1URL}${id}`);

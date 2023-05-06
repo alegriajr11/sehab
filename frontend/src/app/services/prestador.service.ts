@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PrestadorDto } from '../models/prestador.dto';
+import { EditarPrestadorDto } from '../models/editar-prestador-dto';
 
 
 @Injectable({
@@ -22,8 +23,8 @@ export class PrestadorService {
     return this.httpClient.get<PrestadorDto[]>(`${this.prestadorURL}`)
   }
 
-  public listaOne(id: string): Observable<PrestadorDto[]>{
-    return this.httpClient.get<PrestadorDto[]>(`${this.prestadorURL}` + id)
+  public listaOne(id: string): Observable<PrestadorDto>{
+    return this.httpClient.get<PrestadorDto>(`${this.prestadorURL}` + id)
   }
 
 
@@ -39,4 +40,8 @@ export class PrestadorService {
     return this.httpClient.post<any>(`${this.prestadorURL}`, prestador);
   }
   
+  public update(id: string, prestador: PrestadorDto): Observable<any> {
+    return this.httpClient.put<any>(`${this.prestadorURL}${id}`, prestador);
+  }
+
 }

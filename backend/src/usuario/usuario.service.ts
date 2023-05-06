@@ -68,10 +68,6 @@ export class UsuarioService {
     const usuario = await this.findById(id);
     if(!usuario)
     throw new NotFoundException(new MessageDto('El Usuario No Existe'));
-    // usuario.usu_nombre = dto.usu_nombre;
-    // usuario.usu_apellido = dto.usu_apellido;
-    // usuario.usu_nombreUsuario =  dto.usu_nombreUsuario;
-    // usuario.usu_estado = dto.usu_estado;
 
     dto.usu_nombre? usuario.usu_nombre = dto.usu_nombre : usuario.usu_nombre = usuario.usu_nombre;
 

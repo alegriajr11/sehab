@@ -5,6 +5,7 @@ import { MunicipioEntity } from "src/municipio/municipio.entity";
 import { ClaseEntity } from "../clase/clase.entity";
 import { ClasificacionEntity } from "../clasificacion/clasificacion.entity";
 import { TipoEntity } from "../tipo/tipo.entity";
+import { Column } from "typeorm";
 
 
 export class CreatePrestadorDto {
@@ -42,9 +43,9 @@ export class CreatePrestadorDto {
     // @MaxLength(3, {message: 'habilitado: longitud máxima de 3'})
     pre_habilitado: string;
 
-    @IsString()
-    // @MaxLength(60, {message: 'nombre: longitud máxima de 60'})
-    pre_representante: string;
+    @Column({ nullable: true })
+    pre_representante?: string;
+    
 
     @IsObject({
         message: 'La clasificacion no puede estar vacia'

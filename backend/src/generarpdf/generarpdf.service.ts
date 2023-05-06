@@ -9,6 +9,7 @@ import { UsuarioDto } from 'src/usuario/dto/usuario.dto';
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
 import { UsuarioRepository } from 'src/usuario/usuario.repository';
 import { UsuarioService } from 'src/usuario/usuario.service';
+import * as fs from 'fs';
 
 
 const PDFDocument = require('pdfkit-table')
@@ -99,12 +100,12 @@ export class GenerarpdfService {
             });
             doc.moveDown();
 
-            
+
             let rows_elements = [];
             usuario.forEach(item => {
-                if(item.usu_estado === 'true'){
+                if (item.usu_estado === 'true') {
                     item.usu_estado = 'Activo'
-                } else if(item.usu_estado === 'false'){
+                } else if (item.usu_estado === 'false') {
                     item.usu_estado = 'Inactivo'
                 }
                 let r
@@ -112,15 +113,16 @@ export class GenerarpdfService {
                     r = rol.rol_nombre
                 })
 
-                
+
                 var temp_list = [item.usu_nombre, item.usu_apellido, item.usu_email, item.usu_nombreUsuario, item.usu_estado, r];
                 rows_elements.push(temp_list);
             });
 
             const table = {
-                headers: ["Nombres", "Apellidos", "Email", "Nombre de Usuario", "Estado","Rol"],
+                headers: ["Nombres", "Apellidos", "Email", "Nombre de Usuario", "Estado", "Rol"],
                 rows: rows_elements
             };
+
 
 
 
@@ -135,21 +137,20 @@ export class GenerarpdfService {
                 const data = Buffer.concat(buffer)
                 resolve(data)
             })
+
+            const pdfName = 'ListaUsuariosSOGCS.pdf'; // Define a default name for the PDF file
+
+            doc.pipe(fs.createWriteStream(pdfName)); // Pipe the PDF document to a writable stream with the default name
+        
+
             doc.end()
 
-
+            
         })
+
 
         return pdfBuffer;
 
     }
 
-    // async obtenerUsuarios(): Promise<UsuarioEntity[]> {
-    //     const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
-    //         .select(['usuario.usu_nombre', 'usuario.usu_apellido', 'usuario.usu_email', 'usuario.usu_nombreUsuario', 'usuario.usu_estado'])
-    //         .getMany()
-
-    //     if (!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
-    //     return usuario
-    // }
 }

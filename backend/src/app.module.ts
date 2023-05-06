@@ -51,6 +51,60 @@ import { CriterioQuimioterapiaController } from './resolucion/evaluacion/grupo_a
 import { CriterioQuimioterapiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/quimioterapia/criterio_quimioterapia/criterio_quimioterapia.module';
 import { CriterioDiagnostVascularController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/criterio_diagnost_vascular/criterio_diagnost_vascular.controller';
 import { CriterioDiagnostVascularModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/criterio_diagnost_vascular/criterio_diagnost_vascular.module';
+import { CriteriosHemodIntervenController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/hemodinamia_intervencionismo/criterios_hemod_interven/criterios_hemod_interven.controller';
+import { CriteriosHemodIntervenModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/hemodinamia_intervencionismo/criterios_hemod_interven/criterios_hemod_interven.module';
+import { CriteriosGestionPretransController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/gestion_pretransfusional/criterios_gestion_pretrans/criterios_gestion_pretrans.controller';
+import { CriteriosGestionPretransModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/gestion_pretransfusional/criterios_gestion_pretrans/criterios_gestion_pretrans.module';
+import { CriteriosTomMuestrasController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_laboratorio_clinico/criterios_tom_muestras/criterios_tom_muestras.controller';
+import { CriteriosTomMuestrasModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_laboratorio_clinico/criterios_tom_muestras/criterios_tom_muestras.module';
+import { CriteriosLabClinicoService } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_clinico/criterios_lab_clinico/criterios_lab_clinico.service';
+import { CriteriosLabClinicoController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_clinico/criterios_lab_clinico/criterios_lab_clinico.controller';
+import { CriteriosLabClinicoModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_clinico/criterios_lab_clinico/criterios_lab_clinico.module';
+import { CriteriosMuesCuelloController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_cuello_uterino/criterios_mues_cuello/criterios_mues_cuello.controller';
+import { CriteriosMuesCuelloModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_cuello_uterino/criterios_mues_cuello/criterios_mues_cuello.module';
+import { CriteriosLabCitologiaController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_citologias_uterinas/criterios_lab_citologia/criterios_lab_citologia.controller';
+import { CriteriosLabCitologiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_citologias_uterinas/criterios_lab_citologia/criterios_lab_citologia.module';
+import { CriteriosLabHistotecnologiaController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_histotecnologia/criterios_lab_histotecnologia/criterios_lab_histotecnologia.controller';
+import { CriteriosLabHistotecnologiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_histotecnologia/criterios_lab_histotecnologia/criterios_lab_histotecnologia.module';
+import { CriteriosPatologiaController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/patologia/criterios_patologia/criterios_patologia.controller';
+import { CriteriosPatologiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/patologia/criterios_patologia/criterios_patologia.module';
+import { CriteriosDialisisService } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.service';
+import { CriteriosDialisisController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.controller';
+import { CriteriosDialisisModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.module';
+import { CriteriosHospitalizacionController } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterios_hospitalizacion/criterios_hospitalizacion.controller';
+import { CriteriosHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterios_hospitalizacion/criterios_hospitalizacion.module';
+import { CriteriosHospPacienteCronicoController } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/criterios_hosp_paciente_cronico/criterios_hosp_paciente_cronico.controller';
+import { CriteriosHospPacienteCronicoModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/criterios_hosp_paciente_cronico/criterios_hosp_paciente_cronico.module';
+import { CriteriosCuidBasicNeonatalController } from './resolucion/evaluacion/grupo_internacion/cuidado_basico_neonatal/criterios_cuid_basic_neonatal/criterios_cuid_basic_neonatal.controller';
+import { CriteriosCuidBasicNeonatalModule } from './resolucion/evaluacion/grupo_internacion/cuidado_basico_neonatal/criterios_cuid_basic_neonatal/criterios_cuid_basic_neonatal.module';
+import { CriteriosCuidInterNeonatalController } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_neonatal/criterios_cuid_inter_neonatal/criterios_cuid_inter_neonatal.controller';
+import { CriteriosCuidInterNeonatalModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_neonatal/criterios_cuid_inter_neonatal/criterios_cuid_inter_neonatal.module';
+import { CriteriosCuidIntensNeonatalController } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_neonatal/criterios_cuid_intens_neonatal/criterios_cuid_intens_neonatal.controller';
+import { CriteriosCuidIntensNeonatalModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_neonatal/criterios_cuid_intens_neonatal/criterios_cuid_intens_neonatal.module';
+import { CriteriosCuidInterPediatricoController } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_pediatrico/criterios_cuid_inter_pediatrico/criterios_cuid_inter_pediatrico.controller';
+import { CriteriosCuidInterPediatricoModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_pediatrico/criterios_cuid_inter_pediatrico/criterios_cuid_inter_pediatrico.module';
+import { CriteriosCuidIntensPediatricoController } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_pediatrico/criterios_cuid_intens_pediatrico/criterios_cuid_intens_pediatrico.controller';
+import { CriteriosCuidIntensPediatricoModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_pediatrico/criterios_cuid_intens_pediatrico/criterios_cuid_intens_pediatrico.module';
+import { CriteriosCuidInterAdultoController } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_adulto/criterios_cuid_inter_adulto/criterios_cuid_inter_adulto.controller';
+import { CriteriosCuidInterAdultoModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_adulto/criterios_cuid_inter_adulto/criterios_cuid_inter_adulto.module';
+import { CriteriosCuidIntensAdultoController } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_adulto/criterios_cuid_intens_adulto/criterios_cuid_intens_adulto.controller';
+import { CriteriosCuidIntensAdultoModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_adulto/criterios_cuid_intens_adulto/criterios_cuid_intens_adulto.module';
+import { CriteriosHospSaludMentalController } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/criterios_hosp_salud_mental/criterios_hosp_salud_mental.controller';
+import { CriteriosHospSaludMentalModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/criterios_hosp_salud_mental/criterios_hosp_salud_mental.module';
+import { CriteriosHospParcialController } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_parcial/criterios_hosp_parcial/criterios_hosp_parcial.controller';
+import { CriteriosHospParcialModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_parcial/criterios_hosp_parcial/criterios_hosp_parcial.module';
+import { CriteriosConsPsicoactivasController } from './resolucion/evaluacion/grupo_internacion/cuidado_basico_consumo_psicoactivas/criterios_cons_psicoactivas/criterios_cons_psicoactivas.controller';
+import { CriteriosConsPsicoactivasModule } from './resolucion/evaluacion/grupo_internacion/cuidado_basico_consumo_psicoactivas/criterios_cons_psicoactivas/criterios_cons_psicoactivas.module';
+import { CriteriosCirugiaController } from './resolucion/evaluacion/grupo_quirurgico/cirugia/criterios_cirugia/criterios_cirugia.controller';
+import { CriteriosCirugiaModule } from './resolucion/evaluacion/grupo_quirurgico/cirugia/criterios_cirugia/criterios_cirugia.module';
+import { CriteriosUrgenciasController } from './resolucion/evaluacion/grupo_atencion_inmediata/urgencias/criterios_urgencias/criterios_urgencias.controller';
+import { CriteriosUrgenciasModule } from './resolucion/evaluacion/grupo_atencion_inmediata/urgencias/criterios_urgencias/criterios_urgencias.module';
+import { CriteriosTransAsistencialController } from './resolucion/evaluacion/grupo_atencion_inmediata/transporte_asistencial/criterios_trans_asistencial/criterios_trans_asistencial.controller';
+import { CriteriosTransAsistencialModule } from './resolucion/evaluacion/grupo_atencion_inmediata/transporte_asistencial/criterios_trans_asistencial/criterios_trans_asistencial.module';
+import { CriteriosPrehospitalariaController } from './resolucion/evaluacion/grupo_atencion_inmediata/prehospitalaria/criterios_prehospitalaria/criterios_prehospitalaria.controller';
+import { CriteriosPrehospitalariaModule } from './resolucion/evaluacion/grupo_atencion_inmediata/prehospitalaria/criterios_prehospitalaria/criterios_prehospitalaria.module';
+import { CriteriosPartoController } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.controller';
+import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.module';
 
 
 
@@ -70,8 +124,8 @@ import { CriterioDiagnostVascularModule } from './resolucion/evaluacion/grupo_ap
         password: configService.get<string>(DB_PASSWORD),
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize:true,
-        logging: true
+        synchronize:false,
+        logging: false
         
       }),
       inject: [ConfigService],
@@ -106,10 +160,45 @@ import { CriterioDiagnostVascularModule } from './resolucion/evaluacion/grupo_ap
     CriterioMedicinaNuclearModule,
     CriterioRadioterapiaModule,
     CriterioQuimioterapiaModule,
-    CriterioDiagnostVascularModule
+    CriterioDiagnostVascularModule,
+    CriteriosHemodIntervenModule,
+    CriteriosGestionPretransModule,
+    CriteriosTomMuestrasModule,
+    CriteriosLabClinicoModule,
+    CriteriosMuesCuelloModule,
+    CriteriosLabCitologiaModule,
+    CriteriosLabHistotecnologiaModule,
+    CriteriosPatologiaModule,
+    CriteriosDialisisModule,
+    CriteriosHospitalizacionModule,
+    CriteriosHospPacienteCronicoModule,
+    CriteriosCuidBasicNeonatalModule,
+    CriteriosCuidInterNeonatalModule,
+    CriteriosCuidIntensNeonatalModule,
+    CriteriosCuidInterPediatricoModule,
+    CriteriosCuidIntensPediatricoModule,
+    CriteriosCuidInterAdultoModule,
+    CriteriosCuidIntensAdultoModule,
+    CriteriosHospSaludMentalModule,
+    CriteriosHospParcialModule,
+    CriteriosConsPsicoactivasModule,
+    CriteriosCirugiaModule,
+    CriteriosUrgenciasModule,
+    CriteriosTransAsistencialModule,
+    CriteriosPrehospitalariaModule,
+    CriteriosPartoModule
 
   ],
-  controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, CriterioImgRadNoionizantesController, CriterioMedicinaNuclearController, CriterioRadioterapiaController, CriterioQuimioterapiaController, CriterioDiagnostVascularController],
-  providers: [AppService],
+  controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
+    CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 
+    CriterioImgRadNoionizantesController, CriterioMedicinaNuclearController, CriterioRadioterapiaController, CriterioQuimioterapiaController, 
+    CriterioDiagnostVascularController, CriteriosHemodIntervenController, CriteriosGestionPretransController, 
+    CriteriosTomMuestrasController, CriteriosLabClinicoController, CriteriosMuesCuelloController, CriteriosLabCitologiaController, 
+    CriteriosLabHistotecnologiaController, CriteriosPatologiaController, CriteriosDialisisController, CriteriosHospitalizacionController, 
+    CriteriosHospPacienteCronicoController, CriteriosCuidBasicNeonatalController, CriteriosCuidInterNeonatalController, CriteriosCuidIntensNeonatalController, 
+    CriteriosCuidInterPediatricoController, CriteriosCuidIntensPediatricoController, CriteriosCuidInterAdultoController, CriteriosCuidIntensAdultoController, 
+    CriteriosHospSaludMentalController, CriteriosHospParcialController, CriteriosConsPsicoactivasController, CriteriosCirugiaController, CriteriosUrgenciasController, 
+    CriteriosTransAsistencialController, CriteriosPrehospitalariaController, CriteriosPartoController],
+  providers: [AppService, CriteriosLabClinicoService, CriteriosDialisisService],
 })
 export class AppModule {}

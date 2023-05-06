@@ -56,10 +56,6 @@ export class CriteriosicController {
 
 
 
-
-
-
-
     /*CRITERIOS SIC ESTANDAR*/
     //OBTENER TODOS LOS CRITERIOS ESTANDAR
     @Get('estandar/criterios')
