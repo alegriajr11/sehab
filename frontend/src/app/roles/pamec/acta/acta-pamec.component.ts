@@ -10,6 +10,8 @@ import autoTable from 'jspdf-autotable';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ActaPdfDto } from 'src/app/models/Sic/actapdf.dto';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -22,6 +24,8 @@ export class ActaPamecComponent implements OnInit {
   prestador: PrestadorDto[];
   usuario: Usuario[];
   municipio: Municipio[];
+
+
 
 
   //DIV USUARIO
@@ -51,6 +55,7 @@ export class ActaPamecComponent implements OnInit {
     private municipioService: MunicipioService,
     private usuarioService: UsuarioService,
     private toastrService: ToastrService,
+    private authService: AuthService,
     private router: Router
   ) { }
 
@@ -748,7 +753,6 @@ export class ActaPamecComponent implements OnInit {
     }
 
     // doc.save('acta-sic.pdf')
-
 
   }
 

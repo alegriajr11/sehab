@@ -35,8 +35,13 @@
         <tr *ngFor="let criterio of criterioEstandar; let i = index">
           <td>{{i+1}} </td>
           <td>{{criterio.crie_nombre}}</td>
-          <td><button class="btn btn-outline-dark" (click)="openModal(modalTemplate, criterio.crie_id)"><i
-                class='fa fa-check'></i></button></td>
+          <td>
+            <button class="btn btn-outline-dark"
+              [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
+              (click)="openModal(modalTemplate, criterio.crie_id)">
+              <i class='fa fa-check'></i>
+            </button>
+          </td>
 
         </tr>
       </tbody>
@@ -80,8 +85,12 @@
               <tr *ngFor="let criterio of criterioSic; let i = index">
                 <td>{{i+1}} </td>
                 <td>{{criterio.cri_nombre}}</td>
-                <td><button class="btn btn-outline-dark" (click)="openModal(modalTemplate, criterio.cri_id)"><i
-                      class='fa fa-check'></i></button></td>
+                <td>
+                  <button class="btn btn-outline-dark"
+                  [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.cri_id)"
+                  (click)="openModal(modalTemplate, criterio.cri_id)">
+                  <i class='fa fa-check'></i>
+                </button>
               </tr>
             </tbody>
           </table>

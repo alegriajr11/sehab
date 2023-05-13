@@ -37,6 +37,7 @@ export class ModalsicComponent {
     ) { }
 
   ngOnInit(): void {
+
   }
 
   onRegister(): void{
@@ -54,6 +55,8 @@ export class ModalsicComponent {
           timeOut: 3000,
           positionClass: 'toast-top-center',
         });
+        //this.sharedService.criteriosGuardados.push(this.crie_id);
+        this.sharedService.criteriosGuardados.push(this.crie_id)
         this.modalRef.hide()
       },
       (err) => {

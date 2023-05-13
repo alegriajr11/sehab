@@ -24,7 +24,8 @@ export const environment = {
   criterioURL: 'http://localhost:8080/criteriosic/criterio/',
   cumplimientoEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/estandar/',
   cumpleEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/cumple/',
-  
+  //SIC-PDF
+  acta_pdf_URL: 'http://localhost:8080/sic-acta/',
   
 
 //PAMEC

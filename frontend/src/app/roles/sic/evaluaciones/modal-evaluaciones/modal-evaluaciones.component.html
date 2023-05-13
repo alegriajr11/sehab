@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-11">
+            <h4 class="modal-title pull-left text-center">{{nombre_prestador}}</h4>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+                <span aria-hidden="true" class="visually-hidden">&times;</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <hr class="my-4">
+        <h2 class="display-4 text-center">DESCARGAR REPORTE</h2>
+        <hr class="my-4">
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-dark esp btn-circle btn-xl" title="ACTA" (click)="generarPdfActa()">
+                    <i class='fas fa-file-pdf fa-lg'></i>
+                </button>
+                <span class="tittle-button">ACTA</span>
+            </div>
+
+            <div class="col-md-12">
+                <button class="btn btn-dark esp btn-circle btn-xl" title="EVALUACIÓN">
+                    <i class='fa fa-file-text fa-lg'></i>
+                </button>
+                <span class="tittle-button">EVALUACIÓN</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>

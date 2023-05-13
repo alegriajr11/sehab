@@ -9,11 +9,21 @@ export class SharedServiceService {
   pre_cod_habilitacion: string
 
   cumpl_cumple: string
+
+  criteriosGuardados: number[] = [];
+
+
+  //NOMBRES PRESTADORES MODAL
+  pres_nombre: string
     
   constructor() { }
 
   setId(id: number) {
     this.id = id;
+  }
+
+  setNombrePrestador(name: string){
+    this.pres_nombre = name
   }
 
   setIdPrestador(id: string){
@@ -23,4 +33,16 @@ export class SharedServiceService {
   setCumple(cumple: string){
     this.cumpl_cumple = cumple
   }
+
+  // cumplimientosCreados(): void {
+  //   this.municipioService.lista().subscribe(
+  //     data => {
+  //       this.municipio = data;
+  //       this.listaVacia = undefined;
+  //     },
+  //     err => {
+  //       this.listaVacia = err.error.message;
+  //     }
+  //   )
+  // }
 }

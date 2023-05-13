@@ -10,7 +10,7 @@ import { SharedServiceService } from 'src/app/services/Sic/shared-service.servic
 export class Modalsic2Component {
 
   cri_id: number 
-  pre_cod_habilitacion: string 
+  pre_cod_habilitacion: string;
   cumpl_cumple: string;
   cumpl_observaciones: string;
   @Input('dataFromParent') public modalRef: BsModalRef;

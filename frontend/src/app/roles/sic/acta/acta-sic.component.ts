@@ -11,6 +11,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { ActaPdfDto } from 'src/app/models/Sic/actapdf.dto';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 
@@ -27,6 +29,7 @@ export class ActaSicComponent implements OnInit {
   prestador: PrestadorDto[];
   usuario: Usuario[];
   municipio: Municipio[];
+  acta_sic: ActaPdfDto = null;
 
   title = 'Probando-PDF';
 
@@ -36,11 +39,38 @@ export class ActaSicComponent implements OnInit {
   listaVacia: any = undefined;
 
 
+  //VARIABLES PARA TRANSPORTAR EL DTO
+  act_id: string;
+  act_visita_inicial: string;
+  act_visita_seguimiento: string;
+  act_fecha_inicial: string;
+  act_fecha_final: string;
+  act_municipio: string;
+  act_prestador: string;
+  act_nit: string;
+  act_direccion: string
+  act_barrio: string
+  act_telefono: string
+  act_email: string
+  act_sede_principal: string
+  act_sede_localidad: string
+  act_sede_direccion: string
+  act_representante: string
+  act_cod_prestador: string
+  act_cod_sede: string
+  act_obj_visita: string
+  act_nombre_funcionario: string
+  act_cargo_funcionario: string
+  act_nombre_prestador: string
+  act_cargo_prestador: string
+
+
   constructor(
     private prestadorService: PrestadorService,
     private municipioService: MunicipioService,
     private usuarioService: UsuarioService,
     private toastrService: ToastrService,
+    private authService: AuthService,
     private router: Router
 
   ) { }
@@ -120,6 +150,7 @@ export class ActaSicComponent implements OnInit {
           if (pres.pre_cod_habilitacion === Codigo) {
             var nit = (document.getElementById('nit')) as HTMLSelectElement
             nit.value = pres.pre_nit;
+
             var direccion = (document.getElementById('direccion')) as HTMLSelectElement
             direccion.value = pres.pre_direccion;
             var telefono = (document.getElementById('telefono')) as HTMLSelectElement
@@ -223,7 +254,7 @@ export class ActaSicComponent implements OnInit {
   }
 
 
-
+  //REGISTRAR Y GENERAR ACTA PDF
   onRegister(): void {
     //FORMULARIO
     //NÚMERO DE ACTA
@@ -736,6 +767,53 @@ export class ActaSicComponent implements OnInit {
       if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
         valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede && valorActa) {
         if (valorVisitaInicial || valorVisitaSeguim) {
+
+          //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
+          this.act_municipio = valorMunicipio
+          this.act_prestador = valorPrestador
+          this.act_nit = valorNit
+          this.act_direccion = valorDireccion
+          this.act_telefono = valorTelefono
+          this.act_email = valorEmail
+          this.act_representante = valorRepresentante
+          this.act_cod_prestador = valorCodigoPres
+          this.act_nombre_prestador = valorPresNombre
+          this.act_nombre_funcionario = valorUsuSecre
+
+
+          //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
+          this.acta_sic = new ActaPdfDto(
+
+            this.act_id,
+            this.act_visita_inicial,
+            this.act_visita_seguimiento,
+            this.act_fecha_inicial,
+            this.act_fecha_final,
+            this.act_municipio,
+            this.act_prestador,
+            this.act_nit,
+            this.act_direccion,
+            this.act_barrio,
+            this.act_telefono,
+            this.act_email,
+            this.act_sede_principal,
+            this.act_sede_localidad,
+            this.act_sede_direccion,
+            this.act_representante,
+            this.act_cod_prestador,
+            this.act_cod_sede,
+            this.act_obj_visita,
+            this.act_nombre_funcionario,
+            this.act_cargo_funcionario,
+            this.act_nombre_prestador,
+            this.act_cargo_prestador
+          );
+          console.log(this.acta_sic)
+          this.authService.registroActaPdf(this.acta_sic).subscribe();
+
+
+
+
           //OBTENER EL ESTADO DEL BOTON A TRUE 
           this.boton_acta_sic = true
           localStorage.setItem('boton-acta-sic', 'true');
@@ -780,6 +858,52 @@ export class ActaSicComponent implements OnInit {
         valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede
         && valorLocalidad && valorDirSede && valorActa) {
         if (valorVisitaInicial || valorVisitaSeguim) {
+
+          //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
+          this.act_municipio = valorMunicipio
+          this.act_prestador = valorPrestador
+          this.act_nit = valorNit
+          this.act_direccion = valorDireccion
+          this.act_telefono = valorTelefono
+          this.act_email = valorEmail
+          this.act_representante = valorRepresentante
+          this.act_cod_prestador = valorCodigoPres
+          this.act_nombre_prestador = valorPresNombre
+          this.act_nombre_funcionario = valorUsuSecre
+
+
+          //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
+          this.acta_sic = new ActaPdfDto(
+
+            this.act_id,
+            this.act_visita_inicial,
+            this.act_visita_seguimiento,
+            this.act_fecha_inicial,
+            this.act_fecha_final,
+            this.act_municipio,
+            this.act_prestador,
+            this.act_nit,
+            this.act_direccion,
+            this.act_barrio,
+            this.act_telefono,
+            this.act_email,
+            this.act_sede_principal,
+            this.act_sede_localidad,
+            this.act_sede_direccion,
+            this.act_representante,
+            this.act_cod_prestador,
+            this.act_cod_sede,
+            this.act_obj_visita,
+            this.act_nombre_funcionario,
+            this.act_cargo_funcionario,
+            this.act_nombre_prestador,
+            this.act_cargo_prestador
+          );
+          console.log(this.acta_sic)
+          this.authService.registroActaPdf(this.acta_sic).subscribe();
+
+
+
           //OBTENER EL ESTADO DEL BOTON A TRUE 
           this.boton_acta_sic = true
           localStorage.setItem('boton-acta-sic', 'true');
@@ -817,5 +941,7 @@ export class ActaSicComponent implements OnInit {
       }
 
     }
+
+
   }
 }

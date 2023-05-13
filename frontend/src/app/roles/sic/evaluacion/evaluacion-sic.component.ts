@@ -59,7 +59,7 @@ export class EvaluacionSicComponent implements OnInit {
     private indicadorService: IndicadorService,
     private criterioSicService: CriterioSicService,
     private modalService: BsModalService,
-    private sharedService: SharedServiceService,
+    public sharedService: SharedServiceService,
     private cumplimientoEstandarService: CumplimientoEstandarService,
     private toastrService: ToastrService
 
@@ -75,6 +75,7 @@ export class EvaluacionSicComponent implements OnInit {
     this.cargarDominio();
     this.cargarCriteriosSic();
     this.cargarCriteriosEstandar();
+    
   }
 
   ngAfterViewInit() {
@@ -149,6 +150,8 @@ export class EvaluacionSicComponent implements OnInit {
       }
     )
   }
+
+
 
 
   onRegister(): void {

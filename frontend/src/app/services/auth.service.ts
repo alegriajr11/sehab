@@ -7,6 +7,7 @@ import { NuevoUsuarioDto } from '../models/nuevo-usuario.dto';
 import { TokenDto } from '../models/token.dto';
 import { CambiarPasswordDto } from '../models/cambiar-password.dto';
 import { RestablecerPasswordDto } from '../models/reset-password.dto';
+import { ActaPdfDto } from '../models/Sic/actapdf.dto';
 
 
 @Injectable({
@@ -20,6 +21,7 @@ export class AuthService {
   restablecerContraseña = environment.restablecerContraseña;
   usuarioNewURL = environment.usuarioNewURL;
   usuarioAdmin = environment.usuarioURL;
+  acta_sic_pdfUrl = environment.acta_pdf_URL;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -65,5 +67,9 @@ export class AuthService {
 
   resetPassword(dto: RestablecerPasswordDto){
     return this.httpClient.patch<any>(this.authURL + 'reset-password', dto)
+  }
+
+  registroActaPdf(dto: ActaPdfDto): Observable<any> {
+    return this.httpClient.post<any>(this.acta_sic_pdfUrl, dto);
   }
 }

@@ -80,7 +80,7 @@ export class CriteriosicCumplimientoService {
         return new MessageDto('Cumplimiento Asignado');
     }
 
-    //ENCONTRAR CUMPLIMIENTO ESTANDAR POR ID
+    //ENCONTRAR CUMPLIMIENTO ESTANDAR POR CRI_ID CUMPLIDO
     async findByIdCumpl(crie_id: number): Promise<CumplimientoEstandarSicEntity> {
         const criterio_estandarsic = await this.criterioEstandarSicRepository.findOne({ where: { crie_id: crie_id } });
         const cumplimientoEstandar = await this.cumplimientoEstandarSicRepository.findOne({ where: { criterioestandar_sic: criterio_estandarsic } });

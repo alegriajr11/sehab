@@ -49,6 +49,7 @@ export class PrestadorService {
         const prestadores = await this.prestadorRepository.createQueryBuilder('prestador')
             .innerJoin('prestador.pre_municipio', 'pre_municipio')
             .where('pre_municipio.mun_id = :mun', { mun: id })
+            .andWhere('prestador.pre_habilitado LIKE :habilitado', { habilitado: '%SI%' })
             .getMany()
         return prestadores;
     }
@@ -60,6 +61,7 @@ export class PrestadorService {
             .leftJoinAndSelect('prestador.pre_clasificacion', 'pre_clasificacion')
             .where('pre_municipio.mun_id = :mun', { mun: id })
             .andWhere('pre_clasificacion.cla_id IN (:clasificacion)', { clasificacion: ['1', '2'] })
+            .andWhere('prestador.pre_habilitado LIKE :habilitado', { habilitado: '%SI%' })
             //.where('post.status IN (:statuses)', { statuses: ['published', 'draft'] })
             .getMany()
         return prestadores;

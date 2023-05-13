@@ -82,6 +82,7 @@ import { InternacionComponent } from './roles/reso/home-estandar/internacion/int
 import { QuirurgicoComponent } from './roles/reso/home-estandar/quirurgico/quirurgico.component';
 import { AtencionInmediataComponent } from './roles/reso/home-estandar/atencion-inmediata/atencion-inmediata.component';
 import { EditarPrestadorComponent } from './prestador/editar-prestador/editar-prestador.component';
+import { ModalEvaluacionesComponent } from './roles/sic/evaluaciones/modal-evaluaciones/modal-evaluaciones.component';
 
 
 @NgModule({
@@ -154,7 +155,8 @@ import { EditarPrestadorComponent } from './prestador/editar-prestador/editar-pr
     InternacionComponent,
     QuirurgicoComponent,
     AtencionInmediataComponent,
-    EditarPrestadorComponent
+    EditarPrestadorComponent,
+    ModalEvaluacionesComponent
   ],
   imports: [
     BrowserModule,

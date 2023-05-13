@@ -124,8 +124,8 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
         password: configService.get<string>(DB_PASSWORD),
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize:false,
-        logging: false
+        synchronize: false,
+        logging: false 
         
       }),
       inject: [ConfigService],

@@ -86,12 +86,13 @@ h6 {
     display: list-item;
     position: relative;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 1;
     
 }
 .dropdown_ser a {
     color: white;
 }
+
 .dropdown-content {
 
     display: none;

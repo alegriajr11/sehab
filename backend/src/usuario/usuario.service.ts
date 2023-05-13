@@ -31,7 +31,7 @@ export class UsuarioService {
         return usuario;
       }
     
-
+ 
     /*LISTANDO USUARIOS */
     async getall(): Promise<UsuarioEntity[]>{
         const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
@@ -48,13 +48,6 @@ export class UsuarioService {
         const exists = await this.usuarioRepository.findOne({where: [{usu_nombreUsuario: usu_nombreUsuario}, {usu_email: usu_email}]});
         if(exists) throw new BadRequestException(new MessageDto('Ese usuario ya existe'));
         const rolAdmin = await this.rolRepository.findOne({where: {rol_nombre: RolNombre.ADMIN}});
-        // const rolSic = await this.rolRepository.findOne({where: {rol_nombre: RolNombre.SIC}});
-        // const rolSp = await this.rolRepository.findOne({where: {rol_nombre: RolNombre.SP}});
-        // const rolPamec = await this.rolRepository.findOne({where: {rol_nombre: RolNombre.PAMEC}});
-        // const rolRes = await this.rolRepository.findOne({where: {rol_nombre: RolNombre.RES}});
-        // if(!rolAdmin || !rolSic || !rolSp || !rolPamec || !rolRes) throw new InternalServerErrorException(new MessageDto('los roles aún no han sido creados'))
-        // const admin = this.usuarioRepository.create(dto);
-        // admin.roles = [rolAdmin, rolSic, rolSp, rolPamec, rolRes];
         if(!rolAdmin) throw new InternalServerErrorException(new MessageDto('los roles aún no han sido creados'))
         const admin = this.usuarioRepository.create(dto);
         admin.roles = [rolAdmin];

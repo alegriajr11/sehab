@@ -9,9 +9,6 @@ import { environment } from 'src/environments/environment';
 })
 export class CumplimientoEstandarService {
 
-  //  cumpleEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/cumple/',
-  //  cumplimientoEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/estandar/',
-
 
   cumplimientoEstandarURL = environment.cumplimientoEstandarURL
   cumpleEstandarURL = environment.cumpleEstandarURL

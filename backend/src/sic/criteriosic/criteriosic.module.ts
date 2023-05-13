@@ -12,7 +12,11 @@ import { CriteriosicEntity } from '../criteriosic.entity';
 import { CriterioEstandarSicEntity } from '../criteriosEstandar.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DominioEntity]), TypeOrmModule.forFeature([IndicadorEntity]), TypeOrmModule.forFeature([CriteriosicEntity, CriterioEstandarSicEntity]), IndicadorModule, CriterioModule],
+  imports: [TypeOrmModule.forFeature([DominioEntity]), 
+  TypeOrmModule.forFeature([IndicadorEntity]), 
+  TypeOrmModule.forFeature([CriteriosicEntity, CriterioEstandarSicEntity]), 
+  IndicadorModule, CriterioModule],
+  
   providers: [CriteriosicService, CriterioService],
   controllers: [CriteriosicController, CriterioController]
 })
