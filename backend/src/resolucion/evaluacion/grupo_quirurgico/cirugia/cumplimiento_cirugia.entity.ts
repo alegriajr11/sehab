@@ -34,6 +34,7 @@ export class CumplimientoCirugiaEntity {
     @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimineto_cirugia)
     prestador: PrestadorEntity
 
+   //relacion OneToOne de  cumplimiento a criterios cirugia  
     @OneToOne(() => CriterioCirugiaEntity)
     @JoinColumn()
     criterio_cirugia: CriterioCirugiaEntity
