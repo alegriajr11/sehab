@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioCirugiaEntity } from "./criterio_cirugia.entity";
+import { CirugiaEntity } from "./cirugia.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -27,7 +28,11 @@ export class CumplimientoCirugiaEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_ciru_fecha_limite: string;
-    
+
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO_CIRUGIA - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimineto_cirugia)
+    prestador: PrestadorEntity
 
     @OneToOne(() => CriterioCirugiaEntity)
     @JoinColumn()

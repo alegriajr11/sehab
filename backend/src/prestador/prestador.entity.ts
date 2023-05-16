@@ -47,10 +47,10 @@ import { CuidIntePediatricoEntity } from "src/resolucion/evaluacion/grupo_intern
 import { CuidIntermAdultoEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intermedio_adulto/cuid_inter_adulto.entity";
 import { CuidIntermNeonatalEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intermedio_neonatal/cuid_inter_neonatal.entity";
 import { CuidIntermPediatricoEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intermedio_pediatrico/cuid_inter_pediatrico.entity";
-import { HospitalizacionEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion/hospitalizacion.entity";
 import { HospitalizacionCronicoEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/hospi_paciente_cronico.entity";
 import { HospitalizacionParcialEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_parcial/hospitalizacion_parcial.entity";
 import { HospitalizacionMentalEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/hosp_salud_mental.entity";
+import { CumplimientoCirugiaEntity } from "src/resolucion/evaluacion/grupo_quirurgico/cirugia/cumplimiento_cirugia.entity";
 
 
 
@@ -256,9 +256,9 @@ export class PrestadorEntity {
     //---------------------------------///
     //-----GRUPO QUIRURGICO----///
     //--------------------------------///
-    //Relación Uno a Muchos PRESTADORES - CIRUGIA
-    @OneToMany(type => CirugiaEntity, cirugia => cirugia.prestador)
-    cirugia: CirugiaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO_CIRUGIA
+    @OneToMany(type => CumplimientoCirugiaEntity, cumplimiento_cirugia => cumplimiento_cirugia.prestador)
+    cumplimineto_cirugia: CumplimientoCirugiaEntity
 
 
 
@@ -299,8 +299,8 @@ export class PrestadorEntity {
     cuid_inter_pediatrico: CuidIntermPediatricoEntity
 
     //Relación Uno a Muchos PRESTADORES - HOSPITALIZACION
-    @OneToMany(type => HospitalizacionEntity, hospitalizacion => hospitalizacion.prestador)
-    hospitalizacion: HospitalizacionEntity
+    // @OneToMany(type => HospitalizacionEntity, hospitalizacion => hospitalizacion.prestador)
+    // hospitalizacion: HospitalizacionEntity
 
     //Relación Uno a Muchos PRESTADORES - HOSPITALIZACION_CRONICO
     @OneToMany(type => HospitalizacionCronicoEntity, hospit_cronico => hospit_cronico.prestador)

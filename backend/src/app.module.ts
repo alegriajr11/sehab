@@ -71,8 +71,6 @@ import { CriteriosPatologiaModule } from './resolucion/evaluacion/grupo_apoyo_di
 import { CriteriosDialisisService } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.service';
 import { CriteriosDialisisController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.controller';
 import { CriteriosDialisisModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.module';
-import { CriteriosHospitalizacionController } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterios_hospitalizacion/criterios_hospitalizacion.controller';
-import { CriteriosHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterios_hospitalizacion/criterios_hospitalizacion.module';
 import { CriteriosHospPacienteCronicoController } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/criterios_hosp_paciente_cronico/criterios_hosp_paciente_cronico.controller';
 import { CriteriosHospPacienteCronicoModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/criterios_hosp_paciente_cronico/criterios_hosp_paciente_cronico.module';
 import { CriteriosCuidBasicNeonatalController } from './resolucion/evaluacion/grupo_internacion/cuidado_basico_neonatal/criterios_cuid_basic_neonatal/criterios_cuid_basic_neonatal.controller';
@@ -124,8 +122,8 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
         password: configService.get<string>(DB_PASSWORD),
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
-        logging: false 
+        synchronize: true,
+        logging: true 
         
       }),
       inject: [ConfigService],
@@ -170,7 +168,6 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
     CriteriosLabHistotecnologiaModule,
     CriteriosPatologiaModule,
     CriteriosDialisisModule,
-    CriteriosHospitalizacionModule,
     CriteriosHospPacienteCronicoModule,
     CriteriosCuidBasicNeonatalModule,
     CriteriosCuidInterNeonatalModule,
@@ -194,7 +191,7 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
     CriterioImgRadNoionizantesController, CriterioMedicinaNuclearController, CriterioRadioterapiaController, CriterioQuimioterapiaController, 
     CriterioDiagnostVascularController, CriteriosHemodIntervenController, CriteriosGestionPretransController, 
     CriteriosTomMuestrasController, CriteriosLabClinicoController, CriteriosMuesCuelloController, CriteriosLabCitologiaController, 
-    CriteriosLabHistotecnologiaController, CriteriosPatologiaController, CriteriosDialisisController, CriteriosHospitalizacionController, 
+    CriteriosLabHistotecnologiaController, CriteriosPatologiaController, CriteriosDialisisController, 
     CriteriosHospPacienteCronicoController, CriteriosCuidBasicNeonatalController, CriteriosCuidInterNeonatalController, CriteriosCuidIntensNeonatalController, 
     CriteriosCuidInterPediatricoController, CriteriosCuidIntensPediatricoController, CriteriosCuidInterAdultoController, CriteriosCuidIntensAdultoController, 
     CriteriosHospSaludMentalController, CriteriosHospParcialController, CriteriosConsPsicoactivasController, CriteriosCirugiaController, CriteriosUrgenciasController, 
