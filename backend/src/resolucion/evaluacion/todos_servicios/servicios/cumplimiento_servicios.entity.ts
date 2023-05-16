@@ -26,6 +26,9 @@ export class CumplimientoServiciosEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cumps_fecha_limite: string; 
     
+    //Relacion de cumplimiento servicios a prestador
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimiento_servicios) 
+    prestador: PrestadorEntity
 
     @OneToOne(() => Criterio_servicios)
     @JoinColumn()

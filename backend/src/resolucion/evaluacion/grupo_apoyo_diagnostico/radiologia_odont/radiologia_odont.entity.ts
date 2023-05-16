@@ -20,7 +20,7 @@ export class RadiologiaOdontoEntity {
     criterios_rad_odontologica: CriterioRadiologiaOdontoEntity;
 
     //Relación MUCHOS a UNO RADIOLOGIA_ODONTOLOGICA - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.rad_odtontologica)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.rad_odtontologica)
+    // prestador: PrestadorEntity
 
 }

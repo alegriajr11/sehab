@@ -27,6 +27,10 @@ export class CumplimientoSerFarmaceuticoEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_ser_farm_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO SERVICIO_FARMACEUTICO - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_ser_farmaceutico)
+    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioSerFarmaceuticoEntity)

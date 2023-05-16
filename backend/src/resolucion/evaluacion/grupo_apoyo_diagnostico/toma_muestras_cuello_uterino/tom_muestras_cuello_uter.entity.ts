@@ -20,7 +20,7 @@ export class CuelloUterinoEntity {
     criterios_cuello_uterino: CriterioCuelloUterinoEntity;
 
     //Relación MUCHOS a UNO TOMA_MUESTRAS_CUELLO_UTERINO - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.tom_mue_uterino)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.tom_mue_uterino)
+    // prestador: PrestadorEntity
 
 }

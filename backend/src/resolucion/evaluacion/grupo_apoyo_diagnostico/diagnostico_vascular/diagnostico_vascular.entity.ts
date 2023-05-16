@@ -20,7 +20,7 @@ export class DiagnosticoVascularEntity {
     criterios_diag_vascular: CriterioDiagnostVascularEntity;
 
     //Relación MUCHOS a UNO DIAGNOSTICO_VASCULAR - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.diagnostico_vascular)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.diagnostico_vascular)
+    // prestador: PrestadorEntity
 
 }

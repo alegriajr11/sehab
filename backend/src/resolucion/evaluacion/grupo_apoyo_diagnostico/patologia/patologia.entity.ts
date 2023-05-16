@@ -20,7 +20,7 @@ export class PatologiaEntity {
     criterios_patologia: CriterioPatologiaEntity;
 
     //Relación MUCHOS a UNO PATOLOGIA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.patologia)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.patologia)
+    // prestador: PrestadorEntity
 
 }

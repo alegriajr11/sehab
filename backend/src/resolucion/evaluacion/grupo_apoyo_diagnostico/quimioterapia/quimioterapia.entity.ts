@@ -20,7 +20,7 @@ export class QuimioterapiaEntity {
     criterios_quimioterapia: CriterioQuimioterapiaEntity;
 
     //Relación MUCHOS a UNO QUIMIOTERAPIA - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.quimioterapia)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.quimioterapia)
+    // prestador: PrestadorEntity
 
 }

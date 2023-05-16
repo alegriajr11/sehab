@@ -20,7 +20,7 @@ export class LabClinicoEntity {
     criterios_lab_clinico: CriterioLabClinicoEntity;
 
     //Relación MUCHOS a UNO LAB_CLINICO - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.lab_clinico)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.lab_clinico)
+    // prestador: PrestadorEntity
 
 }

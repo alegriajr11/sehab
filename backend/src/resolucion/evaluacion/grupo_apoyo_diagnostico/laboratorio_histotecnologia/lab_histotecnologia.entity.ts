@@ -20,7 +20,7 @@ export class LabHistotecnologiaEntity {
     criterios_lab_histotecnologia: CriterioLabHistotecnologiaEntity;
 
     //Relación MUCHOS a UNO LAB_HISTOTECNOLOGIA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.lab_histotecnologia)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.lab_histotecnologia)
+    // prestador: PrestadorEntity
 
 }
