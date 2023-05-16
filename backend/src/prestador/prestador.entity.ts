@@ -51,6 +51,25 @@ import { HospitalizacionCronicoEntity } from "src/resolucion/evaluacion/grupo_in
 import { HospitalizacionParcialEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_parcial/hospitalizacion_parcial.entity";
 import { HospitalizacionMentalEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/hosp_salud_mental.entity";
 import { CumplimientoCirugiaEntity } from "src/resolucion/evaluacion/grupo_quirurgico/cirugia/cumplimiento_cirugia.entity";
+import { CumplimientoServiciosEntity } from "src/resolucion/evaluacion/todos_servicios/servicios/cumplimiento_servicios.entity";
+import { CumplimientoDiagnosticoVascularEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/cumplimiento_diagnost_vascular.entity";
+import { CumplimientoDialisisEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/cumplimiento_dialisis.entity";
+import { CumplimientoGestionPretransfusionalEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/gestion_pretransfusional/cumplimiento_gestion_pretrans.entity";
+import { CumplimientoHermoIntervenEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/hemodinamia_intervencionismo/cumplimiento_hemo_inter.entity";
+import { CumplimientoImgRadIonizanteEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/imagenes_diagnosticas_rad_ionizantes/cumplimiento_img_rad_ionizantes.entity";
+import { CumplimientoImgRadNoIonizanteEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/imagenes_diagnosticas_rad_noionizantes/cumplimiento_img_rad_noionizantes.entity";
+import { CumplimientoLabUterinaEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_citologias_uterinas/cumplimiento_lab_citologia_uterina.entity";
+import { CumplimientoLabClinicoEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_clinico/cumplimiento_lab_clinico.entity";
+import { CumplimientoLabHistotecnEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_histotecnologia/cumplimiento_lab_histotec.entity";
+import { CumplimientoMedNuclearEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/medicina_nuclear/cumplimineto_medicina_nuclear.entity";
+import { CumplimientoPatologiaEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/patologia/cumplimiento_patologia.entity";
+import { CumplimientoQuimioterapiaEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/quimioterapia/cumplimiento_quimioterapia.entity";
+import { CumplimientoRadOdontologicaEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/radiologia_odont/cumplimiento_radio_odont.entity";
+import { CumplimientoRadioterapiaEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/radioterapia/cumplimiento_radioterapia.entity";
+import { CumplimientoSerFarmaceuticoEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/servicio_farmaceutico/cumplimiento_s_farmaceutico.entity";
+import { CumplimientoTerapiaEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/terapias/cumplimiento_terapias.entity";
+import { CumplimientoCuelloUterinoEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_cuello_uterino/cumplimiento_tom_muest_cuello.entity";
+import { CumplimientoMuestLabClinicoEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_laboratorio_clinico/cumplimiento_tom_muestras.entity";
 
 
 
@@ -139,8 +158,8 @@ export class PrestadorEntity {
 
 
     //Relación Uno a Muchos PRESTADORES - TODOS_SERVICIOS
-    @OneToMany(type => TodoServiciosEntity, todos_servicios => todos_servicios.prestador)
-    todos_servicios: TodoServiciosEntity
+    @OneToMany(type => CumplimientoServiciosEntity, cumplimiento_servicios => cumplimiento_servicios.prestador)
+    cumplimiento_servicios: CumplimientoServiciosEntity
 
 
     //-----GRUPO CONSULTA EXTERNA------///
@@ -165,72 +184,76 @@ export class PrestadorEntity {
     //-----GRUPO APOYO DIAGNOSTICO-----///
     //--------------------------------///
     //Relación Uno a Muchos PRESTADORES - DIAGNOSTICO_VASCULAR
-    @OneToMany(type => DiagnosticoVascularEntity, diag_vascular => diag_vascular.prestador)
-    diagnostico_vascular: DiagnosticoVascularEntity
+    @OneToMany(type => CumplimientoDiagnosticoVascularEntity, cum_diag_vascular => cum_diag_vascular.prestador)
+    cum_diag_vascular: CumplimientoDiagnosticoVascularEntity
 
-    //Relación Uno a Muchos PRESTADORES - DIALISIS
-    @OneToMany(type => DialisisEntity, dialisis => dialisis.prestador)
-    dialisis: DialisisEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO DIALISIS
+    @OneToMany(type => CumplimientoDialisisEntity, cumplimiento_dialisis => cumplimiento_dialisis.prestador)
+    cumplimiento_dialisis: CumplimientoDialisisEntity
 
-    //Relación Uno a Muchos PRESTADORES - GESTION PRETRANSFUSIONAL
-    @OneToMany(type => GestionPretransfusionalEntity, gest_preytansfusional => gest_preytansfusional.prestador)
-    gest_pretransfusional: GestionPretransfusionalEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO GESTION PRETRANSFUSIONAL
+    @OneToMany(type => CumplimientoGestionPretransfusionalEntity, cum_gest_preytansfusional => cum_gest_preytansfusional.prestador)
+    cum_gest_pretransfusional: CumplimientoGestionPretransfusionalEntity
 
-    //Relación Uno a Muchos PRESTADORES - HERMODINAMIA INTERVENSIONISMO
-    @OneToMany(type => HermodIntervenEntity, hermo_interven => hermo_interven.prestador)
-    hermod_interven: HermodIntervenEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO HERMODINAMIA INTERVENSIONISMO
+    @OneToMany(type => CumplimientoHermoIntervenEntity, cum_hermo_interven => cum_hermo_interven.prestador)
+    cum_hermo_interven: CumplimientoHermoIntervenEntity
 
-    //Relación Uno a Muchos PRESTADORES - IMAGENES DIAGNOSTICAS IONIZANTES
-    @OneToMany(type => ImgRadIonizantesEntity, img_ionizantes => img_ionizantes.prestador)
-    img_ionizantes: ImgRadIonizantesEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO IMAGENES DIAGNOSTICAS IONIZANTES
+    @OneToMany(type => CumplimientoImgRadIonizanteEntity, cum_img_ionizantes => cum_img_ionizantes.prestador)
+    cum_img_ionizantes: CumplimientoImgRadIonizanteEntity
 
-    //Relación Uno a Muchos PRESTADORES - LABORATORIO CITOLOGIA UTERINA
-    @OneToMany(type => LabCitologiaUterinaEntity, lab_cit_uterina => lab_cit_uterina.prestador)
-    lab_uterina: LabCitologiaUterinaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO IMAGENES DIAGNOSTICAS NO IONIZANTES
+    @OneToMany(type => CumplimientoImgRadNoIonizanteEntity, cum_img_no_ionizantes => cum_img_no_ionizantes.prestador)
+    cum_img_no_ionizantes: CumplimientoImgRadNoIonizanteEntity
 
-    //Relación Uno a Muchos PRESTADORES - LABORATORIO CLINICO
-    @OneToMany(type => LabClinicoEntity, lab_clinico => lab_clinico.prestador)
-    lab_clinico: LabClinicoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO B LABORATORIO CITOLOGIA UTERINA
+    @OneToMany(type => CumplimientoLabUterinaEntity, cum_lab_cit_uterina => cum_lab_cit_uterina.prestador)
+    cum_lab_cit_uterina: CumplimientoLabUterinaEntity
 
-    //Relación Uno a Muchos PRESTADORES - LABORATORIO HISTOTECNOLOGIA
-    @OneToMany(type => LabHistotecnologiaEntity, lab_histotecnologia => lab_histotecnologia.prestador)
-    lab_histotecnologia: LabHistotecnologiaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO LABORATORIO CLINICO
+    @OneToMany(type => CumplimientoLabClinicoEntity, cum_lab_clinico => cum_lab_clinico.prestador)
+    cum_lab_clinico: CumplimientoLabClinicoEntity
 
-    //Relación Uno a Muchos PRESTADORES - MEDICINA NUCLEAR
-    @OneToMany(type => MedNuclearEntity, med_nuclear => med_nuclear.prestador)
-    med_nuclear: MedNuclearEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO LABORATORIO HISTOTECNOLOGIA
+    @OneToMany(type => CumplimientoLabHistotecnEntity, cum_lab_histotecnologia => cum_lab_histotecnologia.prestador)
+    cum_lab_histotecnologia: CumplimientoLabHistotecnEntity
 
-    //Relación Uno a Muchos PRESTADORES - PATOLOGIA
-    @OneToMany(type => PatologiaEntity, patologia => patologia.prestador)
-    patologia: PatologiaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO MEDICINA NUCLEAR
+    @OneToMany(type => CumplimientoMedNuclearEntity, cum_med_nuclear => cum_med_nuclear.prestador)
+    cum_med_nuclear: CumplimientoMedNuclearEntity
 
-    //Relación Uno a Muchos PRESTADORES - QUIMIOTERAPIA
-    @OneToMany(type => QuimioterapiaEntity, quimioterapia => quimioterapia.prestador)
-    quimioterapia: QuimioterapiaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO PATOLOGIA
+    @OneToMany(type => CumplimientoPatologiaEntity, cumplimiento_patologia =>cumplimiento_patologia.prestador)
+    cumplimiento_patologia: CumplimientoPatologiaEntity
 
-    //Relación Uno a Muchos PRESTADORES - RADIOLOGIA_ODONTOLOGICA
-    @OneToMany(type => RadiologiaOdontoEntity, rad_odtontologica => rad_odtontologica.prestador)
-    rad_odtontologica: RadiologiaOdontoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO QUIMIOTERAPIA
+    @OneToMany(type => CumplimientoQuimioterapiaEntity, cumplimiento_quimioterapia => cumplimiento_quimioterapia.prestador)
+    cumplimiento_quimioterapia: CumplimientoQuimioterapiaEntity
 
-    //Relación Uno a Muchos PRESTADORES - RADIOTERAPIA
-    @OneToMany(type => RadioterapiaEntity, radioterapia => radioterapia.prestador)
-    radioterapia: RadioterapiaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO RADIOLOGIA_ODONTOLOGICA
+    @OneToMany(type => CumplimientoRadOdontologicaEntity, cum_rad_odtontologica => cum_rad_odtontologica.prestador)
+    cum_rad_odtontologica: CumplimientoRadOdontologicaEntity
 
-    //Relación Uno a Muchos PRESTADORES - SERVICIO_FARMACEUTICO
-    @OneToMany(type => RadioterapiaEntity, ser_farmaceutico => ser_farmaceutico.prestador)
-    ser_farmaceutico: RadioterapiaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO RADIOTERAPIA
+    @OneToMany(type => CumplimientoRadioterapiaEntity, cumplimiento_radioterapia => cumplimiento_radioterapia.prestador)
+    cumplimiento_radioterapia: CumplimientoRadioterapiaEntity
 
-    //Relación Uno a Muchos PRESTADORES - TERAPIA
-    @OneToMany(type => TerapiasEntity, terapia => terapia.prestador)
-    terapia: TerapiasEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO SERVICIO_FARMACEUTICO
+    @OneToMany(type => CumplimientoSerFarmaceuticoEntity, cum_ser_farmaceutico => cum_ser_farmaceutico.prestador)
+    cum_ser_farmaceutico: CumplimientoSerFarmaceuticoEntity
 
-    //Relación Uno a Muchos PRESTADORES - TOMA_MUESTRAS_CUELLO_UTERINO
-    @OneToMany(type => CuelloUterinoEntity, tom_mue_uterino => tom_mue_uterino.prestador)
-    tom_mue_uterino: CuelloUterinoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO TERAPIA
+    @OneToMany(type => CumplimientoTerapiaEntity, cumplimiento_terapia => cumplimiento_terapia.prestador)
+    cumplimiento_terapia: CumplimientoTerapiaEntity
 
-    //Relación Uno a Muchos PRESTADORES - TOMA_MUESTRAS_LABORATORIO_CLINICO
-    @OneToMany(type => MuestrasLabClinicoEntity, tom_mue_lab_clinico => tom_mue_lab_clinico.prestador)
-    tom_mue_lab_clinico: MuestrasLabClinicoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO TOMA_MUESTRAS_CUELLO_UTERINO
+    @OneToMany(type => CumplimientoCuelloUterinoEntity, cum_tom_mue_uterino => cum_tom_mue_uterino.prestador)
+    cum_tom_mue_uterino: CumplimientoCuelloUterinoEntity
+
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO TOMA_MUESTRAS_LABORATORIO_CLINICO
+    @OneToMany(type => CumplimientoMuestLabClinicoEntity, cum_tom_mue_lab_clinico => cum_tom_mue_lab_clinico.prestador)
+    cum_tom_mue_lab_clinico: CumplimientoMuestLabClinicoEntity
 
 
     //---------------------------------///
