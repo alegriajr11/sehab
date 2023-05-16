@@ -27,6 +27,10 @@ export class CumplimientoGestionPretransfusionalEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_gestpre_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO GESTION PRETRANSFUNCIONAL - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_gest_pretransfusional)
+    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioGestionPretransfusionalEntity)

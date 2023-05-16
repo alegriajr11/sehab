@@ -20,7 +20,7 @@ export class ServFarmaceuticoEntity {
     criterios_ser_farmaceutico: CriterioSerFarmaceuticoEntity;
 
     //Relación MUCHOS a UNO SERVICIO_FARMACEUTICO - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.ser_farmaceutico)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.ser_farmaceutico)
+    // prestador: PrestadorEntity
 
 }

@@ -20,7 +20,7 @@ export class MedNuclearEntity {
     criterios_med_nuclear: CriterioMedicinaNuclearEntity;
 
     //Relación MUCHOS a UNO MEDICINA_NUCLEAR - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.med_nuclear)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.med_nuclear)
+    // prestador: PrestadorEntity
 
 }

@@ -20,7 +20,7 @@ export class GestionPretransfusionalEntity {
     criterios_gest_pretransfusional: CriterioGestionPretransfusionalEntity;
 
     //Relación MUCHOS a UNO GESTION PRETRANSFUSIONAL - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.gest_pretransfusional)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.gest_pretransfusional)
+    // prestador: PrestadorEntity
 
 }

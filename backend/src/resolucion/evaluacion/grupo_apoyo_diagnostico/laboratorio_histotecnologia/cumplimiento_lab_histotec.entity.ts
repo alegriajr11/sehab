@@ -27,6 +27,10 @@ export class CumplimientoLabHistotecnEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_labhistot_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO LAB_HISTOTECNOLOGIA - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_lab_histotecnologia)
+    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioLabHistotecnologiaEntity)

@@ -20,7 +20,7 @@ export class HermodIntervenEntity {
     criterios_hermod_interven: CriterioHermoIntervenEntity;
 
     //Relación MUCHOS a UNO HERMODINAMIA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.hermod_interven)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.hermod_interven)
+    // prestador: PrestadorEntity
 
 }

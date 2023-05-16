@@ -27,6 +27,10 @@ export class CumplimientoTerapiaEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_ter_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO TERAPIA - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimiento_terapia)
+    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioTerapiaEntity)

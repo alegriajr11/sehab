@@ -20,7 +20,7 @@ export class DialisisEntity {
     criterios_dialisis: CriterioDialisisEntity;
 
     //Relación MUCHOS a UNO DIALISIS - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.dialisis)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.dialisis)
+    // prestador: PrestadorEntity
 
 }

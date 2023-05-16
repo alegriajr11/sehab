@@ -20,7 +20,7 @@ export class RadioterapiaEntity {
     criterios_radioterapia: CriterioRadioterapiaEntity;
 
     //Relación MUCHOS a UNO RADIOTERAPIA - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.radioterapia)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.radioterapia)
+    // prestador: PrestadorEntity
 
 }

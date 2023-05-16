@@ -20,7 +20,7 @@ export class LabCitologiaUterinaEntity {
     criterios_lab_uterina: CriterioLabUterinaEntity;
 
     //Relación MUCHOS a UNO LAB_CITOLOGIA UTERINA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.lab_uterina)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.lab_uterina)
+    // prestador: PrestadorEntity
 
 }

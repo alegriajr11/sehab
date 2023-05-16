@@ -28,6 +28,9 @@ export class CumplimientoMuestLabClinicoEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_mues_clin_fecha_limite: string;
     
+    //Relación MUCHOS a UNO CUMPLIMIENTO TOMA_MUESTRAS_LABORATORIO_CLINICO - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_tom_mue_lab_clinico)
+    prestador: PrestadorEntity
 
     @OneToOne(() => CriterioMuestraLabClinicoEntity)
     @JoinColumn()

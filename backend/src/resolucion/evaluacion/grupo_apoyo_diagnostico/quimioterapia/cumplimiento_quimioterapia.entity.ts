@@ -27,6 +27,10 @@ export class CumplimientoQuimioterapiaEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_quim_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO_QUIMIOTERAPIA - PRESTAOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimiento_quimioterapia)
+    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioQuimioterapiaEntity)

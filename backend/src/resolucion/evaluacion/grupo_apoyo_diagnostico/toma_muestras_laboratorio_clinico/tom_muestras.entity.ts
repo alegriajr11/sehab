@@ -19,8 +19,8 @@ export class MuestrasLabClinicoEntity {
     @OneToMany(type => CriterioMuestraLabClinicoEntity, cri_muest_lab_clinico => cri_muest_lab_clinico.tom_mue_lab_clinico)
     criterios_muest_lab_clinico: CriterioMuestraLabClinicoEntity;
 
-    //Relación MUCHOS a UNO TOMA_MUESTRAS_LABORATORIO_CLINICO - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.tom_mue_lab_clinico)
-    prestador: PrestadorEntity
+    // //Relación MUCHOS a UNO TOMA_MUESTRAS_LABORATORIO_CLINICO - PRESTADOR
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.tom_mue_lab_clinico)
+    // prestador: PrestadorEntity
 
 }

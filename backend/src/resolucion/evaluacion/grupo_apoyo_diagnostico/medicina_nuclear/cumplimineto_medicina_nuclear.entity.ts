@@ -28,6 +28,9 @@ export class CumplimientoMedNuclearEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_med_nucl_fecha_limite: string;
     
+    //Relación MUCHOS a UNO CUMPLIMIENTO MEDICINA_NUCLEAR - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_med_nuclear)
+    prestador: PrestadorEntity
 
     @OneToOne(() => CriterioMedicinaNuclearEntity)
     @JoinColumn()

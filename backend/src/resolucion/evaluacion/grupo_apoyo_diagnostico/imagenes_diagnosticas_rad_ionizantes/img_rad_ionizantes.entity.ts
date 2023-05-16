@@ -20,7 +20,7 @@ export class ImgRadIonizantesEntity {
     criterios_img_ionizantes: CriterioImgRadIonizantesEntity;
 
     //Relación MUCHOS a UNO IMAGENES DIAGNOSTICAS RAD_IONIZANTES - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.img_ionizantes)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.img_ionizantes)
+    // prestador: PrestadorEntity
 
 }

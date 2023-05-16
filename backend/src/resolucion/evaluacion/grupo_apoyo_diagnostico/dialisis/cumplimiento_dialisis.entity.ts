@@ -28,6 +28,9 @@ export class CumplimientoDialisisEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_dial_fecha_limite: string;
     
+    // Relacion MUCHOS a UNO CUMPLIMIENTO DIALISIS a PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimiento_dialisis)
+    prestador: PrestadorEntity
 
     @OneToOne(() => CriterioDialisisEntity)
     @JoinColumn()
