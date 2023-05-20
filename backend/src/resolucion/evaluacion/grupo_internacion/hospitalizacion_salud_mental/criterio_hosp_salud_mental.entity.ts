@@ -4,7 +4,7 @@ import { HospitalizacionMentalEntity } from "./hosp_salud_mental.entity";
 
 
 
-@Entity({ name: 'criterio_hospitalizacion' })
+@Entity({ name: 'criterio_hospitalizacion_mental' })
 export class CriterioHospitalizacionMentalEntity {
     @PrimaryGeneratedColumn('increment')
     crihosp_ment_id: number;
