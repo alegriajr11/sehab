@@ -20,7 +20,7 @@ export class UrgenciasEntity {
     criterios_urgencias: CriterioUrgenciasEntity;
 
     //Relación MUCHOS a UNO URGENCIAS - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.urgencias)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.urgencias)
+    // prestador: PrestadorEntity
 
 }

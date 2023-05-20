@@ -20,7 +20,7 @@ export class PartoEntity {
     criterios_parto: CriterioPartoEntity;
 
     //Relación MUCHOS a UNO PARTO - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.parto)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.parto)
+    // prestador: PrestadorEntity
 
 }

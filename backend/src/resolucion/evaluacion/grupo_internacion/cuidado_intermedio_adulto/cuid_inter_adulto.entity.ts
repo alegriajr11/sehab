@@ -20,7 +20,7 @@ export class CuidIntermAdultoEntity {
     criterios_cuid_inter_adulto: CriterioCuidIntermAdultoEntity;
 
     //Relación MUCHOS a UNO CUIDADO_INTERMEDIO_ADULTO - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cuid_inter_adulto)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.cuid_inter_adulto)
+    // prestador: PrestadorEntity
 
 }

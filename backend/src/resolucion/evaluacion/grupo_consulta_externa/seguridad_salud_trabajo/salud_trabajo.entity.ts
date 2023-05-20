@@ -21,7 +21,7 @@ export class SaludTrabajoEntity {
     criterios_salud_trabajo: CriterioSaludTrabajoEntity;
 
     //Relación MUCHOS a UNO CONSULTA_EXTERNA_SALUD_TRABAJO - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.salud_trabajo)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.salud_trabajo)
+    // prestador: PrestadorEntity
 
 }

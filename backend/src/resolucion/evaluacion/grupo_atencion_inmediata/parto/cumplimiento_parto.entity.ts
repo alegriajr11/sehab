@@ -27,6 +27,11 @@ export class CumplimientoPartoEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_parto_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO PARTO - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimiento_parto)
+    prestador: PrestadorEntity
+
     
 
     @OneToOne(() => CriterioPartoEntity)

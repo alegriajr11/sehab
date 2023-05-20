@@ -20,7 +20,7 @@ export class ExternaGeneralEntity {
     criterios_externa_general: CriterioExternaGeneralEntity;
 
     //Relación MUCHOS a UNO CONSULTA_EXTERNA_ESPECIALIZADA - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.ext_general)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.ext_general)
+    // prestador: PrestadorEntity
 
 }

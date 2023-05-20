@@ -20,7 +20,7 @@ export class HospitalizacionCronicoEntity {
     criterios_hospit_cronico: CriterioHospitCronicoEntity;
 
     //Relación MUCHOS a UNO HOSPITALIZACION_CRONICO - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.hospit_cronico)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.hospit_cronico)
+    // prestador: PrestadorEntity
 
 }

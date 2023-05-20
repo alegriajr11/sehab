@@ -20,7 +20,7 @@ export class VacunacionEntity {
     criterios_vacunacion: CriterioVacunacionEntity;
 
     //Relación MUCHOS a UNO VACUNACION - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.vacunacion)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.vacunacion)
+    // prestador: PrestadorEntity
 
 }

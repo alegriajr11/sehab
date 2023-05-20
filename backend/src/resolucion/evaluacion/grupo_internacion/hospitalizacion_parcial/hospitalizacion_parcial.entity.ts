@@ -20,7 +20,7 @@ export class HospitalizacionParcialEntity {
     criterios_hospitalizacion_parcial: CriterioHospitalizacionParcialEntity;
 
     //Relación MUCHOS a UNO HOSPITALIZACION_PARCIAL - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.hospitalizacion_parcial)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.hospitalizacion_parcial)
+    // prestador: PrestadorEntity
 
 }

@@ -26,6 +26,11 @@ export class CumplimientoExternaGeneralEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_extg_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO CONSULTA_EXTERNA_ESPECIALIZADA - PRESTAOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_ext_general)
+    prestador: PrestadorEntity
+
     
 
     @OneToOne(() => CriterioExternaGeneralEntity)
