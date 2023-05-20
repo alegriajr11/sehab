@@ -27,6 +27,10 @@ export class CumplimientoIntAdultoEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_cui_int_adul_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO CUIDADO_INTENSIVO_ADULTO - PRESTAOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_cuid_int_adulto)
+    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioCuidIntensAdultoEntity)

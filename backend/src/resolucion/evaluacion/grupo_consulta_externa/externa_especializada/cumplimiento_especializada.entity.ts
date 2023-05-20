@@ -24,6 +24,10 @@ export class CumplimientoEspecializadaEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_exte_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO CONSULTA_EXTERNA_ESPECIALIZADA - PRESTAOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_ext_especializada)
+    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioEspecializadaEntity)

@@ -20,7 +20,7 @@ export class PrehospitalariaEntity {
     criterios_prehospitalaria: CriterioPrehospitalariaEntity;
 
     //Relación MUCHOS a UNO PREHOSPITALARIA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.prehospitalaria)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.prehospitalaria)
+    // prestador: PrestadorEntity
 
 }

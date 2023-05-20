@@ -20,7 +20,7 @@ export class HospitalizacionMentalEntity {
     criterios_hospitalizacion_mental: CriterioHospitalizacionMentalEntity;
 
     //Relación MUCHOS a UNO HOSPITALIZACION_MENTAL - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.hospitalizacion_mental)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.hospitalizacion_mental)
+    // prestador: PrestadorEntity
 
 }

@@ -20,7 +20,7 @@ export class CuidInteNeonatalEntity {
     criterios_cuid_int_neonatal: CriterioCuidInteNeonatalEntity;
 
     //Relación MUCHOS a UNO CUIDADO_INTENSIVO_NEONATAL - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cuid_int_neonatal)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.cuid_int_neonatal)
+    // prestador: PrestadorEntity
 
 }

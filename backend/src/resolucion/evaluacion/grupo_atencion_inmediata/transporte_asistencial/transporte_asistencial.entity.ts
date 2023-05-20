@@ -20,7 +20,7 @@ export class TranspAsistencialEntity {
     criterios_transp_asistencial: CriterioTranspAsistencialEntity;
 
     //Relación MUCHOS a UNO TRANSPORTE_ASISTENCIAL - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.transp_asistencial)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.transp_asistencial)
+    // prestador: PrestadorEntity
 
 }

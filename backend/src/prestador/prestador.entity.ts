@@ -70,6 +70,25 @@ import { CumplimientoSerFarmaceuticoEntity } from "src/resolucion/evaluacion/gru
 import { CumplimientoTerapiaEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/terapias/cumplimiento_terapias.entity";
 import { CumplimientoCuelloUterinoEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_cuello_uterino/cumplimiento_tom_muest_cuello.entity";
 import { CumplimientoMuestLabClinicoEntity } from "src/resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_laboratorio_clinico/cumplimiento_tom_muestras.entity";
+import { CumplimientoPartoEntity } from "src/resolucion/evaluacion/grupo_atencion_inmediata/parto/cumplimiento_parto.entity";
+import { CumplimientoPrehospitalariaEntity } from "src/resolucion/evaluacion/grupo_atencion_inmediata/prehospitalaria/cumplimiento_prehospitalaria.entity";
+import { CumplimientoTranspAsistencialEntity } from "src/resolucion/evaluacion/grupo_atencion_inmediata/transporte_asistencial/cumplimiento_trans_asistencial.entity";
+import { CumplimientoUrgenciasEntity } from "src/resolucion/evaluacion/grupo_atencion_inmediata/urgencias/cumplimiento_urgencias.entity";
+import { CumplimientoEspecializadaEntity } from "src/resolucion/evaluacion/grupo_consulta_externa/externa_especializada/cumplimiento_especializada.entity";
+import { CumplimientoExternaGeneralEntity } from "src/resolucion/evaluacion/grupo_consulta_externa/externa_general/cumplimiento_ext_general.entity";
+import { CumplimientoSaludTrabajoEntity } from "src/resolucion/evaluacion/grupo_consulta_externa/seguridad_salud_trabajo/cumplimiento_salud_trabajo.entity";
+import { CumplimientoVacunacionEntity } from "src/resolucion/evaluacion/grupo_consulta_externa/vacunacion/cumplimiento_vacunacion.entity";
+import { CumplimientoConsPsicoactivasEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_basico_consumo_psicoactivas/cumplimiento_cuid_cons_psicoact.entity";
+import { CumplimientoCuidBasNeonatalEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_basico_neonatal/cumplimiento_cuid_basic_neonatal.entity";
+import { CumplimientoIntAdultoEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intensivo_adulto/cumplimiento_cuid_intens_adulto.entity";
+import { CumplimientoCuidIntNeonatalEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intensivo_neonatal/cumplimiento_cuid_intens_neonatal.entity";
+import { CumplimientoCuidIntPediatricoEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intensivo_pediatrico/cumplimiento_cuid_intens_pediatrico.entity";
+import { CumplimientoCuidInterAdultoEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intermedio_adulto/cumplimiento_cuid_inter_adulto.entity";
+import { CumplimientoCuidInterNeonatalEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intermedio_neonatal/cumplimiento_cuid_inter_neonatal.entity";
+import { CumplimientoCuidInterPediatricoEntity } from "src/resolucion/evaluacion/grupo_internacion/cuidado_intermedio_pediatrico/cumplimiento_cuid_inter_pediatrico.entity";
+import { CumplimientoHospitCronicoEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/cumplimiento_hosp_paciente_cron.entity";
+import { CumplimientoHospitalizacionParcialEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_parcial/cumplimiento_hosp_parcial.entity";
+import { CumplimientoHospitalizacionMentalEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/cumplimiento_hosp_salud_mental.entity";
 
 
 
@@ -164,21 +183,21 @@ export class PrestadorEntity {
 
     //-----GRUPO CONSULTA EXTERNA------///
     //--------------------------------///
-    //Relación Uno a Muchos PRESTADORES - CONSULTA_EXTERNA_ESPECIALIZADA
-    @OneToMany(type => ExternaEspecializadaEntity, ext_especializada => ext_especializada.prestador)
-    ext_especializada: ExternaEspecializadaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CONSULTA_EXTERNA_ESPECIALIZADA
+    @OneToMany(type => CumplimientoEspecializadaEntity, cump_ext_especializada => cump_ext_especializada.prestador)
+    cump_ext_especializada: CumplimientoEspecializadaEntity
 
-    //Relación Uno a Muchos PRESTADORES - CONSULTA_EXTERNA_GENERAL
-    @OneToMany(type => ExternaGeneralEntity, ext_general => ext_general.prestador)
-    ext_general: ExternaGeneralEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CONSULTA_EXTERNA_GENERAL
+    @OneToMany(type => CumplimientoExternaGeneralEntity, cump_ext_general => cump_ext_general.prestador)
+    cump_ext_general: CumplimientoExternaGeneralEntity
 
-    //Relación Uno a Muchos PRESTADORES - CONSULTA_EXTERNA_SALUD_TRABAJO
-    @OneToMany(type => SaludTrabajoEntity, salud_trabajo => salud_trabajo.prestador)
-    salud_trabajo: SaludTrabajoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CONSULTA_EXTERNA_SALUD_TRABAJO
+    @OneToMany(type => CumplimientoSaludTrabajoEntity, cump_salud_trabajo => cump_salud_trabajo.prestador)
+    cump_salud_trabajo: CumplimientoSaludTrabajoEntity
 
-    //Relación Uno a Muchos PRESTADORES - VACUNACION
-    @OneToMany(type => VacunacionEntity, vacunacion => vacunacion.prestador)
-    vacunacion: VacunacionEntity
+    //Relación Uno a Muchos CUMPLIMIENTO PRESTADORES - VACUNACION
+    @OneToMany(type => CumplimientoVacunacionEntity, cump_vacunacion => cump_vacunacion.prestador)
+    cump_vacunacion: CumplimientoVacunacionEntity
 
 
     //-----GRUPO APOYO DIAGNOSTICO-----///
@@ -259,21 +278,20 @@ export class PrestadorEntity {
     //---------------------------------///
     //-----GRUPO ATENCIÓN INMEDIATA----///
     //--------------------------------///
-    //Relación Uno a Muchos PRESTADORES - PARTO
-    @OneToMany(type => PartoEntity, parto => parto.prestador)
-    parto: PartoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO PARTO
+    @OneToMany(type => CumplimientoPartoEntity, cumplimiento_parto => cumplimiento_parto.prestador)
+    cumplimiento_parto
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO  PREHOSPITALARIA
+    @OneToMany(type => CumplimientoPrehospitalariaEntity, cumpl_prehospitalaria => cumpl_prehospitalaria.prestador)
+    cumpl_prehospitalaria: CumplimientoPrehospitalariaEntity
 
-    //Relación Uno a Muchos PRESTADORES - PREHOSPITALARIA
-    @OneToMany(type => PrehospitalariaEntity, prehospitalaria => prehospitalaria.prestador)
-    prehospitalaria: PrehospitalariaEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO TRANSPORTE_ASISTENCIAL
+    @OneToMany(type => CumplimientoTranspAsistencialEntity, cump_transp_asistencial => cump_transp_asistencial.prestador)
+    cump_transp_asistencial: CumplimientoTranspAsistencialEntity
 
-    //Relación Uno a Muchos PRESTADORES - TRANSPORTE_ASISTENCIAL
-    @OneToMany(type => TranspAsistencialEntity, transp_asistencial => transp_asistencial.prestador)
-    transp_asistencial: TranspAsistencialEntity
-
-    //Relación Uno a Muchos PRESTADORES - URGENCIAS
-    @OneToMany(type => UrgenciasEntity, urgencias => urgencias.prestador)
-    urgencias: UrgenciasEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO URGENCIAS
+    @OneToMany(type => CumplimientoUrgenciasEntity, cump_urgencias => cump_urgencias.prestador)
+    cump_urgencias: CumplimientoUrgenciasEntity
 
 
     //---------------------------------///
@@ -289,52 +307,52 @@ export class PrestadorEntity {
     //---------------------------------///
     //-----GRUPO INTERNACIÓN----///
     //--------------------------------///
-    //Relación Uno a Muchos PRESTADORES - CUIDADO_BASICO_CONSUMO_PSICOACTIVAS
-    @OneToMany(type => ConsumoPsicoactivasEntity, cons_psicoactivas => cons_psicoactivas.prestador)
-    cons_psicoactivas: ConsumoPsicoactivasEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CUIDADO_BASICO_CONSUMO_PSICOACTIVAS
+    @OneToMany(type => CumplimientoConsPsicoactivasEntity, cump_cons_psicoactivas => cump_cons_psicoactivas.prestador)
+    cump_cons_psicoactivas: CumplimientoConsPsicoactivasEntity
 
-    //Relación Uno a Muchos PRESTADORES - CUIDADO_BASICO_NEONATAL
-    @OneToMany(type => CuidBasNeonatalEntity, cuid_bas_neonatal => cuid_bas_neonatal.prestador)
-    cuid_bas_neonatal: CuidBasNeonatalEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CUIDADO_BASICO_NEONATAL
+    @OneToMany(type => CumplimientoCuidBasNeonatalEntity, cump_cuid_bas_neonatal => cump_cuid_bas_neonatal.prestador)
+    cump_cuid_bas_neonatal: CumplimientoCuidBasNeonatalEntity
 
-    //Relación Uno a Muchos PRESTADORES - CUIDADO_INTENSIVO_ADULTO
-    @OneToMany(type => CuidIntAdultoEntity, cuid_int_adulto => cuid_int_adulto.prestador)
-    cuid_int_adulto: CuidIntAdultoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CUIDADO_INTENSIVO_ADULTO
+    @OneToMany(type => CumplimientoIntAdultoEntity, cump_cuid_int_adulto => cump_cuid_int_adulto.prestador)
+    cump_cuid_int_adulto: CumplimientoIntAdultoEntity
 
-    //Relación Uno a Muchos PRESTADORES - CUIDADO_INTENSIVO_NEONATAL
-    @OneToMany(type => CuidInteNeonatalEntity, cuid_int_neonatal => cuid_int_neonatal.prestador)
-    cuid_int_neonatal: CuidInteNeonatalEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CUIDADO_INTENSIVO_NEONATAL
+    @OneToMany(type => CumplimientoCuidIntNeonatalEntity, cump_cuid_int_neonatal => cump_cuid_int_neonatal.prestador)
+    cump_cuid_int_neonatal: CumplimientoCuidIntNeonatalEntity
 
-    //Relación Uno a Muchos PRESTADORES - CUIDADO_INTENSIVO_PEDIATRICO
-    @OneToMany(type => CuidIntePediatricoEntity, cuid_int_pediatrico => cuid_int_pediatrico.prestador)
-    cuid_int_pediatrico: CuidIntePediatricoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CUIDADO_INTENSIVO_PEDIATRICO
+    @OneToMany(type => CumplimientoCuidIntPediatricoEntity, cump_cuid_int_pediatrico => cump_cuid_int_pediatrico.prestador)
+    cump_cuid_int_pediatrico: CumplimientoCuidIntPediatricoEntity
 
-    //Relación Uno a Muchos PRESTADORES - CUIDADO_INTERMEDIO_ADULTO
-    @OneToMany(type => CuidIntermAdultoEntity, cuid_inter_adulto => cuid_inter_adulto.prestador)
-    cuid_inter_adulto: CuidIntermAdultoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CUIDADO_INTERMEDIO_ADULTO
+    @OneToMany(type => CumplimientoCuidInterAdultoEntity, cump_cuid_inter_adulto => cump_cuid_inter_adulto.prestador)
+    cump_cuid_inter_adulto: CumplimientoCuidInterAdultoEntity
 
-    //Relación Uno a Muchos PRESTADORES - CUIDADO_INTERMEDIO_NEONATAL
-    @OneToMany(type => CuidIntermNeonatalEntity, cuid_inter_neonatal => cuid_inter_neonatal.prestador)
-    cuid_inter_neonatal: CuidIntermNeonatalEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CUIDADO_INTERMEDIO_NEONATAL
+    @OneToMany(type => CumplimientoCuidInterNeonatalEntity, cump_cuid_inter_neonatal => cump_cuid_inter_neonatal.prestador)
+    cump_cuid_inter_neonatal: CumplimientoCuidInterNeonatalEntity
 
-    //Relación Uno a Muchos PRESTADORES - CUIDADO_INTERMEDIO_PEDIATRICO
-    @OneToMany(type => CuidIntermPediatricoEntity, cuid_inter_pediatrico => cuid_inter_pediatrico.prestador)
-    cuid_inter_pediatrico: CuidIntermPediatricoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO CUIDADO_INTERMEDIO_PEDIATRICO
+    @OneToMany(type => CumplimientoCuidInterPediatricoEntity, cump_cuid_inter_pediatrico => cump_cuid_inter_pediatrico.prestador)
+    cump_cuid_inter_pediatrico: CumplimientoCuidInterPediatricoEntity
 
     //Relación Uno a Muchos PRESTADORES - HOSPITALIZACION
     // @OneToMany(type => HospitalizacionEntity, hospitalizacion => hospitalizacion.prestador)
     // hospitalizacion: HospitalizacionEntity
 
-    //Relación Uno a Muchos PRESTADORES - HOSPITALIZACION_CRONICO
-    @OneToMany(type => HospitalizacionCronicoEntity, hospit_cronico => hospit_cronico.prestador)
-    hospit_cronico: HospitalizacionCronicoEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO HOSPITALIZACION_CRONICO
+    @OneToMany(type => CumplimientoHospitCronicoEntity, cump_hospit_cronico => cump_hospit_cronico.prestador)
+    cump_hospit_cronico: CumplimientoHospitCronicoEntity
 
-    //Relación Uno a Muchos PRESTADORES - HOSPITALIZACION_CRONICO
-    @OneToMany(type => HospitalizacionParcialEntity, hospitalizacion_parcial => hospitalizacion_parcial.prestador)
-    hospitalizacion_parcial: HospitalizacionParcialEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO HOSPITALIZACION_CRONICO
+    @OneToMany(type => CumplimientoHospitalizacionParcialEntity, cump_hospitalizacion_parcial => cump_hospitalizacion_parcial.prestador)
+    cump_hospitalizacion_parcial: CumplimientoHospitalizacionParcialEntity
 
-    //Relación Uno a Muchos PRESTADORES - HOSPITALIZACION
-    @OneToMany(type => HospitalizacionMentalEntity, hospitalizacion_mental => hospitalizacion_mental.prestador)
-    hospitalizacion_mental: HospitalizacionMentalEntity
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO HOSPITALIZACION MENTAL
+    @OneToMany(type => CumplimientoHospitalizacionMentalEntity, cump_hospitalizacion_mental => cump_hospitalizacion_mental.prestador)
+    cump_hospitalizacion_mental: CumplimientoHospitalizacionMentalEntity
     
 }

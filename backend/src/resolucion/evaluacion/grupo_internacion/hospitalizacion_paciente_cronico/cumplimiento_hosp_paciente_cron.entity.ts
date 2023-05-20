@@ -27,6 +27,11 @@ export class CumplimientoHospitCronicoEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_hosp_cron_fecha_limite: string;
+
+    //Relación MUCHOS a UNO CUMPLIMIENTO HOSPITALIZACION_CRONICO - PRESTAOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_hospit_cronico)
+    prestador: PrestadorEntity
+
     
 
     @OneToOne(() => CriterioHospitCronicoEntity)

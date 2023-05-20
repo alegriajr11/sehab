@@ -20,7 +20,7 @@ export class ConsumoPsicoactivasEntity {
     criterios_cons_psicoactivas: CriterioConsumoPsicoactivasEntity;
 
     //Relación MUCHOS a UNO CUIDADO_BASICO_CONSUMO_PSICOACTIVAS - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cons_psicoactivas)
-    prestador: PrestadorEntity
+    // @ManyToOne(type => PrestadorEntity, prestador => prestador.cons_psicoactivas)
+    // prestador: PrestadorEntity
 
 }
