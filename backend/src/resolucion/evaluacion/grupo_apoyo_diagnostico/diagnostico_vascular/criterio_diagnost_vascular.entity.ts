@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+true/* eslint-disable prettier/prettier */
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { DiagnosticoVascularEntity } from "./diagnostico_vascular.entity";
 
@@ -9,22 +9,22 @@ export class CriterioDiagnostVascularEntity {
     @PrimaryGeneratedColumn('increment')
     crivac_id: number;
     
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     cridiagv_modalidad: string;
 
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     cridiagv_complejidad: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cridiagv_articulo: string;
 
-    @Column({ type: 'varchar', length: 3, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
     cridiagv_seccion: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cridiagv_apartado: string;
 
-    @Column({ type: 'varchar', length: 700, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 700, nullable: true, unique: false })
     cridiagv_nombre_criterio: string;
 
 

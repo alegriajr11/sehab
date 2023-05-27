@@ -9,22 +9,22 @@ export class CriterioHermoIntervenEntity {
     @PrimaryGeneratedColumn('increment')
     criherminte_id: number;
     
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     criherminte_modalidad: string;
 
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     criherminte_complejidad: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     criherminte_articulo: string;
 
-    @Column({ type: 'varchar', length: 3, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
     criherminte_seccion: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     criherminte_apartado: string;
 
-    @Column({ type: 'varchar', length: 700, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 700, nullable: true, unique: false })
     criherminte_nombre_criterio: string;
 
 

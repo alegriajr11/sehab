@@ -9,22 +9,22 @@ export class CriterioConsumoPsicoactivasEntity {
     @PrimaryGeneratedColumn('increment')
     cri_cons_psic_id: number;
     
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     cri_cons_psic_modalidad: string;
 
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     cri_cons_psic_complejidad: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cri_cons_psic_articulo: string;
 
-    @Column({ type: 'varchar', length: 3, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
     cri_cons_psic_seccion: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cri_cons_psic_apartado: string;
 
-    @Column({ type: 'varchar', length: 700, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 700, nullable: true, unique: false })
     cri_cons_psic_nombre_criterio: string;
 
 

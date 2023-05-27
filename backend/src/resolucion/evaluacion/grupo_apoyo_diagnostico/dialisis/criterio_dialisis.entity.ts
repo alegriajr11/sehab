@@ -9,22 +9,22 @@ export class CriterioDialisisEntity {
     @PrimaryGeneratedColumn('increment')
     cridial_id: number;
     
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     cridial_modalidad: string;
 
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     cridial_complejidad: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cridial_articulo: string;
 
-    @Column({ type: 'varchar', length: 3, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
     cridial_seccion: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cridial_apartado: string;
 
-    @Column({ type: 'varchar', length: 700, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 700, nullable: true, unique: false })
     cridial_nombre_criterio: string;
 
 

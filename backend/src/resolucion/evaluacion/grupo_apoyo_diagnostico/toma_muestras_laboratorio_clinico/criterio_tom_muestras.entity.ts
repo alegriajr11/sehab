@@ -9,22 +9,22 @@ export class CriterioMuestraLabClinicoEntity {
     @PrimaryGeneratedColumn('increment')
     cri_muest_cli_id: number;
     
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     cri_muest_cli_modalidad: string;
 
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     cri_muest_cli_complejidad: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cri_muest_cli_articulo: string;
 
-    @Column({ type: 'varchar', length: 3, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
     cri_muest_cli_seccion: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cri_muest_cli_apartado: string;
 
-    @Column({ type: 'varchar', length: 700, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 700, nullable: true, unique: false })
     cri_muest_cli_nombre_criterio: string;
 
 

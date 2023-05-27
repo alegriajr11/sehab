@@ -4,27 +4,27 @@ import { HospitalizacionMentalEntity } from "./hosp_salud_mental.entity";
 
 
 
-@Entity({ name: 'criterio_hospitalizacion' })
+@Entity({ name: 'criterio_hospitalizacion_mental' })
 export class CriterioHospitalizacionMentalEntity {
     @PrimaryGeneratedColumn('increment')
     crihosp_ment_id: number;
     
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     crihosp_ment_modalidad: string;
 
-    @Column({ type: 'varchar', length: 105, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 105, nullable: true, unique: false })
     crihosp_ment_complejidad: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     crihosp_ment_articulo: string;
 
-    @Column({ type: 'varchar', length: 3, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
     crihosp_ment_seccion: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     crihosp_ment_apartado: string;
 
-    @Column({ type: 'varchar', length: 700, nullable: false, unique: false })
+    @Column({ type: 'varchar', length: 700, nullable: true, unique: false })
     crihosp_ment_nombre_criterio: string;
 
 
