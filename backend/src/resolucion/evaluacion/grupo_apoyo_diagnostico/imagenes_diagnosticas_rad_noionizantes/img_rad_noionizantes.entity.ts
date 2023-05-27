@@ -15,7 +15,7 @@ export class ImgRadNoIonizantesEntity {
     @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
     imgrad_noion_nombre_estandar: string;
 
-    //Relacion UNO a MUCHOS IMAGENES DIAGNOSTICAS RAD_IONIZANTES (ESTANDARES) - CRITERIOS_IMAGENES DIAGNOSTICAS RAD_IONIZANTES
+    //Relacion UNO a MUCHOS IMAGENES DIAGNOSTICAS RAD_NoIONIZANTES (ESTANDARES) - CRITERIOS_IMAGENES DIAGNOSTICAS RAD_IONIZANTES
     @OneToMany(type => CriterioImgRadNoIonizantesEntity, cri_img_noionizantes => cri_img_noionizantes.imgrad_noionizante)
     criterios_img_noionizantes: CriterioImgRadNoIonizantesEntity;
 
