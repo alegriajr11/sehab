@@ -89,6 +89,7 @@ import { CumplimientoCuidInterPediatricoEntity } from "src/resolucion/evaluacion
 import { CumplimientoHospitCronicoEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/cumplimiento_hosp_paciente_cron.entity";
 import { CumplimientoHospitalizacionParcialEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_parcial/cumplimiento_hosp_parcial.entity";
 import { CumplimientoHospitalizacionMentalEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/cumplimiento_hosp_salud_mental.entity";
+import { CumplimientoHospitalizacionEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion/cumplimiento_hospitalizacion.entity";
 
 
 
@@ -243,7 +244,7 @@ export class PrestadorEntity {
     cum_med_nuclear: CumplimientoMedNuclearEntity
 
     //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO PATOLOGIA
-    @OneToMany(type => CumplimientoPatologiaEntity, cumplimiento_patologia =>cumplimiento_patologia.prestador)
+    @OneToMany(type => CumplimientoPatologiaEntity, cumplimiento_patologia => cumplimiento_patologia.prestador)
     cumplimiento_patologia: CumplimientoPatologiaEntity
 
     //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO QUIMIOTERAPIA
@@ -354,5 +355,8 @@ export class PrestadorEntity {
     //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO HOSPITALIZACION MENTAL
     @OneToMany(type => CumplimientoHospitalizacionMentalEntity, cump_hospitalizacion_mental => cump_hospitalizacion_mental.prestador)
     cump_hospitalizacion_mental: CumplimientoHospitalizacionMentalEntity
-    
+
+    //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO HOSPITALIZACION
+    @OneToMany(type => CumplimientoHospitalizacionEntity, cump_hospitalizacion => cump_hospitalizacion.prestador)
+    cump_hospitalizacion: CumplimientoHospitalizacionEntity
 }
