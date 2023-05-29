@@ -4,7 +4,7 @@ import { HospitalizacionEntity } from "./hospitalizacion.entity";
 
 
 
-
+//NOMBRE BASE DE DATOS
 @Entity({ name: 'criterio_hospitalizacion' })
 export class CriterioHospitalizacionEntity {
     @PrimaryGeneratedColumn('increment')
