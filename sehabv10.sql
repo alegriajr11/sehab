@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `acta-sic-pdf` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla sehab.acta-sic-pdf: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sehab.acta-sic-pdf: ~1 rows (aproximadamente)
 DELETE FROM `acta-sic-pdf`;
 INSERT INTO `acta-sic-pdf` (`id`, `act_id`, `act_visita_inicial`, `act_visita_seguimiento`, `act_fecha_inicial`, `act_fecha_final`, `act_municipio`, `act_prestador`, `act_nit`, `act_direccion`, `act_barrio`, `act_telefono`, `act_email`, `act_sede_principal`, `act_sede_localidad`, `act_sede_direccion`, `act_representante`, `act_cod_prestador`, `act_cod_sede`, `act_obj_visita`, `act_nombre_funcionario`, `act_cargo_funcionario`, `act_nombre_prestador`, `act_cargo_prestador`, `act_creado`) VALUES
 	(1, '1', '1', NULL, '2023-05-11', '2023-05-13', ' MOCOA ', ' EMPRESA SOCIAL DEL ESTADO HOSPITAL JOSÉ MARÍA HERNÁNDEZ', '891200679', 'CL. 14 Nº 7 - 26 AV. SAN FRANCISCO', 'Barrio Obrero', '(57)(8) 4296056 - 4296057', 'gerencia@esehospitalmocoa.gov.co', 'si', NULL, NULL, 'MANUEL JAIR ZUÑIGA BRAVO', '8600100038', '12423', 'Realizar seguimiento a la implementación del sistema de información para la calidad que define la resolución 256 de 2016', 'Edward Samir Alegria Salzar', 'cargo funcionario', 'MANUEL JAIR ZUÑIGA BRAVO', 'cargo prestador', '2023-05-12 11:13:56.073727');
@@ -6949,7 +6949,7 @@ CREATE TABLE IF NOT EXISTS `requisito_res` (
   CONSTRAINT `FK_c67489a5f81069d4e7b12a1836e` FOREIGN KEY (`prestadorPreCodHabilitacion`) REFERENCES `prestador` (`pre_cod_habilitacion`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Volcando datos para la tabla sehab.requisito_res: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sehab.requisito_res: ~1 rows (aproximadamente)
 DELETE FROM `requisito_res`;
 INSERT INTO `requisito_res` (`req_id`, `req_nombre`, `prestadorPreCodHabilitacion`) VALUES
 	(1, 'CUMPLIMIENTO DE REQUISITOS DE  LAS CONDICIONES  DE  HABILITACIÓN', NULL);
