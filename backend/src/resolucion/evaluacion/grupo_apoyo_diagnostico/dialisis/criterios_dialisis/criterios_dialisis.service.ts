@@ -17,6 +17,7 @@ export class CriteriosDialisisService {
     ) { }
 
 
+    //LISTANDO CRITERIOS POR ESTANDAR
     async getCriterioForEstandar(id: number): Promise<CriterioDialisisEntity[]> {
         const cri_dialisis = await this.criterioDialisisRepository.createQueryBuilder('criterio')
         .select(['criterio', 'dialisis.dial_nombre_estandar'])
@@ -28,27 +29,6 @@ export class CriteriosDialisisService {
 
     }
 
-    // async findByEta(id: number): Promise<CriterioIndEntity[]> {
-    //     const etapas = await this.criterioIndRepository.createQueryBuilder('criterio')
-    //         .select(['criterio', 'eta_item.eta_nombre'])
-    //         .innerJoin('criterio.eta_item', 'eta_item')
-    //         .where('eta_item.eta_id = :eta', { eta: id })
-    //         .getMany()
-    //     if (!etapas) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-    //     return etapas;
-    // }
-
-    // constructor(
-    //     @InjectRepository(CriterioDialisisEntity)
-    //     private readonly criterioDialisisRepository: CriterioDialisisRepository,
-    // ){}
-
-    // //OBTENER TODOS LOS CRITERIOS DIALISIS
-    // async getall(): Promise<CriterioDialisisEntity[]> {
-    //     const criDialisis = await this.criterioDialisisRepository.find()
-    //     if (!criDialisis) throw new NotFoundException(new MessageDto('No hay Criterios en la lista'))
-    //     return criDialisis;
-    // }
 
 
 }
