@@ -37,6 +37,7 @@ export class CriteriosicService {
     }
 
 
+
     //OBTENER TODOS LOS CRITERIOS ESTANDAR
     async criterioEstandarAll(): Promise<CriterioEstandarSicEntity[]> {
         const estandar = await this.criterioEstandarSicRepository.find()

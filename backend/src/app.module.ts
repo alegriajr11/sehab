@@ -103,6 +103,7 @@ import { CriteriosPrehospitalariaController } from './resolucion/evaluacion/grup
 import { CriteriosPrehospitalariaModule } from './resolucion/evaluacion/grupo_atencion_inmediata/prehospitalaria/criterios_prehospitalaria/criterios_prehospitalaria.module';
 import { CriteriosPartoController } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.controller';
 import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.module';
+import { CriterioHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterio_hospitalizacion/criterio_hospitalizacion.module';
 
 
 
@@ -122,8 +123,8 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
         password: configService.get<string>(DB_PASSWORD),
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
-        logging: true 
+        synchronize: false,
+        logging: false 
         
       }),
       inject: [ConfigService],
@@ -167,7 +168,6 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
     CriteriosLabCitologiaModule,
     CriteriosLabHistotecnologiaModule,
     CriteriosPatologiaModule,
-    CriteriosDialisisModule,
     CriteriosHospPacienteCronicoModule,
     CriteriosCuidBasicNeonatalModule,
     CriteriosCuidInterNeonatalModule,
@@ -183,8 +183,9 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
     CriteriosUrgenciasModule,
     CriteriosTransAsistencialModule,
     CriteriosPrehospitalariaModule,
-    CriteriosPartoModule
-
+    CriteriosPartoModule,
+    CriteriosDialisisModule,
+    CriterioHospitalizacionModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 
@@ -196,6 +197,6 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
     CriteriosCuidInterPediatricoController, CriteriosCuidIntensPediatricoController, CriteriosCuidInterAdultoController, CriteriosCuidIntensAdultoController, 
     CriteriosHospSaludMentalController, CriteriosHospParcialController, CriteriosConsPsicoactivasController, CriteriosCirugiaController, CriteriosUrgenciasController, 
     CriteriosTransAsistencialController, CriteriosPrehospitalariaController, CriteriosPartoController],
-  providers: [AppService, CriteriosLabClinicoService, CriteriosDialisisService],
+  providers: [AppService],
 })
 export class AppModule {}
