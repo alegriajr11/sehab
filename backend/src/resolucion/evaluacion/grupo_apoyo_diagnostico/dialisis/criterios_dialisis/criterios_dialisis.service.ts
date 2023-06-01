@@ -8,7 +8,7 @@ import { DialisisRepository } from '../dialisis.repository';
 
 @Injectable()
 export class CriteriosDialisisService {
-
+ 
     constructor(
         @InjectRepository(CriterioDialisisEntity)
         private readonly criterioDialisisRepository: CriterioDialisisRepository,

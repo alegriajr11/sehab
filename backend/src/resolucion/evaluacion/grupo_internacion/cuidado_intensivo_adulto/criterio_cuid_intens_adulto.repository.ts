@@ -6,5 +6,4 @@ import { CriterioCuidIntensAdultoEntity } from "./criterio_cuid_intens_adulto.en
 
 @EntityRepository(CriterioCuidIntensAdultoEntity)
 export class CriterioCuidIntensAdultoRepository extends Repository<CriterioCuidIntensAdultoEntity> {
-
 }

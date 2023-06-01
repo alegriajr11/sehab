@@ -5,5 +5,4 @@ import { CriterioHospitalizacionMentalEntity } from "./criterio_hosp_salud_menta
 
 @EntityRepository(CriterioHospitalizacionMentalEntity)
 export class CriterioHospitalizacionMentalRepository extends Repository<CriterioHospitalizacionMentalEntity> {
-
 }
