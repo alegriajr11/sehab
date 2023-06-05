@@ -14,5 +14,5 @@ export class CriterioIndDto {
     @IsString()
     @MaxLength(120, {message: 'La verificación debe tener: longitud máxima de 120 caracteres'})
     cri_verificacion: string
-
+ 
 }

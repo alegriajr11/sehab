@@ -1,6 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosDialisisService } from './criterios_dialisis.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { CriterioDialisisDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/dialisis_dto/criterio_dialisis.dto';
 
 @Controller('criterios-dialisis')
 export class CriteriosDialisisController {
@@ -15,6 +16,11 @@ export class CriteriosDialisisController {
         return await this.criterioDialisisService.getCriterioForEstandar(id)
     }
 
-    
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({whitelist: true}))
+    @Post(':id')
+    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioDialisisDto){
+        return this.criterioDialisisService.create(id,dto);
+    }
 
 }
