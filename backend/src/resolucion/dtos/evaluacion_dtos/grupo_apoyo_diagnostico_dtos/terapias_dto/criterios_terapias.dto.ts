@@ -1,29 +1,28 @@
 import { IsString, MaxLength } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 
-export class CriterioDialisisDto {
-    
+export class CriterioTerapiaDto {
+
     @IsNotBlank()
     @IsString()
     @MaxLength(105, {message: 'La modalidad debe tener una longitud máxima de 105 caracteres'})
-    cridial_modalidad: string;
+    criter_modalidad: string;
 
     @IsNotBlank()
     @IsString()
     @MaxLength(105, {message: 'La Complejidad debe tener una longitud máxima de 105 caracteres'})
-    cridial_complejidad: string;
+    criter_complejidad: string;
 
 
-    cridial_articulo: string;
+    criter_articulo: string;
 
-    cridial_seccion: string;
+    criter_seccion: string;
 
-    cridial_apartado: string;
 
+    criter_apartado: string;
 
     @IsNotBlank()
     @IsString()
     @MaxLength(700, {message: 'El criterio debe tener una longitud máxima de 700 caracteres'})
-    cridial_nombre_criterio: string;
-
+    criter_nombre_criterio: string;
 }
