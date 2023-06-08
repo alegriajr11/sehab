@@ -32,7 +32,7 @@ export class CriteriosDialisisService {
 
     //METODO AGREGAR CRITERIO-DIALISIS
     async create(dial_id: number, dto: CriterioDialisisDto): Promise<any> {
-        const dialisis = await this.dialisisRepository.findOne({ where: { dial_id: dial_id} });
+        const dialisis = await this.dialisisRepository.findOne({ where: { dial_id: dial_id } });
         if (!dialisis) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
         //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
         const criterio_dialisis = this.criterioDialisisRepository.create(dto)
@@ -41,6 +41,22 @@ export class CriteriosDialisisService {
         //GUARDAR LOS DATOS EN LA BD
         await this.criterioDialisisRepository.save(criterio_dialisis)
         return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO DIALISIS
+    async findById(cridial_id: number): Promise<CriterioDialisisEntity> {
+        const cri_dialisis = await this.criterioDialisisRepository.findOne({ where: { cridial_id } });
+        if (!cri_dialisis) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return cri_dialisis;
+    }
+
+    //ELIMINAR CRITERIO DIALISIS
+    async delete(id: number): Promise<any> {
+        const criterio_dialisis = await this.findById(id);
+        await this.criterioDialisisRepository.delete(criterio_dialisis.cridial_id)
+        return new MessageDto(`Criterio Eliminado`);
     }
 
 
