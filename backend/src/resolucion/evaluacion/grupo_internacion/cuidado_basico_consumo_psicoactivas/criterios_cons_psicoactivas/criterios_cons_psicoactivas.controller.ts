@@ -1,17 +1,26 @@
-import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosConsPsicoactivasService } from './criterios_cons_psicoactivas.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { CriterioConsumoPsicoactivasDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_basico_consumo_psicoactivas_dto/criterio_cuid_cons_psicoact.dto';
 
 @Controller('criterios-cons-psicoactivas')
 export class CriteriosConsPsicoactivasController {
 
     constructor(
-        private readonly criteriosConsPsicoactivasService: CriteriosConsPsicoactivasService){}
-    
-        //OBTENER CRITERIO CUIDADO BASICO PSICOACTIVAS POR ESTANDAR
-        @UseGuards(JwtAuthGuard)
-        @Get(':id')
-        async getOneCriterio(@Param('id', ParseIntPipe) id: number) {
-            return await this.criteriosConsPsicoactivasService.getCriterioForEstandar(id)
-        }
+        private readonly criteriosConsPsicoactivasService: CriteriosConsPsicoactivasService) { }
+
+    //OBTENER CRITERIO CUIDADO BASICO PSICOACTIVAS POR ESTANDAR
+    @UseGuards(JwtAuthGuard)
+    @Get(':id')
+    async getOneCriterio(@Param('id', ParseIntPipe) id: number) {
+        return await this.criteriosConsPsicoactivasService.getCriterioForEstandar(id)
+    }
+
+    //CREAR CRITERIO CUIDADO BASICO PSICOACTIVAS POR ESTANDAR
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true }))
+    @Post(':id')
+    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioConsumoPsicoactivasDto) {
+        return this.criteriosConsPsicoactivasService.create(id, dto);
+    }
 }

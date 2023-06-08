@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CriterioMuestraLabClinicoEntity } from '../criterio_tom_muestras.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MuestrasLabClinicoEntity } from '../tom_muestras.entity';
 import { CriterioMuestraLabClinicoRepository } from '../criterio_tom_muestras.repository';
 import { MuestrasLabClinicoRepository } from '../tom_muestras.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioMuestraLabClinicoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/toma_muestras_laboratorio_clinico_dto/criterio_tom_muestras.dto';
 
 @Injectable()
 export class CriteriosTomMuestrasService {
@@ -26,5 +27,18 @@ export class CriteriosTomMuestrasService {
             .getMany()
             if (!cri_tom_mues) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_tom_mues
+        }
+
+        //CREAR CRITERIO
+        async create(mue_lab_cli_id   : number, dto: CriterioMuestraLabClinicoDto): Promise<any> {
+            const tomamuestras = await this.muestrasLabClinicoRepository.findOne({ where: { mue_lab_cli_id  : mue_lab_cli_id  } });
+            if (!tomamuestras) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+            const criteriotomamuestras= this.criterioMuestraLabClinicoRepository.create(dto)
+            //ASIGNAMOS EL ESTANDAR AL CRITERIO
+            criteriotomamuestras.tom_mue_lab_clinico = tomamuestras
+            //GUARDAR LOS DATOS EN LA BD
+            await this.criterioMuestraLabClinicoRepository.save(criteriotomamuestras)
+            return new MessageDto('El criterio ha sido Creado Correctamente');
         }
 }

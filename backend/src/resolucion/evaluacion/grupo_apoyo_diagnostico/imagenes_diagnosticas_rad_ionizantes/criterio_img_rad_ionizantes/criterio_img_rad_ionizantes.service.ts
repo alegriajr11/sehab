@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CriterioImgRadIonizantesEntity } from '../criterio_img_rad_ionizantes.entity';
 import { CriterioImgRadIonizanteRepository } from '../criterio_img_rad_ionizantes.repository';
 import { ImgRadIonizantesEntity } from '../img_rad_ionizantes.entity';
 import { ImgRadIonizantesRepository } from '../img_rad_ionizantes.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioImgRadIonizantesDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/imagenes_diagnosticas_rad_ionizantes_dto/criterio_img_rad_ionizantes.dto';
 
 @Injectable()
 export class CriterioImgRadIonizantesService {
@@ -24,6 +25,19 @@ async getCriterioForEstandar(id: number): Promise<CriterioImgRadIonizantesEntity
     .getMany()
     if (!cri_img_rad_ion) throw new NotFoundException(new MessageDto('No Existe en la lista'))
     return cri_img_rad_ion
+}
+
+//METODO AGREGAR CRITERIO-HEMODINamia
+async create(imgradion_id: number, dto: CriterioImgRadIonizantesDto): Promise<any> {
+    const imaioni = await this.imgRadIonizantesRepository.findOne({ where: { imgradion_id: imgradion_id} });
+    if (!imaioni) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+    //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+    const criterioimaioni = this.criterioImgRadIonizanteRepository.create(dto)
+    //ASIGNAMOS EL ESTANDAR AL CRITERIO
+    criterioimaioni.imgrad_ionizante = imaioni
+    //GUARDAR LOS DATOS EN LA BD
+    await this.criterioImgRadIonizanteRepository.save(criterioimaioni)
+    return new MessageDto('El criterio ha sido Creado Correctamente');
 }
 }
 

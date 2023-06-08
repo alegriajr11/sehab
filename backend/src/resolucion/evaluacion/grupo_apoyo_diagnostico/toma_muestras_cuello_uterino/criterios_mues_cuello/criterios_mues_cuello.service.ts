@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CriterioCuelloUterinoEntity } from '../criterio_tom_muest_cuello.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CuelloUterinoEntity } from '../tom_muestras_cuello_uter.entity';
 import { CriterioCuelloUterinoRepository } from '../criterio_tom_muest_cuello.repository';
 import { CuelloUterinoRepository } from '../tom_muestras_cuello_uter.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioCuelloUterinoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/toma_muestras_cuello_uterino_dto/criterio_tom_muest_cuello.dto';
 
 @Injectable()
 export class CriteriosMuesCuelloService {
@@ -26,5 +27,17 @@ export class CriteriosMuesCuelloService {
             .getMany()
             if (!cri_cuello) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_cuello
+        }
+
+        async create(cuel_ute_id  : number, dto: CriterioCuelloUterinoDto): Promise<any> {
+            const cuellouterino = await this.cuelloUterinoRepository.findOne({ where: { cuel_ute_id : cuel_ute_id } });
+            if (!cuellouterino) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+            const criteriocuellouterino= this.criterioCuelloUterinoRepository.create(dto)
+            //ASIGNAMOS EL ESTANDAR AL CRITERIO
+            criteriocuellouterino.cue_uterino = cuellouterino
+            //GUARDAR LOS DATOS EN LA BD
+            await this.criterioCuelloUterinoRepository.save(criteriocuellouterino)
+            return new MessageDto('El criterio ha sido Creado Correctamente');
         }
 }

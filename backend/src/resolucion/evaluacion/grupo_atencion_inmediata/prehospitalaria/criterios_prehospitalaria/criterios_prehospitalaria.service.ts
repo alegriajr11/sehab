@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CriterioPrehospitalariaEntity } from '../criterio_prehospitalaria.entity';
 import { PrehospitalariaEntity } from '../prehospitalaria.entity';
 import { PrehospitalariaRepository } from '../prehospitalaria.repository';
 import { CriterioPrehospitalariaRepository } from '../criterio_prehospitalaria.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioPrehospitalariaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_atencion_inmediata_dtos/prehospitalaria_dto/criterio_prehospitalaria.dto';
 
 @Injectable()
 export class CriteriosPrehospitalariaService {
@@ -26,5 +27,18 @@ export class CriteriosPrehospitalariaService {
             .getMany()
             if (!cri_prehos) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_prehos
+        }
+
+        //CREAR CRITERIO
+        async create(parto_id   : number, dto: CriterioPrehospitalariaDto): Promise<any> {
+            const prehospita = await this.prehospitalariaRepository.findOne({ where: { parto_id  : parto_id  } });
+            if (!prehospita) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+            const criterioprehospita= this.criterioPrehospitalariaRepository.create(dto)
+            //ASIGNAMOS EL ESTANDAR AL CRITERIO
+            criterioprehospita.prehospitalaria = prehospita
+            //GUARDAR LOS DATOS EN LA BD
+            await this.criterioPrehospitalariaRepository.save(criterioprehospita)
+            return new MessageDto('El criterio ha sido Creado Correctamente');
         }
 }

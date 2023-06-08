@@ -29,8 +29,6 @@ export class CriterioCuidIntermPediatricoEntity {
 
 
     //Relacion MUCHOS a UNO CRITERIOS_CUIDADO_INTERMEDIO_PEDIATRICO - CUIDADO_INTERMEDIO_PEDIATRICO (ESTANDARES)
-    @ManyToOne(type => CuidIntermPediatricoEntity,  cuid_inter_pediatrico=> cuid_inter_pediatrico.criterios_cuid_inter_pediatrico)
+    @ManyToOne(type => CuidIntermPediatricoEntity, cuid_inter_pediatrico=> cuid_inter_pediatrico.criterios_cuid_inter_pediatrico)
     cuid_inter_pediatrico: CuidIntermPediatricoEntity;
-
-
 }

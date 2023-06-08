@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CriterioLabClinicoEntity } from '../criterio_lab_clinico.entity';
 import { LabClinicoEntity } from '../laboratorio_clinico.entity';
 import { CriterioLabClinicoRepository } from '../criterio_lab_clinico.repository';
 import { LabClinicoRepository } from '../laboratorio_clinico.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioLabClinicoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/laboratorio_clinico_dto/criterio_lab_clinico.dto';
 
 @Injectable()
 export class CriteriosLabClinicoService {
@@ -27,4 +28,17 @@ export class CriteriosLabClinicoService {
             if (!cri_lab_clin) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_lab_clin
         }
+
+        //METODO AGREGAR CRITERIO-HEMODINamia
+        async create(labclin_id: number, dto: CriterioLabClinicoDto): Promise<any> {
+        const labclinico = await this.labClinicoRepository.findOne({ where: { labclin_id: labclin_id} });
+        if (!labclinico) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criteriolabclinico = this.criterioLabClinicoRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criteriolabclinico.lab_clinico = labclinico
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioLabClinicoRepository.save(criteriolabclinico)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
 }

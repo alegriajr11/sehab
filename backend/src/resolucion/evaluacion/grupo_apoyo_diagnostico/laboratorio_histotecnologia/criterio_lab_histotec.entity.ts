@@ -17,7 +17,7 @@ export class CriterioLabHistotecnologiaEntity {
 
     @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cri_lab_histo_articulo: string;
-
+    
     @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
     cri_lab_histo_seccion: string;
 

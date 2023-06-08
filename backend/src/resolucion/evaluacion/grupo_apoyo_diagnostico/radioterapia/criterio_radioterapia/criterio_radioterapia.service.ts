@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable,InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CriterioRadioterapiaEntity } from '../criterio_radioterapia.entity';
 import { RadioterapiaEntity } from '../radioterapia.entity';
 import { RadioterapiaRepository } from '../radioterapia.repository';
 import { CriterioRadioterapiaRepository } from '../criterio_radioterapia.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioRadioterapiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/radioterapia_dto/criterio_radioterapia.dto';
 
 @Injectable()
 export class CriterioRadioterapiaService {
@@ -27,5 +28,19 @@ export class CriterioRadioterapiaService {
             .getMany()
             if (!cri_radio) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_radio
+        }
+
+
+        
+        async create(radi_id : number, dto: CriterioRadioterapiaDto): Promise<any> {
+            const radioterapia = await this.radioterapiaRepository.findOne({ where: { radi_id: radi_id} });
+            if (!radioterapia) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+            const criterioradioterapia= this.criterioRadioterapiaRepository.create(dto)
+            //ASIGNAMOS EL ESTANDAR AL CRITERIO
+            criterioradioterapia.radioterapia = radioterapia
+            //GUARDAR LOS DATOS EN LA BD
+            await this.criterioRadioterapiaRepository.save(criterioradioterapia)
+            return new MessageDto('El criterio ha sido Creado Correctamente');
         }
 }

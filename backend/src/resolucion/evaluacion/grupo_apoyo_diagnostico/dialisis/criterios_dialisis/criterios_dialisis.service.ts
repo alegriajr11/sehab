@@ -32,9 +32,6 @@ export class CriteriosDialisisService {
 
     //METODO AGREGAR CRITERIO-DIALISIS
     async create(dial_id: number, dto: CriterioDialisisDto): Promise<any> {
-        // const { cridial_nombre_criterio } = dto;
-        // const exists = await this.criterioIndRepository.findOne({ where: [{ cri_nombre: cri_nombre }] });
-        // if (exists) throw new BadRequestException(new MessageDto('Ese Criterio ya existe'));
         const dialisis = await this.dialisisRepository.findOne({ where: { dial_id: dial_id} });
         if (!dialisis) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
         //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS

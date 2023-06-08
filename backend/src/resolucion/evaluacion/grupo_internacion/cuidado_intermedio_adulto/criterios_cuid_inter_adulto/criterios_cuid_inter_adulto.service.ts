@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CriterioCuidIntermAdultoEntity } from '../criterio_cuid_inter_adulto.entity';
 import { CuidIntermAdultoEntity } from '../cuid_inter_adulto.entity';
 import { CriterioCuidIntermAdultoRepository } from '../criterio_cuid_inter_adulto.repository';
 import { CuidIntermAdultoRepository } from '../cuid_inter_adulto.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioCuidIntermAdultoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_intermedio_adulto_dto/criterio_cuid_inter_adulto.dto';
 
 @Injectable()
 export class CriteriosCuidInterAdultoService {
@@ -26,5 +27,17 @@ export class CriteriosCuidInterAdultoService {
             .getMany()
             if (!cri_cuid_inter) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_cuid_inter
+        }
+
+        async create(cuid_inter_adult_id    : number, dto: CriterioCuidIntermAdultoDto): Promise<any> {
+            const cuiinteradul= await this.cuidIntermAdultoRepository.findOne({ where: { cuid_inter_adult_id : cuid_inter_adult_id   } });
+            if (!cuiinteradul) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+            const criterioscuiinteradul= this.criterioCuidIntermAdultoRepository.create(dto)
+            //ASIGNAMOS EL ESTANDAR AL CRITERIO
+            criterioscuiinteradul.cuid_inter_adulto = cuiinteradul
+            //GUARDAR LOS DATOS EN LA BD
+            await this.criterioCuidIntermAdultoRepository.save(criterioscuiinteradul)
+            return new MessageDto('El criterio ha sido Creado Correctamente');
         }
 }

@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CriterioHospitalizacionMentalEntity } from '../criterio_hosp_salud_mental.entity';
 import { HospitalizacionMentalEntity } from '../hosp_salud_mental.entity';
 import { CriterioHospitalizacionMentalRepository } from '../criterio_hosp_salud_mental.repository';
 import { HospitalizacionMentalRepository } from '../hosp_salud_mental.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioHospitalizacionMentalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/hospitalizacion_salud_mental_dto/criterio_hosp_salud_mental.dto';
 
 @Injectable()
 export class CriteriosHospSaludMentalService {
@@ -26,5 +27,17 @@ export class CriteriosHospSaludMentalService {
             .getMany()
             if (!cri_hosp_ment) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_hosp_ment
+        }
+
+        async create(hosp_mental_id  : number, dto: CriterioHospitalizacionMentalDto): Promise<any> {
+            const hospitamental= await this.hospitalizacionMentalRepository.findOne({ where: { hosp_mental_id : hosp_mental_id } });
+            if (!hospitamental) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+            const criterioshospitamental= this.criterioHospitalizacionMentalRepository.create(dto)
+            //ASIGNAMOS EL ESTANDAR AL CRITERIO
+            criterioshospitamental.hospitalizacion_mental = hospitamental
+            //GUARDAR LOS DATOS EN LA BD
+            await this.criterioHospitalizacionMentalRepository.save(criterioshospitamental)
+            return new MessageDto('El criterio ha sido Creado Correctamente');
         }
 }

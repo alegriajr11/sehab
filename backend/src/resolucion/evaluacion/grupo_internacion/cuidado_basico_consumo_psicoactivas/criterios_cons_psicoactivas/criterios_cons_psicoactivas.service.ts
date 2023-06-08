@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CriterioConsumoPsicoactivasEntity } from '../criterio_cuid_cons_psicoact.entity';
 import { ConsumoPsicoactivasEntity } from '../cuid_consumo_psicoactivas.entity';
 import { CriterioConsumoPsicoactivasRepository } from '../criterio_cuid_cons_psicoact.repository';
 import { ConsumoPsicoactivasRepository } from '../cuid_consumo_psicoactivas.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioConsumoPsicoactivasDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_basico_consumo_psicoactivas_dto/criterio_cuid_cons_psicoact.dto';
 
 @Injectable()
 export class CriteriosConsPsicoactivasService {
@@ -26,5 +27,18 @@ export class CriteriosConsPsicoactivasService {
             .getMany()
             if (!cri_psico) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_psico
+        }
+
+        //CREAR CRITERIO
+        async create(cons_psi_id    : number, dto: CriterioConsumoPsicoactivasDto): Promise<any> {
+            const conspsico= await this.consumoPsicoactivasRepository.findOne({ where: { cons_psi_id   : cons_psi_id   } });
+            if (!conspsico) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+            const criteriosconspsico= this.criterioConsumoPsicoactivasRepository.create(dto)
+            //ASIGNAMOS EL ESTANDAR AL CRITERIO
+            criteriosconspsico.cons_psicoactivas = conspsico
+            //GUARDAR LOS DATOS EN LA BD
+            await this.criterioConsumoPsicoactivasRepository.save(criteriosconspsico)
+            return new MessageDto('El criterio ha sido Creado Correctamente');
         }
 }

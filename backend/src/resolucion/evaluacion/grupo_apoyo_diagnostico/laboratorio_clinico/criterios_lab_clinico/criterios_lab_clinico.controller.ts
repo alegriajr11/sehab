@@ -1,6 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriteriosLabClinicoService } from './criterios_lab_clinico.service';
+import { CriterioLabClinicoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/laboratorio_clinico_dto/criterio_lab_clinico.dto';
 
 @Controller('criterios-lab-clinico')
 export class CriteriosLabClinicoController {
@@ -14,5 +15,13 @@ export class CriteriosLabClinicoController {
     @Get(':id')
     async getOneCriterio(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosLabClinicoService.getCriterioForEstandar(id)
+    }
+
+    //CREAR CRITERIO LABORATORIO CLINICO POR ESTANDAR
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({whitelist: true}))
+    @Post(':id')
+    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioLabClinicoDto){
+        return this.criteriosLabClinicoService.create(id,dto);
     }
 }

@@ -31,6 +31,4 @@ export class CriterioHermoIntervenEntity {
     //Relacion MUCHOS a UNO CRITERIOS_DIALISIS - DIALISIS (ESTANDARES)
     @ManyToOne(type => HermodIntervenEntity,  hermo_interven=> hermo_interven.criterios_hermod_interven)
     hermod_interven: HermodIntervenEntity;
-
-
 }

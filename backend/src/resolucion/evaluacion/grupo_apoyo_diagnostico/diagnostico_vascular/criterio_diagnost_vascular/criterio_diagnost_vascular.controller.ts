@@ -1,6 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriterioDiagnostVascularService } from './criterio_diagnost_vascular.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { CriterioDiagnostVascularDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/diagnostico_vascular_dto/criterio_diagnostico_vascular.dto';
 
 
 
@@ -13,5 +14,14 @@ export class CriterioDiagnostVascularController {
     @Get(':id')
     async getOneCriterio(@Param('id', ParseIntPipe) id: number) {
         return await this.criterio_Diagnostico_vascularService.getCriterioForEstandar(id)
+    }
+
+
+    //CREAR CRITERIO DIAGNOSTICO VASCULAR POR ESTANDAR
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({whitelist: true}))
+    @Post(':id')
+    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioDiagnostVascularDto){
+        return this.criterio_Diagnostico_vascularService.create(id,dto);
     }
 }

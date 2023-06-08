@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CriterioLabUterinaEntity } from '../criterio_lab_citologia_uterina.entity';
 import { CriterioLabUterinaRepository } from '../criterio_lab_citologia_uterina.repository';
 import { LabCitologiaUterinaEntity } from '../lab_citologia_uterina.entity';
 import { LabCitologiaUterinaRepository } from '../lab_citologia_uterina.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { CriterioLabUterinaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/laboratorio_citologias_uterinas_dto/criterio_lab_citologia_uterina.dto';
 
 @Injectable()
 export class CriteriosLabCitologiaService {
@@ -27,4 +28,17 @@ export class CriteriosLabCitologiaService {
             if (!cri_lab_cito_ute) throw new NotFoundException(new MessageDto('No Existe en la lista'))
             return cri_lab_cito_ute
         }
+
+    //METODO AGREGAR CRITERIO-HEMODINamia
+    async create(labcit_uter_id: number, dto: CriterioLabUterinaDto): Promise<any> {
+    const citouterinas = await this.labCitologiaUterinaRepository.findOne({ where: { labcit_uter_id: labcit_uter_id} });
+    if (!citouterinas) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+    //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+    const criteriocitouterinas = this.criterioLabUterinaRepository.create(dto)
+    //ASIGNAMOS EL ESTANDAR AL CRITERIO
+    criteriocitouterinas.lab_cit_uterina = citouterinas
+    //GUARDAR LOS DATOS EN LA BD
+    await this.criterioLabUterinaRepository.save(criteriocitouterinas)
+    return new MessageDto('El criterio ha sido Creado Correctamente');
+}
 }

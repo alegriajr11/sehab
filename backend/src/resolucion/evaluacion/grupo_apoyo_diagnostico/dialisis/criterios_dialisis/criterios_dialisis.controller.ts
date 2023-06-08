@@ -16,6 +16,7 @@ export class CriteriosDialisisController {
         return await this.criterioDialisisService.getCriterioForEstandar(id)
     }
 
+    //CREAR CRITERIO DIALISIS POR ESTANDAR
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({whitelist: true}))
     @Post(':id')
