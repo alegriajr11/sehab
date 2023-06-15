@@ -13,11 +13,13 @@ export class CriterioDialisisDto {
     @MaxLength(105, {message: 'La Complejidad debe tener una longitud máxima de 105 caracteres'})
     cridial_complejidad: string;
 
-
+    @IsString()
     cridial_articulo: string;
 
+    @IsString()
     cridial_seccion: string;
-
+    
+    @IsString()
     cridial_apartado: string;
 
 

@@ -59,5 +59,22 @@ export class CriteriosDialisisService {
         return new MessageDto(`Criterio Eliminado`);
     }
 
+    //ACTUALIZAR CRITERIOS DIALISIS
+    async updateDialisis(id: number, dto: CriterioDialisisDto): Promise<any> {
+        const criterio_dialisis = await this.findById(id);
+        if (!criterio_dialisis) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cridial_modalidad ? criterio_dialisis.cridial_modalidad = dto.cridial_modalidad : criterio_dialisis.cridial_modalidad = criterio_dialisis.cridial_modalidad;
+        dto.cridial_complejidad ? criterio_dialisis.cridial_complejidad = dto.cridial_complejidad : criterio_dialisis.cridial_complejidad = criterio_dialisis.cridial_complejidad;
+        criterio_dialisis.cridial_articulo = dto.cridial_articulo !== undefined ? dto.cridial_articulo : "";
+        criterio_dialisis.cridial_seccion = dto.cridial_seccion !== undefined ? dto.cridial_seccion : "";
+        criterio_dialisis.cridial_apartado = dto.cridial_apartado !== undefined ? dto.cridial_apartado : "";
+        dto.cridial_nombre_criterio ? criterio_dialisis.cridial_nombre_criterio = dto.cridial_nombre_criterio : criterio_dialisis.cridial_nombre_criterio = criterio_dialisis.cridial_nombre_criterio;
 
+        await this.criterioDialisisRepository.save(criterio_dialisis);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

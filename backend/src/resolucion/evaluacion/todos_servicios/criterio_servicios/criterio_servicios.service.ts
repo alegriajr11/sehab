@@ -17,7 +17,13 @@ export class CriterioServiciosService {
         private readonly todoServiciosRepository: TodoServiciosRepository,
         ) {}
 
-
+        //LISTANDO TODOS LOS ESTANDARES DEL GRUPO TODOS LOS SERVICIOS
+        async getAllEstandarServicios(): Promise<TodoServiciosEntity[]> {
+            const estandar = await this.todoServiciosRepository.find()
+            if (!estandar) throw new NotFoundException(new MessageDto('No hay Estandares Todos los Servicios en la lista'))
+            return estandar;
+        }
+        
          //LISTANDO CRITERIOS POR ESTANDAR
         async getCriterioForEstandar(id: number): Promise<Criterio_servicios[]> {
             const cri_serv = await this.criterioServiciosRepository.createQueryBuilder('criterio')

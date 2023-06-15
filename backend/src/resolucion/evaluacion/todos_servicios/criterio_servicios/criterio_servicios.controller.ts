@@ -9,6 +9,14 @@ export class CriterioServiciosController {
     constructor(
         private readonly criterioServiciosService: CriterioServiciosService) { }
 
+    //OBTENER ESTANDARES DE TODOS LOS SERVICIOS
+    //@UseGuards(JwtAuthGuard)
+    @Get('estandar')
+    getAllEstandar() {
+        return this.criterioServiciosService.getAllEstandarServicios();
+    }
+    
+
     //OBTENER CRITERIO TODOS LOS SERVICIOS POR ESTANDAR
     @UseGuards(JwtAuthGuard)
     @Get(':id')
