@@ -42,4 +42,20 @@ export class CriterioMedicinaNuclearService {
         await this.criterioMedicinaNuclearRepository.save(criteriomednuclear)
         return new MessageDto('El criterio ha sido Creado Correctamente');
     }
+
+    //ENCONTRAR POR ID - CRITERIO MEDICINA NUCLEAR
+    async findById(crimed_nucl_id: number): Promise<CriterioMedicinaNuclearEntity> {
+        const cri_medi_nucl = await this.criterioMedicinaNuclearRepository.findOne({ where: { crimed_nucl_id } });
+        if (!cri_medi_nucl) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return cri_medi_nucl;
+    }
+
+    //ELIMINAR CRITERIO MEDICINA NUCLEAR
+    async delete(id: number): Promise<any> {
+        const cri_medi_nucl = await this.findById(id);
+        await this.criterioMedicinaNuclearRepository.delete(cri_medi_nucl.crimed_nucl_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

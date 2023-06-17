@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {  Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosGestionPretransService } from './criterios_gestion_pretrans.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioGestionPretransfusionalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/gestion_pretransfusional_dto/criterio_gestion_pretrans.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterios-gestion-pretrans')
 export class CriteriosGestionPretransController {
@@ -20,5 +21,12 @@ export class CriteriosGestionPretransController {
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioGestionPretransfusionalDto) {
         return this.criteriosGestionPretransService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO  PRETRANSFUNSIONAL
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criteriosGestionPretransService.delete(id);
     }
 }

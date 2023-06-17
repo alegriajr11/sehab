@@ -39,6 +39,22 @@ async create(imgradion_id: number, dto: CriterioImgRadIonizantesDto): Promise<an
     await this.criterioImgRadIonizanteRepository.save(criterioimaioni)
     return new MessageDto('El criterio ha sido Creado Correctamente');
 }
+
+//ENCONTRAR POR ID - CRITERIO IMAGENES DIAGNOSTICAS RAD IONIZANTES
+async findById(cri_imgioni_id: number): Promise<CriterioImgRadIonizantesEntity> {
+    const cri_ima_ioni = await this.criterioImgRadIonizanteRepository.findOne({ where: { cri_imgioni_id } });
+    if (!cri_ima_ioni) {
+        throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+    }
+    return cri_ima_ioni;
+}
+
+//ELIMINAR CRITERIO IMAGENES DIAGNOSTICAS RAD IONIZANTES
+async delete(id: number): Promise<any> {
+    const cri_ima_ioni = await this.findById(id);
+    await this.criterioImgRadIonizanteRepository.delete(cri_ima_ioni.cri_imgioni_id)
+    return new MessageDto(`Criterio Eliminado`);
+}
 }
 
 

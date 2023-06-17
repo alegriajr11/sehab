@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriterioRadioterapiaService } from './criterio_radioterapia.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioRadioterapiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/radioterapia_dto/criterio_radioterapia.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterio-radioterapia')
 export class CriterioRadioterapiaController {
@@ -18,11 +19,18 @@ export class CriterioRadioterapiaController {
 
 
 
-    //CREAR CRITERIO RADIOTERAPIA POR ESTANDAR
+    //CREAR CRITERIO RADIOTERAPIA| POR ESTANDAR
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioRadioterapiaDto) {
         return this.criterioRadioterapiaService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO  RADIOTERAPIA
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criterioRadioterapiaService.delete(id);
     }
 }

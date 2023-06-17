@@ -41,4 +41,20 @@ export class CriteriosSaludTrabajoService {
         await this.criterioSaludTrabajoRepository.save(criteriosaludtrabae)
         return new MessageDto('El criterio ha sido Creado Correctamente');
     }
+
+    //ENCONTRAR POR ID - CRITERIO SALUD TRABAJO  
+    async findById(crisaltra_id: number): Promise<CriterioSaludTrabajoEntity> {
+        const criterio_salud_trabajo = await this.criterioSaludTrabajoRepository.findOne({ where: { crisaltra_id } });
+        if (!criterio_salud_trabajo) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterio_salud_trabajo;
+    }
+
+    //ELIMINAR CRITERIO  SALUD TRABAJO 
+    async delete(id: number): Promise<any> {
+        const criterio_salud_trabajo = await this.findById(id);
+        await this.criterioSaludTrabajoRepository.delete(criterio_salud_trabajo.crisaltra_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

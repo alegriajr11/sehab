@@ -40,4 +40,20 @@ export class CriteriosCuidIntensPediatricoService {
             await this.criterioCuidIntePediatricoRepository.save(criterioscuiintensnpedia)
             return new MessageDto('El criterio ha sido Creado Correctamente');
         }
+
+        //ENCONTRAR POR ID - CRITERIO CUIDADO INTENSIVO PEDIATRICO  
+    async findById(cri_int_ped_id: number): Promise<CriterioCuidIntePediatricoEntity> {
+        const criterio_int_ped = await this.criterioCuidIntePediatricoRepository.findOne({ where: { cri_int_ped_id } });
+        if (!criterio_int_ped) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterio_int_ped;
+    }
+
+    //ELIMINAR CRITERIO  CUIDADO INTENSIVO PEDIATRICO
+    async delete(id: number): Promise<any> {
+        const criterio_int_ped = await this.findById(id);
+        await this.criterioCuidIntePediatricoRepository.delete(criterio_int_ped.cri_int_ped_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

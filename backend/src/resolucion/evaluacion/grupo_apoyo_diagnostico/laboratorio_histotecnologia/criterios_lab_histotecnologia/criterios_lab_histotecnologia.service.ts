@@ -42,4 +42,20 @@ export class CriteriosLabHistotecnologiaService {
         await this.criterioLabHistotecnologiaRepository.save(criteriolablabhistotec)
         return new MessageDto('El criterio ha sido Creado Correctamente');
     }
+
+    //ENCONTRAR POR ID - CRITERIO LABORATORIO HISTOTECNOLOGIA
+    async findById(cri_lab_histo_id: number): Promise<CriterioLabHistotecnologiaEntity> {
+        const cri_lab_histo = await this.criterioLabHistotecnologiaRepository.findOne({ where: { cri_lab_histo_id } });
+        if (!cri_lab_histo) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return cri_lab_histo;
+    }
+
+    //ELIMINAR CRITERIO LABORATORIO HISTOTECNOLOGIA
+    async delete(id: number): Promise<any> {
+        const cri_lab_histo = await this.findById(id);
+        await this.criterioLabHistotecnologiaRepository.delete(cri_lab_histo.cri_lab_histo_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

@@ -15,31 +15,47 @@ export class CriterioSFarmaceuticoService {
         @InjectRepository(CriterioSerFarmaceuticoEntity)
         private readonly criterioSerFarmaceuticoRepository: CriterioSerFarmaceuticoRepository,
         @InjectRepository(ServFarmaceuticoEntity)
-        private readonly servFarmaceuticoRepository: ServFarmaceuticoRepository ,
-        ) {}
+        private readonly servFarmaceuticoRepository: ServFarmaceuticoRepository,
+    ) { }
 
 
-         //LISTANDO CRITERIOS POR ESTANDAR
-        async getCriterioForEstandar(id: number): Promise<CriterioSerFarmaceuticoEntity[]> {
-            const cri_farma = await this.criterioSerFarmaceuticoRepository.createQueryBuilder('criterio')
+    //LISTANDO CRITERIOS POR ESTANDAR
+    async getCriterioForEstandar(id: number): Promise<CriterioSerFarmaceuticoEntity[]> {
+        const cri_farma = await this.criterioSerFarmaceuticoRepository.createQueryBuilder('criterio')
             .select(['criterio', 'ser_farmaceutico.ser_farma_nombre_estandar'])
             .innerJoin('criterio.ser_farmaceutico', 'ser_farmaceutico')
-            .where('ser_farmaceutico.ser_farma_id = :farm_est', { farm_est : id})
+            .where('ser_farmaceutico.ser_farma_id = :farm_est', { farm_est: id })
             .getMany()
-            if (!cri_farma) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-            return cri_farma
-        }
+        if (!cri_farma) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_farma
+    }
 
-        //CREAR CRITERIO
-        async create(ser_farma_id : number, dto: CriterioSerFarmaceuticoDto): Promise<any> {
-            const servifarma = await this.servFarmaceuticoRepository.findOne({ where: { ser_farma_id: ser_farma_id} });
-            if (!servifarma) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-            const criterioservifarma= this.criterioSerFarmaceuticoRepository.create(dto)
-            //ASIGNAMOS EL ESTANDAR AL CRITERIO
-            criterioservifarma.ser_farmaceutico = servifarma
-            //GUARDAR LOS DATOS EN LA BD
-            await this.criterioSerFarmaceuticoRepository.save(criterioservifarma)
-            return new MessageDto('El criterio ha sido Creado Correctamente');
+    //CREAR CRITERIO
+    async create(ser_farma_id: number, dto: CriterioSerFarmaceuticoDto): Promise<any> {
+        const servifarma = await this.servFarmaceuticoRepository.findOne({ where: { ser_farma_id: ser_farma_id } });
+        if (!servifarma) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criterioservifarma = this.criterioSerFarmaceuticoRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criterioservifarma.ser_farmaceutico = servifarma
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioSerFarmaceuticoRepository.save(criterioservifarma)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO RADIOTERAPIA
+    async findById(criser_farm_id: number): Promise<CriterioSerFarmaceuticoEntity> {
+        const criterio_ser_farm = await this.criterioSerFarmaceuticoRepository.findOne({ where: { criser_farm_id } });
+        if (!criterio_ser_farm) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
         }
+        return criterio_ser_farm;
+    }
+
+    //ELIMINAR CRITERIO RADIOTERAPIA
+    async delete(id: number): Promise<any> {
+        const criterio_ser_farm = await this.findById(id);
+        await this.criterioSerFarmaceuticoRepository.delete(criterio_ser_farm.criser_farm_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

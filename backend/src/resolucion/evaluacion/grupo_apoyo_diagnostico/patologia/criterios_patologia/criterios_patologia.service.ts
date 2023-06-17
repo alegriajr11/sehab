@@ -41,4 +41,20 @@ export class CriteriosPatologiaService {
         await this.criterioPatologiaRepository.save(criteriopatologia)
         return new MessageDto('El criterio ha sido Creado Correctamente');
     }
+
+    //ENCONTRAR POR ID - CRITERIO PATOLOGIA
+    async findById(cripat_id: number): Promise<CriterioPatologiaEntity> {
+        const cri_pato = await this.criterioPatologiaRepository.findOne({ where: { cripat_id } });
+        if (!cri_pato) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return cri_pato;
+    }
+
+    //ELIMINAR CRITERIO PATOLOGIA
+    async delete(id: number): Promise<any> {
+        const cri_pato = await this.findById(id);
+        await this.criterioPatologiaRepository.delete(cri_pato.cripat_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

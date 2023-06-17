@@ -14,31 +14,47 @@ export class CriteriosUrgenciasService {
         @InjectRepository(CriterioUrgenciasEntity)
         private readonly criterioUrgenciasRepository: CriterioUrgenciasRepository,
         @InjectRepository(UrgenciasEntity)
-        private readonly urgenciasRepository: UrgenciasRepository ,
-        ) {}
+        private readonly urgenciasRepository: UrgenciasRepository,
+    ) { }
 
 
-         //LISTANDO CRITERIOS POR ESTANDAR
-        async getCriterioForEstandar(id: number): Promise<CriterioUrgenciasEntity[]> {
-            const cri_urge = await this.criterioUrgenciasRepository.createQueryBuilder('criterio')
+    //LISTANDO CRITERIOS POR ESTANDAR
+    async getCriterioForEstandar(id: number): Promise<CriterioUrgenciasEntity[]> {
+        const cri_urge = await this.criterioUrgenciasRepository.createQueryBuilder('criterio')
             .select(['criterio', 'urgencias.urg_nombre_estandar'])
             .innerJoin('criterio.urgencias', 'urgencias')
-            .where('urgencias.urg_id = :urge_est', {urge_est : id})
+            .where('urgencias.urg_id = :urge_est', { urge_est: id })
             .getMany()
-            if (!cri_urge) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-            return cri_urge
-        }
+        if (!cri_urge) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_urge
+    }
 
-        //CREAR CRITERIO
-        async create(urg_id    : number, dto: CriterioUrgenciasDto): Promise<any> {
-            const urgencias = await this.urgenciasRepository.findOne({ where: { urg_id   : urg_id   } });
-            if (!urgencias) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-            const criteriourgencias= this.criterioUrgenciasRepository.create(dto)
-            //ASIGNAMOS EL ESTANDAR AL CRITERIO
-            criteriourgencias.urgencias = urgencias
-            //GUARDAR LOS DATOS EN LA BD
-            await this.criterioUrgenciasRepository.save(criteriourgencias)
-            return new MessageDto('El criterio ha sido Creado Correctamente');
+    //CREAR CRITERIO
+    async create(urg_id: number, dto: CriterioUrgenciasDto): Promise<any> {
+        const urgencias = await this.urgenciasRepository.findOne({ where: { urg_id: urg_id } });
+        if (!urgencias) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criteriourgencias = this.criterioUrgenciasRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criteriourgencias.urgencias = urgencias
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioUrgenciasRepository.save(criteriourgencias)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO TRANSPORTE URGENCIAS   
+    async findById(criurge_id: number): Promise<CriterioUrgenciasEntity> {
+        const criterio_urgencias = await this.criterioUrgenciasRepository.findOne({ where: { criurge_id } });
+        if (!criterio_urgencias) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
         }
+        return criterio_urgencias;
+    }
+
+    //ELIMINAR CRITERIO TRANSPORTE URGENCIAS 
+    async delete(id: number): Promise<any> {
+        const criterio_urgencias = await this.findById(id);
+        await this.criterioUrgenciasRepository.delete(criterio_urgencias.criurge_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

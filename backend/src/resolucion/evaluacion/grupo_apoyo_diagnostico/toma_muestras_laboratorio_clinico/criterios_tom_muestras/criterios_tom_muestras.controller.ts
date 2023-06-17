@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosTomMuestrasService } from './criterios_tom_muestras.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioMuestraLabClinicoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/toma_muestras_laboratorio_clinico_dto/criterio_tom_muestras.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterios-tom-muestras')
 export class CriteriosTomMuestrasController {
@@ -22,5 +23,12 @@ export class CriteriosTomMuestrasController {
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioMuestraLabClinicoDto) {
         return this.criteriosTomMuestrasService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO  TOMA MUESTAS CUELLO UTERINO
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criteriosTomMuestrasService.delete(id);
     }
 }

@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriterioRadioOdontService } from './criterio_radio_odont.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioRadiologiaOdontoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/radiologia_odont_dto/criterio_radio_odont.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterio-radio-odont')
 export class CriterioRadioOdontController {
@@ -22,5 +23,12 @@ export class CriterioRadioOdontController {
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioRadiologiaOdontoDto) {
         return this.criterioRadioOdontService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO  RADIOLOGIA ODONTOLOGICA
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criterioRadioOdontService.delete(id);
     }
 }

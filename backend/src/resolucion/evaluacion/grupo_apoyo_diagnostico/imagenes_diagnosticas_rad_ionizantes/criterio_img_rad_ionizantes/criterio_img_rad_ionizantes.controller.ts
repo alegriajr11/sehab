@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriterioImgRadIonizantesService } from './criterio_img_rad_ionizantes.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioImgRadIonizantesDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/imagenes_diagnosticas_rad_ionizantes_dto/criterio_img_rad_ionizantes.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterio-img-rad-ionizantes')
 export class CriterioImgRadIonizantesController {
@@ -21,5 +22,12 @@ export class CriterioImgRadIonizantesController {
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioImgRadIonizantesDto) {
         return this.criterioImgRadIonizantesService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO  IMAGENES DIAGNOSTICAS RAD IONIZANTES
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criterioImgRadIonizantesService.delete(id);
     }
 }

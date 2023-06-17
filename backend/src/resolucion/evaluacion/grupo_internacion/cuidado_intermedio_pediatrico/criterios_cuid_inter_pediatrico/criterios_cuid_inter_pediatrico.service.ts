@@ -1,4 +1,4 @@
-import { Injectable,   InternalServerErrorException,   NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CriterioCuidIntermPediatricoEntity } from '../criterio_cuid_inter_pediatrico.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CuidIntermPediatricoEntity } from '../cuid_inter_pediatrico.entity';
@@ -18,31 +18,47 @@ export class CriteriosCuidInterPediatricoService {
         private readonly criterioCuidIntermPediatricoRepository: CriterioCuidIntermPediatricoRepository,
         @InjectRepository(CuidIntermPediatricoEntity)
         private readonly cuidIntermPediatricoRepository: CuidIntermPediatricoRepository,
-        ) {}
+    ) { }
 
 
-         //LISTANDO CRITERIOS POR ESTANDAR
-        async getCriterioForEstandar(id: number): Promise<CriterioCuidIntermPediatricoEntity[]> {
-            const cri_cuid_ped = await this.criterioCuidIntermPediatricoRepository.createQueryBuilder('criterio')
+    //LISTANDO CRITERIOS POR ESTANDAR
+    async getCriterioForEstandar(id: number): Promise<CriterioCuidIntermPediatricoEntity[]> {
+        const cri_cuid_ped = await this.criterioCuidIntermPediatricoRepository.createQueryBuilder('criterio')
             .select(['criterio', 'cuid_inter_pediatrico.cuid_inter_pedi_nombre_estandar'])
             .innerJoin('criterio.cuid_inter_pediatrico', 'cuid_inter_pediatrico')
-            .where('cuid_inter_pediatrico.cuid_inter_pedi_id = :cui_pedi_est', {cui_pedi_est : id})
+            .where('cuid_inter_pediatrico.cuid_inter_pedi_id = :cui_pedi_est', { cui_pedi_est: id })
             .getMany()
-            if (!cri_cuid_ped) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-            return cri_cuid_ped
-        }
+        if (!cri_cuid_ped) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_cuid_ped
+    }
 
 
-            async create(cuid_inter_pedi_id:number,dto:CriterioCuidIntermPediatricoDto):Promise<any> {
-            const cuidinterpedi =await this.cuidIntermPediatricoRepository.findOne({where:{cuid_inter_pedi_id:cuid_inter_pedi_id  } });
-            if (!cuidinterpedi) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-            const criterioscuidinterpedi= this.criterioCuidIntermPediatricoRepository.create(dto)
-            //ASIGNAMOS EL ESTANDAR AL CRITERIO
-            criterioscuidinterpedi.cuid_inter_pediatrico = cuidinterpedi
-            //GUARDAR LOS DATOS EN LA BD
-            await this.criterioCuidIntermPediatricoRepository.save(criterioscuidinterpedi)
-            return new MessageDto('El criterio ha sido Creado Correctamente');
+    async create(cuid_inter_pedi_id: number, dto: CriterioCuidIntermPediatricoDto): Promise<any> {
+        const cuidinterpedi = await this.cuidIntermPediatricoRepository.findOne({ where: { cuid_inter_pedi_id: cuid_inter_pedi_id } });
+        if (!cuidinterpedi) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criterioscuidinterpedi = this.criterioCuidIntermPediatricoRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criterioscuidinterpedi.cuid_inter_pediatrico = cuidinterpedi
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioCuidIntermPediatricoRepository.save(criterioscuidinterpedi)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO CUIDADO  INTERMEDIO PEDIATRICO
+    async findById(cri_inter_pedia_id: number): Promise<CriterioCuidIntermPediatricoEntity> {
+        const criterio_inter_pedia = await this.criterioCuidIntermPediatricoRepository.findOne({ where: { cri_inter_pedia_id } });
+        if (!criterio_inter_pedia) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
         }
+        return criterio_inter_pedia;
+    }
+
+    //ELIMINAR CRITERIO  CUIDADO  INTERMEDIO PEDIATRICO
+    async delete(id: number): Promise<any> {
+        const criterio_inter_pedia = await this.findById(id);
+        await this.criterioCuidIntermPediatricoRepository.delete(criterio_inter_pedia.cri_inter_pedia_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }
 

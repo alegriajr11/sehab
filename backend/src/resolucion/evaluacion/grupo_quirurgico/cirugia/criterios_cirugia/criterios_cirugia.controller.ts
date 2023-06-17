@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosCirugiaService } from './criterios_cirugia.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioCirugiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_quirurgico_dtos/cirugia_dto/criterio_cirugia.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterios-cirugia')
 export class CriteriosCirugiaController {
@@ -22,5 +23,12 @@ export class CriteriosCirugiaController {
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioCirugiaDto) {
         return this.criteriosCirugiaService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO CIRUGIA
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criteriosCirugiaService.delete(id);
     }
 }

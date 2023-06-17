@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosCuidBasicNeonatalService } from './criterios_cuid_basic_neonatal.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioCuidBasNeonatalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_basico_neonatal_dto/criterio_cuid_basic_neonatal.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterios-cuid-basic-neonatal')
 export class CriteriosCuidBasicNeonatalController {
@@ -23,5 +24,12 @@ export class CriteriosCuidBasicNeonatalController {
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioCuidBasNeonatalDto) {
         return this.criteriosCuidBasicNeonatalService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO CUIDADO BASICO NEO
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criteriosCuidBasicNeonatalService.delete(id);
     }
 }

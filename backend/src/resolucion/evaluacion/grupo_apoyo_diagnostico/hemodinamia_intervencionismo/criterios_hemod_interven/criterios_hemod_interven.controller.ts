@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {  Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosHemodIntervenService } from './criterios_hemod_interven.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioHermodinamiaIntervenDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/hemodinamia_intervencionismo_dto/criterio_hemo_inter.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterios-hemod-interven')
 export class CriteriosHemodIntervenController {
@@ -22,4 +23,11 @@ export class CriteriosHemodIntervenController {
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioHermodinamiaIntervenDto) {
         return this.criteriosHemodIntervenService.create(id, dto);
     }
+
+     //ELIMINAR CRITERIO  PRETRANSFUNSIONAL
+     @UseGuards(JwtAuthGuard, RolesGuard)
+     @Delete(':id')
+     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+         return await this.criteriosHemodIntervenService.delete(id);
+     }
 }

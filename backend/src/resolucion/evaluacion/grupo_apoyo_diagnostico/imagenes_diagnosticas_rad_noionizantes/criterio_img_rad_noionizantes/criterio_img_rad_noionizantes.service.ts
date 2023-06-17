@@ -40,4 +40,20 @@ async create(imgrad_noion_id: number, dto: CriterioImgRadNoIonizantesDto): Promi
     await this.criterioImgRadNoIonizanteRepository.save(criterioimanoioni)
     return new MessageDto('El criterio ha sido Creado Correctamente');
 }
+
+//ENCONTRAR POR ID - CRITERIO IMAGENES DIAGNOSTICAS RAD NO IONIZANTES
+async findById(cri_img_noioni_id: number): Promise<CriterioImgRadNoIonizantesEntity> {
+    const cri_ima_noioni = await this.criterioImgRadNoIonizanteRepository.findOne({ where: { cri_img_noioni_id } });
+    if (!cri_ima_noioni) {
+        throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+    }
+    return cri_ima_noioni;
+}
+
+//ELIMINAR CRITERIO IMAGENES DIAGNOSTICAS RAD NO IONIZANTES
+async delete(id: number): Promise<any> {
+    const cri_ima_noioni = await this.findById(id);
+    await this.criterioImgRadNoIonizanteRepository.delete(cri_ima_noioni.cri_img_noioni_id)
+    return new MessageDto(`Criterio Eliminado`);
+}
 }

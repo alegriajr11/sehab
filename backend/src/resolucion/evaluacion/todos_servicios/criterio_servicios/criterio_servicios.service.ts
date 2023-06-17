@@ -40,4 +40,20 @@ export class CriterioServiciosService {
             await this.criterioServiciosRepository.save(criteriosserviciosa)
             return new MessageDto('El criterio ha sido Creado Correctamente');
         }
+
+        //ENCONTRAR POR ID - CRITERIO TODOS LOS SERVICIOS
+    async findById(cris_id: number): Promise<Criterio_servicios> {
+        const criterio_servicios = await this.criterioServiciosRepository.findOne({ where: { cris_id } });
+        if (!criterio_servicios) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterio_servicios;
+    }
+
+    //ELIMINAR CRITERIO  TODOS LOS SERVICIOS
+    async delete(id: number): Promise<any> {
+        const criterio_servicios = await this.findById(id);
+        await this.criterioServiciosRepository.delete(criterio_servicios.cris_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosPrehospitalariaService } from './criterios_prehospitalaria.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioPrehospitalariaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_atencion_inmediata_dtos/prehospitalaria_dto/criterio_prehospitalaria.dto';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterios-prehospitalaria')
 export class CriteriosPrehospitalariaController {
@@ -22,5 +23,12 @@ export class CriteriosPrehospitalariaController {
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioPrehospitalariaDto) {
         return this.criteriosPrehospitalariaService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO  PREHOSPITALARIA 
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criteriosPrehospitalariaService.delete(id);
     }
 }

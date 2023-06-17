@@ -1,8 +1,9 @@
 import { CriterioHospitalizacionMentalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/hospitalizacion_salud_mental_dto/criterio_hosp_salud_mental.dto';
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriterioHospitalizacionService } from '../../hospitalizacion/criterio_hospitalizacion/criterio_hospitalizacion.service';
 import { CriteriosHospSaludMentalService } from './criterios_hosp_salud_mental.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { RolesGuard } from 'src/guards/rol.guard';
 
 @Controller('criterios-hosp-salud-mental')
 export class CriteriosHospSaludMentalController {
@@ -23,6 +24,13 @@ export class CriteriosHospSaludMentalController {
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioHospitalizacionMentalDto) {
         return this.criteriosHospSaludMentalService.create(id, dto);
+    }
+
+    //ELIMINAR CRITERIO HOSPITALIZACION MENTAL
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Delete(':id')
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.criteriosHospSaludMentalService.delete(id);
     }
 }
 

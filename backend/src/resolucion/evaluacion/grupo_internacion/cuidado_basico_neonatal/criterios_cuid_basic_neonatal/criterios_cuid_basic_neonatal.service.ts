@@ -41,4 +41,20 @@ export class CriteriosCuidBasicNeonatalService {
             await this.criterioCuidBasNeonatalRepository.save(criterioscuidadoneona)
             return new MessageDto('El criterio ha sido Creado Correctamente');
         }
+
+        //ENCONTRAR POR ID - CRITERIO CUIDADO BASICO NEO  
+    async findById(cri_neona_id: number): Promise<CriterioCuidBasNeonatalEntity> {
+        const criterio_neona = await this.criterioCuidBasNeonatalRepository.findOne({ where: { cri_neona_id } });
+        if (!criterio_neona) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterio_neona;
+    }
+
+    //ELIMINAR CRITERIO  CUIDADO BASICO NEO
+    async delete(id: number): Promise<any> {
+        const criterio_neona = await this.findById(id);
+        await this.criterioCuidBasNeonatalRepository.delete(criterio_neona.cri_neona_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

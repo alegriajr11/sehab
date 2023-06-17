@@ -40,4 +40,21 @@ export class CriteriosCuidInterNeonatalService {
             await this.criterioCuidIntermNeonatalRepository.save(criterioscuiinteradul)
             return new MessageDto('El criterio ha sido Creado Correctamente');
         }
+
+        
+        //ENCONTRAR POR ID - CRITERIO CUIDADO  INTERMEDIO NEONATAL
+    async findById(cri_inter_neon_id: number): Promise<CriterioCuidIntermNeonatalEntity> {
+        const criterio_inter_neon = await this.criterioCuidIntermNeonatalRepository.findOne({ where: { cri_inter_neon_id } });
+        if (!criterio_inter_neon) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterio_inter_neon;
+    }
+
+    //ELIMINAR CRITERIO  CUIDADO  INTERMEDIO NEONATAL
+    async delete(id: number): Promise<any> {
+        const criterio_inter_neon = await this.findById(id);
+        await this.criterioCuidIntermNeonatalRepository.delete(criterio_inter_neon.cri_inter_neon_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

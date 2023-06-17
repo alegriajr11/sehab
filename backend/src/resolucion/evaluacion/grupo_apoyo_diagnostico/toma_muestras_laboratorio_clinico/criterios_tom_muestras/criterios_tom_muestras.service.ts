@@ -14,31 +14,47 @@ export class CriteriosTomMuestrasService {
         @InjectRepository(CriterioMuestraLabClinicoEntity)
         private readonly criterioMuestraLabClinicoRepository: CriterioMuestraLabClinicoRepository,
         @InjectRepository(MuestrasLabClinicoEntity)
-        private readonly muestrasLabClinicoRepository: MuestrasLabClinicoRepository ,
-        ) {}
+        private readonly muestrasLabClinicoRepository: MuestrasLabClinicoRepository,
+    ) { }
 
 
-         //LISTANDO CRITERIOS POR ESTANDAR
-        async getCriterioForEstandar(id: number): Promise<CriterioMuestraLabClinicoEntity[]> {
-            const cri_tom_mues = await this.criterioMuestraLabClinicoRepository.createQueryBuilder('criterio')
+    //LISTANDO CRITERIOS POR ESTANDAR
+    async getCriterioForEstandar(id: number): Promise<CriterioMuestraLabClinicoEntity[]> {
+        const cri_tom_mues = await this.criterioMuestraLabClinicoRepository.createQueryBuilder('criterio')
             .select(['criterio', 'tom_mue_lab_clinico.mue_lab_cli_nombre_estandar'])
             .innerJoin('criterio.tom_mue_lab_clinico', 'tom_mue_lab_clinico')
-            .where('tom_mue_lab_clinico.mue_lab_cli_id = :mues_est', { mues_est : id})
+            .where('tom_mue_lab_clinico.mue_lab_cli_id = :mues_est', { mues_est: id })
             .getMany()
-            if (!cri_tom_mues) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-            return cri_tom_mues
-        }
+        if (!cri_tom_mues) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_tom_mues
+    }
 
-        //CREAR CRITERIO
-        async create(mue_lab_cli_id   : number, dto: CriterioMuestraLabClinicoDto): Promise<any> {
-            const tomamuestras = await this.muestrasLabClinicoRepository.findOne({ where: { mue_lab_cli_id  : mue_lab_cli_id  } });
-            if (!tomamuestras) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-            const criteriotomamuestras= this.criterioMuestraLabClinicoRepository.create(dto)
-            //ASIGNAMOS EL ESTANDAR AL CRITERIO
-            criteriotomamuestras.tom_mue_lab_clinico = tomamuestras
-            //GUARDAR LOS DATOS EN LA BD
-            await this.criterioMuestraLabClinicoRepository.save(criteriotomamuestras)
-            return new MessageDto('El criterio ha sido Creado Correctamente');
+    //CREAR CRITERIO
+    async create(mue_lab_cli_id: number, dto: CriterioMuestraLabClinicoDto): Promise<any> {
+        const tomamuestras = await this.muestrasLabClinicoRepository.findOne({ where: { mue_lab_cli_id: mue_lab_cli_id } });
+        if (!tomamuestras) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criteriotomamuestras = this.criterioMuestraLabClinicoRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criteriotomamuestras.tom_mue_lab_clinico = tomamuestras
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioMuestraLabClinicoRepository.save(criteriotomamuestras)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO LAB CLINICO
+    async findById(cri_muest_cli_id: number): Promise<CriterioMuestraLabClinicoEntity> {
+        const criterio_mue_lab_cli = await this.criterioMuestraLabClinicoRepository.findOne({ where: { cri_muest_cli_id } });
+        if (!criterio_mue_lab_cli) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
         }
+        return criterio_mue_lab_cli;
+    }
+
+    //ELIMINAR CRITERIO LAB CLINICO
+    async delete(id: number): Promise<any> {
+        const criterio_mue_lab_cli = await this.findById(id);
+        await this.criterioMuestraLabClinicoRepository.delete(criterio_mue_lab_cli.cri_muest_cli_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

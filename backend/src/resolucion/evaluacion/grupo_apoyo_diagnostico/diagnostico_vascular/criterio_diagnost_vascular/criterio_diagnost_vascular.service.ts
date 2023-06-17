@@ -41,4 +41,20 @@ async create(diag_vas_id: number, dto: CriterioDiagnostVascularDto): Promise<any
     await this.criterioDiagnostVascularRepository.save(criterioDiagnostVascular)
     return new MessageDto('El criterio ha sido Creado Correctamente');
 }
+
+//ENCONTRAR POR ID - CRITERIO GIAGNOSTICO VASCULAR
+async findById(crivac_id: number): Promise<CriterioDiagnostVascularEntity> {
+    const cri_diagnos_vascu = await this.criterioDiagnostVascularRepository.findOne({ where: { crivac_id } });
+    if (!cri_diagnos_vascu) {
+        throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+    }
+    return cri_diagnos_vascu;
+}
+
+//ELIMINAR CRITERIO GIAGNOSTICO VASCULAR
+async delete(id: number): Promise<any> {
+    const cri_diagnos_vascu = await this.findById(id);
+    await this.criterioDiagnostVascularRepository.delete(cri_diagnos_vascu.crivac_id)
+    return new MessageDto(`Criterio Eliminado`);
+}
 }   

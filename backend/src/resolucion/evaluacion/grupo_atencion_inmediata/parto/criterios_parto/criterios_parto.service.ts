@@ -14,30 +14,46 @@ export class CriteriosPartoService {
         @InjectRepository(CriterioPartoEntity)
         private readonly criterioPartoRepository: CriterioPartoRepository,
         @InjectRepository(PartoEntity)
-        private readonly partoRepository: PartoRepository ,
-        ) {}
+        private readonly partoRepository: PartoRepository,
+    ) { }
 
 
-         //LISTANDO CRITERIOS POR ESTANDAR
-        async getCriterioForEstandar(id: number): Promise<CriterioPartoEntity[]> {
-            const cri_parto = await this.criterioPartoRepository.createQueryBuilder('criterio')
+    //LISTANDO CRITERIOS POR ESTANDAR
+    async getCriterioForEstandar(id: number): Promise<CriterioPartoEntity[]> {
+        const cri_parto = await this.criterioPartoRepository.createQueryBuilder('criterio')
             .select(['criterio', 'parto.parto_nombre_estandar'])
             .innerJoin('criterio.parto', 'parto')
-            .where('parto.parto_id = :part_est', { part_est : id})
+            .where('parto.parto_id = :part_est', { part_est: id })
             .getMany()
-            if (!cri_parto) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-            return cri_parto
-        }
+        if (!cri_parto) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_parto
+    }
 
-        async create(parto_id   : number, dto: CriterioPartoDto): Promise<any> {
-            const parto = await this.partoRepository.findOne({ where: { parto_id  : parto_id  } });
-            if (!parto) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-            const criterioparto= this.criterioPartoRepository.create(dto)
-            //ASIGNAMOS EL ESTANDAR AL CRITERIO
-            criterioparto.parto = parto
-            //GUARDAR LOS DATOS EN LA BD
-            await this.criterioPartoRepository.save(criterioparto)
-            return new MessageDto('El criterio ha sido Creado Correctamente');
+    async create(parto_id: number, dto: CriterioPartoDto): Promise<any> {
+        const parto = await this.partoRepository.findOne({ where: { parto_id: parto_id } });
+        if (!parto) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criterioparto = this.criterioPartoRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criterioparto.parto = parto
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioPartoRepository.save(criterioparto)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO PARTO  
+    async findById(criparto_id: number): Promise<CriterioPartoEntity> {
+        const criterio_parto = await this.criterioPartoRepository.findOne({ where: { criparto_id } });
+        if (!criterio_parto) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
         }
+        return criterio_parto;
+    }
+
+    //ELIMINAR CRITERIO PARTO
+    async delete(id: number): Promise<any> {
+        const criterio_parto = await this.findById(id);
+        await this.criterioPartoRepository.delete(criterio_parto.criparto_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

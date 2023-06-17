@@ -42,4 +42,20 @@ export class CriteriosVacunacionService {
         await this.criterioVacunacionRepository.save(criteriosvacunacion)
         return new MessageDto('El criterio ha sido Creado Correctamente');
     }
+
+    //ENCONTRAR POR ID - CRITERIO VACUNACION  
+    async findById(crivac_id: number): Promise<CriterioVacunacionEntity> {
+        const criterio_vacunacion = await this.criterioVacunacionRepository.findOne({ where: { crivac_id } });
+        if (!criterio_vacunacion) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterio_vacunacion;
+    }
+
+    //ELIMINAR CRITERIO  VACUNACION
+    async delete(id: number): Promise<any> {
+        const criterio_vacunacion = await this.findById(id);
+        await this.criterioVacunacionRepository.delete(criterio_vacunacion.crivac_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

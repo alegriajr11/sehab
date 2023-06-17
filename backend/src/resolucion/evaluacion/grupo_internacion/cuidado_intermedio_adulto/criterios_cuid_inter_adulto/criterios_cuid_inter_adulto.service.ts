@@ -40,4 +40,20 @@ export class CriteriosCuidInterAdultoService {
             await this.criterioCuidIntermAdultoRepository.save(criterioscuiinteradul)
             return new MessageDto('El criterio ha sido Creado Correctamente');
         }
+
+        //ENCONTRAR POR ID - CRITERIO CUIDADO  INTERMEDIO ADULTO
+    async findById(cri_inter_adult_id: number): Promise<CriterioCuidIntermAdultoEntity> {
+        const criterio_inter_adult = await this.criterioCuidIntermAdultoRepository.findOne({ where: { cri_inter_adult_id } });
+        if (!criterio_inter_adult) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterio_inter_adult;
+    }
+
+    //ELIMINAR CRITERIO  CUIDADO  INTERMEDIO ADULTO
+    async delete(id: number): Promise<any> {
+        const criterio_inter_adult = await this.findById(id);
+        await this.criterioCuidIntermAdultoRepository.delete(criterio_inter_adult.cri_inter_adult_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

@@ -15,29 +15,45 @@ export class CriteriosHospSaludMentalService {
         private readonly criterioHospitalizacionMentalRepository: CriterioHospitalizacionMentalRepository,
         @InjectRepository(HospitalizacionMentalEntity)
         private readonly hospitalizacionMentalRepository: HospitalizacionMentalRepository,
-        ) {}
+    ) { }
 
 
-         //LISTANDO CRITERIOS POR ESTANDAR
-        async getCriterioForEstandar(id: number): Promise<CriterioHospitalizacionMentalEntity[]> {
-            const cri_hosp_ment = await this.criterioHospitalizacionMentalRepository.createQueryBuilder('criterio')
+    //LISTANDO CRITERIOS POR ESTANDAR
+    async getCriterioForEstandar(id: number): Promise<CriterioHospitalizacionMentalEntity[]> {
+        const cri_hosp_ment = await this.criterioHospitalizacionMentalRepository.createQueryBuilder('criterio')
             .select(['criterio', 'hospitalizacion_mental.hosp_mental_nombre_estandar'])
             .innerJoin('criterio.hospitalizacion_mental', 'hospitalizacion_mental')
-            .where('hospitalizacion_mental.hosp_mental_id = :hosp_ment_est', {hosp_ment_est : id})
+            .where('hospitalizacion_mental.hosp_mental_id = :hosp_ment_est', { hosp_ment_est: id })
             .getMany()
-            if (!cri_hosp_ment) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-            return cri_hosp_ment
-        }
+        if (!cri_hosp_ment) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_hosp_ment
+    }
 
-        async create(hosp_mental_id  : number, dto: CriterioHospitalizacionMentalDto): Promise<any> {
-            const hospitamental= await this.hospitalizacionMentalRepository.findOne({ where: { hosp_mental_id : hosp_mental_id } });
-            if (!hospitamental) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-            const criterioshospitamental= this.criterioHospitalizacionMentalRepository.create(dto)
-            //ASIGNAMOS EL ESTANDAR AL CRITERIO
-            criterioshospitamental.hospitalizacion_mental = hospitamental
-            //GUARDAR LOS DATOS EN LA BD
-            await this.criterioHospitalizacionMentalRepository.save(criterioshospitamental)
-            return new MessageDto('El criterio ha sido Creado Correctamente');
+    async create(hosp_mental_id: number, dto: CriterioHospitalizacionMentalDto): Promise<any> {
+        const hospitamental = await this.hospitalizacionMentalRepository.findOne({ where: { hosp_mental_id: hosp_mental_id } });
+        if (!hospitamental) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criterioshospitamental = this.criterioHospitalizacionMentalRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criterioshospitamental.hospitalizacion_mental = hospitamental
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioHospitalizacionMentalRepository.save(criterioshospitamental)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO HOSPITALIZACION MENTAL
+    async findById(crihosp_ment_id: number): Promise<CriterioHospitalizacionMentalEntity> {
+        const criterio_hosp_ment = await this.criterioHospitalizacionMentalRepository.findOne({ where: { crihosp_ment_id } });
+        if (!criterio_hosp_ment) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
         }
+        return criterio_hosp_ment;
+    }
+
+    //ELIMINAR CRITERIO  HOSPITALIZACION MENTAL
+    async delete(id: number): Promise<any> {
+        const criterio_hosp_ment = await this.findById(id);
+        await this.criterioHospitalizacionMentalRepository.delete(criterio_hosp_ment.crihosp_ment_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

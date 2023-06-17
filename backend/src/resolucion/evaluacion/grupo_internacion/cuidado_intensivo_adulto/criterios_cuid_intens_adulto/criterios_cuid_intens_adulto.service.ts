@@ -39,4 +39,20 @@ export class CriteriosCuidIntensAdultoService {
         await this.criterioCuidIntensAdultoRepository.save(criterioscuiintensadul)
         return new MessageDto('El criterio ha sido Creado Correctamente');
     }
+
+    //ENCONTRAR POR ID - CRITERIO CUIDADO INTENSIVO ADULTO  
+    async findById(cri_int_adult_id: number): Promise<CriterioCuidIntensAdultoEntity> {
+        const criterio_int_adult = await this.criterioCuidIntensAdultoRepository.findOne({ where: { cri_int_adult_id } });
+        if (!criterio_int_adult) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterio_int_adult;
+    }
+
+    //ELIMINAR CRITERIO  CUIDADO INTENSIVO ADULTO
+    async delete(id: number): Promise<any> {
+        const criterio_int_adult = await this.findById(id);
+        await this.criterioCuidIntensAdultoRepository.delete(criterio_int_adult.cri_int_adult_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

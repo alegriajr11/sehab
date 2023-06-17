@@ -14,30 +14,46 @@ export class CriteriosCirugiaService {
         @InjectRepository(CriterioCirugiaEntity)
         private readonly criterioCirugiaRepository: CriterioCirugiaRepository,
         @InjectRepository(CirugiaEntity)
-        private readonly cirugiaRepository: CirugiaRepository ,
-        ) {}
+        private readonly cirugiaRepository: CirugiaRepository,
+    ) { }
 
 
-         //LISTANDO CRITERIOS POR ESTANDAR
-        async getCriterioForEstandar(id: number): Promise<CriterioCirugiaEntity[]> {
-            const cri_ciru = await this.criterioCirugiaRepository.createQueryBuilder('criterio')
+    //LISTANDO CRITERIOS POR ESTANDAR
+    async getCriterioForEstandar(id: number): Promise<CriterioCirugiaEntity[]> {
+        const cri_ciru = await this.criterioCirugiaRepository.createQueryBuilder('criterio')
             .select(['criterio', 'cirugia.ciru_nombre_estandar'])
             .innerJoin('criterio.cirugia', 'cirugia')
-            .where('cirugia.ciru_id = :ciru_est', {ciru_est : id})
+            .where('cirugia.ciru_id = :ciru_est', { ciru_est: id })
             .getMany()
-            if (!cri_ciru) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-            return cri_ciru
-        }
+        if (!cri_ciru) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_ciru
+    }
 
-        async create(ciru_id  : number, dto: CriterioCirugiaDto): Promise<any> {
-            const cirugia= await this.cirugiaRepository.findOne({ where: { ciru_id : ciru_id } });
-            if (!cirugia) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-            const criterioscirugia= this.criterioCirugiaRepository.create(dto)
-            //ASIGNAMOS EL ESTANDAR AL CRITERIO
-            criterioscirugia.cirugia = cirugia
-            //GUARDAR LOS DATOS EN LA BD
-            await this.criterioCirugiaRepository.save(criterioscirugia)
-            return new MessageDto('El criterio ha sido Creado Correctamente');
+    async create(ciru_id: number, dto: CriterioCirugiaDto): Promise<any> {
+        const cirugia = await this.cirugiaRepository.findOne({ where: { ciru_id: ciru_id } });
+        if (!cirugia) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criterioscirugia = this.criterioCirugiaRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criterioscirugia.cirugia = cirugia
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioCirugiaRepository.save(criterioscirugia)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO CIRUGIAL
+    async findById(cri_ciru_id: number): Promise<CriterioCirugiaEntity> {
+        const criterio_ciru = await this.criterioCirugiaRepository.findOne({ where: { cri_ciru_id } });
+        if (!criterio_ciru) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
         }
+        return criterio_ciru;
+    }
+
+    //ELIMINAR CRITERIO  CIRUGIA
+    async delete(id: number): Promise<any> {
+        const criterio_ciru = await this.findById(id);
+        await this.criterioCirugiaRepository.delete(criterio_ciru.cri_ciru_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

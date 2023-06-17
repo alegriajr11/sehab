@@ -17,27 +17,43 @@ export class CriteriosGestionPretransService {
     ) { }
 
     //LISTANDO CRITERIOS POR ESTANDAR
-async getCriterioForEstandar(id: number): Promise<CriterioGestionPretransfusionalEntity[]> {
-    const cri_gest_pretrasn = await this.criterioGestionPretransfusionalRepository.createQueryBuilder('criterio')
-    .select(['criterio', 'gestion_pretransfusional.gestp_nombre_estandar'])
-    .innerJoin('criterio.gestion_pretransfusional', 'gestion_pretransfusional')
-    .where('gestion_pretransfusional.gestp_id = :dial_est', { dial_est : id})
-    .getMany()
-    if (!cri_gest_pretrasn) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-    return cri_gest_pretrasn
-}
+    async getCriterioForEstandar(id: number): Promise<CriterioGestionPretransfusionalEntity[]> {
+        const cri_gest_pretrasn = await this.criterioGestionPretransfusionalRepository.createQueryBuilder('criterio')
+            .select(['criterio', 'gestion_pretransfusional.gestp_nombre_estandar'])
+            .innerJoin('criterio.gestion_pretransfusional', 'gestion_pretransfusional')
+            .where('gestion_pretransfusional.gestp_id = :dial_est', { dial_est: id })
+            .getMany()
+        if (!cri_gest_pretrasn) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_gest_pretrasn
+    }
 
 
-//METODO AGREGAR CRITERIO-GESTION PRETRANS
-async create(gestp_id: number, dto: CriterioGestionPretransfusionalDto): Promise<any> {
-    const gestionpretans = await this.gestionPretransfusionalRepository.findOne({ where: { gestp_id: gestp_id} });
-    if (!gestionpretans) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-    //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-    const criteriogestionpretans = this.criterioGestionPretransfusionalRepository.create(dto)
-    //ASIGNAMOS EL ESTANDAR AL CRITERIO
-    criteriogestionpretans.gestion_pretransfusional = gestionpretans
-    //GUARDAR LOS DATOS EN LA BD
-    await this.criterioGestionPretransfusionalRepository.save(criteriogestionpretans)
-    return new MessageDto('El criterio ha sido Creado Correctamente');
-}
+    //METODO AGREGAR CRITERIO-GESTION PRETRANS
+    async create(gestp_id: number, dto: CriterioGestionPretransfusionalDto): Promise<any> {
+        const gestionpretans = await this.gestionPretransfusionalRepository.findOne({ where: { gestp_id: gestp_id } });
+        if (!gestionpretans) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criteriogestionpretans = this.criterioGestionPretransfusionalRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criteriogestionpretans.gestion_pretransfusional = gestionpretans
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioGestionPretransfusionalRepository.save(criteriogestionpretans)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO PRETANSFUNCIONAL
+    async findById(crigestpre_id: number): Promise<CriterioGestionPretransfusionalEntity> {
+        const cri_pre_trans = await this.criterioGestionPretransfusionalRepository.findOne({ where: { crigestpre_id } });
+        if (!cri_pre_trans) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return cri_pre_trans;
+    }
+
+    //ELIMINAR CRITERIO PRETANSFUNCIONAL
+    async delete(id: number): Promise<any> {
+        const cri_pretrans = await this.findById(id);
+        await this.criterioGestionPretransfusionalRepository.delete(cri_pretrans.crigestpre_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }

@@ -17,27 +17,43 @@ export class CriteriosHemodIntervenService {
         private readonly hermodIntervenRepository: HermodIntervenRepository,
     ) { }
 
-        //LISTANDO CRITERIOS POR ESTANDAR
+    //LISTANDO CRITERIOS POR ESTANDAR
     async getCriterioForEstandar(id: number): Promise<CriterioHermoIntervenEntity[]> {
-    const cri_hemo_inter = await this.criterioHermoIntervenRepository.createQueryBuilder('criterio')
-    .select(['criterio', 'hermod_interven.hermointer_nombre_estandar'])
-    .innerJoin('criterio.hermod_interven', 'hermod_interven')
-    .where('hermod_interven.hermointer_id = :dial_est', { dial_est : id})
-    .getMany()
-    if (!cri_hemo_inter) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-    return cri_hemo_inter
-}
+        const cri_hemo_inter = await this.criterioHermoIntervenRepository.createQueryBuilder('criterio')
+            .select(['criterio', 'hermod_interven.hermointer_nombre_estandar'])
+            .innerJoin('criterio.hermod_interven', 'hermod_interven')
+            .where('hermod_interven.hermointer_id = :dial_est', { dial_est: id })
+            .getMany()
+        if (!cri_hemo_inter) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_hemo_inter
+    }
 
-//METODO AGREGAR CRITERIO-HEMODINamia
-async create(hermointer_id: number, dto: CriterioHermodinamiaIntervenDto): Promise<any> {
-    const hermodinamia = await this.hermodIntervenRepository.findOne({ where: { hermointer_id: hermointer_id} });
-    if (!hermodinamia) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-    //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-    const criteriohermodinamia = this.criterioHermoIntervenRepository.create(dto)
-    //ASIGNAMOS EL ESTANDAR AL CRITERIO
-    criteriohermodinamia.hermod_interven = hermodinamia
-    //GUARDAR LOS DATOS EN LA BD
-    await this.criterioHermoIntervenRepository.save(criteriohermodinamia)
-    return new MessageDto('El criterio ha sido Creado Correctamente');
-}
+    //METODO AGREGAR CRITERIO-HEMODINamia
+    async create(hermointer_id: number, dto: CriterioHermodinamiaIntervenDto): Promise<any> {
+        const hermodinamia = await this.hermodIntervenRepository.findOne({ where: { hermointer_id: hermointer_id } });
+        if (!hermodinamia) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criteriohermodinamia = this.criterioHermoIntervenRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criteriohermodinamia.hermod_interven = hermodinamia
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioHermoIntervenRepository.save(criteriohermodinamia)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO HEMODINAMINIA
+    async findById(criherminte_id: number): Promise<CriterioHermoIntervenEntity> {
+        const cri_hemodi = await this.criterioHermoIntervenRepository.findOne({ where: { criherminte_id } });
+        if (!cri_hemodi) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return cri_hemodi;
+    }
+
+    //ELIMINAR CRITERIO HEMODINAMINIA
+    async delete(id: number): Promise<any> {
+        const cri_hemodi = await this.findById(id);
+        await this.criterioHermoIntervenRepository.delete(cri_hemodi.criherminte_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
 }
