@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosDialisisService } from './criterios_dialisis.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioDialisisDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/dialisis_dto/criterio_dialisis.dto';
@@ -32,6 +32,14 @@ export class CriteriosDialisisController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criterioDialisisService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO DIALISIS
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioDialisisDto) {
+        return await this.criterioDialisisService.updateDialisis(id, dto);
     }
 
 

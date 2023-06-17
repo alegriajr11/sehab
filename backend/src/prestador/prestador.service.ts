@@ -110,7 +110,7 @@ export class PrestadorService {
 
 
 
-    /*ACTUALIZANDO USUARIO*/
+    /*ACTUALIZANDO PRESTADOR*/
     async update(id: string, dto: PrestadorDto): Promise<any> {
         const prestador = await this.findById(id);
         if (!prestador)
