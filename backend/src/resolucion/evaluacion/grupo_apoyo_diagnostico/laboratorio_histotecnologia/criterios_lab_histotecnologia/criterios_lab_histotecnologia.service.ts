@@ -58,4 +58,23 @@ export class CriteriosLabHistotecnologiaService {
         await this.criterioLabHistotecnologiaRepository.delete(cri_lab_histo.cri_lab_histo_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS  LABORATORIO HISTOTECNOLOGIA
+    async updateLab_Histo(id: number, dto: CriterioLabHistotecnologiaDto): Promise<any> {
+        const criterio_lab_histotec = await this.findById(id);
+        if (!criterio_lab_histotec) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_lab_histo_modalidad ? criterio_lab_histotec.cri_lab_histo_modalidad = dto.cri_lab_histo_modalidad : criterio_lab_histotec.cri_lab_histo_modalidad = criterio_lab_histotec.cri_lab_histo_modalidad;
+        dto.cri_lab_histo_complejidad ? criterio_lab_histotec.cri_lab_histo_complejidad = dto.cri_lab_histo_complejidad : criterio_lab_histotec.cri_lab_histo_complejidad = criterio_lab_histotec.cri_lab_histo_complejidad;
+        criterio_lab_histotec.cri_lab_histo_articulo = dto.cri_lab_histo_articulo !== undefined ? dto.cri_lab_histo_articulo : "";
+        criterio_lab_histotec.cri_lab_histo_seccion = dto.cri_lab_histo_seccion !== undefined ? dto.cri_lab_histo_seccion : "";
+        criterio_lab_histotec.cri_lab_histo_apartado = dto.cri_lab_histo_apartado !== undefined ? dto.cri_lab_histo_apartado : "";
+        dto.cri_lab_histo_nombre_criterio ? criterio_lab_histotec.cri_lab_histo_nombre_criterio = dto.cri_lab_histo_nombre_criterio : criterio_lab_histotec.cri_lab_histo_nombre_criterio = criterio_lab_histotec.cri_lab_histo_nombre_criterio;
+
+        await this.criterioLabHistotecnologiaRepository.save(criterio_lab_histotec);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

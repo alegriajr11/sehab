@@ -51,10 +51,29 @@ async findById(crivac_id: number): Promise<CriterioDiagnostVascularEntity> {
     return cri_diagnos_vascu;
 }
 
-//ELIMINAR CRITERIO GIAGNOSTICO VASCULAR
+//ELIMINAR CRITERIO DIAGNOSTICO VASCULAR
 async delete(id: number): Promise<any> {
     const cri_diagnos_vascu = await this.findById(id);
     await this.criterioDiagnostVascularRepository.delete(cri_diagnos_vascu.crivac_id)
     return new MessageDto(`Criterio Eliminado`);
+}
+
+//ACTUALIZAR CRITERIOS DIAGNOSTICO VASCULAR
+async updateVascular(id: number, dto: CriterioDiagnostVascularDto): Promise<any> {
+    const criterio_diagnost_vascular = await this.findById(id);
+    if (!criterio_diagnost_vascular) {
+        throw new NotFoundException(new MessageDto('El criterio no existe'))
+    }
+    dto.cridiagv_modalidad ? criterio_diagnost_vascular.cridiagv_modalidad = dto.cridiagv_modalidad : criterio_diagnost_vascular.cridiagv_modalidad = criterio_diagnost_vascular.cridiagv_modalidad;
+    dto.cridiagv_complejidad ? criterio_diagnost_vascular.cridiagv_complejidad = dto.cridiagv_complejidad : criterio_diagnost_vascular.cridiagv_complejidad = criterio_diagnost_vascular.cridiagv_complejidad;
+    criterio_diagnost_vascular.cridiagv_articulo = dto.cridiagv_articulo !== undefined ? dto.cridiagv_articulo : "";
+    criterio_diagnost_vascular.cridiagv_seccion = dto.cridiagv_seccion !== undefined ? dto.cridiagv_seccion : "";
+    criterio_diagnost_vascular.cridiagv_apartado = dto.cridiagv_apartado !== undefined ? dto.cridiagv_apartado : "";
+    dto.cridiagv_nombre_criterio ? criterio_diagnost_vascular.cridiagv_nombre_criterio = dto.cridiagv_nombre_criterio : criterio_diagnost_vascular.cridiagv_nombre_criterio = criterio_diagnost_vascular.cridiagv_nombre_criterio;
+
+    await this.criterioDiagnostVascularRepository.save(criterio_diagnost_vascular);
+
+    return new MessageDto(`El criterio ha sido Actualizado`);
+
 }
 }   

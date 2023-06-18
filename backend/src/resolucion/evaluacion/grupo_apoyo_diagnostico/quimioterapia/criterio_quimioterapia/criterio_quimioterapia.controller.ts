@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriterioQuimioterapiaService } from './criterio_quimioterapia.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioQuimioterapiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/quimioterapia_dto/criterio_quimioterapia.dto';
@@ -30,5 +30,13 @@ export class CriterioQuimioterapiaController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criterioQuimioterapiaService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO   QUIMIOTERAPIA
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioQuimioterapiaDto) {
+        return await this.criterioQuimioterapiaService.updateQuimio(id, dto);
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosPatologiaService } from './criterios_patologia.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioPatologiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/patologia_dto/criterio_patologia.dto';
@@ -31,5 +31,13 @@ export class CriteriosPatologiaController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosPatologiaService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO   PATOLOGIA
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioPatologiaDto) {
+        return await this.criteriosPatologiaService.updatePatologia(id, dto);
     }
 }

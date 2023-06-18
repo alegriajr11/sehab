@@ -58,4 +58,23 @@ export class CriteriosExtGeneralService {
         await this.criterioExternaGeneralRepository.delete(criterio_ext_gene.criextg_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS EXTERNA GENERAL 
+    async updateConsulGene(id: number, dto: CriterioExternaGeneralDto): Promise<any> {
+        const criterio_ext_gene = await this.findById(id);
+        if (!criterio_ext_gene) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.criextg_modalidad ? criterio_ext_gene.criextg_modalidad = dto.criextg_modalidad : criterio_ext_gene.criextg_modalidad = criterio_ext_gene.criextg_modalidad;
+        dto.criextg_complejidad ? criterio_ext_gene.criextg_complejidad = dto.criextg_complejidad : criterio_ext_gene.criextg_complejidad = criterio_ext_gene.criextg_complejidad;
+        criterio_ext_gene.criextg_articulo = dto.criextg_articulo !== undefined ? dto.criextg_articulo : "";
+        criterio_ext_gene.criextg_seccion = dto.criextg_seccion !== undefined ? dto.criextg_seccion : "";
+        criterio_ext_gene.criextg_apartado = dto.criextg_apartado !== undefined ? dto.criextg_apartado : "";
+        dto.criextg_nombre_criterio ? criterio_ext_gene.criextg_nombre_criterio = dto.criextg_nombre_criterio : criterio_ext_gene.criextg_nombre_criterio = criterio_ext_gene.criextg_nombre_criterio;
+
+        await this.criterioExternaGeneralRepository.save(criterio_ext_gene);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

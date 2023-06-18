@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosMuesCuelloService } from './criterios_mues_cuello.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioCuelloUterinoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/toma_muestras_cuello_uterino_dto/criterio_tom_muest_cuello.dto';
@@ -30,5 +30,13 @@ export class CriteriosMuesCuelloController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosMuesCuelloService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO   TOMA MUESTAS CUELLO UTERINO
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioCuelloUterinoDto) {
+        return await this.criteriosMuesCuelloService.updateCuelloUte(id, dto);
     }
 }

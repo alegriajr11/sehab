@@ -56,4 +56,23 @@ export class CriteriosHospSaludMentalService {
         await this.criterioHospitalizacionMentalRepository.delete(criterio_hosp_ment.crihosp_ment_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS CUIDADO  HOSPITALIZACION MENTAL
+    async updatehospiment(id: number, dto: CriterioHospitalizacionMentalDto): Promise<any> {
+        const criterio_hosp_ment = await this.findById(id);
+        if (!criterio_hosp_ment) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.crihosp_ment_modalidad ? criterio_hosp_ment.crihosp_ment_modalidad = dto.crihosp_ment_modalidad : criterio_hosp_ment.crihosp_ment_modalidad = criterio_hosp_ment.crihosp_ment_modalidad;
+        dto.crihosp_ment_complejidad ? criterio_hosp_ment.crihosp_ment_complejidad = dto.crihosp_ment_complejidad : criterio_hosp_ment.crihosp_ment_complejidad = criterio_hosp_ment.crihosp_ment_complejidad;
+        criterio_hosp_ment.crihosp_ment_articulo = dto.crihosp_ment_articulo !== undefined ? dto.crihosp_ment_articulo : "";
+        criterio_hosp_ment.crihosp_ment_seccion = dto.crihosp_ment_seccion !== undefined ? dto.crihosp_ment_seccion : "";
+        criterio_hosp_ment.crihosp_ment_apartado = dto.crihosp_ment_apartado !== undefined ? dto.crihosp_ment_apartado : "";
+        dto.crihosp_ment_nombre_criterio ? criterio_hosp_ment.crihosp_ment_nombre_criterio = dto.crihosp_ment_nombre_criterio : criterio_hosp_ment.crihosp_ment_nombre_criterio = criterio_hosp_ment.crihosp_ment_nombre_criterio;
+
+        await this.criterioHospitalizacionMentalRepository.save(criterio_hosp_ment);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosExtEspecializadaService } from './criterios_ext_especializada.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioEspecializadaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_consulta_externa_dtos/externa_especializada_dto/criterio_especializada.dto';
@@ -27,10 +27,18 @@ export class CriteriosExtEspecializadaController {
         return this.criteriosExtEspecializadaService.create(id, dto);
     }
 
-    //ELIMINAR CRITERIO  TRANSPORTE ASISTENCIAL 
+    //ELIMINAR CRITERIO  EXTERNA ESPECIALIZADA 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosExtEspecializadaService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO  EXTERNA ESPECIALIZADA
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioEspecializadaDto) {
+        return await this.criteriosExtEspecializadaService.updateConsulExter(id, dto);
     }
 }

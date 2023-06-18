@@ -51,10 +51,29 @@ export class CriteriosExtEspecializadaService {
         return criterio_ext_esp;
     }
 
-    //ELIMINAR CRITERIO TRANSPORTE EXTERNA ESPECIALIZADA 
+    //ELIMINAR CRITERIO  EXTERNA ESPECIALIZADA 
     async delete(id: number): Promise<any> {
         const criterio_ext_esp = await this.findById(id);
         await this.criterioEspecializadaRepository.delete(criterio_ext_esp.criextg_id)
         return new MessageDto(`Criterio Eliminado`);
+    }
+
+    //ACTUALIZAR CRITERIOS EXTERNA ESPECIALIZADA 
+    async updateConsulExter(id: number, dto: CriterioEspecializadaDto): Promise<any> {
+        const criterio_ext_esp = await this.findById(id);
+        if (!criterio_ext_esp) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.criexte_modalidad ? criterio_ext_esp.criexte_modalidad = dto.criexte_modalidad : criterio_ext_esp.criexte_modalidad = criterio_ext_esp.criexte_modalidad;
+        dto.criexte_complejidad ? criterio_ext_esp.criexte_complejidad = dto.criexte_complejidad : criterio_ext_esp.criexte_complejidad = criterio_ext_esp.criexte_complejidad;
+        criterio_ext_esp.criexte_articulo = dto.criexte_articulo !== undefined ? dto.criexte_articulo : "";
+        criterio_ext_esp.criexte_seccion = dto.criexte_seccion !== undefined ? dto.criexte_seccion : "";
+        criterio_ext_esp.criexte_apartado = dto.criexte_apartado !== undefined ? dto.criexte_apartado : "";
+        dto.criexte_nombre_criterio ? criterio_ext_esp.criexte_nombre_criterio = dto.criexte_nombre_criterio : criterio_ext_esp.criexte_nombre_criterio = criterio_ext_esp.criexte_nombre_criterio;
+
+        await this.criterioEspecializadaRepository.save(criterio_ext_esp);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
     }
 }

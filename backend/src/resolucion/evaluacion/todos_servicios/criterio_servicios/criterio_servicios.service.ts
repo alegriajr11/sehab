@@ -62,4 +62,22 @@ export class CriterioServiciosService {
         await this.criterioServiciosRepository.delete(criterio_servicios.cris_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS CUIDADO  TODOS LOS SERVICIOS
+    async updatetodoserv(id: number, dto: CriterioServiciosDto): Promise<any> {
+        const criterio_servicios = await this.findById(id);
+        if (!criterio_servicios) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cris_modalidad ? criterio_servicios.cris_modalidad = dto.cris_modalidad : criterio_servicios.cris_modalidad = criterio_servicios.cris_modalidad;
+        criterio_servicios.cris_articulo = dto.cris_articulo !== undefined ? dto.cris_articulo : "";
+        criterio_servicios.cris_seccion = dto.cris_seccion !== undefined ? dto.cris_seccion : "";
+        criterio_servicios.cris_apartado = dto.cris_apartado !== undefined ? dto.cris_apartado : "";
+        dto.cris_nombre_criterio ? criterio_servicios.cris_nombre_criterio = dto.cris_nombre_criterio : criterio_servicios.cris_nombre_criterio = criterio_servicios.cris_nombre_criterio;
+
+        await this.criterioServiciosRepository.save(criterio_servicios);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

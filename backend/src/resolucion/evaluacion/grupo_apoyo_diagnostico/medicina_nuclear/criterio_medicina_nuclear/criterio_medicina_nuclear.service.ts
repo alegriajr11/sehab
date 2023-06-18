@@ -58,4 +58,23 @@ export class CriterioMedicinaNuclearService {
         await this.criterioMedicinaNuclearRepository.delete(cri_medi_nucl.crimed_nucl_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS  MEDICINA NUCLEAR 
+    async updateMed_Nucl(id: number, dto: CriterioMedicinaNuclearDto): Promise<any> {
+        const criterio_medicina_nuclear = await this.findById(id);
+        if (!criterio_medicina_nuclear) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        } 
+        dto.crimed_nucl_modalidad ? criterio_medicina_nuclear.crimed_nucl_modalidad = dto.crimed_nucl_modalidad : criterio_medicina_nuclear.crimed_nucl_modalidad = criterio_medicina_nuclear.crimed_nucl_modalidad;
+        dto.crimed_nucl_complejidad ? criterio_medicina_nuclear.crimed_nucl_complejidad = dto.crimed_nucl_complejidad : criterio_medicina_nuclear.crimed_nucl_complejidad = criterio_medicina_nuclear.crimed_nucl_complejidad;
+        criterio_medicina_nuclear.crimed_nucl_articulo = dto.crimed_nucl_articulo !== undefined ? dto.crimed_nucl_articulo : "";
+        criterio_medicina_nuclear.crimed_nucl_seccion = dto.crimed_nucl_seccion !== undefined ? dto.crimed_nucl_seccion : "";
+        criterio_medicina_nuclear.crimed_nucl_apartado = dto.crimed_nucl_apartado !== undefined ? dto.crimed_nucl_apartado : "";
+        dto.crimed_nucl_nombre_criterio ? criterio_medicina_nuclear.crimed_nucl_nombre_criterio = dto.crimed_nucl_nombre_criterio : criterio_medicina_nuclear.crimed_nucl_nombre_criterio = criterio_medicina_nuclear.crimed_nucl_nombre_criterio;
+
+        await this.criterioMedicinaNuclearRepository.save(criterio_medicina_nuclear);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

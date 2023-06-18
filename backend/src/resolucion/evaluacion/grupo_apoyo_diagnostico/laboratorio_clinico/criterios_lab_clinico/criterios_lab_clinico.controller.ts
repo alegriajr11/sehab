@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriteriosLabClinicoService } from './criterios_lab_clinico.service';
 import { CriterioLabClinicoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/laboratorio_clinico_dto/criterio_lab_clinico.dto';
@@ -31,5 +31,13 @@ export class CriteriosLabClinicoController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosLabClinicoService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO  LAB CLINICO
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioLabClinicoDto) {
+        return await this.criteriosLabClinicoService.updateLab_Cli(id, dto);
     }
 }

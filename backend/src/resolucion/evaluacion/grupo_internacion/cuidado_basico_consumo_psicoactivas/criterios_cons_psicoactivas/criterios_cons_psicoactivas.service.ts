@@ -57,4 +57,23 @@ export class CriteriosConsPsicoactivasService {
         await this.criterioConsumoPsicoactivasRepository.delete(criterio_cons_psic.cri_cons_psic_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS  CUIDADO BASICO PSICOACTIVAS 
+    async updatecuidpsico(id: number, dto: CriterioConsumoPsicoactivasDto): Promise<any> {
+        const criterio_cuid_cons_psicoact = await this.findById(id);
+        if (!criterio_cuid_cons_psicoact) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_cons_psic_modalidad ? criterio_cuid_cons_psicoact.cri_cons_psic_modalidad = dto.cri_cons_psic_modalidad : criterio_cuid_cons_psicoact.cri_cons_psic_modalidad = criterio_cuid_cons_psicoact.cri_cons_psic_modalidad;
+        dto.cri_cons_psic_complejidad ? criterio_cuid_cons_psicoact.cri_cons_psic_complejidad = dto.cri_cons_psic_complejidad : criterio_cuid_cons_psicoact.cri_cons_psic_complejidad = criterio_cuid_cons_psicoact.cri_cons_psic_complejidad;
+        criterio_cuid_cons_psicoact.cri_cons_psic_articulo = dto.cri_cons_psic_articulo !== undefined ? dto.cri_cons_psic_articulo : "";
+        criterio_cuid_cons_psicoact.cri_cons_psic_seccion = dto.cri_cons_psic_seccion !== undefined ? dto.cri_cons_psic_seccion : "";
+        criterio_cuid_cons_psicoact.cri_cons_psic_apartado = dto.cri_cons_psic_apartado !== undefined ? dto.cri_cons_psic_apartado : "";
+        dto.cri_cons_psic_nombre_criterio ? criterio_cuid_cons_psicoact.cri_cons_psic_nombre_criterio = dto.cri_cons_psic_nombre_criterio : criterio_cuid_cons_psicoact.cri_cons_psic_nombre_criterio = criterio_cuid_cons_psicoact.cri_cons_psic_nombre_criterio;
+
+        await this.criterioConsumoPsicoactivasRepository.save(criterio_cuid_cons_psicoact);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

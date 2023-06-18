@@ -57,4 +57,24 @@ export class CriteriosCuidBasicNeonatalService {
         await this.criterioCuidBasNeonatalRepository.delete(criterio_neona.cri_neona_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    
+    //ACTUALIZAR CRITERIOS CUIDADO BASICO NEO 
+    async updatecuidneo(id: number, dto: CriterioCuidBasNeonatalDto): Promise<any> {
+        const criterio_cuid_basic_neonatal = await this.findById(id);
+        if (!criterio_cuid_basic_neonatal) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_neona_modalidad ? criterio_cuid_basic_neonatal.cri_neona_modalidad = dto.cri_neona_modalidad : criterio_cuid_basic_neonatal.cri_neona_modalidad = criterio_cuid_basic_neonatal.cri_neona_modalidad;
+        dto.cri_neona_complejidad ? criterio_cuid_basic_neonatal.cri_neona_complejidad = dto.cri_neona_complejidad : criterio_cuid_basic_neonatal.cri_neona_complejidad = criterio_cuid_basic_neonatal.cri_neona_complejidad;
+        criterio_cuid_basic_neonatal.cri_neona_articulo = dto.cri_neona_articulo !== undefined ? dto.cri_neona_articulo : "";
+        criterio_cuid_basic_neonatal.cri_neona_seccion = dto.cri_neona_seccion !== undefined ? dto.cri_neona_seccion : "";
+        criterio_cuid_basic_neonatal.cri_neona_apartado = dto.cri_neona_apartado !== undefined ? dto.cri_neona_apartado : "";
+        dto.cri_neona_nombre_criterio ? criterio_cuid_basic_neonatal.cri_neona_nombre_criterio = dto.cri_neona_nombre_criterio : criterio_cuid_basic_neonatal.cri_neona_nombre_criterio = criterio_cuid_basic_neonatal.cri_neona_nombre_criterio;
+
+        await this.criterioCuidBasNeonatalRepository.save(criterio_cuid_basic_neonatal);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

@@ -60,5 +60,24 @@ export class CriteriosCuidInterPediatricoService {
         await this.criterioCuidIntermPediatricoRepository.delete(criterio_inter_pedia.cri_inter_pedia_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS CUIDADO INTERMEDIO PEDIATRICO
+    async updateinterpdi(id: number, dto: CriterioCuidIntermPediatricoDto): Promise<any> {
+        const criterio_cuid_inter_pedi = await this.findById(id);
+        if (!criterio_cuid_inter_pedi) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_inter_pedia_modalidad ? criterio_cuid_inter_pedi.cri_inter_pedia_modalidad = dto.cri_inter_pedia_modalidad : criterio_cuid_inter_pedi.cri_inter_pedia_modalidad = criterio_cuid_inter_pedi.cri_inter_pedia_modalidad;
+        dto.cri_inter_pedia_complejidad ? criterio_cuid_inter_pedi.cri_inter_pedia_complejidad = dto.cri_inter_pedia_complejidad : criterio_cuid_inter_pedi.cri_inter_pedia_complejidad = criterio_cuid_inter_pedi.cri_inter_pedia_complejidad;
+        criterio_cuid_inter_pedi.cri_inter_pedia_articulo = dto.cri_inter_pedia_articulo !== undefined ? dto.cri_inter_pedia_articulo : "";
+        criterio_cuid_inter_pedi.cri_inter_pedia_seccion = dto.cri_inter_pedia_seccion !== undefined ? dto.cri_inter_pedia_seccion : "";
+        criterio_cuid_inter_pedi.cri_inter_pedia_apartado = dto.cri_inter_pedia_apartado !== undefined ? dto.cri_inter_pedia_apartado : "";
+        dto.cri_inter_pedia_nombre_criterio ? criterio_cuid_inter_pedi.cri_inter_pedia_nombre_criterio = dto.cri_inter_pedia_nombre_criterio : criterio_cuid_inter_pedi.cri_inter_pedia_nombre_criterio = criterio_cuid_inter_pedi.cri_inter_pedia_nombre_criterio;
+
+        await this.criterioCuidIntermPediatricoRepository.save(criterio_cuid_inter_pedi);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }
 

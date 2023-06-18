@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosPartoService } from './criterios_parto.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioPartoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_atencion_inmediata_dtos/parto_dto/criterio_parto.dto';
@@ -25,10 +25,19 @@ export class CriteriosPartoController {
         return this.criteriosPartoService.create(id, dto);
     }
 
-    //ELIMINAR CRITERIO  TOMA MUESTAS CUELLO UTERINO
+    //ELIMINAR CRITERIO  PARTO
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosPartoService.delete(id);
+    }
+
+    
+    //ACTUALIZAR UN CRITERIO  PARTO
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioPartoDto) {
+        return await this.criteriosPartoService.updateParto(id, dto);
     }
 }

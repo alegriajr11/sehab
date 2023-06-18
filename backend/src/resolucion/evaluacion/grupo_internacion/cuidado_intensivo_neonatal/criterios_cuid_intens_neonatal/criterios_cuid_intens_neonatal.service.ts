@@ -56,5 +56,24 @@ export class CriteriosCuidIntensNeonatalService {
         await this.criterioCuidInteNeonatalRepository.delete(criterio_int_neona.cri_neona_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS CUIDADO INTENSIVO NEONATAL
+    async updateintenneo(id: number, dto: CriterioCuidInteNeonatalDto): Promise<any> {
+        const criterio_cuid_intens_neo = await this.findById(id);
+        if (!criterio_cuid_intens_neo) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_neona_modalidad ? criterio_cuid_intens_neo.cri_neona_modalidad = dto.cri_neona_modalidad : criterio_cuid_intens_neo.cri_neona_modalidad = criterio_cuid_intens_neo.cri_neona_modalidad;
+        dto.cri_neona_complejidad ? criterio_cuid_intens_neo.cri_neona_complejidad = dto.cri_neona_complejidad : criterio_cuid_intens_neo.cri_neona_complejidad = criterio_cuid_intens_neo.cri_neona_complejidad;
+        criterio_cuid_intens_neo.cri_neona_articulo = dto.cri_neona_articulo !== undefined ? dto.cri_neona_articulo : "";
+        criterio_cuid_intens_neo.cri_neona_seccion = dto.cri_neona_seccion !== undefined ? dto.cri_neona_seccion : "";
+        criterio_cuid_intens_neo.cri_neona_apartado = dto.cri_neona_apartado !== undefined ? dto.cri_neona_apartado : "";
+        dto.cri_neona_nombre_criterio ? criterio_cuid_intens_neo.cri_neona_nombre_criterio = dto.cri_neona_nombre_criterio : criterio_cuid_intens_neo.cri_neona_nombre_criterio = criterio_cuid_intens_neo.cri_neona_nombre_criterio;
+
+        await this.criterioCuidInteNeonatalRepository.save(criterio_cuid_intens_neo);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }
 

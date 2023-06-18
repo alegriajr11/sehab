@@ -56,4 +56,23 @@ export class CriteriosHemodIntervenService {
         await this.criterioHermoIntervenRepository.delete(cri_hemodi.criherminte_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+     //ACTUALIZAR CRITERIOS HEMODINAMINIA
+     async updateHemo(id: number, dto: CriterioHermodinamiaIntervenDto): Promise<any> {
+        const criterio_hemo_inter = await this.findById(id);
+        if (!criterio_hemo_inter) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.criherminte_modalidad ? criterio_hemo_inter.criherminte_modalidad = dto.criherminte_modalidad : criterio_hemo_inter.criherminte_modalidad = criterio_hemo_inter.criherminte_modalidad;
+        dto.criherminte_complejidad ? criterio_hemo_inter.criherminte_complejidad = dto.criherminte_complejidad : criterio_hemo_inter.criherminte_complejidad = criterio_hemo_inter.criherminte_complejidad;
+        criterio_hemo_inter.criherminte_articulo = dto.criherminte_articulo !== undefined ? dto.criherminte_articulo : "";
+        criterio_hemo_inter.criherminte_seccion = dto.criherminte_seccion !== undefined ? dto.criherminte_seccion : "";
+        criterio_hemo_inter.criherminte_apartado = dto.criherminte_apartado !== undefined ? dto.criherminte_apartado : "";
+        dto.criherminte_nombre_criterio ? criterio_hemo_inter.criherminte_nombre_criterio = dto.criherminte_nombre_criterio : criterio_hemo_inter.criherminte_nombre_criterio = criterio_hemo_inter.criherminte_nombre_criterio;
+
+        await this.criterioHermoIntervenRepository.save(criterio_hemo_inter);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

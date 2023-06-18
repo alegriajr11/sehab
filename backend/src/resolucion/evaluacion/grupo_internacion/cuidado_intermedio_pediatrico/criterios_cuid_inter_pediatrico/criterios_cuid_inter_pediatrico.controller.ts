@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosCuidInterPediatricoService } from './criterios_cuid_inter_pediatrico.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioCuidIntermPediatricoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_intermedio_pediatrico_dto/criterio_cuid_inter_pediatrico.dto';
@@ -32,5 +32,13 @@ export class CriteriosCuidInterPediatricoController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosCuidInterPediatricoService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO CUIDADO INTENSIVO PEDIATRICO
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioCuidIntermPediatricoDto) {
+        return await this.criteriosCuidInterPediatricoService.updateinterpdi(id, dto);
     }
 }

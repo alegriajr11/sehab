@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriterioSFarmaceuticoService } from './criterio_s_farmaceutico.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioSerFarmaceuticoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/servicio_farmaceutico_dto/criterios_s_farmaceutico.dto';
@@ -31,5 +31,13 @@ export class CriterioSFarmaceuticoController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criterioSFarmaceuticoService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO   SERVICIO FARMACEUTICO
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioSerFarmaceuticoDto) {
+        return await this.criterioSFarmaceuticoService.updateFarma(id, dto);
     }
 }

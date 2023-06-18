@@ -51,10 +51,30 @@ export class CriterioQuimioterapiaService {
         return cri_quimio;
     }
 
-    //ELIMINAR CRITERIO PQUIMIOTERAPIA
+    //ELIMINAR CRITERIO QUIMIOTERAPIA
     async delete(id: number): Promise<any> {
         const cri_quimio = await this.findById(id);
         await this.criterioQuimioterapiaRepository.delete(cri_quimio.criquim_id)
         return new MessageDto(`Criterio Eliminado`);
+    }
+
+    
+    //ACTUALIZAR CRITERIOS QUIMIOTERAPIA
+    async updateQuimio(id: number, dto: CriterioQuimioterapiaDto): Promise<any> {
+        const criterio_quimioterapia = await this.findById(id);
+        if (!criterio_quimioterapia) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        } 
+        dto.criquim_modalidad ? criterio_quimioterapia.criquim_modalidad = dto.criquim_modalidad : criterio_quimioterapia.criquim_modalidad = criterio_quimioterapia.criquim_modalidad;
+        dto.criquim_complejidad ? criterio_quimioterapia.criquim_complejidad = dto.criquim_complejidad : criterio_quimioterapia.criquim_complejidad = criterio_quimioterapia.criquim_complejidad;
+        criterio_quimioterapia.criquim_articulo = dto.criquim_articulo !== undefined ? dto.criquim_articulo : "";
+        criterio_quimioterapia.criquim_seccion = dto.criquim_seccion !== undefined ? dto.criquim_seccion : "";
+        criterio_quimioterapia.criquim_apartado = dto.criquim_apartado !== undefined ? dto.criquim_apartado : "";
+        dto.criquim_nombre_criterio ? criterio_quimioterapia.criquim_nombre_criterio = dto.criquim_nombre_criterio : criterio_quimioterapia.criquim_nombre_criterio = criterio_quimioterapia.criquim_nombre_criterio;
+
+        await this.criterioQuimioterapiaRepository.save(criterio_quimioterapia);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
     }
 }

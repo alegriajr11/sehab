@@ -57,4 +57,23 @@ export class CriteriosTomMuestrasService {
         await this.criterioMuestraLabClinicoRepository.delete(criterio_mue_lab_cli.cri_muest_cli_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS TOMA MUESTAS CUELLO UTERINO
+    async updateTomaMues(id: number, dto: CriterioMuestraLabClinicoDto): Promise<any> {
+        const criterio_tom_muestras = await this.findById(id);
+        if (!criterio_tom_muestras) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_muest_cli_modalidad ? criterio_tom_muestras.cri_muest_cli_modalidad = dto.cri_muest_cli_modalidad : criterio_tom_muestras.cri_muest_cli_modalidad = criterio_tom_muestras.cri_muest_cli_modalidad;
+        dto.cri_muest_cli_complejidad ? criterio_tom_muestras.cri_muest_cli_complejidad = dto.cri_muest_cli_complejidad : criterio_tom_muestras.cri_muest_cli_complejidad = criterio_tom_muestras.cri_muest_cli_complejidad;
+        criterio_tom_muestras.cri_muest_cli_articulo = dto.cri_muest_cli_articulo !== undefined ? dto.cri_muest_cli_articulo : "";
+        criterio_tom_muestras.cri_muest_cli_seccion = dto.cri_muest_cli_seccion !== undefined ? dto.cri_muest_cli_seccion : "";
+        criterio_tom_muestras.cri_muest_cli_apartado = dto.cri_muest_cli_apartado !== undefined ? dto.cri_muest_cli_apartado : "";
+        dto.cri_muest_cli_nombre_criterio ? criterio_tom_muestras.cri_muest_cli_nombre_criterio = dto.cri_muest_cli_nombre_criterio : criterio_tom_muestras.cri_muest_cli_nombre_criterio = criterio_tom_muestras.cri_muest_cli_nombre_criterio;
+
+        await this.criterioMuestraLabClinicoRepository.save(criterio_tom_muestras);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

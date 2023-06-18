@@ -57,4 +57,23 @@ export class CriterioRadioOdontService {
         await this.criterioRadiologiaOdontoRepository.delete(cri_radiolo.crirad_odon_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS RADIOLOGIA ODOCTOLOGICA
+    async updateRadio_Odon(id: number, dto: CriterioRadiologiaOdontoDto): Promise<any> {
+        const criterio_radio_odont = await this.findById(id);
+        if (!criterio_radio_odont) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.crirad_odon_modalidad ? criterio_radio_odont.crirad_odon_modalidad = dto.crirad_odon_modalidad : criterio_radio_odont.crirad_odon_modalidad = criterio_radio_odont.crirad_odon_modalidad;
+        dto.crirad_odon_complejidad ? criterio_radio_odont.crirad_odon_complejidad = dto.crirad_odon_complejidad : criterio_radio_odont.crirad_odon_complejidad = criterio_radio_odont.crirad_odon_complejidad;
+        criterio_radio_odont.crirad_odon_articulo = dto.crirad_odon_articulo !== undefined ? dto.crirad_odon_articulo : "";
+        criterio_radio_odont.crirad_odon_seccion = dto.crirad_odon_seccion !== undefined ? dto.crirad_odon_seccion : "";
+        criterio_radio_odont.crirad_odon_apartado = dto.crirad_odon_apartado !== undefined ? dto.crirad_odon_apartado : "";
+        dto.crirad_odon_nombre_criterio ? criterio_radio_odont.crirad_odon_nombre_criterio = dto.crirad_odon_nombre_criterio : criterio_radio_odont.crirad_odon_nombre_criterio = criterio_radio_odont.crirad_odon_nombre_criterio;
+
+        await this.criterioRadiologiaOdontoRepository.save(criterio_radio_odont);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

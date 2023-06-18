@@ -58,4 +58,23 @@ export class CriterioTerapiasService {
         await this.criterioTerapiaRepository.delete(criterio_terapia.criter_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS TERAPIAS
+    async updateTerapia(id: number, dto: CriterioTerapiaDto): Promise<any> {
+        const criterio_terapia = await this.findById(id);
+        if (!criterio_terapia) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.criter_modalidad ? criterio_terapia.criter_modalidad = dto.criter_modalidad : criterio_terapia.criter_modalidad = criterio_terapia.criter_modalidad;
+        dto.criter_complejidad ? criterio_terapia.criter_complejidad = dto.criter_complejidad : criterio_terapia.criter_complejidad = criterio_terapia.criter_complejidad;
+        criterio_terapia.criter_articulo = dto.criter_articulo !== undefined ? dto.criter_articulo : "";
+        criterio_terapia.criter_seccion = dto.criter_seccion !== undefined ? dto.criter_seccion : "";
+        criterio_terapia.criter_apartado = dto.criter_apartado !== undefined ? dto.criter_apartado : "";
+        dto.criter_nombre_criterio ? criterio_terapia.criter_nombre_criterio = dto.criter_nombre_criterio : criterio_terapia.criter_nombre_criterio = criterio_terapia.criter_nombre_criterio;
+
+        await this.criterioTerapiaRepository.save(criterio_terapia);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

@@ -43,7 +43,7 @@ export class CriterioSFarmaceuticoService {
         return new MessageDto('El criterio ha sido Creado Correctamente');
     }
 
-    //ENCONTRAR POR ID - CRITERIO RADIOTERAPIA
+    //ENCONTRAR POR ID - CRITERIO SERVICIO FARMACEUTICO
     async findById(criser_farm_id: number): Promise<CriterioSerFarmaceuticoEntity> {
         const criterio_ser_farm = await this.criterioSerFarmaceuticoRepository.findOne({ where: { criser_farm_id } });
         if (!criterio_ser_farm) {
@@ -52,10 +52,29 @@ export class CriterioSFarmaceuticoService {
         return criterio_ser_farm;
     }
 
-    //ELIMINAR CRITERIO RADIOTERAPIA
+    //ELIMINAR CRITERIO SERVICIO FARMACEUTICO
     async delete(id: number): Promise<any> {
         const criterio_ser_farm = await this.findById(id);
         await this.criterioSerFarmaceuticoRepository.delete(criterio_ser_farm.criser_farm_id)
         return new MessageDto(`Criterio Eliminado`);
+    }
+
+    //ACTUALIZAR CRITERIOS SERVICIO FARMACEUTICO
+    async updateFarma(id: number, dto: CriterioSerFarmaceuticoDto): Promise<any> {
+        const criterio_ser_farm = await this.findById(id);
+        if (!criterio_ser_farm) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.criser_farm_modalidad ? criterio_ser_farm.criser_farm_modalidad = dto.criser_farm_modalidad : criterio_ser_farm.criser_farm_modalidad = criterio_ser_farm.criser_farm_modalidad;
+        dto.criser_farm_complejidad ? criterio_ser_farm.criser_farm_complejidad = dto.criser_farm_complejidad : criterio_ser_farm.criser_farm_complejidad = criterio_ser_farm.criser_farm_complejidad;
+        criterio_ser_farm.criser_farm_articulo = dto.criser_farm_articulo !== undefined ? dto.criser_farm_articulo : "";
+        criterio_ser_farm.criser_farm_seccion = dto.criser_farm_seccion !== undefined ? dto.criser_farm_seccion : "";
+        criterio_ser_farm.criser_farm_apartado = dto.criser_farm_apartado !== undefined ? dto.criser_farm_apartado : "";
+        dto.criser_farm_nombre_criterio ? criterio_ser_farm.criser_farm_nombre_criterio = dto.criser_farm_nombre_criterio : criterio_ser_farm.criser_farm_nombre_criterio = criterio_ser_farm.criser_farm_nombre_criterio;
+
+        await this.criterioSerFarmaceuticoRepository.save(criterio_ser_farm);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
     }
 }

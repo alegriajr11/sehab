@@ -16,45 +16,64 @@ export class CriterioImgRadIonizantesService {
         private readonly imgRadIonizantesRepository: ImgRadIonizantesRepository,
     ) { }
 
-        //LISTANDO CRITERIOS POR ESTANDAR
-async getCriterioForEstandar(id: number): Promise<CriterioImgRadIonizantesEntity[]> {
-    const cri_img_rad_ion = await this.criterioImgRadIonizanteRepository.createQueryBuilder('criterio')
-    .select(['criterio', 'imgrad_ionizante.imgradion_nombre_estandar'])
-    .innerJoin('criterio.imgrad_ionizante', 'imgrad_ionizante')
-    .where('imgrad_ionizante.imgradion_id = :ima_est', { ima_est : id})
-    .getMany()
-    if (!cri_img_rad_ion) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-    return cri_img_rad_ion
-}
-
-//METODO AGREGAR CRITERIO-HEMODINamia
-async create(imgradion_id: number, dto: CriterioImgRadIonizantesDto): Promise<any> {
-    const imaioni = await this.imgRadIonizantesRepository.findOne({ where: { imgradion_id: imgradion_id} });
-    if (!imaioni) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-    //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-    const criterioimaioni = this.criterioImgRadIonizanteRepository.create(dto)
-    //ASIGNAMOS EL ESTANDAR AL CRITERIO
-    criterioimaioni.imgrad_ionizante = imaioni
-    //GUARDAR LOS DATOS EN LA BD
-    await this.criterioImgRadIonizanteRepository.save(criterioimaioni)
-    return new MessageDto('El criterio ha sido Creado Correctamente');
-}
-
-//ENCONTRAR POR ID - CRITERIO IMAGENES DIAGNOSTICAS RAD IONIZANTES
-async findById(cri_imgioni_id: number): Promise<CriterioImgRadIonizantesEntity> {
-    const cri_ima_ioni = await this.criterioImgRadIonizanteRepository.findOne({ where: { cri_imgioni_id } });
-    if (!cri_ima_ioni) {
-        throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+    //LISTANDO CRITERIOS POR ESTANDAR
+    async getCriterioForEstandar(id: number): Promise<CriterioImgRadIonizantesEntity[]> {
+        const cri_img_rad_ion = await this.criterioImgRadIonizanteRepository.createQueryBuilder('criterio')
+            .select(['criterio', 'imgrad_ionizante.imgradion_nombre_estandar'])
+            .innerJoin('criterio.imgrad_ionizante', 'imgrad_ionizante')
+            .where('imgrad_ionizante.imgradion_id = :ima_est', { ima_est: id })
+            .getMany()
+        if (!cri_img_rad_ion) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cri_img_rad_ion
     }
-    return cri_ima_ioni;
-}
 
-//ELIMINAR CRITERIO IMAGENES DIAGNOSTICAS RAD IONIZANTES
-async delete(id: number): Promise<any> {
-    const cri_ima_ioni = await this.findById(id);
-    await this.criterioImgRadIonizanteRepository.delete(cri_ima_ioni.cri_imgioni_id)
-    return new MessageDto(`Criterio Eliminado`);
-}
+    //METODO AGREGAR CRITERIO-HEMODINamia
+    async create(imgradion_id: number, dto: CriterioImgRadIonizantesDto): Promise<any> {
+        const imaioni = await this.imgRadIonizantesRepository.findOne({ where: { imgradion_id: imgradion_id } });
+        if (!imaioni) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+        const criterioimaioni = this.criterioImgRadIonizanteRepository.create(dto)
+        //ASIGNAMOS EL ESTANDAR AL CRITERIO
+        criterioimaioni.imgrad_ionizante = imaioni
+        //GUARDAR LOS DATOS EN LA BD
+        await this.criterioImgRadIonizanteRepository.save(criterioimaioni)
+        return new MessageDto('El criterio ha sido Creado Correctamente');
+    }
+
+    //ENCONTRAR POR ID - CRITERIO IMAGENES DIAGNOSTICAS RAD IONIZANTES
+    async findById(cri_imgioni_id: number): Promise<CriterioImgRadIonizantesEntity> {
+        const cri_ima_ioni = await this.criterioImgRadIonizanteRepository.findOne({ where: { cri_imgioni_id } });
+        if (!cri_ima_ioni) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return cri_ima_ioni;
+    }
+
+    //ELIMINAR CRITERIO IMAGENES DIAGNOSTICAS RAD IONIZANTES
+    async delete(id: number): Promise<any> {
+        const cri_ima_ioni = await this.findById(id);
+        await this.criterioImgRadIonizanteRepository.delete(cri_ima_ioni.cri_imgioni_id)
+        return new MessageDto(`Criterio Eliminado`);
+    }
+
+    //ACTUALIZAR CRITERIOS IMAGENES DIAGNOSTICAS RAD IONIZANTES
+    async updateIma_Rad(id: number, dto: CriterioImgRadIonizantesDto): Promise<any> {
+        const criterio_img_rad_ionizantes = await this.findById(id);
+        if (!criterio_img_rad_ionizantes) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_imgioni_modalidad ? criterio_img_rad_ionizantes.cri_imgioni_modalidad = dto.cri_imgioni_modalidad : criterio_img_rad_ionizantes.cri_imgioni_modalidad = criterio_img_rad_ionizantes.cri_imgioni_modalidad;
+        dto.cri_imgioni_complejidad ? criterio_img_rad_ionizantes.cri_imgioni_complejidad = dto.cri_imgioni_complejidad : criterio_img_rad_ionizantes.cri_imgioni_complejidad = criterio_img_rad_ionizantes.cri_imgioni_complejidad;
+        criterio_img_rad_ionizantes.cri_imgioni_articulo = dto.cri_imgioni_articulo !== undefined ? dto.cri_imgioni_articulo : "";
+        criterio_img_rad_ionizantes.cri_imgioni_seccion = dto.cri_imgioni_seccion !== undefined ? dto.cri_imgioni_seccion : "";
+        criterio_img_rad_ionizantes.cri_imgioni_apartado = dto.cri_imgioni_apartado !== undefined ? dto.cri_imgioni_apartado : "";
+        dto.cri_imgioni_nombre_criterio ? criterio_img_rad_ionizantes.cri_imgioni_nombre_criterio = dto.cri_imgioni_nombre_criterio : criterio_img_rad_ionizantes.cri_imgioni_nombre_criterio = criterio_img_rad_ionizantes.cri_imgioni_nombre_criterio;
+
+        await this.criterioImgRadIonizanteRepository.save(criterio_img_rad_ionizantes);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }
 
 

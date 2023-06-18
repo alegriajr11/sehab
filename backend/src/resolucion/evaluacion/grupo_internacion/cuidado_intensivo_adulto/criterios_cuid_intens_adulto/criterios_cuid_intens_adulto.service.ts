@@ -55,4 +55,23 @@ export class CriteriosCuidIntensAdultoService {
         await this.criterioCuidIntensAdultoRepository.delete(criterio_int_adult.cri_int_adult_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS CUIDADO INTENSIVO ADULTO
+    async updateintenadult(id: number, dto: CriterioCuidIntensAdultoDto): Promise<any> {
+        const criterio_cuid_intens_adulto = await this.findById(id);
+        if (!criterio_cuid_intens_adulto) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_int_adult_modalidad ? criterio_cuid_intens_adulto.cri_int_adult_modalidad = dto.cri_int_adult_modalidad : criterio_cuid_intens_adulto.cri_int_adult_modalidad = criterio_cuid_intens_adulto.cri_int_adult_modalidad;
+        dto.cri_int_adult_complejidad ? criterio_cuid_intens_adulto.cri_int_adult_complejidad = dto.cri_int_adult_complejidad : criterio_cuid_intens_adulto.cri_int_adult_complejidad = criterio_cuid_intens_adulto.cri_int_adult_complejidad;
+        criterio_cuid_intens_adulto.cri_int_adult_articulo = dto.cri_int_adult_articulo !== undefined ? dto.cri_int_adult_articulo : "";
+        criterio_cuid_intens_adulto.cri_int_adult_seccion = dto.cri_int_adult_seccion !== undefined ? dto.cri_int_adult_seccion : "";
+        criterio_cuid_intens_adulto.cri_int_adult_apartado = dto.cri_int_adult_apartado !== undefined ? dto.cri_int_adult_apartado : "";
+        dto.cri_int_adult_nombre_criterio ? criterio_cuid_intens_adulto.cri_int_adult_nombre_criterio = dto.cri_int_adult_nombre_criterio : criterio_cuid_intens_adulto.cri_int_adult_nombre_criterio = criterio_cuid_intens_adulto.cri_int_adult_nombre_criterio;
+
+        await this.criterioCuidIntensAdultoRepository.save(criterio_cuid_intens_adulto);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

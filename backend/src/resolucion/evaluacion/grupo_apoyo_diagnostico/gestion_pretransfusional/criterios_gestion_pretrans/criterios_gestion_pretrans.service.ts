@@ -56,4 +56,23 @@ export class CriteriosGestionPretransService {
         await this.criterioGestionPretransfusionalRepository.delete(cri_pretrans.crigestpre_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS PRETRANSFUNSIONAL
+    async updateGestion(id: number, dto: CriterioGestionPretransfusionalDto): Promise<any> {
+        const criterio_gestion_pretrans = await this.findById(id);
+        if (!criterio_gestion_pretrans) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.crigestpre_modalidad ? criterio_gestion_pretrans.crigestpre_modalidad = dto.crigestpre_modalidad : criterio_gestion_pretrans.crigestpre_modalidad = criterio_gestion_pretrans.crigestpre_modalidad;
+        dto.crigestpre_complejidad ? criterio_gestion_pretrans.crigestpre_complejidad = dto.crigestpre_complejidad : criterio_gestion_pretrans.crigestpre_complejidad = criterio_gestion_pretrans.crigestpre_complejidad;
+        criterio_gestion_pretrans.crigestpre_articulo = dto.crigestpre_articulo !== undefined ? dto.crigestpre_articulo : "";
+        criterio_gestion_pretrans.crigestpre_seccion = dto.crigestpre_seccion !== undefined ? dto.crigestpre_seccion : "";
+        criterio_gestion_pretrans.crigestpre_apartado = dto.crigestpre_apartado !== undefined ? dto.crigestpre_apartado : "";
+        dto.crigestpre_nombre_criterio ? criterio_gestion_pretrans.crigestpre_nombre_criterio = dto.crigestpre_nombre_criterio : criterio_gestion_pretrans.crigestpre_nombre_criterio = criterio_gestion_pretrans.crigestpre_nombre_criterio;
+
+        await this.criterioGestionPretransfusionalRepository.save(criterio_gestion_pretrans);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

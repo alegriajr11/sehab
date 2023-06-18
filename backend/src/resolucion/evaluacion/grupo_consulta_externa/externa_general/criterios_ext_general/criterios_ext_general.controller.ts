@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosExtGeneralService } from './criterios_ext_general.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioExternaGeneralDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_consulta_externa_dtos/externa_general_dto/criterio_ext_general.dto';
@@ -31,5 +31,13 @@ export class CriteriosExtGeneralController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosExtGeneralService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO  EXTERNA GENERAL
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioExternaGeneralDto) {
+        return await this.criteriosExtGeneralService.updateConsulGene(id, dto);
     }
 }

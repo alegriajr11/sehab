@@ -56,4 +56,23 @@ export class CriteriosPartoService {
         await this.criterioPartoRepository.delete(criterio_parto.criparto_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS PARTO
+    async updateParto(id: number, dto: CriterioPartoDto): Promise<any> {
+        const criterio_parto = await this.findById(id);
+        if (!criterio_parto) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.criparto_modalidad ? criterio_parto.criparto_modalidad = dto.criparto_modalidad : criterio_parto.criparto_modalidad = criterio_parto.criparto_modalidad;
+        dto.criparto_complejidad ? criterio_parto.criparto_complejidad = dto.criparto_complejidad : criterio_parto.criparto_complejidad = criterio_parto.criparto_complejidad;
+        criterio_parto.criparto_articulo = dto.criparto_articulo !== undefined ? dto.criparto_articulo : "";
+        criterio_parto.criparto_seccion = dto.criparto_seccion !== undefined ? dto.criparto_seccion : "";
+        criterio_parto.criparto_apartado = dto.criparto_apartado !== undefined ? dto.criparto_apartado : "";
+        dto.criparto_nombre_criterio ? criterio_parto.criparto_nombre_criterio = dto.criparto_nombre_criterio : criterio_parto.criparto_nombre_criterio = criterio_parto.criparto_nombre_criterio;
+
+        await this.criterioPartoRepository.save(criterio_parto);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

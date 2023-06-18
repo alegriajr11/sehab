@@ -57,4 +57,23 @@ export class CriteriosLabClinicoService {
         await this.criterioLabClinicoRepository.delete(cri_lab_cli.cri_lab_cli_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS  CITOLOGIAS CLINICO
+    async updateLab_Cli(id: number, dto: CriterioLabClinicoDto): Promise<any> {
+        const criterio_lab_clinico = await this.findById(id);
+        if (!criterio_lab_clinico) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_lab_cli_modalidad ? criterio_lab_clinico.cri_lab_cli_modalidad = dto.cri_lab_cli_modalidad : criterio_lab_clinico.cri_lab_cli_modalidad = criterio_lab_clinico.cri_lab_cli_modalidad;
+        dto.cri_lab_cli_complejidad ? criterio_lab_clinico.cri_lab_cli_complejidad = dto.cri_lab_cli_complejidad : criterio_lab_clinico.cri_lab_cli_complejidad = criterio_lab_clinico.cri_lab_cli_complejidad;
+        criterio_lab_clinico.cri_lab_cli_articulo = dto.cri_lab_cli_articulo !== undefined ? dto.cri_lab_cli_articulo : "";
+        criterio_lab_clinico.cri_lab_cli_seccion = dto.cri_lab_cli_seccion !== undefined ? dto.cri_lab_cli_seccion : "";
+        criterio_lab_clinico.cri_lab_cli_apartado = dto.cri_lab_cli_apartado !== undefined ? dto.cri_lab_cli_apartado : "";
+        dto.cri_lab_cli_nombre_criterio ? criterio_lab_clinico.cri_lab_cli_nombre_criterio = dto.cri_lab_cli_nombre_criterio : criterio_lab_clinico.cri_lab_cli_nombre_criterio = criterio_lab_clinico.cri_lab_cli_nombre_criterio;
+
+        await this.criterioLabClinicoRepository.save(criterio_lab_clinico);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

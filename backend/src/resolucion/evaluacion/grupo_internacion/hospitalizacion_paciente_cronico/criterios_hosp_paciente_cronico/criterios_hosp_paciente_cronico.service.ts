@@ -56,4 +56,23 @@ export class CriteriosHospPacienteCronicoService {
         await this.criterioHospitCronicoRepository.delete(criterio_hosp_cron.crihosp_cron_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS CUIDADO  HOSPITALIZACION PACIENTE CRONIC
+    async updatehospicron(id: number, dto: CriterioHospitCronicoDto): Promise<any> {
+        const criterio_hosp_paciente_cron = await this.findById(id);
+        if (!criterio_hosp_paciente_cron) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.crihosp_cron_modalidad ? criterio_hosp_paciente_cron.crihosp_cron_modalidad = dto.crihosp_cron_modalidad : criterio_hosp_paciente_cron.crihosp_cron_modalidad = criterio_hosp_paciente_cron.crihosp_cron_modalidad;
+        dto.crihosp_cron_complejidad ? criterio_hosp_paciente_cron.crihosp_cron_complejidad = dto.crihosp_cron_complejidad : criterio_hosp_paciente_cron.crihosp_cron_complejidad = criterio_hosp_paciente_cron.crihosp_cron_complejidad;
+        criterio_hosp_paciente_cron.crihosp_cron_articulo = dto.crihosp_cron_articulo !== undefined ? dto.crihosp_cron_articulo : "";
+        criterio_hosp_paciente_cron.crihosp_cron_seccion = dto.crihosp_cron_seccion !== undefined ? dto.crihosp_cron_seccion : "";
+        criterio_hosp_paciente_cron.crihosp_cron_apartado = dto.crihosp_cron_apartado !== undefined ? dto.crihosp_cron_apartado : "";
+        dto.crihosp_cron_nombre_criterio ? criterio_hosp_paciente_cron.crihosp_cron_nombre_criterio = dto.crihosp_cron_nombre_criterio : criterio_hosp_paciente_cron.crihosp_cron_nombre_criterio = criterio_hosp_paciente_cron.crihosp_cron_nombre_criterio;
+
+        await this.criterioHospitCronicoRepository.save(criterio_hosp_paciente_cron);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

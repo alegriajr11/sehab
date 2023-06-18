@@ -56,4 +56,23 @@ export class CriteriosHospParcialService {
         await this.criterioHospitalizacionParcialRepository.delete(criterio_hosp_parc.crihosp_parc_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS CUIDADO  HOSPITALIZACION PARCIAL
+    async updatehospipar(id: number, dto: CriterioHospitalizacionParcialDto): Promise<any> {
+        const criterio_hosp_parc = await this.findById(id);
+        if (!criterio_hosp_parc) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.crihosp_parc_modalidad ? criterio_hosp_parc.crihosp_parc_modalidad = dto.crihosp_parc_modalidad : criterio_hosp_parc.crihosp_parc_modalidad = criterio_hosp_parc.crihosp_parc_modalidad;
+        dto.crihosp_parc_complejidad ? criterio_hosp_parc.crihosp_parc_complejidad = dto.crihosp_parc_complejidad : criterio_hosp_parc.crihosp_parc_complejidad = criterio_hosp_parc.crihosp_parc_complejidad;
+        criterio_hosp_parc.crihosp_parc_articulo = dto.crihosp_parc_articulo !== undefined ? dto.crihosp_parc_articulo : "";
+        criterio_hosp_parc.crihosp_parc_seccion = dto.crihosp_parc_seccion !== undefined ? dto.crihosp_parc_seccion : "";
+        criterio_hosp_parc.crihosp_parc_apartado = dto.crihosp_parc_apartado !== undefined ? dto.crihosp_parc_apartado : "";
+        dto.crihosp_parc_nombre_criterio ? criterio_hosp_parc.crihosp_parc_nombre_criterio = dto.crihosp_parc_nombre_criterio : criterio_hosp_parc.crihosp_parc_nombre_criterio = criterio_hosp_parc.crihosp_parc_nombre_criterio;
+
+        await this.criterioHospitalizacionParcialRepository.save(criterio_hosp_parc);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

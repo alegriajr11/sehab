@@ -58,4 +58,23 @@ export class CriteriosTransAsistencialService {
         await this.criterioTranspAsistencialRepository.delete(criterio_trans_asist.cri_trans_asis_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS TRANSPORTE ASISTENCIAL 
+    async updateTrasAsis(id: number, dto: CriterioTranspAsistencialDto): Promise<any> {
+        const criterio_trans_asist = await this.findById(id);
+        if (!criterio_trans_asist) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_trans_asis_modalidad ? criterio_trans_asist.cri_trans_asis_modalidad = dto.cri_trans_asis_modalidad : criterio_trans_asist.cri_trans_asis_modalidad = criterio_trans_asist.cri_trans_asis_modalidad;
+        dto.cri_trans_asis_complejidad ? criterio_trans_asist.cri_trans_asis_complejidad = dto.cri_trans_asis_complejidad : criterio_trans_asist.cri_trans_asis_complejidad = criterio_trans_asist.cri_trans_asis_complejidad;
+        criterio_trans_asist.cri_trans_asis_articulo = dto.cri_trans_asis_articulo !== undefined ? dto.cri_trans_asis_articulo : "";
+        criterio_trans_asist.cri_trans_asis_seccion = dto.cri_trans_asis_seccion !== undefined ? dto.cri_trans_asis_seccion : "";
+        criterio_trans_asist.cri_trans_asis_apartado = dto.cri_trans_asis_apartado !== undefined ? dto.cri_trans_asis_apartado : "";
+        dto.cri_trans_asis_nombre_criterio ? criterio_trans_asist.cri_trans_asis_nombre_criterio = dto.cri_trans_asis_nombre_criterio : criterio_trans_asist.cri_trans_asis_nombre_criterio = criterio_trans_asist.cri_trans_asis_nombre_criterio;
+
+        await this.criterioTranspAsistencialRepository.save(criterio_trans_asist);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

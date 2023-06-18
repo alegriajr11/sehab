@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriterioMedicinaNuclearService } from './criterio_medicina_nuclear.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioMedicinaNuclearDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/medicina_nuclear_dto/criterio_medicina_nuclear.dto';
@@ -25,10 +25,19 @@ export class CriterioMedicinaNuclearController {
         return this.criterioMedicinaNuclearService.create(id, dto);
     }
 
-    //ELIMINAR CRITERIO  LMEDICINA NUCLEAR 
+    //ELIMINAR CRITERIO  MEDICINA NUCLEAR 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criterioMedicinaNuclearService.delete(id);
+    }
+
+
+    //ACTUALIZAR UN CRITERIO   MEDICINA NUCLEAR 
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioMedicinaNuclearDto) {
+        return await this.criterioMedicinaNuclearService.updateMed_Nucl(id, dto);
     }
 }

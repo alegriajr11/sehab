@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosTransAsistencialService } from './criterios_trans_asistencial.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioTranspAsistencialDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_atencion_inmediata_dtos/transporte_asistencial_dto/criterio_trans_asistencial.dto';
@@ -30,5 +30,13 @@ export class CriteriosTransAsistencialController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosTransAsistencialService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO  TRANSPORTE ASISTENCIAL 
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioTranspAsistencialDto) {
+        return await this.criteriosTransAsistencialService.updateTrasAsis(id, dto);
     }
 }

@@ -51,10 +51,29 @@ export class CriteriosUrgenciasService {
         return criterio_urgencias;
     }
 
-    //ELIMINAR CRITERIO TRANSPORTE URGENCIAS 
+    //ELIMINAR CRITERIO  URGENCIAS 
     async delete(id: number): Promise<any> {
         const criterio_urgencias = await this.findById(id);
         await this.criterioUrgenciasRepository.delete(criterio_urgencias.criurge_id)
         return new MessageDto(`Criterio Eliminado`);
+    }
+
+    //ACTUALIZAR CRITERIOS URGENCIAS
+    async updateUrgencias(id: number, dto: CriterioUrgenciasDto): Promise<any> {
+        const criterio_urgencias = await this.findById(id);
+        if (!criterio_urgencias) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.criurge_modalidad ? criterio_urgencias.criurge_modalidad = dto.criurge_modalidad : criterio_urgencias.criurge_modalidad = criterio_urgencias.criurge_modalidad;
+        dto.criurge_complejidad ? criterio_urgencias.criurge_complejidad = dto.criurge_complejidad : criterio_urgencias.criurge_complejidad = criterio_urgencias.criurge_complejidad;
+        criterio_urgencias.criurge_articulo = dto.criurge_articulo !== undefined ? dto.criurge_articulo : "";
+        criterio_urgencias.criurge_seccion = dto.criurge_seccion !== undefined ? dto.criurge_seccion : "";
+        criterio_urgencias.criurge_apartado = dto.criurge_apartado !== undefined ? dto.criurge_apartado : "";
+        dto.criurge_nombre_criterio ? criterio_urgencias.criurge_nombre_criterio = dto.criurge_nombre_criterio : criterio_urgencias.criurge_nombre_criterio = criterio_urgencias.criurge_nombre_criterio;
+
+        await this.criterioUrgenciasRepository.save(criterio_urgencias);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
     }
 }

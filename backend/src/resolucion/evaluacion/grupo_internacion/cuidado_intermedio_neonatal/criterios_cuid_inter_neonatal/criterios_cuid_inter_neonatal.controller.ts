@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosCuidInterNeonatalService } from './criterios_cuid_inter_neonatal.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioCuidIntermNeonatalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_intermedio_neonatal_dto/criterio_cuid_inter_neonatal.dto';
@@ -33,4 +33,6 @@ export class CriteriosCuidInterNeonatalController {
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosCuidInterNeonatalService.delete(id);
     }
+
+    NEONATAL
 }

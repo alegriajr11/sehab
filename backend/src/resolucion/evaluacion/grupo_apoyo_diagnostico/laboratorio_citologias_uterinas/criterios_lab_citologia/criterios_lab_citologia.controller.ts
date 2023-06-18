@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosLabCitologiaService } from './criterios_lab_citologia.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioLabUterinaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/laboratorio_citologias_uterinas_dto/criterio_lab_citologia_uterina.dto';
@@ -26,11 +26,19 @@ export class CriteriosLabCitologiaController {
         return this.criteriosLabCitologiaService.create(id, dto);
     }
 
-    //ELIMINAR CRITERIO  IMAGENES DIAGNOSTICAS RAD NO IONIZANTES
+    //ELIMINAR CRITERIO  CITOLOGIAS UTERINAS 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosLabCitologiaService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO  CITOLOGIAS UTERINAS 
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioLabUterinaDto) {
+        return await this.criteriosLabCitologiaService.updateLab_Ute(id, dto);
     }
 
 }

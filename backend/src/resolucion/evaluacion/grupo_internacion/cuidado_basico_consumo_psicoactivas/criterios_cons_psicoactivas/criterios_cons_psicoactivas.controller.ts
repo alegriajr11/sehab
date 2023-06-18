@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CriteriosConsPsicoactivasService } from './criterios_cons_psicoactivas.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioConsumoPsicoactivasDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_basico_consumo_psicoactivas_dto/criterio_cuid_cons_psicoact.dto';
@@ -30,5 +30,13 @@ export class CriteriosConsPsicoactivasController {
     @Delete(':id')
     async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriosConsPsicoactivasService.delete(id);
+    }
+
+    //ACTUALIZAR UN CRITERIO CUIDADO BASICO PSICOACTIVAS
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioConsumoPsicoactivasDto) {
+        return await this.criteriosConsPsicoactivasService.updatecuidpsico(id, dto);
     }
 }

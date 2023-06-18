@@ -57,4 +57,23 @@ export class CriteriosLabCitologiaService {
         await this.criterioLabUterinaRepository.delete(cri_citolo_ute.cri_lab_ute_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS  CITOLOGIAS UTERINAS
+    async updateLab_Ute(id: number, dto: CriterioLabUterinaDto): Promise<any> {
+        const criterio_lab_citologia_uterina = await this.findById(id);
+        if (!criterio_lab_citologia_uterina) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_lab_ute_modalidad ? criterio_lab_citologia_uterina.cri_lab_ute_modalidad = dto.cri_lab_ute_modalidad : criterio_lab_citologia_uterina.cri_lab_ute_modalidad = criterio_lab_citologia_uterina.cri_lab_ute_modalidad;
+        dto.cri_lab_ute_complejidad ? criterio_lab_citologia_uterina.cri_lab_ute_complejidad = dto.cri_lab_ute_complejidad : criterio_lab_citologia_uterina.cri_lab_ute_complejidad = criterio_lab_citologia_uterina.cri_lab_ute_complejidad;
+        criterio_lab_citologia_uterina.cri_lab_ute_articulo = dto.cri_lab_ute_articulo !== undefined ? dto.cri_lab_ute_articulo : "";
+        criterio_lab_citologia_uterina.cri_lab_ute_seccion = dto.cri_lab_ute_seccion !== undefined ? dto.cri_lab_ute_seccion : "";
+        criterio_lab_citologia_uterina.cri_lab_ute_apartado = dto.cri_lab_ute_apartado !== undefined ? dto.cri_lab_ute_apartado : "";
+        dto.cri_lab_ute_nombre_criterio ? criterio_lab_citologia_uterina.cri_lab_ute_nombre_criterio = dto.cri_lab_ute_nombre_criterio : criterio_lab_citologia_uterina.cri_lab_ute_nombre_criterio = criterio_lab_citologia_uterina.cri_lab_ute_nombre_criterio;
+
+        await this.criterioLabUterinaRepository.save(criterio_lab_citologia_uterina);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

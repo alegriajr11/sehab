@@ -60,4 +60,23 @@ export class CriterioRadioterapiaService {
         await this.criterioRadioterapiaRepository.delete(criterio_radioterapia.crirad_ter_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS RADIOTERAPIA
+    async updateRadiotera(id: number, dto: CriterioRadioterapiaDto): Promise<any> {
+        const criterio_radioterapia = await this.findById(id);
+        if (!criterio_radioterapia) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.crirad_ter_modalidad ? criterio_radioterapia.crirad_ter_modalidad = dto.crirad_ter_modalidad : criterio_radioterapia.crirad_ter_modalidad = criterio_radioterapia.crirad_ter_modalidad;
+        dto.crirad_ter_complejidad ? criterio_radioterapia.crirad_ter_complejidad = dto.crirad_ter_complejidad : criterio_radioterapia.crirad_ter_complejidad = criterio_radioterapia.crirad_ter_complejidad;
+        criterio_radioterapia.crirad_ter_articulo = dto.crirad_ter_articulo !== undefined ? dto.crirad_ter_articulo : "";
+        criterio_radioterapia.crirad_ter_seccion = dto.crirad_ter_seccion !== undefined ? dto.crirad_ter_seccion : "";
+        criterio_radioterapia.crirad_ter_apartado = dto.crirad_ter_apartado !== undefined ? dto.crirad_ter_apartado : "";
+        dto.crirad_ter_nombre_criterio ? criterio_radioterapia.crirad_ter_nombre_criterio = dto.crirad_ter_nombre_criterio : criterio_radioterapia.crirad_ter_nombre_criterio = criterio_radioterapia.crirad_ter_nombre_criterio;
+
+        await this.criterioRadioterapiaRepository.save(criterio_radioterapia);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

@@ -57,4 +57,23 @@ export class CriteriosSaludTrabajoService {
         await this.criterioSaludTrabajoRepository.delete(criterio_salud_trabajo.crisaltra_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS SALUD TRABAJO 
+    async updateSaludTrab(id: number, dto: CriterioSaludTrabajoDto): Promise<any> {
+        const criterio_salud_trabajo = await this.findById(id);
+        if (!criterio_salud_trabajo) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.crisaltra_modalidad ? criterio_salud_trabajo.crisaltra_modalidad = dto.crisaltra_modalidad : criterio_salud_trabajo.crisaltra_modalidad = criterio_salud_trabajo.crisaltra_modalidad;
+        dto.crisaltra_complejidad ? criterio_salud_trabajo.crisaltra_complejidad = dto.crisaltra_complejidad : criterio_salud_trabajo.crisaltra_complejidad = criterio_salud_trabajo.crisaltra_complejidad;
+        criterio_salud_trabajo.crisaltra_articulo = dto.crisaltra_articulo !== undefined ? dto.crisaltra_articulo : "";
+        criterio_salud_trabajo.crisaltra_seccion = dto.crisaltra_seccion !== undefined ? dto.crisaltra_seccion : "";
+        criterio_salud_trabajo.crisaltra_apartado = dto.crisaltra_apartado !== undefined ? dto.crisaltra_apartado : "";
+        dto.crisaltra_nombre_criterio ? criterio_salud_trabajo.crisaltra_nombre_criterio = dto.crisaltra_nombre_criterio : criterio_salud_trabajo.crisaltra_nombre_criterio = criterio_salud_trabajo.crisaltra_nombre_criterio;
+
+        await this.criterioSaludTrabajoRepository.save(criterio_salud_trabajo);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

@@ -58,4 +58,23 @@ export class CriteriosVacunacionService {
         await this.criterioVacunacionRepository.delete(criterio_vacunacion.crivac_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS VACUNACION 
+    async updateVacuna(id: number, dto: CriterioVacunacionDto): Promise<any> {
+        const criterio_vacunacion = await this.findById(id);
+        if (!criterio_vacunacion) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.crivac_modalidad ? criterio_vacunacion.crivac_modalidad = dto.crivac_modalidad : criterio_vacunacion.crivac_modalidad = criterio_vacunacion.crivac_modalidad;
+        dto.crivac_complejidad ? criterio_vacunacion.crivac_complejidad = dto.crivac_complejidad : criterio_vacunacion.crivac_complejidad = criterio_vacunacion.crivac_complejidad;
+        criterio_vacunacion.crivac_articulo = dto.crivac_articulo !== undefined ? dto.crivac_articulo : "";
+        criterio_vacunacion.crivac_seccion = dto.crivac_seccion !== undefined ? dto.crivac_seccion : "";
+        criterio_vacunacion.crivac_apartado = dto.crivac_apartado !== undefined ? dto.crivac_apartado : "";
+        dto.crivac_nombre_criterio ? criterio_vacunacion.crivac_nombre_criterio = dto.crivac_nombre_criterio : criterio_vacunacion.crivac_nombre_criterio = criterio_vacunacion.crivac_nombre_criterio;
+
+        await this.criterioVacunacionRepository.save(criterio_vacunacion);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

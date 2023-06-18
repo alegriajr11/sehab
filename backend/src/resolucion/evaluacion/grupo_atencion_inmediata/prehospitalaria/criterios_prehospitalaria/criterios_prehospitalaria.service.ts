@@ -57,4 +57,24 @@ export class CriteriosPrehospitalariaService {
         await this.criterioPrehospitalariaRepository.delete(criterio_prehospi.cripreh_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    
+    //ACTUALIZAR CRITERIOS PARTO
+    async updatePrehosp(id: number, dto: CriterioPrehospitalariaDto): Promise<any> {
+        const criterio_prehospi = await this.findById(id);
+        if (!criterio_prehospi) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cripreh_modalidad ? criterio_prehospi.cripreh_modalidad = dto.cripreh_modalidad : criterio_prehospi.cripreh_modalidad = criterio_prehospi.cripreh_modalidad;
+        dto.cripreh_complejidad ? criterio_prehospi.cripreh_complejidad = dto.cripreh_complejidad : criterio_prehospi.cripreh_complejidad = criterio_prehospi.cripreh_complejidad;
+        criterio_prehospi.cripreh_articulo = dto.cripreh_articulo !== undefined ? dto.cripreh_articulo : "";
+        criterio_prehospi.cripreh_seccion = dto.cripreh_seccion !== undefined ? dto.cripreh_seccion : "";
+        criterio_prehospi.cripreh_apartado = dto.cripreh_apartado !== undefined ? dto.cripreh_apartado : "";
+        dto.cripreh_nombre_criterio ? criterio_prehospi.cripreh_nombre_criterio = dto.cripreh_nombre_criterio : criterio_prehospi.cripreh_nombre_criterio = criterio_prehospi.cripreh_nombre_criterio;
+
+        await this.criterioPrehospitalariaRepository.save(criterio_prehospi);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }

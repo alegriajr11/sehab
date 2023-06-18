@@ -56,4 +56,23 @@ export class CriteriosMuesCuelloService {
         await this.criterioCuelloUterinoRepository.delete(criterio_mue_cuello_ute.cri_cuel_ute_id)
         return new MessageDto(`Criterio Eliminado`);
     }
+
+    //ACTUALIZAR CRITERIOS CUELLO UTERINO
+    async updateCuelloUte(id: number, dto: CriterioCuelloUterinoDto): Promise<any> {
+        const criterio_mue_cuello_ute = await this.findById(id);
+        if (!criterio_mue_cuello_ute) {
+            throw new NotFoundException(new MessageDto('El criterio no existe'))
+        }
+        dto.cri_cuel_ute_modalidad ? criterio_mue_cuello_ute.cri_cuel_ute_modalidad = dto.cri_cuel_ute_modalidad : criterio_mue_cuello_ute.cri_cuel_ute_modalidad = criterio_mue_cuello_ute.cri_cuel_ute_modalidad;
+        dto.cri_cuel_ute_complejidad ? criterio_mue_cuello_ute.cri_cuel_ute_complejidad = dto.cri_cuel_ute_complejidad : criterio_mue_cuello_ute.cri_cuel_ute_complejidad = criterio_mue_cuello_ute.cri_cuel_ute_complejidad;
+        criterio_mue_cuello_ute.cri_cuel_ute_articulo = dto.cri_cuel_ute_articulo !== undefined ? dto.cri_cuel_ute_articulo : "";
+        criterio_mue_cuello_ute.cri_cuel_ute_seccion = dto.cri_cuel_ute_seccion !== undefined ? dto.cri_cuel_ute_seccion : "";
+        criterio_mue_cuello_ute.cri_cuel_ute_apartado = dto.cri_cuel_ute_apartado !== undefined ? dto.cri_cuel_ute_apartado : "";
+        dto.cri_cuel_ute_nombre_criterio ? criterio_mue_cuello_ute.cri_cuel_ute_nombre_criterio = dto.cri_cuel_ute_nombre_criterio : criterio_mue_cuello_ute.cri_cuel_ute_nombre_criterio = criterio_mue_cuello_ute.cri_cuel_ute_nombre_criterio;
+
+        await this.criterioCuelloUterinoRepository.save(criterio_mue_cuello_ute);
+
+        return new MessageDto(`El criterio ha sido Actualizado`);
+
+    }
 }
