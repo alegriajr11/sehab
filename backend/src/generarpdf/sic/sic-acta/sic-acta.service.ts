@@ -13,6 +13,7 @@ export class SicActaService {
         private readonly acta_sic_pdfRepository: ActaSicPdfRepository,
     ) { }
 
+    //LISTAR TODAS LAS ACTAS SIC
     async getallActas(): Promise<ActaSicPdfEntity[]> {
         const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
             .select(['acta'])
@@ -21,6 +22,7 @@ export class SicActaService {
         return acta;
     }
 
+    //ENCONTRAR POR ACTA
     async findByActa(id: number): Promise<ActaSicPdfEntity> {
         const acta = await this.acta_sic_pdfRepository.findOne({ where: { id } });
         if (!acta) {

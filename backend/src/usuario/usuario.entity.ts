@@ -3,49 +3,52 @@ import { hash } from "bcrypt";
 import { RolEntity } from "src/rol/rol.entity";
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
-@Entity({name: 'usuario'})
+@Entity({ name: 'usuario' })
 export class UsuarioEntity {
-    
+
     @PrimaryGeneratedColumn('increment')
     usu_id: number;
 
-    @Column({type: 'varchar', length: 20, nullable: true})
+    @Column({ type: 'varchar', length: 20, nullable: true })
     usu_nombre: string;
 
-    @Column({type: 'varchar', length: 20, nullable: true})
+    @Column({ type: 'varchar', length: 20, nullable: true })
     usu_apellido: string;
 
-    @Column({type: 'varchar', length: 30, nullable: false, unique: false})
+    @Column({ type: 'varchar', length: 30, nullable: false, unique: false })
     usu_email: string;
 
-    @Column({type: 'varchar', length: 10, nullable: false, unique: false})
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     usu_nombreUsuario: string;
 
-    @Column({type: 'varchar', nullable: false})
+    @Column({ type: 'varchar', nullable: false })
     usu_password: string;
 
     @Column({ type: 'uuid', unique: true, name: 'reset_password_token', nullable: true })
     resetPasswordToken: string;
 
-    @Column({type: 'varchar', nullable: false})
+    @Column({ type: 'varchar', nullable: false })
     usu_estado: string;
 
     @CreateDateColumn()
     usu_creado: Timestamp;
 
+    @Column({ type: 'blob' })
+    usu_firma: Buffer;
+
 
     //Relacion Muchos a Muchos USUARIOS - ROL
-    @ManyToMany(type => RolEntity, rol => rol.usuarios, {eager: true})
+    @ManyToMany(type => RolEntity, rol => rol.usuarios, { eager: true })
     @JoinTable({
         name: 'usuario_rol',
-        joinColumn: {name: 'usuario_id'},
-        inverseJoinColumn: {name: 'rol_id'} 
+        joinColumn: { name: 'usuario_id' },
+        inverseJoinColumn: { name: 'rol_id' }
     })
     roles: RolEntity[];
 
     @BeforeInsert()
-    async hashPassword(){
-        if(!this.usu_password) return;
+    async hashPassword() {
+        if (!this.usu_password) return;
         this.usu_password = await hash(this.usu_password, 10)
     }
 }

@@ -11,9 +11,10 @@ import { SicActaController } from './sic/sic-acta/sic-acta.controller';
 import { SicActaModule } from './sic/sic-acta/sic-acta.module';
 import { SicActaService } from './sic/sic-acta/sic-acta.service';
 import { ActaSicPdfEntity } from './sic/sic-acta/sic-acta-pdf.entity';
+import { SpIndependientesModule } from './sp/sp-independientes/sp-independientes.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity]), SicActaModule],
+  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity]), SicActaModule, SpIndependientesModule],
   controllers: [GenerarpdfController, SicActaController],
   providers: [GenerarpdfService, UsuarioService, SicActaService]
 })
