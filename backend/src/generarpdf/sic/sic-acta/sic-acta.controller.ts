@@ -17,29 +17,20 @@ export class SicActaController {
         return this.sic_act_pdfService.getallActas();
     }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get(':id')
-    // async getOne(@Param('id', ParseIntPipe) id: number){
-    //     return await this.sic_act_pdfService.findByActa(id);
-    // }
+    //OBTENER ACTAS POR ID
+    @UseGuards(JwtAuthGuard)
+    @Get(':id')
+    async getOne(@Param('id', ParseIntPipe) id: number) {
+        return await this.sic_act_pdfService.findByActa(id);
+    }
 
-    // @UseGuards(JwtAuthGuard)
-    // @Get(':id')
-    // async getOne(@Param('id', ParseIntPipe) id: number) {
-    //     return await this.sic_act_pdfService.findByActa(id);
-    // }
-
-
-    // @Get('/fecha/:date')
-    // async getExample(@Param('date') date: Date) {
-    //     return await this.sic_act_pdfService.findAllFromDate(date)
-    // }
-
+    //OBTENER ACTAS POR FECHA
     @Get('/fecha/:date')
     async findAllFromDate(@Param('date') dateString: string) {
         return this.sic_act_pdfService.findAllFromDate(dateString);
     }
 
+    //CREAR ACTA
     @Post()
     async create(@Body() dto: ActaSicPdfDto) {
         return this.sic_act_pdfService.create(dto);
