@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, 
 import { SicActaService } from './sic-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
+import { ActaSicPdfEntity } from './sic-acta-pdf.entity';
 
 @Controller('sic-acta')
 export class SicActaController {
@@ -16,13 +17,20 @@ export class SicActaController {
         return this.sic_act_pdfService.getallActas();
     }
 
+    //OBTENER ACTAS POR ID
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    async getOne(@Param('id', ParseIntPipe) id: number){
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.sic_act_pdfService.findByActa(id);
     }
-    
 
+    //OBTENER ACTAS POR FECHA
+    @Get('/fecha/:date')
+    async findAllFromDate(@Param('date') dateString: string) {
+        return this.sic_act_pdfService.findAllFromDate(dateString);
+    }
+
+    //CREAR ACTA
     @Post()
     async create(@Body() dto: ActaSicPdfDto) {
         return this.sic_act_pdfService.create(dto);

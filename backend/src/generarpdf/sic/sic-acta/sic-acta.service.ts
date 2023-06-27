@@ -4,6 +4,7 @@ import { MessageDto } from 'src/common/message.dto';
 import { ActaSicPdfEntity } from './sic-acta-pdf.entity';
 import { ActaSicPdfRepository } from './sic-acta-pdf.repository';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
+import { LessThan } from 'typeorm';
 
 @Injectable()
 export class SicActaService {
@@ -29,6 +30,19 @@ export class SicActaService {
             throw new NotFoundException(new MessageDto('No Existe'));
         }
         return acta;
+    }
+
+
+
+    async findAllFromDate(date: string): Promise<ActaSicPdfEntity[]> {
+        const actas = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
+            .where('acta.act_creado = :date', { date })
+            .getMany();
+        if(actas.length === 0){
+            throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
+        }
+
+        return actas;
     }
 
 
