@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity({name: 'acta-sp-ind-pdf'})
 export class ActaSpIndependientePdfEntity {
@@ -64,9 +64,11 @@ export class ActaSpIndependientePdfEntity {
     @Column({type: 'varchar', length: 50, nullable: false})
     act_cargo_prestador
 
-    @Column({ type: 'blob' })
-    act_firma_prestador: Buffer;
+    @Column({ type: 'date' })
+    act_creado: Date;
 
-    @CreateDateColumn()
-    act_creado: Timestamp;
+    @BeforeInsert()
+    async setDate() {
+        this.act_creado = new Date();
+    }
 }
