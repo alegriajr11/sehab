@@ -35,6 +35,7 @@ export class SicActaService {
 
 
     async findAllFromDate(date: string): Promise<ActaSicPdfEntity[]> {
+
         const actas = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
             .where('acta.act_creado = :date', { date })
             .getMany();
@@ -48,7 +49,15 @@ export class SicActaService {
 
     /*CREACIÓN SIC ACTA PDF */
     async create(dto: ActaSicPdfDto): Promise<any> {
+
+        const {act_id} = dto
+
+        const verf_acta_id = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
+            .where('acta.act_id != :act_id', {act_id})
+            .andWhere('acta.act_creado')
         const acta_sicpdf = this.acta_sic_pdfRepository.create(dto);
         await this.acta_sic_pdfRepository.save(acta_sicpdf)
     }
+
+
 }

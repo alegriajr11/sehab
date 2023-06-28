@@ -19,6 +19,8 @@ import { PayloadInterface } from './payload.interface';
 import { v4 } from 'uuid';
 import { RessetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { requestIpMiddleware } from 'request-ip';
 
 @Injectable()
 export class AuthService {
@@ -32,6 +34,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly usuarioService: UsuarioService,
         private readonly encoderService: EncoderService,
+        private readonly auditoria_registroService: AuditoriaRegistroService
     ) { }
 
 
@@ -56,6 +59,8 @@ export class AuthService {
 
     }
 
+
+
     async createUserSP(dto: NuevoUsuarioDto): Promise<any> {
         const { usu_nombreUsuario, usu_email } = dto;
         const exists = await this.authRepository.findOne({ where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_email }] });
@@ -68,6 +73,8 @@ export class AuthService {
         return new MessageDto('Usuario Creado');
 
     }
+
+
 
     async createUserPamec(dto: NuevoUsuarioDto): Promise<any> {
         const { usu_nombreUsuario, usu_email } = dto;
@@ -98,6 +105,8 @@ export class AuthService {
 
     async login(dto: LoginUsuarioDto): Promise<any> {
         const { usu_nombreUsuario, } = dto;
+        //const direccionIp = requestIpMiddleware.getClientIp(req);
+        const direccionIp = '192.168.19.1'
         const usuario = await this.authRepository.findOne({ where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_nombreUsuario }] });
         if (!usuario) return new UnauthorizedException(new MessageDto('El usuario no existe'));
         const passordOK = await compare(dto.usu_password, usuario.usu_password);
@@ -105,6 +114,7 @@ export class AuthService {
         const payload: PayloadInterface = {
             usu_id: usuario.usu_id,
             usu_nombre: usuario.usu_nombre,
+            usu_apellido: usuario.usu_apellido,
             usu_nombreUsuario: usuario.usu_nombreUsuario,
             usu_email: usuario.usu_email,
             usu_estado: usuario.usu_estado,
@@ -114,6 +124,7 @@ export class AuthService {
         if (payload.usu_estado == 'false') {
             return new UnauthorizedException(new MessageDto('Acceso Denegado Comunicarse con el Administrador'));
         }
+        await this.auditoria_registroService.logLogin(payload.usu_nombre, payload.usu_apellido, direccionIp)
         return { token };
     }
 
@@ -123,6 +134,7 @@ export class AuthService {
         const payload: PayloadInterface = {
             usu_id: usuario[`usu_id`],
             usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
             usu_nombreUsuario: usuario[`usu_nombreUsuario`],
             usu_email: usuario[`usu_email`],
             usu_estado: usuario[`usu_estado`],
@@ -132,11 +144,10 @@ export class AuthService {
         return { token };
     }
 
-    async requestResetPassword(usu_id: number ): Promise<void> {
+    async requestResetPassword(usu_id: number): Promise<void> {
         const usuario: UsuarioEntity = await this.usuarioService.findById(usu_id)
         usuario.resetPasswordToken = v4();
         this.authRepository.save(usuario);
-        //ENVIAR EMAIL
     }
 
     async resetPassword(resetPasswordDto: RessetPasswordDto): Promise<any> {
@@ -150,9 +161,9 @@ export class AuthService {
     }
 
 
-    async changePassword(changePasswordDto: ChangePasswordDto, usuario: UsuarioEntity): Promise<any>{
-        const { oldPassword, newPassword} = changePasswordDto; 
-        if(await this.encoderService.checkPassword(oldPassword, usuario.usu_password)){
+    async changePassword(changePasswordDto: ChangePasswordDto, usuario: UsuarioEntity): Promise<any> {
+        const { oldPassword, newPassword } = changePasswordDto;
+        if (await this.encoderService.checkPassword(oldPassword, usuario.usu_password)) {
             usuario.usu_password = await this.encoderService.encodePassword(newPassword);
             this.authRepository.save(usuario);
             return new MessageDto('La contraseña ha sido cambiada exitosamente');

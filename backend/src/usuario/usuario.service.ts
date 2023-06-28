@@ -44,7 +44,7 @@ export class UsuarioService {
 
     /*CREACIÓN USUARIO ADMINISTRADOR */
     async create(dto: CreateUsuarioDto): Promise<any> {
-        const {usu_nombreUsuario, usu_email} = dto;
+        const {usu_nombreUsuario, usu_email, usu_nombre, usu_apellido} = dto;
         const exists = await this.usuarioRepository.findOne({where: [{usu_nombreUsuario: usu_nombreUsuario}, {usu_email: usu_email}]});
         if(exists) throw new BadRequestException(new MessageDto('Ese usuario ya existe'));
         const rolAdmin = await this.rolRepository.findOne({where: {rol_nombre: RolNombre.ADMIN}});

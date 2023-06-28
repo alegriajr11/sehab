@@ -14,9 +14,12 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { EncoderService } from './encoder.service';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import { MailerservicesService } from './mailerservices/mailerservices.service';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroRepository } from 'src/auditoria/auditoria_registro.repository';
+import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsuarioEntity, RolEntity, AuthRepository]),
+  imports: [TypeOrmModule.forFeature([UsuarioEntity, RolEntity, AuthRepository, AuditoriaRegistroRepository]),
   PassportModule.register({
     defaultStrategy: 'jwt'
   }),
@@ -30,7 +33,7 @@ import { MailerservicesService } from './mailerservices/mailerservices.service';
     }),
     inject: [ConfigService],
   }),
-],
+  AuditoriaRegistroModule],
   providers: [AuthService, ConfigService, JwtStrategy, EncoderService, UsuarioService, MailerservicesService],
   controllers: [AuthController],
   exports: [PassportModule, JwtStrategy]

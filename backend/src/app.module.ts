@@ -104,6 +104,9 @@ import { CriteriosPrehospitalariaModule } from './resolucion/evaluacion/grupo_at
 import { CriteriosPartoController } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.controller';
 import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.module';
 import { CriterioHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterio_hospitalizacion/criterio_hospitalizacion.module';
+import { AuditoriaRegistroService } from './auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroModule } from './auditoria/auditoria_registro/auditoria_registro.module';
+
 
 
 
@@ -186,6 +189,7 @@ import { CriterioHospitalizacionModule } from './resolucion/evaluacion/grupo_int
     CriteriosPartoModule,
     CriteriosDialisisModule,
     CriterioHospitalizacionModule,
+    AuditoriaRegistroModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { GetUser } from 'src/decorators/get-user.decorator';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
