@@ -21,6 +21,12 @@ export class SpIpsController {
         return await this.sp_IpsService.findByActa(id);
     }
 
+    //OBTENER ACTAS POR FECHA
+    @Get('/fecha/:date')
+    async findAllFromDate(@Param('date') dateString: string) {
+        return this.sp_IpsService.findAllFromDate(dateString);
+    }
+
     //CREAR SP IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))

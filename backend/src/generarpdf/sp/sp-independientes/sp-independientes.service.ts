@@ -30,6 +30,19 @@ export class SpIndependientesService {
         return indep;
     }
 
+    //ENCONTRAR POR ACTA POR FECHAS
+    async findAllFromDate(date: string): Promise<ActaSpIndependientePdfEntity[]> {
+
+        const actas = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
+            .where('acta.act_creado = :date', { date })
+            .getMany();
+        if (actas.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
+        }
+
+        return actas;
+    }
+
 
     /*CREACIÓN SP INDEPENDIENTE ACTA PDF */
     async create(dto: IndActaDto): Promise<any> {

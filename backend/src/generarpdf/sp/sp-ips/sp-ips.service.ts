@@ -30,6 +30,19 @@ export class SpIpsService {
         return ips;
     }
 
+    //ENCONTRAR POR ACTA POR FECHAS
+    async findAllFromDate(date: string): Promise<ActaSpIpsEntity[]> {
+
+        const actas = await this.actaSpIpsRepository.createQueryBuilder('acta')
+            .where('acta.act_creado = :date', { date })
+            .getMany();
+        if (actas.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
+        }
+
+        return actas;
+    }
+
 
     /*CREACIÓN SP IPS ACTA PDF */
     async create(dto: IpsDto): Promise<any> {

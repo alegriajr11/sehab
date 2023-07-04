@@ -21,6 +21,12 @@ export class PamecActaController {
         return await this.pamecActaService.findByActa(id);
     }
 
+    //OBTENER ACTAS POR FECHA
+    @Get('/fecha/:date')
+    async findAllFromDate(@Param('date') dateString: string) {
+        return this.pamecActaService.findAllFromDate(dateString);
+    }
+
     //CREAR PAMEC IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))

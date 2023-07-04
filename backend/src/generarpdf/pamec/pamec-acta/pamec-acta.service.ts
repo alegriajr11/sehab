@@ -30,6 +30,19 @@ export class PamecActaService {
         return ips;
     }
 
+     //ENCONTRAR POR ACTA POR FECHAS
+    async findAllFromDate(date: string): Promise<ActaPamecIpsEntity[]> {
+
+        const actas = await this.actaPamecIpsRepository.createQueryBuilder('acta')
+            .where('acta.act_creado = :date', { date })
+            .getMany();
+        if(actas.length === 0){
+            throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
+        }
+
+        return actas;
+    }
+
 
     /*CREACIÓN PAMEC IPS ACTA PDF */
     async create(dto: ActaPamecIpsDto): Promise<any> {
