@@ -30,6 +30,13 @@ export class SicActaController {
         return this.sic_act_pdfService.findAllFromDate(dateString);
     }
 
+    //ÚLTIMA ACTA SIC
+    //@UseGuards(JwtAuthGuard)
+    @Get('ultima/acta/sic')
+    getLastActa() {
+        return this.sic_act_pdfService.getLastestActa();
+    }
+
     //CREAR ACTA
     @Post()
     async create(@Body() dto: ActaSicPdfDto) {

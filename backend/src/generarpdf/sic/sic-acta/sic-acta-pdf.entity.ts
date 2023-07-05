@@ -7,9 +7,9 @@ export class ActaSicPdfEntity {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column({ type: 'varchar', length: 15, nullable: true })
-    act_id: string;
-
+    @Column({ type: 'int', nullable: false })
+    act_id: number;
+    
     @Column({ type: 'varchar', length: 2, nullable: true })
     act_visita_inicial: string;
 

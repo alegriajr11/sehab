@@ -22,7 +22,7 @@ export class AuditoriaRegistroService {
     //CONTROLAR LA CREACIÓN DE UN USUARIO DE ROL SIC
     async logCreateUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
-        await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario', details, direccionIp);
+        await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario Sic', details, direccionIp);
     }
     
     /*

@@ -32,14 +32,43 @@ export class SicActaService {
         return acta;
     }
 
+    //ÚLTIMA ACTA REGISTRADA
+    async getLastestActa(): Promise<ActaSicPdfEntity> {
+        const anioActual: number = new Date().getFullYear();
+
+        const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
+            .addSelect('acta.act_id')
+            .orderBy('acta.act_id', 'DESC')
+            .getOne();
+
+        if (!acta) {
+            const newActa: ActaSicPdfEntity = new ActaSicPdfEntity();
+            newActa.act_id = 1;
+            return newActa;
+        }
+
+        acta.act_creado = new Date(acta.act_creado);
+
+        if (acta.act_creado.getFullYear() === anioActual) {
+            acta.act_id++;
+        } else {
+            acta.act_id = 1;
+        }
+
+        
+        return acta;
+    }
 
 
+
+
+    //ENCONTRAR ACTAS POR FECHA EXACTA
     async findAllFromDate(date: string): Promise<ActaSicPdfEntity[]> {
 
         const actas = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
             .where('acta.act_creado = :date', { date })
             .getMany();
-        if(actas.length === 0){
+        if (actas.length === 0) {
             throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
         }
 
@@ -47,17 +76,11 @@ export class SicActaService {
     }
 
 
-    /*CREACIÓN SIC ACTA PDF */
-    async create(dto: ActaSicPdfDto): Promise<any> {
-
-        const {act_id} = dto
-
-        const verf_acta_id = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
-            .where('acta.act_id != :act_id', {act_id})
-            .andWhere('acta.act_creado')
-        const acta_sicpdf = this.acta_sic_pdfRepository.create(dto);
-        await this.acta_sic_pdfRepository.save(acta_sicpdf)
-    }
+/*CREACIÓN SIC ACTA PDF */
+async create(dto: ActaSicPdfDto): Promise<any> {
+    const acta_sicpdf = this.acta_sic_pdfRepository.create(dto);
+    await this.acta_sic_pdfRepository.save(acta_sicpdf)
+}
 
 
 }

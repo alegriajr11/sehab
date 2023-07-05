@@ -7,7 +7,7 @@ import { Column } from "typeorm";
 export class ActaSicPdfDto {
 
     @IsNotBlank()
-    act_id: string;
+    act_id: number;
     
     @Column({ nullable: true })
     act_visita_inicial?: string;
