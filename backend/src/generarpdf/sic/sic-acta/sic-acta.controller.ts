@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SicActaService } from './sic-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
@@ -41,5 +41,13 @@ export class SicActaController {
     @Post()
     async create(@Body() dto: ActaSicPdfDto) {
         return this.sic_act_pdfService.create(dto);
+    }
+
+    //ACTUALIZAR PAMEC IPS ACTA PDF
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: ActaSicPdfDto) {
+        return await this.sic_act_pdfService.updateActa(id, dto);
     }
 }

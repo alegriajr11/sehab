@@ -18,10 +18,16 @@ export class SpIndependientesController {
     //OBTENER UN SP INDEPENDIENTE ACTA PDF POR ID
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    async getOne(@Param('id', ParseIntPipe) id: number){
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.sp_IndependientesService.findByActa(id);
     }
-    
+
+    //OBTENER ACTAS POR FECHA
+    @Get('/fecha/:date')
+    async findAllFromDate(@Param('date') dateString: string) {
+        return this.sp_IndependientesService.findAllFromDate(dateString);
+    }
+
     //CREAR SP INDEPENDIENTE ACTA PDF
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
