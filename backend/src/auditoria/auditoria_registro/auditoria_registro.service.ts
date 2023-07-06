@@ -67,7 +67,7 @@ export class AuditoriaRegistroService {
     //logCreateUserRES
     //logUpdateUserRES
     //logDeleteUserRES
-    
+
 
 
 
@@ -141,6 +141,23 @@ export class AuditoriaRegistroService {
     //     await this.logActivity(usu_nombre, usu_apellido, 'Actualizacion de admin', details, direccionIp);
     // }
 
+
+    /* CONSULTAS DE AUDITORIA - SERVICIO DE AUDITORIA */
+    // LISTA DE AUDITORIAS POR FECHA INICIO Y FECHA FINAL O ACCIÓN REALIZADA
+
+
+    //LISTAR TODAS LAS AUDITORIAS POR NOMBRE Y APELLIDOS DEL FUNCIONARIO
+    async findAllAuditoriaNomApel(usu_nombre_apellido: string): Promise<AuditoriaRegistroEntity[]> {
+        const usu_nombres = usu_nombre_apellido.trim()
+        console.log(usu_nombre_apellido)
+
+        const aduditoria = await this.auditoria_registroRepository.createQueryBuilder('auditoria')
+            .where('CONCAT(auditoria.usu_nombre, " ", auditoria.usu_apellido) LIKE :usu_nombres', { usu_nombres: `%${usu_nombres}%` })
+            .getMany();
+
+        return aduditoria
+
+    }
 
 
 
