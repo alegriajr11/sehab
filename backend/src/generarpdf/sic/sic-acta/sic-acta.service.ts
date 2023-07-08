@@ -32,6 +32,7 @@ export class SicActaService {
         return acta;
     }
 
+
     //ÚLTIMA ACTA REGISTRADA
     async getLastestActa(): Promise<ActaSicPdfEntity> {
         const anioActual: number = new Date().getFullYear();
