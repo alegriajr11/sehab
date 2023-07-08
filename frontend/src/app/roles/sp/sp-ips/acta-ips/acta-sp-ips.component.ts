@@ -16,7 +16,7 @@ import autoTable from 'jspdf-autotable';
   templateUrl: './acta-sp-ips.component.html',
   styleUrls: ['./acta-sp-ips.component.css']
 })
-export class ActaSpComponent implements OnInit {
+export class ActaSpIpsComponent implements OnInit {
 
   prestador: PrestadorDto[];
   usuario: Usuario[];

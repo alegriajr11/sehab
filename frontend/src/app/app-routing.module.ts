@@ -7,9 +7,10 @@ import { ButtonGuard } from './guards/button.guard';
 import { LoginGuard } from './guards/login.guard';
 import { UsuarioGuard } from './guards/usuario.guard';
 import { HomeComponent } from './home/home.component';
-import { CriterioSicEstandarDto } from './models/Sic/criterioSicEstandar.dto';
 import { ListaPrestadorComponent } from './prestador/lista-prestador.component';
 import { NuevoPrestadorComponent } from './prestador/nuevo-prestador.component';
+
+//COMPONENTES ROL PAMEC
 import { ActaPamecComponent } from './roles/pamec/acta/acta-pamec.component';
 import { EvaluacionPamecComponent } from './roles/pamec/evaluacion-pamec/evaluacion-pamec.component';
 import { EvaluacionesPamecComponent } from './roles/pamec/evaluaciones/evaluaciones-pamec.component';
@@ -22,13 +23,17 @@ import { EvaluacionSicComponent } from './roles/sic/evaluacion/evaluacion-sic.co
 import { ModalsicComponent } from './roles/sic/evaluacion/modalsic/modalsic.component';
 import { EvaluacionesSicComponent } from './roles/sic/evaluaciones/evaluaciones-sic.component';
 import { HomeSicComponent } from './roles/sic/home-sic.component';
-import { ActaSpComponent } from './roles/sp/acta-ips/acta-sp-ips.component';
-import { ActaSpProComponent } from './roles/sp/acta-pro/acta-sp-pro.component';
-import { EvaluacionesSpIpsComponent } from './roles/sp/home-evaluacion-ips/evaluaciones-ips/evaluaciones-sp-ips.component';
-import { EvaluacionesSpProComponent } from './roles/sp/evaluaciones-pro/evaluaciones-sp-pro.component';
-import { EvaluacionSpIpsComponent } from './roles/sp/evaluacion-sp-ips/evaluacion-sp-ips.component';
-import { EvaluacionSpProComponent } from './roles/sp/evaluacion-sp-pro/evaluacion-sp-pro.component';
+
+//COMPONENTES ROL SP IPS Y PROFESIONALES
+import { EvaluacionesSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/evaluaciones-sp-ips.component';
+import { EvaluacionesSpProComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/evaluaciones-sp-pro.component';
+import { HomeEvaluacionIpsComponent } from './roles/sp/sp-ips/home-evaluacion-ips/home-evaluacion-ips.component';
+import { ActaSpIpsComponent } from './roles/sp/sp-ips/acta-ips/acta-sp-ips.component';
+import { ActaSpProComponent } from './roles/sp/sp-profesionales/acta-pro/acta-sp-pro.component';
+import { EvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluacion-sp-pro/evaluacion-sp-pro.component';
+
 import { HomeSpComponent } from './roles/sp/home-sp.component';
+
 import { AgregarIndComponent } from './usuario/admin/criterio-sp-ind/agregar-ind/agregar-ind.component';
 import { CriterioSpIndComponent } from './usuario/admin/criterio-sp-ind/criterio-sp-ind.component';
 import { EditarcriteindComponent } from './usuario/admin/criterio-sp-ind/editarcriteind/editarcriteind.component';
@@ -65,7 +70,7 @@ import { EditarPrestadorComponent } from './prestador/editar-prestador/editar-pr
 import { HomeCriteriosComponent } from './usuario/admin/resolucion/home-criterios/home-criterios.component';
 import { CriterioTodosServiciosComponent } from './usuario/admin/resolucion/criterio-todos-servicios/criterio-todos-servicios.component';
 import { AuditoriaComponent } from './usuario/admin/auditoria/auditoria.component';
-import { HomeEvaluacionIpsComponent } from './roles/sp/home-evaluacion-ips/home-evaluacion-ips.component';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -121,9 +126,9 @@ const routes: Routes = [
 
   //Rutas SP - IPS
   { path: 'sp', component: HomeSpComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/acta-ips', component: ActaSpComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/acta-ips', component: ActaSpIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/evaluaciones-ips', component: EvaluacionesSpIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard,], data: { expectedRol: ['admin', 'sp'] } },
+  //{ path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard,], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/home-evaluacion-ips', component: HomeEvaluacionIpsComponent, canActivate: [UsuarioGuard,], data: { expectedRol: ['admin', 'sp'] } },
 
   //Rutas SP - PROFESIONALES

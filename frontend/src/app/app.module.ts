@@ -38,11 +38,9 @@ import { NuevoUsuarioPamecComponent } from './usuario/pamec/nuevo-usuario-pamec.
 import { NuevoUsuarioResoComponent } from './usuario/reso/nuevo-usuario-reso.component';
 import { EvaluacionesSicComponent } from './roles/sic/evaluaciones/evaluaciones-sic.component';
 import { EvaluacionSicComponent } from './roles/sic/evaluacion/evaluacion-sic.component';
-import { ActaSpComponent } from './roles/sp/acta-ips/acta-sp-ips.component';
-import { ActaSpProComponent } from './roles/sp/acta-pro/acta-sp-pro.component';
 import { ActaPamecComponent } from './roles/pamec/acta/acta-pamec.component';
-import { EvaluacionesSpProComponent } from './roles/sp/evaluaciones-pro/evaluaciones-sp-pro.component';
-import { EvaluacionesSpIpsComponent } from './roles/sp/home-evaluacion-ips/evaluaciones-ips/evaluaciones-sp-ips.component';
+import { EvaluacionesSpProComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/evaluaciones-sp-pro.component';
+import { EvaluacionesSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/evaluaciones-sp-ips.component';
 import { EvaluacionesPamecComponent } from './roles/pamec/evaluaciones/evaluaciones-pamec.component';
 import { ListaPrestadorComponent } from './prestador/lista-prestador.component';
 import { NuevoPrestadorComponent } from './prestador/nuevo-prestador.component';
@@ -64,8 +62,6 @@ import { EditarcriteipsverifComponent } from './usuario/admin/criterio-sp-ips/ed
 import { EditarcriteipsimplComponent } from './usuario/admin/criterio-sp-ips/editarcriteipsimpl/editarcriteipsimpl.component';
 import { EditarcriteipsplanComponent } from './usuario/admin/criterio-sp-ips/editarcriteipsplan/editarcriteipsplan.component';
 import { ListaVerificacionComponent } from './roles/reso/lista-verificacion/lista-verificacion.component';
-import { EvaluacionSpIpsComponent } from './roles/sp/evaluacion-sp-ips/evaluacion-sp-ips.component';
-import { EvaluacionSpProComponent } from './roles/sp/evaluacion-sp-pro/evaluacion-sp-pro.component';
 import { EvaluacionPamecComponent } from './roles/pamec/evaluacion-pamec/evaluacion-pamec.component';
 import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
 import { CriterioestandarComponent } from './usuario/admin/criteriosic/criterioestandar/criterioestandar.component';
@@ -86,7 +82,10 @@ import { ModalEvaluacionesComponent } from './roles/sic/evaluaciones/modal-evalu
 import { HomeCriteriosComponent } from './usuario/admin/resolucion/home-criterios/home-criterios.component';
 import { CriterioTodosServiciosComponent } from './usuario/admin/resolucion/criterio-todos-servicios/criterio-todos-servicios.component';
 import { AuditoriaComponent } from './usuario/admin/auditoria/auditoria.component';
-import { HomeEvaluacionIpsComponent } from './roles/sp/home-evaluacion-ips/home-evaluacion-ips.component';
+import { HomeEvaluacionIpsComponent } from './roles/sp/sp-ips/home-evaluacion-ips/home-evaluacion-ips.component';
+import { ActaSpIpsComponent } from './roles/sp/sp-ips/acta-ips/acta-sp-ips.component';
+import { ActaSpProComponent } from './roles/sp/sp-profesionales/acta-pro/acta-sp-pro.component';
+import { EvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluacion-sp-pro/evaluacion-sp-pro.component';
 
 
 @NgModule({
@@ -117,7 +116,7 @@ import { HomeEvaluacionIpsComponent } from './roles/sp/home-evaluacion-ips/home-
     NuevoUsuarioResoComponent,
     EvaluacionesSicComponent,
     EvaluacionSicComponent,
-    ActaSpComponent,
+    ActaSpIpsComponent,
     ActaSpProComponent,
     ActaPamecComponent,
     EvaluacionesSpProComponent,
@@ -142,7 +141,6 @@ import { HomeEvaluacionIpsComponent } from './roles/sp/home-evaluacion-ips/home-
     EditarcriteipsimplComponent,
     EditarcriteipsplanComponent,
     ListaVerificacionComponent,
-    EvaluacionSpIpsComponent,
     EvaluacionSpProComponent,
     EvaluacionPamecComponent,
     ResetpasswordComponent,
