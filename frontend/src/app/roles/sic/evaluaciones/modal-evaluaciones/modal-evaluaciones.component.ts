@@ -17,7 +17,7 @@ export class ModalEvaluacionesComponent {
 
 
   //VARIBALES PARA ASIGNAR AL PDF GENERADO DESDE MODAL
-  act_id: string;
+  act_id: number;
   act_visita_inicial: string;
   act_visita_seguimiento: string;
   act_fecha_inicial: string;

@@ -13,6 +13,9 @@
     </div>
 </div>
 
+<!-- <ng-template #modalTemplate>
+    <app-modal-evaluaciones [dataFromParent]="modalRef"></app-modal-evaluaciones>
+</ng-template> -->
 
 <div class="wrapper">
 
@@ -25,37 +28,85 @@
                     </div>
                 </div>
             </div>
-            <div class="search-hero">
-                <input class="form-control" type="text" name="search" [(ngModel)]="searchText" placeholder="Buscar Prestador">
+
+            <div class="row">
+
+                <div class="col-md-2">
+                    <label for="">No Acta:</label>
+                    <input type="number" min="0" class="form-control" id="acta" name="act_id"
+                        placeholder="Número de Acta...">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="">Año:</label>
+                    <select name="select-anio" id="select-anio" class="form-select form-control">
+                        <option hidden selected>Año...</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-1 button-container">
+                    <button class="btn btn-outline-dark" title="Buscar Evaluaciones"><i class='fa fa-search'
+                            style="font-size:20px;"></i></button>
+                </div>
+
+                <div class="col-md-1 button-container">
+                    <button class="btn btn-outline-dark" title="Mostrar Actas"><i
+                            class='fa fa-list-alt' style="font-size:20px;"></i></button>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="">Nombre de Prestador o NIT:</label>
+                    <input class="form-control" type="text" name="search" [(ngModel)]="searchText"
+                        placeholder="Buscar Prestador">
+                </div>
+
             </div>
+
+
+
             <table class="table table-wrapper table-hover">
                 <thead>
                     <tr>
+                        <th scope="col">N°ACTA</th>
                         <th scope="col">PRESTADOR</th>
+                        <th scope="col">NIT</th>
+                        <th scope="col">MUNICIPIO</th>
+                        <th scope="col">FECHA DE CREACIÓN</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let evaluacion of evaluaciones | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page}">
-                        <td>{{evaluacion.nombrePrestador}}</td>
+                    <tr
+                        *ngFor="let evaluacion of evaluaciones | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page}">
+                        <td class="text-center">{{evaluacion.act_id}}</td>
+                        <td>{{evaluacion.act_prestador}}</td>
+                        <td>{{evaluacion.act_nit}}</td>
+                        <td class="text-center">{{evaluacion.act_municipio}}</td>
+                        <td>{{evaluacion.act_creado | date: 'dd/MM/yyyy' }}</td>
                         <td>
-                            <span class="fas fa-clipboard-check"></span>
+                            <!-- <button class="btn btn-outline-dark"
+                                (click)="openModal(modalTemplate, evaluacion.id, evaluacion.act_prestador)">
+                                <span class="fas fa-clipboard-check"></span>
+                            </button> -->
+
                         </td>
                     </tr>
+
                 </tbody>
-                <div class="container" *ngIf="!evaluaciones.length">
-                    <div class="p-3 mb-2 bg-dark text-white text-center">
-                        <h2>No Hay Evaluaciones Realizadas</h2>
-                    </div>
-                </div>
             </table>
-            <pagination-controls
-            (pageChange) ="page =$event"
-            previousLabel="Anterior"
-            nextLabel="Siguiente">
+
+            <div class="container" *ngIf="listaVacia">
+                <div class="p-3 mb-2 bg-dark text-white text-center">
+                    <h2>{{ listaVacia }}</h2>
+                </div>
+            </div>
+
+            <pagination-controls (pageChange)="page =$event" previousLabel="Anterior" nextLabel="Siguiente">
             </pagination-controls>
         </div>
     </div>
+
 
 
     <app-footer></app-footer>

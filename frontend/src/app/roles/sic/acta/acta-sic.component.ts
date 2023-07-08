@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { ActaPdfDto } from 'src/app/models/Sic/actapdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
+import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 
 
 
@@ -29,7 +30,8 @@ export class ActaSicComponent implements OnInit {
   prestador: PrestadorDto[];
   usuario: Usuario[];
   municipio: Municipio[];
-  acta_sic: ActaPdfDto = null;
+  actaPdf: ActaPdfDto = null;
+  actaSic: ActaPdfDto[];
 
   title = 'Probando-PDF';
 
@@ -40,7 +42,7 @@ export class ActaSicComponent implements OnInit {
 
 
   //VARIABLES PARA TRANSPORTAR EL DTO
-  act_id: string;
+  act_id: number;
   act_visita_inicial: string;
   act_visita_seguimiento: string;
   act_fecha_inicial: string;
@@ -71,6 +73,7 @@ export class ActaSicComponent implements OnInit {
     private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private authService: AuthService,
+    private actaPdfService: ActapdfService,
     private router: Router
 
   ) { }
@@ -79,7 +82,8 @@ export class ActaSicComponent implements OnInit {
     this.cargarMunicipio();
     this.cargarUsuario();
     this.unsoloCheckbox();
-    this.obtenerNombres()
+    this.obtenerNombres();
+    this.mostrarActaId();
   }
 
 
@@ -92,6 +96,18 @@ export class ActaSicComponent implements OnInit {
       },
       err => {
         this.listaVacia = err.error.message;
+      }
+    )
+  }
+
+
+  mostrarActaId(): void {
+    this.actaPdfService.listaUltimaSic().subscribe(
+      data => {
+        this.actaPdf = data
+        var acta = (document.getElementById('acta')) as HTMLSelectElement
+        acta.value = this.actaPdf.act_id.toString()
+
       }
     )
   }
@@ -143,6 +159,8 @@ export class ActaSicComponent implements OnInit {
     var sel = id.selectedIndex;
     var opt = id.options[sel]
     var Codigo = (<HTMLSelectElement><unknown>opt).value;
+
+
 
     this.prestadorService.listaOne(Codigo).subscribe(
       data => {
@@ -224,23 +242,24 @@ export class ActaSicComponent implements OnInit {
 
   obtenerNombres(): void {
     //OBTENER NOMBRE DEL PRESTADOR
-    var idp = (document.getElementById('prestador')) as HTMLSelectElement
-    var selp = idp.selectedIndex;
-    var optp = idp.options[selp]
-    var valorPrestador = (<HTMLSelectElement><unknown>optp);
-    sessionStorage.setItem("nombre-pres-sic", valorPrestador.textContent);
+    const idp = document.getElementById('prestador') as HTMLSelectElement;
+    const selp = idp.selectedIndex;
+    const optp = idp.options[selp] as HTMLOptionElement;
+    const valorPrestador = optp ? optp.textContent : '';
+    sessionStorage.setItem("nombre-pres-sic", valorPrestador);
+
 
     //CODIGO PRESTADOR
     var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
     var valorCodigoPres = codigoPres.value
     sessionStorage.setItem("cod-pres-sic", valorCodigoPres);
 
-    //USUARIO SECRETARIA
-    var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
-    var selUsuSecre = idUsuSecre.selectedIndex;
-    var optUsuSecre = idUsuSecre.options[selUsuSecre]
-    var valorUsuSecre = (<HTMLSelectElement><unknown>optUsuSecre);
-    sessionStorage.setItem("nombre-usuario-sic", valorUsuSecre.textContent);
+    // USUARIO SECRETARIA
+    const idUsuSecre = document.getElementById('usu_secretaria') as HTMLSelectElement;
+    const selUsuSecre = idUsuSecre.selectedIndex;
+    const optUsuSecre = idUsuSecre.options[selUsuSecre] as HTMLOptionElement;
+    const valorUsuSecre = optUsuSecre ? optUsuSecre.textContent : '';
+    sessionStorage.setItem("nombre-usuario-sic", valorUsuSecre);
 
     //CARGO USUARIO SECRETARIA
     var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
@@ -297,16 +316,16 @@ export class ActaSicComponent implements OnInit {
 
 
     //MUNICIPIO
-    var id = (document.getElementById('mun_id')) as HTMLSelectElement
-    var sel = id.selectedIndex;
-    var opt = id.options[sel]
-    var valorMunicipio = (<HTMLSelectElement><unknown>opt).textContent;
+    const id = document.getElementById('mun_id') as HTMLSelectElement;
+    const sel = id.selectedIndex;
+    const opt = id.options[sel] as HTMLOptionElement;
+    const valorMunicipio = opt ? opt.textContent : '';
 
     //PRESTADOR
-    var idp = (document.getElementById('prestador')) as HTMLSelectElement
-    var selp = idp.selectedIndex;
-    var optp = idp.options[selp]
-    var valorPrestador = (<HTMLSelectElement><unknown>optp).textContent;
+    const idp = document.getElementById('prestador') as HTMLSelectElement;
+    const selp = idp.selectedIndex;
+    const optp = idp.options[selp] as HTMLOptionElement;
+    const valorPrestador = optp ? optp.textContent : '';
 
 
 
@@ -344,10 +363,10 @@ export class ActaSicComponent implements OnInit {
     var valorCodigoSede = codsede.value
 
     //SEDE PRINCIPAL
-    var idSede = (document.getElementById('sedep')) as HTMLSelectElement
-    var selSede = idSede.selectedIndex;
-    var optSede = idSede.options[selSede]
-    var valorSede = (<HTMLSelectElement><unknown>optSede).textContent;
+    const idSede = document.getElementById('sedep') as HTMLSelectElement;
+    const selSede = idSede.selectedIndex;
+    const optSede = idSede.options[selSede] as HTMLOptionElement;
+    const valorSede = optSede ? optSede.textContent : '';
 
     //LOCALIDAD Y DIRECCION SEDE PRINCIPAL
 
@@ -357,17 +376,17 @@ export class ActaSicComponent implements OnInit {
     var direccionSede = (document.getElementById('dirubic')) as HTMLInputElement
     var valorDirSede = direccionSede.value
 
-    //OBJETO VISITA
-    var idObjvisita = (document.getElementById('objVisita')) as HTMLSelectElement
-    var selObjvisita = idObjvisita.selectedIndex;
-    var optObjvisita = idObjvisita.options[selObjvisita]
-    var valorObjvisita = (<HTMLSelectElement><unknown>optObjvisita).textContent;
+    // OBJETO VISITA
+    const idObjvisita = document.getElementById('objVisita') as HTMLSelectElement;
+    const selObjvisita = idObjvisita.selectedIndex;
+    const optObjvisita = idObjvisita.options[selObjvisita] as HTMLOptionElement;
+    const valorObjvisita = optObjvisita ? optObjvisita.textContent : '';
 
-    //USUARIO SECRETARIA
-    var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
-    var selUsuSecre = idUsuSecre.selectedIndex;
-    var optUsuSecre = idUsuSecre.options[selUsuSecre]
-    var valorUsuSecre = (<HTMLSelectElement><unknown>optUsuSecre).textContent;
+    // USUARIO SECRETARIA
+    const idUsuSecre = document.getElementById('usu_secretaria') as HTMLSelectElement;
+    const selUsuSecre = idUsuSecre.selectedIndex;
+    const optUsuSecre = idUsuSecre.options[selUsuSecre] as HTMLOptionElement;
+    const valorUsuSecre = optUsuSecre ? optUsuSecre.textContent : '';
 
     //CARGO USUARIO SECRETARIA
     var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
@@ -646,6 +665,13 @@ export class ActaSicComponent implements OnInit {
       }
     })
 
+    //VALIDAR ACTA
+    if (!valorActa.length) {
+      this.toastrService.error('El número de acta no puede estar vacia', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-top-center',
+      })
+    }
 
     //VALIDAR FECHAS
     if (!valorfechaFinal && !valorfechaInicial) {
@@ -662,14 +688,6 @@ export class ActaSicComponent implements OnInit {
     }
     if (!valorfechaFinal) {
       this.toastrService.error('La fecha Final no pueden estar vacia', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR ACTA
-    if (!valorActa.length) {
-      this.toastrService.error('El número de acta no puede estar vacia', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       })
@@ -723,13 +741,14 @@ export class ActaSicComponent implements OnInit {
     }
 
     //VALIDAR MUNICIPIO Y PRESTADOR
-    if (!sel) {
+    if (!valorMunicipio) {
       this.toastrService.error('Selecciona el Municipio', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       })
     }
-    if (!selp) {
+    /**/
+    if (valorMunicipio && !valorPrestador) {
       this.toastrService.error('Selecciona el Prestador', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',
@@ -765,10 +784,11 @@ export class ActaSicComponent implements OnInit {
     //VALIDANDO POR VALOR DE SEDE Y ENVIAR SOLICITUD DE DESCARGA DE ACTA
     if (valorSede === 'Si') {
       if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
-        valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede && valorActa) {
+        valorCargoSecre && valorCargoPres && valorUsuSecre && valorObjvisita && valorMunicipio && valorPrestador && valorSede && valorActa) {
         if (valorVisitaInicial || valorVisitaSeguim) {
 
           //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
+          this.act_id = Number(valorActa);
           this.act_municipio = valorMunicipio
           this.act_prestador = valorPrestador
           this.act_nit = valorNit
@@ -782,7 +802,7 @@ export class ActaSicComponent implements OnInit {
 
 
           //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
-          this.acta_sic = new ActaPdfDto(
+          this.actaPdf = new ActaPdfDto(
 
             this.act_id,
             this.act_visita_inicial,
@@ -808,8 +828,7 @@ export class ActaSicComponent implements OnInit {
             this.act_nombre_prestador,
             this.act_cargo_prestador
           );
-          console.log(this.acta_sic)
-          this.authService.registroActaPdf(this.acta_sic).subscribe();
+          this.authService.registroActaPdf(this.actaPdf).subscribe();
 
 
 
@@ -817,7 +836,7 @@ export class ActaSicComponent implements OnInit {
           //OBTENER EL ESTADO DEL BOTON A TRUE 
           this.boton_acta_sic = true
           localStorage.setItem('boton-acta-sic', 'true');
-          console.log(localStorage.setItem('boton-acta-sic', 'true'))
+
 
           Swal.fire({
             title: '¿Desea descargar el acta?',
@@ -855,8 +874,8 @@ export class ActaSicComponent implements OnInit {
     //VALIDACIÓN PARA PDF
     if (valorSede === 'No') {
       if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
-        valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && selSede
-        && valorLocalidad && valorDirSede && valorActa) {
+        valorCargoSecre && valorCargoPres && valorUsuSecre && valorObjvisita && valorMunicipio && valorPrestador && valorSede && valorActa
+        && valorLocalidad && valorDirSede) {
         if (valorVisitaInicial || valorVisitaSeguim) {
 
           //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
@@ -873,7 +892,7 @@ export class ActaSicComponent implements OnInit {
 
 
           //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
-          this.acta_sic = new ActaPdfDto(
+          this.actaPdf = new ActaPdfDto(
 
             this.act_id,
             this.act_visita_inicial,
@@ -899,8 +918,7 @@ export class ActaSicComponent implements OnInit {
             this.act_nombre_prestador,
             this.act_cargo_prestador
           );
-          console.log(this.acta_sic)
-          this.authService.registroActaPdf(this.acta_sic).subscribe();
+          this.authService.registroActaPdf(this.actaPdf).subscribe();
 
 
 

@@ -26,7 +26,6 @@ export class CriteriopamecComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarActividad();
-
   }
 
   cargarActividad(): void{

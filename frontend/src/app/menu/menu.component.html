@@ -42,9 +42,14 @@
             <a *ngIf="isAdmin || isPamec" routerLink="/criteriopam">CRITERIOS PAMEC</a>
             <a *ngIf="isAdmin || isSp" routerLink="/criterioind">CRITERIOS SP IND</a>
             <a *ngIf="isAdmin || isSp" routerLink="/criterioips">CRITERIOS SP IPS</a>
-            <a *ngIf="isAdmin || isReso" routerLink="/">COSAS DE RES</a>
+            <a *ngIf="isAdmin || isReso" routerLink="/home-res-criterios">GRUPOS RESOLUCIÓN 3100</a>
           </div>
         </div>
+
+        <li class="nav-item">
+          <a class="nav-link bg-a" *ngIf="isAdmin" routerLink="/auditoria"><i class="fas fa-search-location color_icono"></i>
+            AUDITORIA</a>
+        </li>
 
       </div>
     </ul>

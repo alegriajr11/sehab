@@ -1,5 +1,5 @@
 export class ActaPdfDto {
-    act_id?: string;
+    act_id?: number;
     act_visita_inicial: string;
     act_visita_seguimiento: string;
     act_fecha_inicial: string;
@@ -24,7 +24,7 @@ export class ActaPdfDto {
     act_cargo_prestador: string
 
     constructor(
-        act_id: string, 
+        act_id: number, 
         act_visita_inicial: string, 
         act_visita_seguimiento: string,
         act_fecha_inicial: string,
