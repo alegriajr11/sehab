@@ -43,6 +43,18 @@ export class SpIpsService {
         return actas;
     }
 
+    //ENCONTRAR ACTAS POR AÑO EXACTA
+    async findAllFromYear(date: string): Promise<ActaSpIpsEntity[]> {
+
+        const actas = await this.actaSpIpsRepository.createQueryBuilder('acta')
+            .where('YEAR(acta.act_creado )= :date', { date })
+            .getMany();
+        if (actas.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay actas en ese año'));
+        }
+
+        return actas;
+    }
 
     /*CREACIÓN SP IPS ACTA PDF */
     async create(dto: IpsDto): Promise<any> {

@@ -28,6 +28,12 @@ export class SpIndependientesController {
         return this.sp_IndependientesService.findAllFromDate(dateString);
     }
 
+    //OBTENER ACTAS POR AÑO
+    @Get('/fecha/year/:date')
+    async findAllFromYear(@Param('date') dateString: string) {
+        return this.sp_IndependientesService.findAllFromYear(dateString);
+    }
+
     //CREAR SP INDEPENDIENTE ACTA PDF
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))

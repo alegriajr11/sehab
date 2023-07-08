@@ -27,6 +27,12 @@ export class PamecActaController {
         return this.pamecActaService.findAllFromDate(dateString);
     }
 
+    //OBTENER ACTAS POR AÑO
+    @Get('/fecha/year/:date')
+    async findAllFromYear(@Param('date') dateString: string) {
+        return this.pamecActaService.findAllFromYear(dateString);
+    }
+
     //CREAR PAMEC IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))

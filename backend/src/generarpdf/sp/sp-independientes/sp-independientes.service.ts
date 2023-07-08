@@ -43,6 +43,19 @@ export class SpIndependientesService {
         return actas;
     }
 
+    //ENCONTRAR ACTAS POR AÑO EXACTA
+    async findAllFromYear(date: string): Promise<ActaSpIndependientePdfEntity[]> {
+
+        const actas = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
+            .where('YEAR(acta.act_creado )= :date', { date })
+            .getMany();
+        if (actas.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay actas en ese año'));
+        }
+
+        return actas;
+    }
+
 
     /*CREACIÓN SP INDEPENDIENTE ACTA PDF */
     async create(dto: IndActaDto): Promise<any> {

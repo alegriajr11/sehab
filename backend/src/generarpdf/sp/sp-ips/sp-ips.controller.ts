@@ -27,6 +27,13 @@ export class SpIpsController {
         return this.sp_IpsService.findAllFromDate(dateString);
     }
 
+    //OBTENER ACTAS POR AÑO
+    @Get('/fecha/year/:date')
+    async findAllFromYear(@Param('date') dateString: string) {
+        return this.sp_IpsService.findAllFromYear(dateString);
+    }
+
+
     //CREAR SP IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))

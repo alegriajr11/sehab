@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 
 @Entity({ name: 'auditoria-registro' })
 export class AuditoriaRegistroEntity {
@@ -20,6 +20,11 @@ export class AuditoriaRegistroEntity {
     @Column()
     direccionIp: string;
 
-    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    @Column({ type: 'date' })
     creadoEn: Date;
+
+    @BeforeInsert()
+    async setDate() {
+        this.creadoEn = new Date();
+    }
 }

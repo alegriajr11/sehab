@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuditoriaRegistroEntity } from '../auditoria_registro.entity';
 import { AuditoriaRegistroRepository } from '../auditoria_registro.repository';
+import { MessageDto } from 'src/common/message.dto';
 
 @Injectable()
 export class AuditoriaRegistroService {
@@ -48,26 +49,71 @@ export class AuditoriaRegistroService {
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario Sic', details, direccionIp);
     }
     //logUpdateUserSic
+    async logUpdateUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario Sic', details, direccionIp);
+    }
     //logDeleteUserSic
+    async logDeleteUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario Sic', details, direccionIp);
+    }
 
 
     /** USUARIOS - ROL PAMEC */
     //logCreateUserPamec
+    async logCreateUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Creado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol PAMEC`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario PAMEC', details, direccionIp);
+    }
     //logUpdateUserPamec
+    async logUpdateUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol PAMEC`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario PAMEC', details, direccionIp);
+    }
     //logDeleteUserPamec
+    async logDeleteUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol PAMEC`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario PAMEC', details, direccionIp);
+    }
 
-
-    /** USUARIOS - ROL PAMEC */
+    /** USUARIOS - ROL SP */
     //logCreateUserSP
+    async logCreateUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Creado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario SP', details, direccionIp);
+    }
     //logUpdateUserSP
+    async logUpdateUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario SP', details, direccionIp);
+    }
     //logDeleteUserSP
+    async logDeleteUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario SP', details, direccionIp);
+    }
 
 
-    /** USUARIOS - ROL PAMEC */
+
+
+
+    /** USUARIOS - ROL RES */
     //logCreateUserRES
+    async logCreateUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Creado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol RES`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario RES', details, direccionIp);
+    }
     //logUpdateUserRES
+    async logUpdateUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol RES`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario RES', details, direccionIp);
+    }
     //logDeleteUserRES
-
+    async logDeleteUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol RES`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario RES', details, direccionIp);
+    }
 
 
 
@@ -82,6 +128,12 @@ export class AuditoriaRegistroService {
     async logUpdateActaSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta SIC ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta SIC', details, direccionIp);
+    }
+
+    //CONTROLAR LA ELININACIÓN DE SIC ACTA
+    async logDeleteActaSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado un Acta SIC ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Acta SIC', details, direccionIp);
     }
 
 
@@ -100,6 +152,13 @@ export class AuditoriaRegistroService {
     }
 
 
+    //CONTROLAR LA ELIMINACIÓN DE PAMEC ACTA ACTA
+    async logDeletePamecActa(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado un PAMEC ACTA   ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol PAMEC ACTA`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación PAMEC ACTA', details, direccionIp);
+    }
+
+
 
     /*ACTAS - SP*/
     //CONTROLAR LA CREACIÓN DE  SP INDEPENDIENTE ACTA
@@ -108,11 +167,6 @@ export class AuditoriaRegistroService {
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Acta SP Independientes', details, direccionIp);
     }
 
-    //CONTROLAR LA CREACIÓN DE  SP IPS ACTA
-    async logCreateSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta SP IPS ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP`;
-        await this.logActivity(usu_nombre, usu_apellido, 'Creación Acta SP IPS', details, direccionIp);
-    }
 
     //CONTROLAR LA ACTUALIZACIÓN DE  SP INDEPENDIENTE ACTA
     async logUpdateSpIndep(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
@@ -120,31 +174,58 @@ export class AuditoriaRegistroService {
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta SP Independientes', details, direccionIp);
     }
 
-    //CONTROLAR LA ACTUALIZACIÓN DE  PAMEC ACTA
+
+
+    //CONTROLAR LA ELIMINACIÓN DE  SP INDEPENDIENTE ACTA
+    async logDeleteSpIdep(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado un Acta SP INDEPENDIENTE ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP INDEPENDIENTE`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Acta SP INDEPENDIENTE', details, direccionIp);
+    }
+
+    //CONTROLAR LA CREACIÓN DE  SP IPS ACTA
+    async logCreateSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta SP IPS ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Creación Acta SP IPS', details, direccionIp);
+    }
+
+    //CONTROLAR LA ACTUALIZACIÓN DE SP IPS ACTA
     async logUpdateSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta SP IPS ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP`;
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta SP IPS ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del RolSP IPS`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta SP IPS', details, direccionIp);
+    }
+
+    //CONTROLAR LA ELIMINACIÓN DE  SP IPS ACTA
+    async logDeleteSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado un Acta SP IPS ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP IPS`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Acta SP IPS', details, direccionIp);
     }
 
 
 
 
-    // //CONTROLAR LA CREACIÓN DE ADMIN
-    // async logCreateRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-    //     const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado el admin ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol Admin`;
-    //     await this.logActivity(usu_nombre, usu_apellido, 'creacion de admin', details, direccionIp);
-    // }
-
-    // //CONTROLAR LA ACTUALIZACIÓN DE ADMIN
-    // async logUpdateRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-    //     const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado el admin ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol Admin`;
-    //     await this.logActivity(usu_nombre, usu_apellido, 'Actualizacion de admin', details, direccionIp);
-    // }
-
-
     /* CONSULTAS DE AUDITORIA - SERVICIO DE AUDITORIA */
-    // LISTA DE AUDITORIAS POR FECHA INICIO Y FECHA FINAL O ACCIÓN REALIZADA
+    // LISTA DE AUDITORIAS POR FECHA INICIO Y FECHA FINAL
+    //ENCONTRAR ACTAS POR FECHA EXACTA
+    async findAllFromDate(fechaInicio?: Date, fechaFin?: Date, accion?: string): Promise<AuditoriaRegistroEntity[]> {
+        let query = this.auditoria_registroRepository.createQueryBuilder('auditoria');
 
+        if (accion) {
+            query = query.where('auditoria.accion = :accion', { accion });
+        }
+
+        if (fechaInicio && fechaFin) {
+            query = query.andWhere('auditoria.creadoEn >= :fechaInicio', { fechaInicio })
+                .andWhere('auditoria.creadoEn <= :fechaFin', { fechaFin });
+        }
+
+        const auditorias = await query.getMany();
+
+        if (auditorias.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
+        }
+
+        return auditorias;
+    }
 
     //LISTAR TODAS LAS AUDITORIAS POR NOMBRE Y APELLIDOS DEL FUNCIONARIO
     async findAllAuditoriaNomApel(usu_nombre_apellido: string): Promise<AuditoriaRegistroEntity[]> {
