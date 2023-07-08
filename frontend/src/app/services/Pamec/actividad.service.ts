@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ActividadService {
 
-  //  actividadURL: 'http://localhost:8080/actividad/',
+  //actividadURL: 'http://localhost:8080/actividad/',
 
   actividadURL = environment.actividadURL
 

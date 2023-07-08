@@ -207,6 +207,23 @@ table.table .avatar {
     grid-gap: 0 1rem;
 }
 
+.button-container{
+    display: flex;
+    align-items: flex-end;
+
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+label {
+    font-weight:  bold;
+}
+
 span{
     font-size: xx-large;
 }

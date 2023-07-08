@@ -24,8 +24,8 @@ import { EvaluacionesSicComponent } from './roles/sic/evaluaciones/evaluaciones-
 import { HomeSicComponent } from './roles/sic/home-sic.component';
 import { ActaSpComponent } from './roles/sp/acta-ips/acta-sp-ips.component';
 import { ActaSpProComponent } from './roles/sp/acta-pro/acta-sp-pro.component';
-import { EvaluacionesSpIpsComponent } from './roles/sp/eva-ips/evaluaciones-sp-ips.component';
-import { EvaluacionesSpProComponent } from './roles/sp/eva-pro/evaluaciones-sp-pro.component';
+import { EvaluacionesSpIpsComponent } from './roles/sp/home-evaluacion-ips/evaluaciones-ips/evaluaciones-sp-ips.component';
+import { EvaluacionesSpProComponent } from './roles/sp/evaluaciones-pro/evaluaciones-sp-pro.component';
 import { EvaluacionSpIpsComponent } from './roles/sp/evaluacion-sp-ips/evaluacion-sp-ips.component';
 import { EvaluacionSpProComponent } from './roles/sp/evaluacion-sp-pro/evaluacion-sp-pro.component';
 import { HomeSpComponent } from './roles/sp/home-sp.component';
@@ -62,9 +62,16 @@ import { ApoyoDiagnosticoComponent } from './roles/reso/home-estandar/apoyo-diag
 import { InternacionComponent } from './roles/reso/home-estandar/internacion/internacion.component';
 import { QuirurgicoComponent } from './roles/reso/home-estandar/quirurgico/quirurgico.component';
 import { EditarPrestadorComponent } from './prestador/editar-prestador/editar-prestador.component';
+import { HomeCriteriosComponent } from './usuario/admin/resolucion/home-criterios/home-criterios.component';
+import { CriterioTodosServiciosComponent } from './usuario/admin/resolucion/criterio-todos-servicios/criterio-todos-servicios.component';
+import { AuditoriaComponent } from './usuario/admin/auditoria/auditoria.component';
+import { HomeEvaluacionIpsComponent } from './roles/sp/home-evaluacion-ips/home-evaluacion-ips.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+
+  //ADMIN AUDITORIA
+  { path: 'auditoria', component: AuditoriaComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
 
   //Rutas ADMIN - SIC
   { path: 'criteriosic', component: CriteriosicComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sic'] } },
@@ -110,16 +117,18 @@ const routes: Routes = [
   { path: 'sic', component: HomeSicComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sic'] } },
   { path: 'sic/acta', component: ActaSicComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sic'] } },
   { path: 'sic/evaluaciones', component: EvaluacionesSicComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sic'] } },
-  { path: 'sic/evaluacion', component: EvaluacionSicComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sic'] } },
-  //, ButtonGuard => Guard Acceso a evaluación
+  { path: 'sic/evaluacion', component: EvaluacionSicComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sic'] } },
 
-  //Rutas SP
+  //Rutas SP - IPS
   { path: 'sp', component: HomeSpComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/acta-ips', component: ActaSpComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluaciones-ips', component: EvaluacionesSpIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard,], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/home-evaluacion-ips', component: HomeEvaluacionIpsComponent, canActivate: [UsuarioGuard,], data: { expectedRol: ['admin', 'sp'] } },
+
+  //Rutas SP - PROFESIONALES
   { path: 'sp/acta-pro', component: ActaSpProComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/evaluaciones-pro', component: EvaluacionesSpProComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluaciones-ips', component: EvaluacionesSpIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/evaluacion-pro', component: EvaluacionSpProComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
 
   //Rutas PAMEC
@@ -133,7 +142,7 @@ const routes: Routes = [
   { path: 'reso', component: HomeResoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'lista-verificacion', component: ListaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'servicios-capacidad', component: CapacidadInstaladaComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
-    //ESTANDARES - RESOLUCION
+  //ESTANDARES - RESOLUCION
   { path: 'home-estandar', component: HomeEstandarComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'todos-servicios', component: TodosServiciosComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'atencion-inmediata', component: AtencionInmediataComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
@@ -141,6 +150,17 @@ const routes: Routes = [
   { path: 'apoyo-diagnostico', component: ApoyoDiagnosticoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'internacion', component: InternacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'quirurgico', component: QuirurgicoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
+  //HOME CRITERIOS RESOLUCIÓN 3100
+  { path: 'home-res-criterios', component: HomeCriteriosComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'criterio-todos-servicios', component: CriterioTodosServiciosComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
+  { path: 'atencion-inmediata', component: AtencionInmediataComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'consulta-externa', component: ConsultaExternaComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'apoyo-diagnostico', component: ApoyoDiagnosticoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'internacion', component: InternacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'quirurgico', component: QuirurgicoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
 
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
 

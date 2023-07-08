@@ -16,6 +16,7 @@ export const environment = {
   rolURL:'http://localhost:8080/rol/',
   claseURL: 'http://localhost:8080/clase/',
   generarPdfURL: 'http://localhost:8080/generarpdf/usuarios/',
+  
 
 //SIC
   criterioSicURL: 'http://localhost:8080/criteriosic/',
@@ -50,6 +51,10 @@ export const environment = {
   ajusteDetailURL: 'http://localhost:8080/criterioajuste/ajuste/',
   verificacionURL: 'http://localhost:8080/criterioverif/',
   verificacionOneURL: 'http://localhost:8080/criterioverif/verificacion/',
+
+
+  //RESOLUCIÓN 3100/2019
+  todos_serviciosURL: 'http://localhost:8080/criterio-servicios/',
 
 //PRESTADOR
   municipioURL: 'http://localhost:8080/municipio/',

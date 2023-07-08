@@ -16,12 +16,14 @@ export class EvaluacionesSicComponent implements OnInit {
   // evaluaciones: Usuario[] = [];
 
   evaluaciones: any[] = [];
-  
+
   listaVacia: any = undefined;
-  
+
   searchText: any;
 
   public modalRef: BsModalRef;
+
+  public fechaSeleccionada: string;
 
   public page!: number;
 
@@ -34,6 +36,7 @@ export class EvaluacionesSicComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarActas();
+    this.obtenerAnios();
   }
 
   cargarActas(): void {
@@ -63,8 +66,30 @@ export class EvaluacionesSicComponent implements OnInit {
 
   }
 
-  generarActaPdf(): void{
+  obtenerActasFechas(date: string) {
+    this.actapdfService.actaSicDate(date).subscribe(
+      data => {
+        this.evaluaciones = data;
+        this.listaVacia = undefined;
+      },
+      err => {
+        this.listaVacia = err.error.message;
+        this.evaluaciones = []
+      }
+    );
+  }
+
+  obtenerAnios(): void {
+    const selectAnio = document.getElementById("select-anio") as HTMLSelectElement;
+    const fechaActual = new Date();
+    const anioActual = fechaActual.getFullYear();
     
+    for (let i = anioActual; i >= 1900; i--) {
+      const option = document.createElement("option");
+      option.text = i.toString();
+      option.value = i.toString();
+      selectAnio.add(option);
+    }
   }
 
 

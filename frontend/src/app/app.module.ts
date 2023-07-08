@@ -41,8 +41,8 @@ import { EvaluacionSicComponent } from './roles/sic/evaluacion/evaluacion-sic.co
 import { ActaSpComponent } from './roles/sp/acta-ips/acta-sp-ips.component';
 import { ActaSpProComponent } from './roles/sp/acta-pro/acta-sp-pro.component';
 import { ActaPamecComponent } from './roles/pamec/acta/acta-pamec.component';
-import { EvaluacionesSpProComponent } from './roles/sp/eva-pro/evaluaciones-sp-pro.component';
-import { EvaluacionesSpIpsComponent } from './roles/sp/eva-ips/evaluaciones-sp-ips.component';
+import { EvaluacionesSpProComponent } from './roles/sp/evaluaciones-pro/evaluaciones-sp-pro.component';
+import { EvaluacionesSpIpsComponent } from './roles/sp/home-evaluacion-ips/evaluaciones-ips/evaluaciones-sp-ips.component';
 import { EvaluacionesPamecComponent } from './roles/pamec/evaluaciones/evaluaciones-pamec.component';
 import { ListaPrestadorComponent } from './prestador/lista-prestador.component';
 import { NuevoPrestadorComponent } from './prestador/nuevo-prestador.component';
@@ -83,6 +83,10 @@ import { QuirurgicoComponent } from './roles/reso/home-estandar/quirurgico/quiru
 import { AtencionInmediataComponent } from './roles/reso/home-estandar/atencion-inmediata/atencion-inmediata.component';
 import { EditarPrestadorComponent } from './prestador/editar-prestador/editar-prestador.component';
 import { ModalEvaluacionesComponent } from './roles/sic/evaluaciones/modal-evaluaciones/modal-evaluaciones.component';
+import { HomeCriteriosComponent } from './usuario/admin/resolucion/home-criterios/home-criterios.component';
+import { CriterioTodosServiciosComponent } from './usuario/admin/resolucion/criterio-todos-servicios/criterio-todos-servicios.component';
+import { AuditoriaComponent } from './usuario/admin/auditoria/auditoria.component';
+import { HomeEvaluacionIpsComponent } from './roles/sp/home-evaluacion-ips/home-evaluacion-ips.component';
 
 
 @NgModule({
@@ -156,7 +160,11 @@ import { ModalEvaluacionesComponent } from './roles/sic/evaluaciones/modal-evalu
     QuirurgicoComponent,
     AtencionInmediataComponent,
     EditarPrestadorComponent,
-    ModalEvaluacionesComponent
+    ModalEvaluacionesComponent,
+    HomeCriteriosComponent,
+    CriterioTodosServiciosComponent,
+    AuditoriaComponent,
+    HomeEvaluacionIpsComponent
   ],
   imports: [
     BrowserModule,
