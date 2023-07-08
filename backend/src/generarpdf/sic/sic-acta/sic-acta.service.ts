@@ -75,6 +75,19 @@ export class SicActaService {
         return actas;
     }
 
+    //ENCONTRAR ACTAS POR FECHA EXACTA
+    async findAllFromYear(date: string): Promise<ActaSicPdfEntity[]> {
+
+        const actas = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
+            .where('YEAR(acta.act_creado )= :date', { date })
+            .getMany();
+        if (actas.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay actas en ese año'));
+        }
+
+        return actas;
+    }
+
 
 
     /*CREACIÓN SIC ACTA PDF */

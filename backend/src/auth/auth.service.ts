@@ -20,7 +20,6 @@ import { v4 } from 'uuid';
 import { RessetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
-import { requestIpMiddleware } from 'request-ip';
 
 @Injectable()
 export class AuthService {

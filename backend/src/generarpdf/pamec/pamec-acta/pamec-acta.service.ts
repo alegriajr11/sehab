@@ -31,16 +31,29 @@ export class PamecActaService {
     }
 
     //async getallActasYear(): Promise<ActaPamecIpsEntity[]> {
-    
 
-     //ENCONTRAR POR ACTA POR FECHAS
+
+    //ENCONTRAR POR ACTA POR FECHAS
     async findAllFromDate(date: string): Promise<ActaPamecIpsEntity[]> {
 
         const actas = await this.actaPamecIpsRepository.createQueryBuilder('acta')
             .where('acta.act_creado = :date', { date })
             .getMany();
-        if(actas.length === 0){
+        if (actas.length === 0) {
             throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
+        }
+
+        return actas;
+    }
+
+    //ENCONTRAR ACTAS POR AÑO EXACTA
+    async findAllFromYear(date: string): Promise<ActaPamecIpsEntity[]> {
+
+        const actas = await this.actaPamecIpsRepository.createQueryBuilder('acta')
+            .where('YEAR(acta.act_creado )= :date', { date })
+            .getMany();
+        if (actas.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay actas en ese año'));
         }
 
         return actas;

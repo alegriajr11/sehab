@@ -30,6 +30,12 @@ export class SicActaController {
         return this.sic_act_pdfService.findAllFromDate(dateString);
     }
 
+    //OBTENER ACTAS POR AÑO
+    @Get('/fecha/year/:date')
+    async findAllFromYear(@Param('date') dateString: string) {
+        return this.sic_act_pdfService.findAllFromYear(dateString);
+    }
+
     //ÚLTIMA ACTA SIC
     //@UseGuards(JwtAuthGuard)
     @Get('ultima/acta/sic')
