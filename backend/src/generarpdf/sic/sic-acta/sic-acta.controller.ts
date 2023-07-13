@@ -3,11 +3,8 @@ import { SicActaService } from './sic-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
 import { ActaSicPdfEntity } from './sic-acta-pdf.entity';
-<<<<<<< HEAD
 import { query } from 'express';
-=======
 import { TokenDto } from 'src/auth/dto/token.dto';
->>>>>>> 394b05929c48998c5f989aaefe26961ce5d529b0
 
 @Controller('sic-acta')
 export class SicActaController {

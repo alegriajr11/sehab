@@ -103,17 +103,11 @@ import { CriteriosPrehospitalariaModule } from './resolucion/evaluacion/grupo_at
 import { CriteriosPartoController } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.controller';
 import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.module';
 import { CriterioHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterio_hospitalizacion/criterio_hospitalizacion.module';
-<<<<<<< HEAD
-import { AuditoriaRegistroService } from './auditoria/auditoria_registro/auditoria_registro.service';
-import { AuditoriaRegistroModule } from './auditoria/auditoria_registro/auditoria_registro.module';
-import { CapacidadInstaladaModule } from './resolucion/servicio_capacidad/capacidad_instalada/capacidad_instalada.module';
 import { CapacidadInstaladaModule } from './resolucion/servicios_capacidad/capacidad_instalada/capacidad_instalada.module';
-import { CapacidadInstaladaController } from './no/resolucion/servicios_capacidad/capacidad_instalada/capacidad_instalada.controller';
 import { ServiciosVerificadosModule } from './resolucion/servicios_capacidad/servicios_verificados/servicios_verificados.module';
-=======
-import { AuditoriaRegistroService } from './auditoria_registro/auditoria_registro.service';
 import { AuditoriaRegistroModule } from './auditoria_registro/auditoria_registro.module';
->>>>>>> 394b05929c48998c5f989aaefe26961ce5d529b0
+import { CapacidadInstaladaController } from './resolucion/servicios_capacidad/capacidad_instalada/capacidad_instalada.controller';
+
 
 
 
