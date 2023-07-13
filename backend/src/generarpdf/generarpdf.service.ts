@@ -28,11 +28,13 @@ export class GenerarpdfService {
         private readonly usuarioRepository: UsuarioRepository,
         @Inject(UsuarioService)
         private readonly usuarioService: UsuarioService
+        
 
 
     ) { }
 
-    async generarPdf(): Promise<Buffer> {
+    //GENERACIÓN DE REPORTE DE USUSARIOS CON SU RESPECTIVO ROL Y MOSTRANDO SU ESTADO
+    async generarPdfUsuarios(): Promise<Buffer> {
         const usuario = await this.usuarioService.getall()
 
         const pdfBuffer: Buffer = await new Promise(resolve => {
@@ -118,6 +120,7 @@ export class GenerarpdfService {
                 rows_elements.push(temp_list);
             });
 
+
             const table = {
                 headers: ["Nombres", "Apellidos", "Email", "Nombre de Usuario", "Estado", "Rol"],
                 rows: rows_elements
@@ -152,5 +155,14 @@ export class GenerarpdfService {
         return pdfBuffer;
 
     }
+    // FIN DEL METODO - GENERACIÓN DE REPORTE DE USUSARIOS CON SU RESPECTIVO ROL Y MOSTRANDO SU ESTADO
+
+
+
+    //METODO CREACIÓN DE REPORTE DE EVALUACIÓN SIC
+    
+    //FIN DEL METODO - CREACIÓN DE REPORTE DE EVALUACIÓN SIC
+
+
 
 }

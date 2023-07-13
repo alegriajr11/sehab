@@ -21,7 +21,6 @@ import { ItemipsModule } from './sp/sp_ips/itemips/itemips.module';
 import { PlaneacionModule } from './sp/sp_ips/planeacion/planeacion.module';
 import { GenerarpdfModule } from './generarpdf/generarpdf.module';
 import { CalificacionpamecModule } from './pamec/calificacionpamec/calificacionpamec.module';
-import { CriteriosicCumplimientoController } from './sic/criteriosic-cumplimiento/criteriosic-cumplimiento.controller';
 import { CriteriosicCumplimientoModule } from './sic/criteriosic-cumplimiento/criteriosic-cumplimiento.module';
 import { CriterioServiciosController } from './resolucion/evaluacion/todos_servicios/criterio_servicios/criterio_servicios.controller';
 import { CriterioServiciosModule } from './resolucion/evaluacion/todos_servicios/criterio_servicios/criterio_servicios.module';
@@ -104,8 +103,8 @@ import { CriteriosPrehospitalariaModule } from './resolucion/evaluacion/grupo_at
 import { CriteriosPartoController } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.controller';
 import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/criterios_parto/criterios_parto.module';
 import { CriterioHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterio_hospitalizacion/criterio_hospitalizacion.module';
-import { AuditoriaRegistroService } from './auditoria/auditoria_registro/auditoria_registro.service';
-import { AuditoriaRegistroModule } from './auditoria/auditoria_registro/auditoria_registro.module';
+import { AuditoriaRegistroService } from './auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroModule } from './auditoria_registro/auditoria_registro.module';
 
 
 

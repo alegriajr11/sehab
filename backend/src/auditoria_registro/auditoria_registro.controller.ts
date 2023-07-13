@@ -15,7 +15,7 @@ export class AuditoriaRegistroController {
         return await this.auditoriaRegistroService.findAllAuditoriaNomApel(usu_nombre_apellido);
     }
 
-    //OBTENER ACTAS POR FECHA
+    //OBTENER ACTAS POR FECHA O ACCIÓN
     @Get('/fecha/date')
     async findAllFromDate(@Query('fechaInicio') fechaInicio: Date,
         @Query('fechaFin') fechaFin: Date,

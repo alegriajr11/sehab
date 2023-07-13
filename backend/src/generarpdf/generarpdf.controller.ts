@@ -15,7 +15,7 @@ export class GenerarpdfController {
     //DECORADOR SOLICITANDO SERVICIO GENERAR PDF
     @Get('usuarios')
     async descargarPdf(@Res() res): Promise<void> {
-        const buffer = await this.generarPdfService.generarPdf()
+        const buffer = await this.generarPdfService.generarPdfUsuarios()
 
         res.setHeader('Content-Disposition', 'attachment; filename="usuarios_sogcs.pdf"');
         res.set({

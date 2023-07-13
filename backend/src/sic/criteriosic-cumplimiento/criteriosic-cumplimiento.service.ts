@@ -67,8 +67,7 @@ export class CriteriosicCumplimientoService {
         const cumpl_cri = await this.cumplimientoEstandarSicRepository.findOne({ where: { criterioestandar_sic: criterio_estandarsic } })
         const cumpl_pres = await this.cumplimientoEstandarSicRepository.findOne({ where: { prestadores: prestador } })
 
-
-
+        
         const cumplimiento = await this.cumplimientoEstandarSicRepository.create(dto)
 
         cumplimiento.criterioestandar_sic = criterio_estandarsic

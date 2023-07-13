@@ -4,12 +4,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ActaPamecIpsRepository } from './pamec-acta-ips.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { ActaPamecIpsDto } from 'src/generarpdf/pamec/dto/pamec-acta-ips.dto';
+import { JwtService } from '@nestjs/jwt';
+import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
 
 @Injectable()
 export class PamecActaService {
     constructor(
         @InjectRepository(ActaPamecIpsEntity)
         private readonly actaPamecIpsRepository: ActaPamecIpsRepository,
+        private readonly jwtService: JwtService,
+        private readonly auditoria_registro_services: AuditoriaRegistroService
     ) { }
 
     //LISTAR TODAS PAMEC IPS ACTA PDF
@@ -65,6 +69,7 @@ export class PamecActaService {
         const ips = this.actaPamecIpsRepository.create(dto);
         await this.actaPamecIpsRepository.save(ips)
     }
+
 
     //ACTUALIZAR PAMEC IPS ACTA PDF
     async updateActaipspam(id: number, dto: ActaPamecIpsDto): Promise<any> {

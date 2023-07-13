@@ -19,7 +19,7 @@ import { PayloadInterface } from './payload.interface';
 import { v4 } from 'uuid';
 import { RessetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
 
 @Injectable()
 export class AuthService {
@@ -142,6 +142,8 @@ export class AuthService {
         const token = await this.jwtService.sign(payload);
         return { token };
     }
+
+
 
     async requestResetPassword(usu_id: number): Promise<void> {
         const usuario: UsuarioEntity = await this.usuarioService.findById(usu_id)
