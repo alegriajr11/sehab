@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuditoriaRegistroEntity } from '../auditoria_registro.entity';
-import { AuditoriaRegistroRepository } from '../auditoria_registro.repository';
 import { MessageDto } from 'src/common/message.dto';
+import { AuditoriaRegistroEntity } from './auditoria_registro.entity';
+import { AuditoriaRegistroRepository } from './auditoria_registro.repository';
+
 
 @Injectable()
 export class AuditoriaRegistroService {
@@ -48,6 +49,7 @@ export class AuditoriaRegistroService {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario Sic', details, direccionIp);
     }
+    
     //logUpdateUserSic
     async logUpdateUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado el usuario ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
@@ -119,22 +121,17 @@ export class AuditoriaRegistroService {
 
     /*ACTAS - SIC*/
     //CONTROLAR LA CREACIÓN DE  SIC ACTA
-    async logCreateActaSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta Sic ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
+    async logCreateActaSic(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta Sic con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Acta Sic', details, direccionIp);
     }
 
     //CONTROLAR LA ACTUALIZACIÓN DE  SIC ACTA
-    async logUpdateActaSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta SIC ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
+    async logUpdateActaSic(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta SIC  con nombre de usuario  del Rol SIC`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta SIC', details, direccionIp);
     }
 
-    //CONTROLAR LA ELININACIÓN DE SIC ACTA
-    async logDeleteActaSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado un Acta SIC ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SIC`;
-        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Acta SIC', details, direccionIp);
-    }
 
 
 
@@ -149,13 +146,6 @@ export class AuditoriaRegistroService {
     async logUpdatePamecActa(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta Pamec ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol PAMEC`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta Pamec', details, direccionIp);
-    }
-
-
-    //CONTROLAR LA ELIMINACIÓN DE PAMEC ACTA ACTA
-    async logDeletePamecActa(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado un PAMEC ACTA   ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol PAMEC ACTA`;
-        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación PAMEC ACTA', details, direccionIp);
     }
 
 
@@ -176,12 +166,6 @@ export class AuditoriaRegistroService {
 
 
 
-    //CONTROLAR LA ELIMINACIÓN DE  SP INDEPENDIENTE ACTA
-    async logDeleteSpIdep(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado un Acta SP INDEPENDIENTE ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP INDEPENDIENTE`;
-        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Acta SP INDEPENDIENTE', details, direccionIp);
-    }
-
     //CONTROLAR LA CREACIÓN DE  SP IPS ACTA
     async logCreateSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta SP IPS ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP`;
@@ -194,12 +178,6 @@ export class AuditoriaRegistroService {
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta SP IPS', details, direccionIp);
     }
 
-    //CONTROLAR LA ELIMINACIÓN DE  SP IPS ACTA
-    async logDeleteSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombreUsuario: string, usu_nombre2: string, usu_apellido2: string): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Eliminado un Acta SP IPS ${usu_nombre2} ${usu_apellido2} con nombre de usuario ${usu_nombreUsuario} del Rol SP IPS`;
-        await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Acta SP IPS', details, direccionIp);
-    }
-
 
 
 
@@ -210,12 +188,16 @@ export class AuditoriaRegistroService {
         let query = this.auditoria_registroRepository.createQueryBuilder('auditoria');
 
         if (accion) {
-            query = query.where('auditoria.accion = :accion', { accion });
+            query = query.where('auditoria.accion LIKE :accion', { accion: `%${accion}%` });
         }
 
         if (fechaInicio && fechaFin) {
+            // Ajustar la fecha de fin para incluir hasta el final del día
+            const fechaFinAjustada = new Date(fechaFin);
+            fechaFinAjustada.setHours(23, 59, 59, 999);
+
             query = query.andWhere('auditoria.creadoEn >= :fechaInicio', { fechaInicio })
-                .andWhere('auditoria.creadoEn <= :fechaFin', { fechaFin });
+                .andWhere('auditoria.creadoEn <= :fechaFin', { fechaFin: fechaFinAjustada });
         }
 
         const auditorias = await query.getMany();
@@ -226,6 +208,7 @@ export class AuditoriaRegistroService {
 
         return auditorias;
     }
+
 
     //LISTAR TODAS LAS AUDITORIAS POR NOMBRE Y APELLIDOS DEL FUNCIONARIO
     async findAllAuditoriaNomApel(usu_nombre_apellido: string): Promise<AuditoriaRegistroEntity[]> {

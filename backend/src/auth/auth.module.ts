@@ -14,9 +14,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { EncoderService } from './encoder.service';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import { MailerservicesService } from './mailerservices/mailerservices.service';
-import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
-import { AuditoriaRegistroRepository } from 'src/auditoria/auditoria_registro.repository';
-import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
+import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_registro.module';
+import { AuditoriaRegistroRepository } from 'src/auditoria_registro/auditoria_registro.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsuarioEntity, RolEntity, AuthRepository, AuditoriaRegistroRepository]),

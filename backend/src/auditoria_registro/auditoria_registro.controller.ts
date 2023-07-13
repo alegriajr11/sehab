@@ -9,13 +9,13 @@ export class AuditoriaRegistroController {
 
     constructor(private readonly auditoriaRegistroService: AuditoriaRegistroService) { }
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get('funcionario')
     async getAudtioriaNomApe(@Query('usu_nombre_apellido') usu_nombre_apellido: string) {
         return await this.auditoriaRegistroService.findAllAuditoriaNomApel(usu_nombre_apellido);
     }
 
-    //OBTENER ACTAS POR FECHA
+    //OBTENER ACTAS POR FECHA O ACCIÓN
     @Get('/fecha/date')
     async findAllFromDate(@Query('fechaInicio') fechaInicio: Date,
         @Query('fechaFin') fechaFin: Date,

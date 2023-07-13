@@ -67,11 +67,6 @@ export class AuthController {
         return this.authService.refresh(dto)
     }
 
-    // @Get('refresh')
-    // refreshGet(@Body() dto: TokenDto){
-    //     return this.authService.refresh(dto)
-    // }
-
 
     //REESTABLECER CONTRASEÑA
     @UseGuards(JwtAuthGuard)

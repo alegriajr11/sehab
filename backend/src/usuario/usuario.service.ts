@@ -31,7 +31,7 @@ export class UsuarioService {
         return usuario;
       }
     
- 
+
     /*LISTANDO USUARIOS */
     async getall(): Promise<UsuarioEntity[]>{
         const usuario = await this.usuarioRepository.createQueryBuilder('usuario')

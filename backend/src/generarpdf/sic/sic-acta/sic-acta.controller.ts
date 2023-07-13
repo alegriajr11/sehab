@@ -3,7 +3,11 @@ import { SicActaService } from './sic-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
 import { ActaSicPdfEntity } from './sic-acta-pdf.entity';
+<<<<<<< HEAD
 import { query } from 'express';
+=======
+import { TokenDto } from 'src/auth/dto/token.dto';
+>>>>>>> 394b05929c48998c5f989aaefe26961ce5d529b0
 
 @Controller('sic-acta')
 export class SicActaController {
@@ -47,9 +51,12 @@ export class SicActaController {
 
     //CREAR ACTA
     @Post()
-    async create(@Body() dto: ActaSicPdfDto) {
-        return this.sic_act_pdfService.create(dto);
-    }
+    async create(@Body() payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.sic_act_pdfService.create(payload);
+    }    
+
+
 
     //ACTUALIZAR PAMEC IPS ACTA PDF
     @UseGuards(JwtAuthGuard)

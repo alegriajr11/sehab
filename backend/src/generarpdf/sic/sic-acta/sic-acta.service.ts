@@ -5,6 +5,10 @@ import { ActaSicPdfEntity } from './sic-acta-pdf.entity';
 import { ActaSicPdfRepository } from './sic-acta-pdf.repository';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
 import { LessThan } from 'typeorm';
+import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { JwtService } from '@nestjs/jwt';
+import { PayloadInterface } from 'src/auth/payload.interface';
 
 @Injectable()
 export class SicActaService {
@@ -12,6 +16,8 @@ export class SicActaService {
     constructor(
         @InjectRepository(ActaSicPdfEntity)
         private readonly acta_sic_pdfRepository: ActaSicPdfRepository,
+        private readonly jwtService: JwtService,
+        private readonly auditoria_registro_services: AuditoriaRegistroService
     ) { }
 
     //LISTAR TODAS LAS ACTAS SIC
@@ -31,6 +37,7 @@ export class SicActaService {
         }
         return acta;
     }
+
 
     //ÚLTIMA ACTA REGISTRADA
     async getLastestActa(): Promise<ActaSicPdfEntity> {
@@ -99,10 +106,37 @@ export class SicActaService {
 
 
     /*CREACIÓN SIC ACTA PDF */
-    async create(dto: ActaSicPdfDto): Promise<any> {
+    async create(payloads: { dto: ActaSicPdfDto, tokenDto: TokenDto }): Promise<any> {
+        const { dto, tokenDto } = payloads;
+
         const acta_sicpdf = this.acta_sic_pdfRepository.create(dto);
-        await this.acta_sic_pdfRepository.save(acta_sicpdf)
+        const usuario = await this.jwtService.decode(tokenDto.token);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        const year = new Date().getFullYear().toString();
+
+        await this.acta_sic_pdfRepository.save(acta_sicpdf);
+        await this.auditoria_registro_services.logCreateActaSic(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            dto.act_id,
+            year,
+            dto.act_prestador,
+            dto.act_cod_prestador
+        );
     }
+
+
 
 
 
@@ -135,7 +169,30 @@ export class SicActaService {
         dto.act_nombre_prestador ? acta.act_nombre_prestador = dto.act_nombre_prestador : acta.act_nombre_prestador = acta.act_nombre_prestador;
         dto.act_cargo_prestador ? acta.act_cargo_prestador = dto.act_cargo_prestador : acta.act_cargo_prestador = acta.act_cargo_prestador;
 
+        // const usuario = await this.jwtService.decode(tokenDto.token);
+
+        // const payloadInterface: PayloadInterface = {
+        //     usu_id: usuario[`usu_id`],
+        //     usu_nombre: usuario[`usu_nombre`],
+        //     usu_apellido: usuario[`usu_apellido`],
+        //     usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+        //     usu_email: usuario[`usu_email`],
+        //     usu_estado: usuario[`usu_estado`],
+        //     usu_roles: usuario[`usu_roles`]
+        // };
+
+        // const year = new Date().getFullYear().toString();
+
         await this.acta_sic_pdfRepository.save(acta);
+        // await this.auditoria_registro_services.logUpdateActaSic(
+        //     payloadInterface.usu_nombre,
+        //     payloadInterface.usu_apellido,
+        //     'ip',
+        //     dto.act_id,
+        //     year,
+        //     dto.act_prestador,
+        //     dto.act_cod_prestador
+        // );
 
         return new MessageDto(`El acta ha sido Actualizada`);
 
