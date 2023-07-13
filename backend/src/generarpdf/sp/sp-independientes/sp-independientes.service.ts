@@ -43,18 +43,28 @@ export class SpIndependientesService {
         return actas;
     }
 
-    //ENCONTRAR ACTAS POR AÑO EXACTA
-    async findAllFromYear(date: string): Promise<ActaSpIndependientePdfEntity[]> {
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA
 
-        const actas = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
-            .where('YEAR(acta.act_creado )= :date', { date })
-            .getMany();
+    async findAllFromYear(year?: Date, numActa?: number): Promise<ActaSpIndependientePdfEntity[]> {
+        let query = this.actaSpIndependientePdfRepository.createQueryBuilder('acta');
+
+        if (numActa) {
+            query = query.where('acta.act_id = :numActa', { numActa });
+        }
+
+        if (year) {
+            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+        }
+
+        const actas = await query.getMany();
+
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay actas en ese año'));
+            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
         }
 
         return actas;
     }
+
 
 
     /*CREACIÓN SP INDEPENDIENTE ACTA PDF */

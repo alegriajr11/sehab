@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PamecActaService } from './pamec-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaPamecIpsDto } from '../dto/pamec-acta-ips.dto';
@@ -28,9 +28,10 @@ export class PamecActaController {
     }
 
     //OBTENER ACTAS POR AÑO
-    @Get('/fecha/year/:date')
-    async findAllFromYear(@Param('date') dateString: string) {
-        return this.pamecActaService.findAllFromYear(dateString);
+    @Get('/year/date')
+    async findAllFromYear(@Query('year') year: Date,
+        @Query('numActa') numActa: number) {
+        return this.pamecActaService.findAllFromYear(year, numActa);
     }
 
     //CREAR PAMEC IPS ACTA PDF

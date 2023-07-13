@@ -74,14 +74,23 @@ export class SicActaService {
         return actas;
     }
 
-    //ENCONTRAR ACTAS POR FECHA EXACTA
-    async findAllFromYear(date: string): Promise<ActaSicPdfEntity[]> {
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA
 
-        const actas = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
-            .where('YEAR(acta.act_creado )= :date', { date })
-            .getMany();
+    async findAllFromYear(year?: Date, numActa?: number): Promise<ActaSicPdfEntity[]> {
+        let query = this.acta_sic_pdfRepository.createQueryBuilder('acta');
+
+        if (numActa) {
+            query = query.where('acta.act_id = :numActa', { numActa });
+        }
+
+        if (year) {
+            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+        }
+
+        const actas = await query.getMany();
+
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay actas en ese año'));
+            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
         }
 
         return actas;

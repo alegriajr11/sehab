@@ -43,14 +43,23 @@ export class SpIpsService {
         return actas;
     }
 
-    //ENCONTRAR ACTAS POR AÑO EXACTA
-    async findAllFromYear(date: string): Promise<ActaSpIpsEntity[]> {
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA
 
-        const actas = await this.actaSpIpsRepository.createQueryBuilder('acta')
-            .where('YEAR(acta.act_creado )= :date', { date })
-            .getMany();
+    async findAllFromYear(year?: Date, numActa?: number): Promise<ActaSpIpsEntity[]> {
+        let query = this.actaSpIpsRepository.createQueryBuilder('acta');
+
+        if (numActa) {
+            query = query.where('acta.act_id = :numActa', { numActa });
+        }
+
+        if (year) {
+            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+        }
+
+        const actas = await query.getMany();
+
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay actas en ese año'));
+            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
         }
 
         return actas;

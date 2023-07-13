@@ -106,6 +106,10 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
 import { CriterioHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterio_hospitalizacion/criterio_hospitalizacion.module';
 import { AuditoriaRegistroService } from './auditoria/auditoria_registro/auditoria_registro.service';
 import { AuditoriaRegistroModule } from './auditoria/auditoria_registro/auditoria_registro.module';
+import { CapacidadInstaladaModule } from './resolucion/servicio_capacidad/capacidad_instalada/capacidad_instalada.module';
+import { CapacidadInstaladaModule } from './resolucion/servicios_capacidad/capacidad_instalada/capacidad_instalada.module';
+import { CapacidadInstaladaController } from './no/resolucion/servicios_capacidad/capacidad_instalada/capacidad_instalada.controller';
+import { ServiciosVerificadosModule } from './resolucion/servicios_capacidad/servicios_verificados/servicios_verificados.module';
 
 
 
@@ -190,6 +194,8 @@ import { AuditoriaRegistroModule } from './auditoria/auditoria_registro/auditori
     CriteriosDialisisModule,
     CriterioHospitalizacionModule,
     AuditoriaRegistroModule,
+    CapacidadInstaladaModule,
+    ServiciosVerificadosModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 
@@ -200,7 +206,7 @@ import { AuditoriaRegistroModule } from './auditoria/auditoria_registro/auditori
     CriteriosHospPacienteCronicoController, CriteriosCuidBasicNeonatalController, CriteriosCuidInterNeonatalController, CriteriosCuidIntensNeonatalController, 
     CriteriosCuidInterPediatricoController, CriteriosCuidIntensPediatricoController, CriteriosCuidInterAdultoController, CriteriosCuidIntensAdultoController, 
     CriteriosHospSaludMentalController, CriteriosHospParcialController, CriteriosConsPsicoactivasController, CriteriosCirugiaController, CriteriosUrgenciasController, 
-    CriteriosTransAsistencialController, CriteriosPrehospitalariaController, CriteriosPartoController],
+    CriteriosTransAsistencialController, CriteriosPrehospitalariaController, CriteriosPartoController, CapacidadInstaladaController],
   providers: [AppService],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SpIndependientesService } from './sp-independientes.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { IndActaDto } from 'src/generarpdf/sp/dto/sp-ind-acta.dto';
@@ -29,9 +29,10 @@ export class SpIndependientesController {
     }
 
     //OBTENER ACTAS POR AÑO
-    @Get('/fecha/year/:date')
-    async findAllFromYear(@Param('date') dateString: string) {
-        return this.sp_IndependientesService.findAllFromYear(dateString);
+    @Get('/year/date')
+    async findAllFromYear(@Query('year') year: Date,
+        @Query('numActa') numActa: number) {
+        return this.sp_IndependientesService.findAllFromYear(year, numActa);
     }
 
     //CREAR SP INDEPENDIENTE ACTA PDF

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SpIpsService } from './sp-ips.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { IpsDto } from 'src/generarpdf/sp/dto/sp-ips.dto';
@@ -28,9 +28,10 @@ export class SpIpsController {
     }
 
     //OBTENER ACTAS POR AÑO
-    @Get('/fecha/year/:date')
-    async findAllFromYear(@Param('date') dateString: string) {
-        return this.sp_IpsService.findAllFromYear(dateString);
+    @Get('/year/date')
+    async findAllFromYear(@Query('year') year: Date,
+        @Query('numActa') numActa: number) {
+        return this.sp_IpsService.findAllFromYear(year, numActa);
     }
 
 

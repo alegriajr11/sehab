@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SicActaService } from './sic-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
 import { ActaSicPdfEntity } from './sic-acta-pdf.entity';
+import { query } from 'express';
 
 @Controller('sic-acta')
 export class SicActaController {
@@ -31,9 +32,10 @@ export class SicActaController {
     }
 
     //OBTENER ACTAS POR AÑO
-    @Get('/fecha/year/:date')
-    async findAllFromYear(@Param('date') dateString: string) {
-        return this.sic_act_pdfService.findAllFromYear(dateString);
+    @Get('/year/date')
+    async findAllFromYear(@Query('year') year: Date,
+        @Query('numActa') numActa: number) {
+        return this.sic_act_pdfService.findAllFromYear(year,numActa);
     }
 
     //ÚLTIMA ACTA SIC
