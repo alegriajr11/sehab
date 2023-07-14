@@ -14,6 +14,8 @@ import Swal from 'sweetalert2';
 import { ActaPdfDto } from 'src/app/models/Sic/actapdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
+import { TokenService } from 'src/app/services/token.service';
+import { TokenDto } from 'src/app/models/token.dto';
 
 
 
@@ -74,6 +76,7 @@ export class ActaSicComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private actaPdfService: ActapdfService,
+    private tokenService: TokenService,
     private router: Router
 
   ) { }
@@ -828,7 +831,9 @@ export class ActaSicComponent implements OnInit {
             this.act_nombre_prestador,
             this.act_cargo_prestador
           );
-          this.authService.registroActaPdf(this.actaPdf).subscribe();
+          const token = this.tokenService.getToken()
+          const tokenDto: TokenDto = new TokenDto(token);
+          this.authService.registroActaPdf(this.actaPdf, tokenDto).subscribe();
 
 
 
@@ -918,7 +923,9 @@ export class ActaSicComponent implements OnInit {
             this.act_nombre_prestador,
             this.act_cargo_prestador
           );
-          this.authService.registroActaPdf(this.actaPdf).subscribe();
+          const token = this.tokenService.getToken()
+          const tokenDto: TokenDto = new TokenDto(token);
+          this.authService.registroActaPdf(this.actaPdf, tokenDto).subscribe();
 
 
 

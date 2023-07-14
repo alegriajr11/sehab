@@ -59,9 +59,13 @@ export const environment = {
 //PRESTADOR
   municipioURL: 'http://localhost:8080/municipio/',
   clasificacionURL: 'http://localhost:8080/clasificacion/',
-  tipoURL: 'http://localhost:8080/tipo/'
-};
+  tipoURL: 'http://localhost:8080/tipo/',
 
+
+  //AUDITORIA
+  auditoriaUrl: 'http://localhost:8080/auditoria-registro/'
+};
+  
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

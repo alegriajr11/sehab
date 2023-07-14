@@ -31,7 +31,8 @@ export class EvaluacionSicComponent implements OnInit {
   cumple: CumplimientoSicEstandarDto;
 
 
-  numeroDeClones = 0;
+  numeroDeClones: number = 0;
+
   originalDiv: HTMLElement;
   clondiv: boolean = false
 
@@ -80,53 +81,136 @@ export class EvaluacionSicComponent implements OnInit {
 
   ngAfterViewInit() {
     this.originalDiv = this.el.nativeElement.querySelector('.original-div');
+    
   }
 
 
+  // clonarDiv() {
+  //   var idDomino = (document.getElementById('dom_id')) as HTMLSelectElement
+  //   var selDominio = idDomino.selectedIndex;
+  //   var optDominio = idDomino.options[selDominio]
+  //   var valorDominio = (<HTMLSelectElement><unknown>optDominio).textContent;
+
+
+  //   var idIndicador = (document.getElementById('ind_id')) as HTMLSelectElement
+  //   var selIndicador = idIndicador.selectedIndex;
+  //   var optIndicador = idIndicador.options[selIndicador]
+  //   var valorIndicador = (<HTMLSelectElement><unknown>optIndicador).textContent;
+
+  //   if (selDominio && selIndicador) {
+
+  //     this.numeroDeClones++;
+  //     this.clondiv = true
+  //     this.habilitarDiv = false
+      
+  //     var nombreDominioElement = document.getElementById("nombre-dominio" + this.numeroDeClones);
+  //     var nombreIndicadorElement = document.getElementById("nombre-indicador" + this.numeroDeClones);
+  
+  //     if (nombreDominioElement) {
+  //       nombreDominioElement.innerText = valorDominio;
+  //     }
+  
+  //     if (nombreIndicadorElement) {
+  //       nombreIndicadorElement.innerText = valorIndicador;
+  //     }
+
+  //   } else if (!selDominio) {
+  //     this.toastrService.error('Selecciona un Dominio', 'Error', {
+  //       timeOut: 3000,
+  //       positionClass: 'toast-top-center',
+  //     })
+  //   } else if (!selIndicador) {
+  //     this.toastrService.error('Selecciona un Indicador', 'Error', {
+  //       timeOut: 3000,
+  //       positionClass: 'toast-top-center',
+  //     })
+  //   }
+
+  // }
   clonarDiv() {
-    var idDomino = (document.getElementById('dom_id')) as HTMLSelectElement
-    var selDominio = idDomino.selectedIndex;
-    var optDominio = idDomino.options[selDominio]
-    var valorDominio = (<HTMLSelectElement><unknown>optDominio).textContent;
+  const idDomino = document.getElementById('dom_id') as HTMLSelectElement;
+  const selDominio = idDomino.selectedIndex;
+  const optDominio = idDomino.options[selDominio];
+  const valorDominio = optDominio.textContent;
 
+  const idIndicador = document.getElementById('ind_id') as HTMLSelectElement;
+  const selIndicador = idIndicador.selectedIndex;
+  const optIndicador = idIndicador.options[selIndicador];
+  const valorIndicador = optIndicador.textContent;
 
-    var idIndicador = (document.getElementById('ind_id')) as HTMLSelectElement
-    var selIndicador = idIndicador.selectedIndex;
-    var optIndicador = idIndicador.options[selIndicador]
-    var valorIndicador = (<HTMLSelectElement><unknown>optIndicador).textContent;
+  if (selDominio && selIndicador) {
+    this.numeroDeClones++;
+    this.clondiv = true;
+    this.habilitarDiv = false;
 
-    if (selDominio && selIndicador) {
-      this.numeroDeClones++;
-      this.clondiv = true
-      this.habilitarDiv = false
-      setTimeout(() => {
-        document.getElementById("nombre-dominio" + this.numeroDeClones).innerHTML = valorDominio;
-        document.getElementById("nombre-indicador" + this.numeroDeClones).innerHTML = valorIndicador;
-      }, 0);
+    const nuevoDiv = document.createElement('div');
+    nuevoDiv.id = 'divClonado' + this.numeroDeClones;
 
-      // if (this.originalDiv) {
-      //   let clonedDiv: HTMLElement = this.originalDiv.cloneNode(true) as HTMLElement;
-      //   this.originalDiv.insertAdjacentElement("beforeend", clonedDiv);
-      // }
+    const divTitulos = document.createElement('div');
+    divTitulos.id = 'div-titulos';
 
-    } else if (!selDominio) {
-      this.toastrService.error('Selecciona un Dominio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    } else if (!selIndicador) {
-      this.toastrService.error('Selecciona un Indicador', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
+    const nombreDominio = document.createElement('h5');
+    nombreDominio.innerHTML = '<b>Dominio:</b>';
 
+    const spanDominio = document.createElement('span');
+    spanDominio.id = 'nombre-dominio' + this.numeroDeClones;
+    spanDominio.textContent = valorDominio;
+
+    const nombreIndicador = document.createElement('h5');
+    nombreIndicador.innerHTML = '<b>Indicador:</b>';
+
+    const spanIndicador = document.createElement('span');
+    spanIndicador.id = 'nombre-indicador' + this.numeroDeClones;
+    spanIndicador.textContent = valorIndicador;
+
+    const colSm6 = document.createElement('div');
+    colSm6.className = 'col-sm-6';
+    colSm6.appendChild(nombreDominio);
+    colSm6.appendChild(spanDominio);
+
+    const colSm6_2 = document.createElement('div');
+    colSm6_2.className = 'col-sm-6';
+    colSm6_2.appendChild(nombreIndicador);
+    colSm6_2.appendChild(spanIndicador);
+
+    const colSm7 = document.createElement('div');
+    colSm7.className = 'col-sm-7';
+
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.appendChild(colSm6);
+    row.appendChild(colSm6_2);
+    row.appendChild(colSm7);
+
+    const tableTitle = document.createElement('div');
+    tableTitle.className = 'table-title';
+    tableTitle.appendChild(row);
+
+    divTitulos.appendChild(tableTitle);
+    nuevoDiv.appendChild(divTitulos);
+
+  } else if (!selDominio) {
+    this.toastrService.error('Selecciona un Dominio', 'Error', {
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+    });
+  } else if (!selIndicador) {
+    this.toastrService.error('Selecciona un Indicador', 'Error', {
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+    });
   }
+}
+
+  
+  
+  
+  
 
   range(num: number): number[] {
-    return Array.from({ length: num }, (_, i) => i);
+    return Array.from({ length: num }, (_, i) => i + 1);
   }
-
+  
   openModal(modalTemplate: TemplateRef<any>, id: number) {
     this.sharedService.setId(id)
     this.modalRef = this.modalService.show(modalTemplate,

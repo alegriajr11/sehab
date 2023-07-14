@@ -12,7 +12,10 @@ h1 {
     margin: 30px 0;
     border-radius: 3px;
     box-shadow: 0 1px 1px rgba(0,0,0,.05);
+
 }
+
+
 .table-title {        
     padding-bottom: 15px;
     background: #343a40;
@@ -216,4 +219,6 @@ span{
     font-size: xx-large;
 }
 
-
+.container{
+    max-width: 1523px;
+}
