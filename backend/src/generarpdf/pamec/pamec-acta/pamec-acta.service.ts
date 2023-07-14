@@ -6,6 +6,8 @@ import { MessageDto } from 'src/common/message.dto';
 import { ActaPamecIpsDto } from 'src/generarpdf/pamec/dto/pamec-acta-ips.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { PayloadInterface } from 'src/auth/payload.interface';
 
 @Injectable()
 export class PamecActaService {
@@ -76,17 +78,44 @@ export class PamecActaService {
 
 
     /*CREACIÓN PAMEC IPS ACTA PDF */
-    async create(dto: ActaPamecIpsDto): Promise<any> {
-        const ips = this.actaPamecIpsRepository.create(dto);
-        await this.actaPamecIpsRepository.save(ips)
+    async create(payloads: { dto: ActaPamecIpsDto, tokenDto: TokenDto }): Promise<any> {
+        const { dto, tokenDto } = payloads;
+
+        const acta_sicpdf = this.actaPamecIpsRepository.create(dto);
+        const usuario = await this.jwtService.decode(tokenDto.token);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        const year = new Date().getFullYear().toString();
+
+        await this.actaPamecIpsRepository.save(acta_sicpdf);
+        await this.auditoria_registro_services.logCreatePamecActa(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            dto.act_id,
+            year,
+            dto.act_prestador,
+            dto.act_cod_prestador
+        );
     }
 
 
     //ACTUALIZAR PAMEC IPS ACTA PDF
-    async updateActaipspam(id: number, dto: ActaPamecIpsDto): Promise<any> {
+    
+    async updateActaipspam(id: number, payload:{ dto: ActaPamecIpsDto, tokenDto: TokenDto}): Promise<any> {
+        const { dto, tokenDto } = payload;
         const ips = await this.findByActa(id);
         if (!ips) {
-            throw new NotFoundException(new MessageDto('El acta no existe'))
+            throw new NotFoundException(new MessageDto('El Acta no existe'))
         }
         dto.act_id ? ips.act_id = dto.act_id : ips.act_id = ips.act_id;
         dto.act_fecha_visita ? ips.act_fecha_visita = dto.act_fecha_visita : ips.act_fecha_visita = ips.act_fecha_visita;
@@ -110,10 +139,33 @@ export class PamecActaService {
         ips.act_cargo_prestador2 = dto.act_cargo_prestador2 !== undefined ? dto.act_cargo_prestador2 : "";
         dto.act_obj_visita ? ips.act_obj_visita = dto.act_obj_visita : ips.act_obj_visita = ips.act_obj_visita;
 
+
+        const usuario = await this.jwtService.decode(tokenDto.token);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        const year = new Date().getFullYear().toString();
+
         await this.actaPamecIpsRepository.save(ips);
+        await this.auditoria_registro_services.logUpdatePamecActa(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            dto.act_id,
+            year,
+            dto.act_prestador,
+            dto.act_cod_prestador
+        );
 
         return new MessageDto(`El acta ha sido Actualizada`);
-
 
     }
 }

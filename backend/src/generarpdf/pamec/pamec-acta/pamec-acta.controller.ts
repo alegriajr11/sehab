@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards
 import { PamecActaService } from './pamec-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaPamecIpsDto } from '../dto/pamec-acta-ips.dto';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('pamec-acta')
 export class PamecActaController {
@@ -35,18 +36,17 @@ export class PamecActaController {
     }
 
     //CREAR PAMEC IPS ACTA PDF
-    @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post()
-    async create(@Body() dto: ActaPamecIpsDto) {
-        return this.pamecActaService.create(dto);
+    async create(@Body() payload: { dto: ActaPamecIpsDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.pamecActaService.create(payload);
     }
 
     //ACTUALIZAR PAMEC IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: ActaPamecIpsDto) {
-        return await this.pamecActaService.updateActaipspam(id, dto);
+    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: ActaPamecIpsDto, tokenDto: TokenDto }) {
+        const { dto,tokenDto}= payload;
+        return await this.pamecActaService.updateActaipspam(id,payload);
     }
 }

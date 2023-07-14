@@ -6,7 +6,7 @@ import { Column } from "typeorm";
 export class IpsDto {
 
     @IsNotBlank()
-    act_id: string;
+    act_id: number;
     
     @Column({ nullable: true })
     act_visita_inicial?: string;

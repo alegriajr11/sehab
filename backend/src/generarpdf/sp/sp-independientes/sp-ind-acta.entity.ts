@@ -8,7 +8,7 @@ export class ActaSpIndependientePdfEntity {
     id: number;
 
     @Column({type: 'varchar', length: 15, nullable: true})
-    act_id: string;
+    act_id: number;
 
     @Column({type: 'varchar', length: 2, nullable: true})
     act_visita_inicial: string;

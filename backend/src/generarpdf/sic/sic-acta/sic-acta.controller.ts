@@ -57,9 +57,9 @@ export class SicActaController {
 
     //ACTUALIZAR PAMEC IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: ActaSicPdfDto) {
-        return await this.sic_act_pdfService.updateActa(id, dto);
+    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: ActaSicPdfDto, tokenDto: TokenDto }) {
+        const { dto,tokenDto}= payload;
+        return await this.sic_act_pdfService.updateActa(id,payload);
     }
 }

@@ -8,7 +8,7 @@ export class ActaPamecIpsEntity {
     id: number;
 
     @Column({type: 'varchar', length: 15, nullable: true})
-    act_id: string;
+    act_id: number;
 
     @Column({type: 'varchar', length: 12, nullable: false})
     act_fecha_visita: string;

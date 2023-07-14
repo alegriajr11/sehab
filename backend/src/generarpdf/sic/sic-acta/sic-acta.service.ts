@@ -134,6 +134,8 @@ export class SicActaService {
             dto.act_prestador,
             dto.act_cod_prestador
         );
+
+        return new MessageDto(`El acta ha sido Creada`);
     }
 
 
@@ -141,7 +143,8 @@ export class SicActaService {
 
 
     //ACTUALIZAR CRITERIOS SP INDEPENDIENTE
-    async updateActa(id: number, dto: ActaSicPdfDto): Promise<any> {
+    async updateActa(id: number, payload:{ dto: ActaSicPdfDto, tokenDto: TokenDto}): Promise<any> {
+        const { dto, tokenDto } = payload;
         const acta = await this.findByActa(id);
         if (!acta) {
             throw new NotFoundException(new MessageDto('El Acta no existe'))
@@ -169,30 +172,30 @@ export class SicActaService {
         dto.act_nombre_prestador ? acta.act_nombre_prestador = dto.act_nombre_prestador : acta.act_nombre_prestador = acta.act_nombre_prestador;
         dto.act_cargo_prestador ? acta.act_cargo_prestador = dto.act_cargo_prestador : acta.act_cargo_prestador = acta.act_cargo_prestador;
 
-        // const usuario = await this.jwtService.decode(tokenDto.token);
+        const usuario = await this.jwtService.decode(tokenDto.token);
 
-        // const payloadInterface: PayloadInterface = {
-        //     usu_id: usuario[`usu_id`],
-        //     usu_nombre: usuario[`usu_nombre`],
-        //     usu_apellido: usuario[`usu_apellido`],
-        //     usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-        //     usu_email: usuario[`usu_email`],
-        //     usu_estado: usuario[`usu_estado`],
-        //     usu_roles: usuario[`usu_roles`]
-        // };
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
 
-        // const year = new Date().getFullYear().toString();
+        const year = new Date().getFullYear().toString();
 
         await this.acta_sic_pdfRepository.save(acta);
-        // await this.auditoria_registro_services.logUpdateActaSic(
-        //     payloadInterface.usu_nombre,
-        //     payloadInterface.usu_apellido,
-        //     'ip',
-        //     dto.act_id,
-        //     year,
-        //     dto.act_prestador,
-        //     dto.act_cod_prestador
-        // );
+        await this.auditoria_registro_services.logUpdateActaSic(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            dto.act_id,
+            year,
+            dto.act_prestador,
+            dto.act_cod_prestador
+        );
 
         return new MessageDto(`El acta ha sido Actualizada`);
 

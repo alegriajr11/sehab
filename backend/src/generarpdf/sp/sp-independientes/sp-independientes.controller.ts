@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards
 import { SpIndependientesService } from './sp-independientes.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { IndActaDto } from 'src/generarpdf/sp/dto/sp-ind-acta.dto';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('sp-independientes')
 export class SpIndependientesController {
@@ -36,18 +37,17 @@ export class SpIndependientesController {
     }
 
     //CREAR SP INDEPENDIENTE ACTA PDF
-    @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post()
-    async create(@Body() dto: IndActaDto) {
-        return this.sp_IndependientesService.create(dto);
+    async create(@Body() payload: { dto: IndActaDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.sp_IndependientesService.create(payload);
     }
 
     //ACTUALIZAR  SP INDEPENDIENTE ACTA PDF
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: IndActaDto) {
-        return await this.sp_IndependientesService.updateActaInd(id, dto);
+    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: IndActaDto, tokenDto: TokenDto }) {
+        const { dto,tokenDto}= payload;
+        return await this.sp_IndependientesService.updateActaInd(id,payload);
     }
 }

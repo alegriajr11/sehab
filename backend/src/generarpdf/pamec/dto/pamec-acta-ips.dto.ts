@@ -8,7 +8,7 @@ export class ActaPamecIpsDto {
 
 
     @IsNotBlank()
-    act_id: string;
+    act_id: number;
 
     @Column({ nullable: true })
     act_fecha_visita?: string;

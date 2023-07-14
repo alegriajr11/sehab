@@ -4,12 +4,18 @@ import { ActaSpIpsRepository } from './sp-ips.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
 import { IpsDto } from 'src/generarpdf/sp/dto/sp-ips.dto';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { PayloadInterface } from 'src/auth/payload.interface';
+import { JwtService } from '@nestjs/jwt';
+import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
 
 @Injectable()
 export class SpIpsService {
     constructor(
         @InjectRepository(ActaSpIpsEntity)
         private readonly actaSpIpsRepository: ActaSpIpsRepository,
+        private readonly jwtService: JwtService,
+        private readonly auditoria_registro_services: AuditoriaRegistroService
     ) { }
 
     //LISTAR TODAS LAS ACTAS SP IPS
@@ -66,16 +72,42 @@ export class SpIpsService {
     }
 
     /*CREACIÓN SP IPS ACTA PDF */
-    async create(dto: IpsDto): Promise<any> {
-        const ips = this.actaSpIpsRepository.create(dto);
-        await this.actaSpIpsRepository.save(ips)
+    async create(payloads: { dto: IpsDto, tokenDto: TokenDto }): Promise<any> {
+        const { dto, tokenDto } = payloads;
+
+        const acta_sicpdf = this.actaSpIpsRepository.create(dto);
+        const usuario = await this.jwtService.decode(tokenDto.token);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        const year = new Date().getFullYear().toString();
+
+        await this.actaSpIpsRepository.save(acta_sicpdf);
+        await this.auditoria_registro_services.logCreateSpIps(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            dto.act_id,
+            year,
+            dto.act_prestador,
+            dto.act_cod_prestador
+        );
     }
 
     //ACTUALIZAR  SP IPS ACTA PDF
-    async updateActaIps(id: number, dto: IpsDto): Promise<any> {
+    async updateActaIps(id: number, payload:{ dto: IpsDto, tokenDto: TokenDto}): Promise<any> {
+        const { dto, tokenDto } = payload;
         const ips = await this.findByActa(id);
         if (!ips) {
-            throw new NotFoundException(new MessageDto('El acta no existe'))
+            throw new NotFoundException(new MessageDto('El Acta no existe'))
         }
         dto.act_id ? ips.act_id = dto.act_id : ips.act_id = ips.act_id;
         dto.act_visita_inicial ? ips.act_visita_inicial = dto.act_visita_inicial : ips.act_visita_inicial = ips.act_visita_inicial;
@@ -97,7 +129,31 @@ export class SpIpsService {
         dto.act_nombre_prestador ? ips.act_nombre_prestador = dto.act_nombre_prestador : ips.act_nombre_prestador = ips.act_nombre_prestador;
         dto.act_cargo_prestador ? ips.act_cargo_prestador = dto.act_cargo_prestador : ips.act_cargo_prestador = ips.act_cargo_prestador;
 
+
+        const usuario = await this.jwtService.decode(tokenDto.token);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        const year = new Date().getFullYear().toString();
+
         await this.actaSpIpsRepository.save(ips);
+        await this.auditoria_registro_services.logUpdateSpIps(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            dto.act_id,
+            year,
+            dto.act_prestador,
+            dto.act_cod_prestador
+        );
 
         return new MessageDto(`El acta ha sido Actualizada`);
 

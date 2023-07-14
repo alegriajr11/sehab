@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards
 import { SpIpsService } from './sp-ips.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { IpsDto } from 'src/generarpdf/sp/dto/sp-ips.dto';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('sp-ips')
 export class SpIpsController {
@@ -35,19 +36,17 @@ export class SpIpsController {
     }
 
 
-    //CREAR SP IPS ACTA PDF
-    @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post()
-    async create(@Body() dto: IpsDto) {
-        return this.sp_IpsService.create(dto);
+    async create(@Body() payload: { dto: IpsDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.sp_IpsService.create(payload);
     }
 
     //ACTUALIZAR SP IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: IpsDto) {
-        return await this.sp_IpsService.updateActaIps(id, dto);
+    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: IpsDto, tokenDto: TokenDto }) {
+        const { dto,tokenDto}= payload;
+        return await this.sp_IpsService.updateActaIps(id,payload);
     }
 }
