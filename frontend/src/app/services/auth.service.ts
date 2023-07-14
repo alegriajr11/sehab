@@ -69,7 +69,12 @@ export class AuthService {
     return this.httpClient.patch<any>(this.authURL + 'reset-password', dto)
   }
 
-  registroActaPdf(dto: ActaPdfDto): Observable<any> {
-    return this.httpClient.post<any>(this.acta_sic_pdfUrl, dto);
+  registroActaPdf(dto: ActaPdfDto, tokenDto: TokenDto): Observable<any> {
+    const body = {
+      dto: dto,
+      tokenDto: tokenDto
+    }
+    return this.httpClient.post<any>(this.acta_sic_pdfUrl, body);
   }
+
 }

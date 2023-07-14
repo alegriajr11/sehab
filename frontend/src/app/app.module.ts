@@ -70,13 +70,12 @@ import { EditarcriteriosicComponent } from './usuario/admin/criteriosic/editarcr
 import { ModalsicComponent } from './roles/sic/evaluacion/modalsic/modalsic.component';
 import { Modalsic2Component } from './roles/sic/evaluacion/modalsic2/modalsic2.component';
 import { CapacidadInstaladaComponent } from './roles/reso/capacidad-instalada/capacidad-instalada.component';
-import { HomeEstandarComponent } from './roles/reso/home-estandar/home-estandar.component';
 import { TodosServiciosComponent } from './roles/reso/home-estandar/todos-servicios/todos-servicios.component';
-import { ConsultaExternaComponent } from './roles/reso/home-estandar/consulta-externa/consulta-externa.component';
-import { ApoyoDiagnosticoComponent } from './roles/reso/home-estandar/apoyo-diagnostico/apoyo-diagnostico.component';
-import { InternacionComponent } from './roles/reso/home-estandar/internacion/internacion.component';
-import { QuirurgicoComponent } from './roles/reso/home-estandar/quirurgico/quirurgico.component';
-import { AtencionInmediataComponent } from './roles/reso/home-estandar/atencion-inmediata/atencion-inmediata.component';
+import { ConsultaExternaComponent } from './roles/reso/lista-verificacion/home-estandar/consulta-externa/consulta-externa.component';
+import { ApoyoDiagnosticoComponent } from './roles/reso/lista-verificacion/home-estandar/apoyo-diagnostico/apoyo-diagnostico.component';
+import { InternacionComponent } from './roles/reso/lista-verificacion/home-estandar/internacion/internacion.component';
+import { QuirurgicoComponent } from './roles/reso/lista-verificacion/home-estandar/quirurgico/quirurgico.component';
+import { AtencionInmediataComponent } from './roles/reso/lista-verificacion/home-estandar/atencion-inmediata/atencion-inmediata.component';
 import { EditarPrestadorComponent } from './prestador/editar-prestador/editar-prestador.component';
 import { ModalEvaluacionesComponent } from './roles/sic/evaluaciones/modal-evaluaciones/modal-evaluaciones.component';
 import { HomeCriteriosComponent } from './usuario/admin/resolucion/home-criterios/home-criterios.component';
@@ -86,6 +85,7 @@ import { HomeEvaluacionIpsComponent } from './roles/sp/sp-ips/home-evaluacion-ip
 import { ActaSpIpsComponent } from './roles/sp/sp-ips/acta-ips/acta-sp-ips.component';
 import { ActaSpProComponent } from './roles/sp/sp-profesionales/acta-pro/acta-sp-pro.component';
 import { EvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluacion-sp-pro/evaluacion-sp-pro.component';
+import { HomeEstandarComponent } from './roles/reso/lista-verificacion/home-estandar/home-estandar.component';
 
 
 @NgModule({
