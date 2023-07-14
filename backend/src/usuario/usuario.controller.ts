@@ -7,6 +7,7 @@ import { RolNombre } from 'src/rol/rol.enum';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UsuarioDto } from './dto/usuario.dto';
 import { UsuarioService } from './usuario.service';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -32,8 +33,8 @@ export class UsuarioController {
     //ELIMINAR USUARIO
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
-    async delete(@Param('id', ParseIntPipe) id: number) {
-        return await this.usuarioService.delete(id);
+    async delete(@Param('id', ParseIntPipe) id: number,@Body()tokenDto: TokenDto) {
+        return await this.usuarioService.delete(id,tokenDto);
     }
 
     //CREAR USUARIO ADMINISTRADOR
@@ -41,17 +42,18 @@ export class UsuarioController {
     // @UseGuards(JwtAuthGuard, RolesGuard) => GUARD
     @UsePipes(new ValidationPipe({whitelist: true}))
     @Post()
-    async create(@Body() dto: CreateUsuarioDto){
-        return this.usuarioService.create(dto);
+    async create(@Body()payload: {dto: CreateUsuarioDto, tokenDto: TokenDto}){
+        const { dto, tokenDto } = payload;
+        return this.usuarioService.create(payload);
     }
 
     //ACTUALIZAR USUARIO
     @RolDecorator(RolNombre.ADMIN)
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({whitelist: true, transformOptions: {enableImplicitConversion: true}}))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UsuarioDto){
-        return await this.usuarioService.update(id, dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body()payload: {dto: UsuarioDto, tokenDto: TokenDto}){
+        const { dto,tokenDto}= payload;
+        return await this.usuarioService.update(id, payload);
     }
 
 }
