@@ -104,46 +104,52 @@ export class SicActaService {
     }
 
 
-
-    /*CREACIÓN SIC ACTA PDF */
+    /*CREACIÓN SIC ACTA PDF*/
     async create(payloads: { dto: ActaSicPdfDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
 
-        const acta_sicpdf = this.acta_sic_pdfRepository.create(dto);
-        const usuario = await this.jwtService.decode(tokenDto.token);
+        try {
+            const acta_sicpdf = this.acta_sic_pdfRepository.create(dto);
+            const usuario = await this.jwtService.decode(tokenDto.token);
 
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
 
-        const year = new Date().getFullYear().toString();
+            const year = new Date().getFullYear().toString();
 
-        await this.acta_sic_pdfRepository.save(acta_sicpdf);
-        await this.auditoria_registro_services.logCreateActaSic(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.act_id,
-            year,
-            dto.act_prestador,
-            dto.act_cod_prestador
-        );
+            await this.acta_sic_pdfRepository.save(acta_sicpdf);
+            await this.auditoria_registro_services.logCreateActaSic(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.act_id,
+                year,
+                dto.act_prestador,
+                dto.act_cod_prestador
+            );
 
-        return new MessageDto(`El acta ha sido Creada`);
+            return { error: false, message: 'El acta ha sido creada' };
+        } catch (error) {
+            console.log(error)
+            // Devuelve un mensaje de error apropiado
+            return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
+        }
     }
 
 
 
 
 
+
     //ACTUALIZAR CRITERIOS SP INDEPENDIENTE
-    async updateActa(id: number, payload:{ dto: ActaSicPdfDto, tokenDto: TokenDto}): Promise<any> {
+    async updateActa(id: number, payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payload;
         const acta = await this.findByActa(id);
         if (!acta) {

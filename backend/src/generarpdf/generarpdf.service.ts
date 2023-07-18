@@ -1,15 +1,13 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { join, resolve } from 'path';
-import { NuevoUsuarioDto } from 'src/auth/dto/nuevo-usuario.dto';
-import { MessageDto } from 'src/common/message.dto';
 import { PrestadorEntity } from 'src/prestador/prestador.entity';
 import { PrestadorRepository } from 'src/prestador/prestador.repository';
-import { UsuarioDto } from 'src/usuario/dto/usuario.dto';
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
 import { UsuarioRepository } from 'src/usuario/usuario.repository';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import * as fs from 'fs';
+import { CriteriosicCumplimientoService } from 'src/sic/criteriosic-cumplimiento/criteriosic-cumplimiento.service';
 
 
 const PDFDocument = require('pdfkit-table')
@@ -27,8 +25,9 @@ export class GenerarpdfService {
         @InjectRepository(UsuarioEntity)
         private readonly usuarioRepository: UsuarioRepository,
         @Inject(UsuarioService)
-        private readonly usuarioService: UsuarioService
-        
+        private readonly usuarioService: UsuarioService,
+        @Inject(CriteriosicCumplimientoService)
+        private readonly cumplimientoService: CriteriosicCumplimientoService
 
 
     ) { }
@@ -141,11 +140,6 @@ export class GenerarpdfService {
                 resolve(data)
             })
 
-            const pdfName = 'ListaUsuariosSOGCS.pdf'; // Define a default name for the PDF file
-
-            doc.pipe(fs.createWriteStream(pdfName)); // Pipe the PDF document to a writable stream with the default name
-        
-
             doc.end()
 
             
@@ -160,7 +154,76 @@ export class GenerarpdfService {
 
 
     //METODO CREACIÓN DE REPORTE DE EVALUACIÓN SIC
-    
+    async generarPdfEvaluacionEstandarSic(): Promise<Buffer> {
+
+        const pdfBuffer: Buffer = await new Promise(resolve => {
+
+            const doc = new PDFDocument(
+                {
+                    size: "LETTER",
+                    bufferPages: true,
+                    autoFirstPage: false,
+                })
+
+            let pageNumber = 0;
+            doc.on('pageAdded', () => {
+                pageNumber++
+                let bottom = doc.page.margins.bottom;
+
+                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 30, { fit: [500, 500], align: 'center' })
+                doc.font("Helvetica-Bold").fontSize(5);
+
+
+                doc.page.margins.bottom = 0;
+                doc.font("Helvetica").fontSize(14);
+                doc.text(
+                    'Pág. ' + pageNumber,
+                    0.5 * (doc.page.width - 100),
+                    doc.page.height - 50,
+                    {
+                        width: 100,
+                        align: 'center',
+                        lineBreak: false,
+                    })
+                doc.page.margins.bottom = bottom;
+            })
+
+
+            doc.addPage();
+            doc.text('', 50, 130);
+            doc.font("Helvetica-Bold").fontSize(14);
+            doc.text("INDICADORES PARA EL MONITOREO DE LA CALIDAD/PRESTADORES DE SERVICIOS ACTA DE VERIFICACION Y SEGUIMIENTO");
+            doc.moveDown();
+            doc.font("Helvetica").fontSize(16);
+            doc.text('', 50, 70)
+
+
+            doc.moveDown();
+            doc.text('', 50, 70)
+            doc.fontSize(24);
+            doc.moveDown();
+            doc.moveDown();
+            // doc.font("Helvetica-Bold").fontSize(16);
+            // doc.text("EVALUACIÓN", {
+            //     width: doc.page.width - 100,
+            //     align: 'center'
+            // });
+            doc.moveDown();
+
+            const buffer = []
+            doc.on('data', buffer.push.bind(buffer))
+            doc.on('end', () => {
+                const data = Buffer.concat(buffer)
+                resolve(data)
+            })
+
+            doc.end()
+
+            
+        })
+
+        return pdfBuffer
+    }
     //FIN DEL METODO - CREACIÓN DE REPORTE DE EVALUACIÓN SIC
 
 
