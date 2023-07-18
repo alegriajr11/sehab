@@ -10,6 +10,9 @@ import { UsuarioEntity } from 'src/usuario/usuario.entity';
 import { UsuarioRepository } from 'src/usuario/usuario.repository';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import * as fs from 'fs';
+import { ActaSicPdfEntity } from './sic/sic-acta/sic-acta-pdf.entity';
+import { SicActaService } from './sic/sic-acta/sic-acta.service';
+import { ActaSicPdfRepository } from './sic/sic-acta/sic-acta-pdf.repository';
 
 
 const PDFDocument = require('pdfkit-table')
@@ -27,7 +30,11 @@ export class GenerarpdfService {
         @InjectRepository(UsuarioEntity)
         private readonly usuarioRepository: UsuarioRepository,
         @Inject(UsuarioService)
-        private readonly usuarioService: UsuarioService
+        private readonly usuarioService: UsuarioService,
+        @Inject(SicActaService)
+        private readonly sicActaService: SicActaService,
+        @Inject(ActaSicPdfEntity)
+        private readonly actaSicPdfRepository: ActaSicPdfRepository
         
 
 
