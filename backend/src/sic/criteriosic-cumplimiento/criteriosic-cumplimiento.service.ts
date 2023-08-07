@@ -51,6 +51,39 @@ export class CriteriosicCumplimientoService {
         return criterioEstandarsic;
     }
 
+    //ENCONTRAR CRITERIO ESTANDAR POR ID
+    async findByIdCumliSic(ind_id: string): Promise<IndicadorEntity> {
+        const criterioEstandarsic = await this.indicadorRepository.findOne({ where: { ind_id } });
+        if (!criterioEstandarsic) {
+            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+        }
+        return criterioEstandarsic;
+    }
+
+    /*LISTANDO CRITERIOSIC */
+    async getalll(): Promise<CumplimientoEstandarSicEntity[]> {
+        const cumplimiento_estandar = await this.cumplimientoEstandarSicRepository.createQueryBuilder('cumplimiento')
+            .select(['cumplimiento', 'criterioestandar_sic.crie_id', 'criterioestandar_sic.crie_nombre'])
+            .innerJoin('cumplimiento.criterioestandar_sic', 'criterioestandar_sic')
+            .getMany()
+        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+        return cumplimiento_estandar
+    }
+
+
+    async getallcumple(): Promise<CumplimientoSicEntity[]> {
+        const cumplimiento_estandar = await this.cumplimientoSicRepository.createQueryBuilder('cumplimiento')
+            // .select(['cumplimiento','criterio_sic.cri_id','criterio_sic.cumpl_cumple','prestadores.pre_nombre','criterio_sic.cri_id','criterio_sic.cri_nombre'])
+            .select(['cumplimiento', 'criterio_sic.cri_id', 'criterio_sic.cri_nombre', 'indicadorsic.ind_id','indicadorsic.ind_nombre','ind_dominio.dom_nombre','prestadores.pre_nombre'])
+            .innerJoin('cumplimiento.criterio_sic', 'criterio_sic')
+            .innerJoin('cumplimiento.indicadorsic', 'indicadorsic')
+            .innerJoinAndSelect('indicadorsic.ind_dominio', 'ind_dominio')
+            .innerJoinAndSelect('ind_dominio.prestadores', 'prestadores')
+            .getMany()
+        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+        return cumplimiento_estandar
+    }
+
     //CREAR CUMPLIMIENTO ESTANDAR 
     async createCumplimientoEstandar(dto: CumplimientoEstandarSicDto): Promise<any> {
         const { crie_id, pre_cod_habilitacion } = dto
@@ -67,7 +100,7 @@ export class CriteriosicCumplimientoService {
         const cumpl_cri = await this.cumplimientoEstandarSicRepository.findOne({ where: { criterioestandar_sic: criterio_estandarsic } })
         const cumpl_pres = await this.cumplimientoEstandarSicRepository.findOne({ where: { prestadores: prestador } })
 
-        
+
         const cumplimiento = await this.cumplimientoEstandarSicRepository.create(dto)
 
         cumplimiento.criterioestandar_sic = criterio_estandarsic

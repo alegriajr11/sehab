@@ -78,7 +78,7 @@ export class SpIndependientesService {
         const { dto, tokenDto } = payloads;
 
         const acta_sicpdf = this.actaSpIndependientePdfRepository.create(dto);
-        const usuario = await this.jwtService.decode(tokenDto.token);
+        const usuario = this.jwtService.decode(tokenDto.token);
 
         const payloadInterface: PayloadInterface = {
             usu_id: usuario[`usu_id`],

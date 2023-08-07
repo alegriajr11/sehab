@@ -177,7 +177,12 @@ export class AuditoriaRegistroService {
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta IPS ', details, direccionIp);
     }
 
-
+/*EVALUACION CRITERIOS - APOYO DIAGNOSTICO*/
+    //CONTROLAR LA CREACIÓN DEL CRITERIO DIAGNOSTICO VASCULAR
+    async logCreateDiagnostico(usu_nombre: string, usu_apellido: string, direccionIp: string,  anio: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un criterio diagnostico vascular con fecha ${anio} `;
+        await this.logActivity(usu_nombre, usu_apellido, 'Creación Criterio Diagnostico Vascular', details, direccionIp);
+    }
 
 
     /* CONSULTAS DE AUDITORIA - SERVICIO DE AUDITORIA */

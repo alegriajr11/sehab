@@ -40,4 +40,27 @@ export class CriterioindController {
     async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioIndDto){
         return this.criterioIndService.create(id,dto);
     }
+
+    @Get('criid/independientes')
+    async getAllcriterio() {
+        return await this.criterioIndService.getallcriterio()
+    }
+
+    @Get('criid/independientes/titulouno')
+    async getAllcriterioxtitulo() {
+        return await this.criterioIndService.getallcriterioxtitulo()
+    }
+
+    @Get('criid/independientes/titulodos')
+    async getAllcriterioxtitulodos() {
+        return await this.criterioIndService.getallcriterioxtitulodos()
+    }
+    @Get('criid/independientes/titulotres')
+    async getAllcriterioxtitulotres() {
+        return await this.criterioIndService.getallcriterioxtitulotres()
+    }
+    @Get('criid/independientes/titulocuatro')
+    async getAllcriterioxtitulocuatro() {
+        return await this.criterioIndService.getallcriterioxtitulocuatro()
+    }
 }

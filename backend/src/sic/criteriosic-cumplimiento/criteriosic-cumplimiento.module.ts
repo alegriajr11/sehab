@@ -11,8 +11,9 @@ import { CriteriosicCumplimientoController } from './criteriosic-cumplimiento.co
 import { CriteriosicCumplimientoService } from './criteriosic-cumplimiento.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PrestadorEntity,DominioEntity, IndicadorEntity, CriteriosicEntity, CumplimientoSicEntity, CriterioEstandarSicEntity, CumplimientoEstandarSicEntity])],
+  imports: [TypeOrmModule.forFeature([PrestadorEntity,DominioEntity,IndicadorEntity, CriteriosicEntity, CumplimientoSicEntity, CriterioEstandarSicEntity, CumplimientoEstandarSicEntity])],
   providers: [CriteriosicCumplimientoService],
-  controllers: [CriteriosicCumplimientoController]
+  controllers: [CriteriosicCumplimientoController],
+  exports: [CriteriosicCumplimientoService]
 })
 export class CriteriosicCumplimientoModule {}

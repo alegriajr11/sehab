@@ -16,12 +16,17 @@ import { SpIpsModule } from './sp/sp-ips/sp-ips.module';
 import { PamecActaModule } from './pamec/pamec-acta/pamec-acta.module';
 import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_registro.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CriteriosicCumplimientoModule } from 'src/sic/criteriosic-cumplimiento/criteriosic-cumplimiento.module';
+import { CriterioindModule } from 'src/sp/sp_ind/criterioind/criterioind.module';
+import { CriterioindService } from 'src/sp/sp_ind/criterioind/criterioind.service';
+import { CriterioIndEntity } from 'src/sp/sp_ind/criterioind.entity';
+import { EtapaInd } from 'src/sp/sp_ind/etapaind.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity]), SicActaModule, 
-  SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule, JwtModule],
+  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd]), SicActaModule, 
+  SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule, JwtModule, CriteriosicCumplimientoModule,CriterioindModule],
 
   controllers: [GenerarpdfController, SicActaController],
-  providers: [GenerarpdfService, UsuarioService, SicActaService]
+  providers: [GenerarpdfService, UsuarioService, SicActaService,CriterioindService]
 })
 export class GenerarpdfModule {}

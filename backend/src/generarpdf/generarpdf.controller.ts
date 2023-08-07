@@ -24,4 +24,27 @@ export class GenerarpdfController {
         res.end(buffer)
     }
 
+    //DECORADOR SOLICITANDO SERVICIO GENERAR PDF - EVALUACION SIC
+    @Get('sic/evaluacion')
+    async descargarPdfEvaluacionSic(@Res() res): Promise<void> {
+        const buffer = await this.generarPdfService.generarPdfEvaluacionEstandarSic()
+
+        res.setHeader('Content-Disposition', 'attachment; filename="criterio_ind_sogcs.pdf"');
+        res.set({
+            'Content-Length': buffer.length,
+        })
+        res.end(buffer)
+    }
+
+    @Get('ind/criterio')
+    async descargarPdfCriterioImd(@Res() res): Promise<void> {
+        const buffer = await this.generarPdfService.generarPdfInd()
+
+        res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sic_sogcs.pdf"');
+        res.set({
+            'Content-Length': buffer.length,
+        })
+        res.end(buffer)
+    }
+    
 }

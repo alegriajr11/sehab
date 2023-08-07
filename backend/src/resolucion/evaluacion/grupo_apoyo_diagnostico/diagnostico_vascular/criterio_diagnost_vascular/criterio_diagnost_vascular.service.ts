@@ -6,6 +6,10 @@ import { DiagnosticoVascularEntity } from '../diagnostico_vascular.entity';
 import { DiagnosticoVascularRepository } from '../diagnostico_vascular.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { CriterioDiagnostVascularDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/diagnostico_vascular_dto/criterio_diagnostico_vascular.dto';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { JwtService } from '@nestjs/jwt';
+import { PayloadInterface } from 'src/auth/payload.interface';
+import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
 
 
 @Injectable()
@@ -15,6 +19,8 @@ export class CriterioDiagnostVascularService {
         private readonly criterioDiagnostVascularRepository: CriterioDiagnostVascularRepository,
         @InjectRepository(DiagnosticoVascularEntity)
         private readonly diagnosticoVascularRepository: DiagnosticoVascularRepository,
+        // private readonly jwtService: JwtService,
+        // private readonly auditoria_registro_services: AuditoriaRegistroService
     ) { }
 
 //LISTANDO CRITERIOS POR ESTANDAR
@@ -41,6 +47,43 @@ async create(diag_vas_id: number, dto: CriterioDiagnostVascularDto): Promise<any
     await this.criterioDiagnostVascularRepository.save(criterioDiagnostVascular)
     return new MessageDto('El criterio ha sido Creado Correctamente');
 }
+
+//METODO AGREGAR CRITERIO-GIAGNOSTICO VASCULAR
+// async createCriDiag(diag_vas_id: number, payloads:{ dto: CriterioDiagnostVascularDto, tokenDto: TokenDto }): Promise<any> {
+//     const { dto, tokenDto } = payloads;
+//     const diagnostVascular = await this.diagnosticoVascularRepository.findOne({ where: { diag_vas_id: diag_vas_id} });
+//     if (!diagnostVascular) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
+//     CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+//     const criterioDiagnostVascular = this.criterioDiagnostVascularRepository.create(dto)
+//     ASIGNAMOS EL ESTANDAR AL CRITERIO
+//     criterioDiagnostVascular.diagnostico_vascular = diagnostVascular
+//     GUARDAR LOS DATOS EN LA BD
+//     await this.criterioDiagnostVascularRepository.save(criterioDiagnostVascular)
+//     const usuario = await this.jwtService.decode(tokenDto.token);
+
+//     const payloadInterface: PayloadInterface = {
+//         usu_id: usuario[`usu_id`],
+//         usu_nombre: usuario[`usu_nombre`],
+//         usu_apellido: usuario[`usu_apellido`],
+//         usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+//         usu_email: usuario[`usu_email`],
+//         usu_estado: usuario[`usu_estado`],
+//         usu_roles: usuario[`usu_roles`]
+//     };
+    
+//     const year = new Date().getFullYear().toString();
+
+//     await this.diagnosticoVascularRepository.save(diagnostVascular);
+//     await this.auditoria_registro_services.logCreateDiagnostico(
+//         payloadInterface.usu_nombre,
+//         payloadInterface.usu_apellido,
+//         'ip',
+//         year
+//     );
+
+
+//     return new MessageDto('El criterio ha sido Creado Correctamente');
+// }
 
 //ENCONTRAR POR ID - CRITERIO GIAGNOSTICO VASCULAR
 async findById(crivac_id: number): Promise<CriterioDiagnostVascularEntity> {
