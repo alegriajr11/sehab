@@ -32,21 +32,22 @@
                     <label class="label" for="">Fecha Inicio:</label>
                     <input type="date" class="form-control" id="fecha-auditoria-inicio" pattern="dd/MM/yyyy"
                         name="fecha-auditoria-inicio" [(ngModel)]="fechaInicio"
-                        ngDefaultControl (change)="habilitarFechaFinal()">
+                        ngDefaultControl (change)="habilitarFechaFinal()" (change)="limpiarFechaFinal()" [max]="obtenerFechaActual()"
+                        (change)="actualizarFechaMinima()">
                 </div>
 
                 <div class="col-md-3">
                     <label class="label" for="">Fecha Final:</label>
                     <input type="date" class="form-control" id="fecha-auditoria-final" pattern="dd/MM/yyyy"
                         name="fecha-auditoria-final" [(ngModel)]="fechaFin"
-                        ngDefaultControl [disabled]="!habilitarfechaFin" (change)="cargarAuditorias()">
+                        ngDefaultControl [disabled]="!habilitarfechaFin" (change)="cargarAuditorias()" [min]="fechaInicio" [max]="obtenerFechaActual()">
                 </div>
                 
                 <div class="col-md-3">
                     <label class="label" for="">Acción Realizada:</label>
                     <select id="objVisita" class="form-select form-control" [(ngModel)]="accion" [ngModelOptions]="{standalone: true}" 
                     ngDefaultControl (change)="cargarAuditorias()">
-                        <option hidden selected>Acción...</option>
+                        <option hidden disabled selected>Acción...</option>
                         <option value="Inicio de Sesión">Inicio de Sesión</option>
                         <option value="Creación">Creación</option>
                         <option value="Eliminación">Eliminación</option>
@@ -57,7 +58,7 @@
 
                 <div class="col-md-3">
                     <label class="label" for="">Nombre Funcionario:</label>
-                    <input type="text" class="form-control" placeholder="Ingresa Nombre y Apellido...">
+                    <input type="text" class="form-control" [(ngModel)]="nombre_usuario" placeholder="Ingresa Nombre y Apellido..." (input)="cargarAuditoriaUsuario()">
                 </div>
             </div>
 
@@ -66,25 +67,24 @@
             <table class="table table-wrapper text-center table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">N°</th>
-                        <th scope="col">FUNCIONARIO</th>
-                        <th scope="col">FECHA DE LA ACCIÓN</th>
-                        <th scope="col">ACCIÓN</th>
-                        <th scope="col">DETALLES</th>
-                        <th scope="col">DIRECCIÓN IP</th>
+                        <th scope="col" colspan="1">N°</th>
+                        <th scope="col" colspan="1">FUNCIONARIO</th>
+                        <th scope="col" colspan="1">FECHA ACCIÓN</th>
+                        <th scope="col" colspan="1">ACCIÓN</th>
+                        <th scope="col" colspan="1">DETALLES</th>
+                        <th scope="col" colspan="1">DIRECCIÓN IP</th>
 
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let auditoria of this.auditoria | paginate: { itemsPerPage: 10, currentPage: page}" >
-                        <td>{{auditoria.id}}</td>
+                    <tr *ngFor="let auditoria of this.auditoria | paginate: { itemsPerPage: 10, currentPage: page}; let i = index" >
+                        <td>{{calcularIDGlobal(i, page, 10)}}</td>
                         <td>{{auditoria.usu_nombre + ' ' + auditoria.usu_apellido}}</td>
                         <td>{{auditoria.creadoEn}}</td>
                         <td>{{auditoria.accion}}</td>
                         <td>{{auditoria.detalles}}</td>
                         <td>{{auditoria.direccionIp}}</td>
                     </tr>
-
                 </tbody>
             </table>
             

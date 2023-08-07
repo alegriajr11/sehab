@@ -222,3 +222,8 @@ span{
 .container{
     max-width: 1523px;
 }
+
+td {
+    text-align: center;
+}
+

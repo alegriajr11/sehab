@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ActaPamecIpsEntity } from './pamec-acta-ips.entity';
+import { ActaPamecIpsEntity } from './pamec-acta.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ActaPamecIpsRepository } from './pamec-acta-ips.repository';
+import { ActaPamecIpsRepository } from './pamec-acta.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { ActaPamecIpsDto } from 'src/generarpdf/pamec/dto/pamec-acta-ips.dto';
 import { JwtService } from '@nestjs/jwt';

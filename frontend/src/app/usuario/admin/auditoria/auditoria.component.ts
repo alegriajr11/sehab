@@ -12,7 +12,12 @@ export class AuditoriaComponent {
 
   fechaInicio: Date
   fechaFin: Date
+  fechaMinima: string
   accion: string = '';
+
+  i: number;
+
+  nombre_usuario: string;
 
   habilitarfechaFin = false;
 
@@ -20,16 +25,37 @@ export class AuditoriaComponent {
   public page: number;
 
 
-  constructor(private auditoria_services: AuditoriaService){}
+  constructor(private auditoria_services: AuditoriaService) { }
 
-  
+
   ngOnInit(): void {
 
   }
+  limpiarFechaFinal() {
+    this.fechaFin = null
+    this.auditoria = []
+  }
 
-  habilitarFechaFinal(){
+  habilitarFechaFinal() {
     this.habilitarfechaFin = true;
   }
+
+  obtenerFechaActual(): string {
+    const fechaActual = new Date();
+    const dia = fechaActual.getDate().toString().padStart(2, '0');
+    const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0'); // Enero es 0
+    const anio = fechaActual.getFullYear().toString();
+    return `${anio}-${mes}-${dia}`;
+  }
+
+  actualizarFechaMinima(): void {
+    const fechaInicioSeleccionada = new Date(this.fechaInicio);
+    const dia = fechaInicioSeleccionada.getDate().toString().padStart(2, '0');
+    const mes = (fechaInicioSeleccionada.getMonth() + 1).toString().padStart(2, '0'); // Enero es 0
+    const anio = fechaInicioSeleccionada.getFullYear().toString();
+    this.fechaMinima = `${anio}-${mes}-${dia}`;
+  }
+
 
   cargarAuditorias(){
     const fechaFinAjustada = new Date(this.fechaFin);
@@ -46,4 +72,23 @@ export class AuditoriaComponent {
     )
     this.page = 1;
   }
+
+  cargarAuditoriaUsuario() {
+    this.auditoria_services.listAuditoriaNombreUsuario(this.nombre_usuario).subscribe(
+      data => {
+        this.auditoria = data
+        this.listaVacia = undefined
+      },
+      err => {
+        this.listaVacia = err.error.message;
+        this.auditoria = []
+      }
+    )
+  }
+
+  // Método para calcular el ID global
+  calcularIDGlobal(index: number, currentPage: number, itemsPerPage: number): number {
+    return index + 1 + (currentPage - 1) * itemsPerPage;
+  }
+
 }

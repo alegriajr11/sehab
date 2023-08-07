@@ -18,11 +18,7 @@ export class CriteriopamEntity {
     @ManyToOne(type => ActividadEntity, actividad => actividad.act_criteriopam)
     crip_actividad: ActividadEntity;
 
-    @ManyToMany(type => CalificacionpamEntity, calificacion => calificacion.criteriopam, {eager: true})
-    @JoinTable({
-        name: 'cri_cal',
-        joinColumn: {name: 'cri_cal_id'},
-        inverseJoinColumn: {name: 'cal_cri_id'} 
-    })
-    calificacionpam: CalificacionpamEntity[]
+    @OneToMany(type => CalificacionpamEntity, criterio_pam => criterio_pam.criteriopam_calificacion)
+    criterio_calificacionpam: CalificacionpamEntity;
+
 }

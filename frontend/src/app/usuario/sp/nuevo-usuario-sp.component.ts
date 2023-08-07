@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { NuevoUsuarioDto } from 'src/app/models/nuevo-usuario.dto';
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,13 +22,29 @@ export class NuevoUsuarioSpComponent implements OnInit {
   usu_password: string;
   usu_estado: string;
 
+  //MODAL
+  public modalRef: BsModalRef;
+
   constructor(
+    private modalService: BsModalService,
     private authService: AuthService,
     private toastrService: ToastrService,
     private router: Router
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
+  //Metodo Abrir Modal
+  openModal(modalTemplate: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(modalTemplate,
+      {
+        class: 'modal-dialogue-centered modal-md',
+        backdrop: 'static',
+        keyboard: true
+      }
+
+    );
+  }
 
   onRegister(): void {
     this.usuario = new NuevoUsuarioDto(

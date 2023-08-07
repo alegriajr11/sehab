@@ -13,34 +13,35 @@ export const environment = {
   prestadorURL: 'http://localhost:8080/prestador/',
   prestadorMunicipioURL: 'http://localhost:8080/prestador/mun/',
   prestadorPamecMunicipioURL: 'http://localhost:8080/prestador/mun/pamec/',
-  rolURL:'http://localhost:8080/rol/',
+  rolURL: 'http://localhost:8080/rol/',
   claseURL: 'http://localhost:8080/clase/',
   generarPdfURL: 'http://localhost:8080/generarpdf/usuarios/',
-  
 
-//SIC
+
+  //SIC
   criterioSicURL: 'http://localhost:8080/criteriosic/',
   indicadorURL: 'http://localhost:8080/indicador/',
   criterios_URL: 'http://localhost:8080/criterio/',
   criterioURL: 'http://localhost:8080/criteriosic/criterio/',
   cumplimientoEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/estandar/',
   cumpleEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/cumple/',
-  //SIC-PDF
-  acta_pdf_URL: 'http://localhost:8080/sic-acta/',
   
+  //SIC-PDF
+  actaSic_pdf_URL: 'http://localhost:8080/sic-acta/',
 
-//PAMEC
+
+  //PAMEC
   actividadURL: 'http://localhost:8080/actividad/',
   criteriopamURL: 'http://localhost:8080/criteriopam/',
   criteriopam1URL: 'http://localhost:8080/criteriopam/criterio/',
 
-//SEGURIDAD DEL PACIENTE - PROFESIONALES INDEPENDIENTE
+  //SEGURIDAD DEL PACIENTE - PROFESIONALES INDEPENDIENTE
   etapaURL: 'http://localhost:8080/sp-ind/',
   criterioindURL: 'http://localhost:8080/criterioind/',
   criteindURL: 'http://localhost:8080/criterioind/criterio/',
 
 
-//SEGURIDAD DEL PACIENTE - IPS
+  //SEGURIDAD DEL PACIENTE - IPS
   evaluacionipsURL: 'http://localhost:8080/evaluacionips/',
   itemipsURL: 'http://localhost:8080/itemips/',
   planeacionURL: 'http://localhost:8080/planeacion/',
@@ -52,11 +53,16 @@ export const environment = {
   verificacionURL: 'http://localhost:8080/criterioverif/',
   verificacionOneURL: 'http://localhost:8080/criterioverif/verificacion/',
 
+  //SP-PDF
+  actaSpIps_pdf_URL: 'http://localhost:8080/sp-ips/',
+  actaSpInd_pdf_URL: 'http://localhost:8080/sp-independientes/',
+
+
 
   //RESOLUCIÓN 3100/2019
   todos_serviciosURL: 'http://localhost:8080/criterio-servicios/',
 
-//PRESTADOR
+  //PRESTADOR
   municipioURL: 'http://localhost:8080/municipio/',
   clasificacionURL: 'http://localhost:8080/clasificacion/',
   tipoURL: 'http://localhost:8080/tipo/',
@@ -65,7 +71,7 @@ export const environment = {
   //AUDITORIA
   auditoriaUrl: 'http://localhost:8080/auditoria-registro/'
 };
-  
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

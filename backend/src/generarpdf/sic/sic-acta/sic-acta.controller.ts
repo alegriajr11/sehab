@@ -40,7 +40,7 @@ export class SicActaController {
     }
 
     //ÚLTIMA ACTA SIC
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get('ultima/acta/sic')
     getLastActa() {
         return this.sic_act_pdfService.getLastestActa();

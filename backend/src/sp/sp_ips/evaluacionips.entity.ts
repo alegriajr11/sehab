@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { PrestadorEntity } from "src/prestador/prestador.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CalificacionIpsEntity } from "./calificacionips.entity";
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioAjusteEntity } from "./criterioajuste.entity";
 import { CriterioImplementacionEntity } from "./criterioimplementacion.entity";
 import { CriterioPlaneacionEntity } from "./criterioplaneacion.entity";
@@ -16,13 +15,14 @@ export class EvaluacionipsEntity {
     @Column({ type: 'varchar', length: 100, nullable: false, unique: false })
     evips_nombre: string;
 
+    @Column({ type: 'date', nullable: true })
+    evips_creado: Date | null;    
+
+
     //Relacion Muchos a Muchos EVALUACIONIPS - PRESTADOR
     @ManyToMany(type => PrestadorEntity, prestador => prestador.evaluacionesips)
     prestadores: PrestadorEntity[];
 
-    //Relacion Muchos a Muchos EVALUACIONIPS - CALIFICACION_IPS
-    @ManyToMany(type => CalificacionIpsEntity, calificacionips => calificacionips.evaluaciones_ips)
-    calificaciones_ips: CalificacionIpsEntity[];
 
     //Relacion Uno a Muchos EVALUACIONIPS - ITEM
     // @ManyToMany(type => ItemEntity, item => item.ite_evaluacionips)
@@ -36,23 +36,19 @@ export class EvaluacionipsEntity {
     })
     evips_items: ItemEntity[];
 
-    //Relacion Muchos a Muchos EVALUACIONIPS - PRESTADOR
-    @ManyToMany(type => CalificacionIpsEntity, calificacionips => calificacionips.evaluaciones_ips)
-    calificacion_ips: CalificacionIpsEntity[];
-
-    //Relacion Muchos a Muchos EVALUACIONIPS - CRITERIO_AJUSTE
+    //Relacion Uno a Muchos EVALUACIONIPS - CRITERIO_AJUSTE
     @OneToMany(type => CriterioAjusteEntity, evaluacionips => evaluacionips.cri_aju_eva)
     evaluacionipsAjuste: CriterioAjusteEntity
 
-    //Relacion Muchos a Muchos EVALUACIONIPS - CRITERIO_IMPLEMENTACION
+    //Relacion Uno a Muchos EVALUACIONIPS - CRITERIO_IMPLEMENTACION
     @OneToMany(type => CriterioImplementacionEntity, evaluacionips => evaluacionips.cri_imp_eva)
     evaluacionipsImpl: CriterioImplementacionEntity
 
-    //Relacion Muchos a Muchos EVALUACIONIPS - CRITERIO_VERIFICACION
+    //Relacion Uno a Muchos EVALUACIONIPS - CRITERIO_VERIFICACION
     @OneToMany(type => CriterioVerificacionEntity, evaluacionips => evaluacionips.cri_ver_eva)
     evaluacionipsVerif: CriterioVerificacionEntity
 
-    //Relacion Muchos a Muchos EVALUACIONIPS - CRITERIO_PLANEACION
+    //Relacion Uno a Muchos EVALUACIONIPS - CRITERIO_PLANEACION
     @OneToMany(type => CriterioPlaneacionEntity, evaluacionips => evaluacionips.cri_pla_eva)
     evaluacionipsPlane: CriterioPlaneacionEntity
 

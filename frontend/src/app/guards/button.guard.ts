@@ -10,7 +10,9 @@ export class ButtonGuard implements CanActivate {
     canActivate(): boolean {
         if (localStorage.getItem('boton-acta-sic') === 'true') {
             return true;
-        }if (localStorage.getItem('boton-acta-sp') === 'true') {
+        }if (localStorage.getItem('boton-acta-sp-ips') === 'true') {
+            return true;
+        }if (localStorage.getItem('boton-acta-sp-ind') === 'true') {
             return true;
         }
         if (localStorage.getItem('boton-acta-pamec') === 'true') {

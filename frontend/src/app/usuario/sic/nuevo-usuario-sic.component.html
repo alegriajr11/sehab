@@ -1,4 +1,9 @@
 <app-menu></app-menu>
+
+<ng-template #modalTemplate>
+    <app-modal-firma-sic [dataFromParent]="modalRef"></app-modal-firma-sic>
+</ng-template>
+
 <div class="grid-container">
     <button class="btn btn-light esp btn-circle btn-xl" routerLink="/usuarios/nuevo">
         <i class="fa fa-reply fa-lg"></i>
@@ -24,8 +29,8 @@
 
                 <div class="form-group">
                     <label for="nombreUsuario">Nombre de Usuario:</label>
-                    <input type="text" class="form-control" name="usu_nombreUsuario" id="usu_nombreUsuario" autocomplete="off"
-                        required [(ngModel)]="usu_nombreUsuario">
+                    <input type="text" class="form-control" name="usu_nombreUsuario" id="usu_nombreUsuario"
+                        autocomplete="off" required [(ngModel)]="usu_nombreUsuario">
                 </div>
 
                 <div class="form-group">
@@ -42,16 +47,23 @@
 
                 <div>
                     <label for="estado">Estado:</label>
-                    <Select class="form-select form-control" [(ngModel)]="usu_estado" [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option value="" disabled selected >Selecciona Estado..</option>
+                    <Select class="form-select form-control" [(ngModel)]="usu_estado"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                        <option value="" disabled selected>Selecciona Estado..</option>
                         <option value="true">Activo</option>
                         <option value="false">Inactivo</option>
                     </Select>
                 </div>
+
+                <!--BOTON MODAL FIRMA-->
+                <div class="mt-4">
+                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma</span>
+                </div>
+
                 <hr>
 
                 <div class="form-group">
-                    <button class="btn btn-dark btn-block" type="submit">
+                    <button class="btn btn-dark btn-block" type="submit" [disabled]="!f.valid">
                         <i class='fa fa-user-plus'></i> Crear Cuenta
                     </button>
 

@@ -10,7 +10,7 @@ import autoTable from 'jspdf-autotable';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { ActaPdfDto } from 'src/app/models/Sic/actapdf.dto';
+import {  } from 'src/app/models/actaSicpdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
 
 

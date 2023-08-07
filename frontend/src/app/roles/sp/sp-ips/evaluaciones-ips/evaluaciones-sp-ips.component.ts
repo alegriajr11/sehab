@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
+import { SharedServiceService } from 'src/app/services/Sic/shared-service.service';
 import { TokenService } from 'src/app/services/token.service';
 
 @Component({
@@ -21,11 +23,46 @@ export class EvaluacionesSpIpsComponent implements OnInit {
 
   public page!: number;
 
-  constructor(tokenService: TokenService) { }
+  constructor(
+    private modalService: BsModalService,
+    public sharedService: SharedServiceService,
+    private actapdfService: ActapdfService,
+    private tokenService: TokenService,
+    ) { }
 
   ngOnInit(): void {
+    this.cargarActas();
     this.obtenerAnios();
   }
+
+  cargarActas(): void {
+    this.actapdfService.listaSpIps().subscribe(
+      data => {
+        this.evaluaciones = data;
+        this.listaVacia = undefined;
+      },
+      err => {
+        this.listaVacia = err.error.message;
+      }
+    );
+  }
+
+
+  openModal(modalTemplate: TemplateRef<any>, id: number, name: string) {
+    this.sharedService.setId(id)
+    this.sharedService.setNombrePrestador(name)
+    this.modalRef = this.modalService.show(modalTemplate,
+      {
+        class: 'modal-dialogue-centered modal-md',
+        backdrop: 'static',
+        keyboard: true
+      }
+
+    );
+
+  }
+
+
 
   obtenerAnios(): void {
     const selectAnio = document.getElementById("select-anio") as HTMLSelectElement;

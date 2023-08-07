@@ -24,9 +24,11 @@ export class AuditoriaService {
       const url = `${this.auditoriaUrl}fecha/date?&accion=${accion}`;
       return this.httpClient.get<Auditoria[]>(url);
     }
-
-
   }
   
+  listAuditoriaNombreUsuario(usu_nombre_apellido: string): Observable<Auditoria[]>{
+    const url = `${this.auditoriaUrl}funcionario?usu_nombre_apellido=${usu_nombre_apellido}`
+    return this.httpClient.get<Auditoria[]>(url);
+  }
   
 }

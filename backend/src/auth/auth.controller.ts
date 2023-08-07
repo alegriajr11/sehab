@@ -80,6 +80,7 @@ export class AuthController {
     @Post('nuevo/pamec')
     createUserPamec(@Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
         const { dto, tokenDto } = payload;
+        
         return this.authService.createUserPamec(payload);
     }
 

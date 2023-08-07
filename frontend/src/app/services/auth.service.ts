@@ -7,7 +7,8 @@ import { NuevoUsuarioDto } from '../models/nuevo-usuario.dto';
 import { TokenDto } from '../models/token.dto';
 import { CambiarPasswordDto } from '../models/cambiar-password.dto';
 import { RestablecerPasswordDto } from '../models/reset-password.dto';
-import { ActaPdfDto } from '../models/Sic/actapdf.dto';
+import { ActaSicPdfDto } from '../models/actaSicpdf.dto';
+import { ActaSpPdfDto } from '../models/actaSpPdf.dto';
 
 
 @Injectable({
@@ -16,12 +17,15 @@ import { ActaPdfDto } from '../models/Sic/actapdf.dto';
 export class AuthService {
 
   //authURL: 'http://localhost:8080/auth/',
+  //actaSpIps_pdf_URL: 'http://localhost:8080/sp-ips/',
 
   authURL = environment.authURL;
   restablecerContraseña = environment.restablecerContraseña;
   usuarioNewURL = environment.usuarioNewURL;
   usuarioAdmin = environment.usuarioURL;
-  acta_sic_pdfUrl = environment.acta_pdf_URL;
+  acta_sic_pdfUrl = environment.actaSic_pdf_URL;
+  acta_SpIps_pdfUrl = environment.actaSpIps_pdf_URL;
+  acta_SpInd_pdfUrl = environment.actaSpInd_pdf_URL;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -41,9 +45,14 @@ export class AuthService {
     return this.httpClient.post<any>(this.usuarioNewURL + 'sp', dto);
   }
 
-  registroPamec(dto: NuevoUsuarioDto): Observable<any> {
-    return this.httpClient.post<any>(this.usuarioNewURL + 'pamec', dto);
+  registroPamec(dto: NuevoUsuarioDto, tokenDto: TokenDto): Observable<any> {
+    const body = {
+      dto: dto,
+      tokenDto: tokenDto
+    }
+    return this.httpClient.post<any>(this.usuarioNewURL + 'pamec', body);
   }
+
 
   registroReso(dto: NuevoUsuarioDto): Observable<any> {
     return this.httpClient.post<any>(this.usuarioNewURL + 'res', dto);
@@ -57,7 +66,7 @@ export class AuthService {
     return this.httpClient.patch<any>(this.authURL + 'change-password', dto);
   }
 
-  requestPassword(id: number): Observable<any>{
+  requestPassword(id: number): Observable<any> {
     return this.httpClient.patch<any>(`${this.restablecerContraseña}${id}`, null);
   }
 
@@ -65,11 +74,12 @@ export class AuthService {
     return this.httpClient.patch<any>(this.authURL + 'reset-password', dto);
   }
 
-  resetPassword(dto: RestablecerPasswordDto){
+  resetPassword(dto: RestablecerPasswordDto) {
     return this.httpClient.patch<any>(this.authURL + 'reset-password', dto)
   }
 
-  registroActaPdf(dto: ActaPdfDto, tokenDto: TokenDto): Observable<any> {
+  //REGISTRO ACTA PDF SIC
+  registroActaSicPdf(dto: ActaSicPdfDto, tokenDto: TokenDto): Observable<any> {
     const body = {
       dto: dto,
       tokenDto: tokenDto
@@ -77,4 +87,21 @@ export class AuthService {
     return this.httpClient.post<any>(this.acta_sic_pdfUrl, body);
   }
 
+  //REGISTRO ACTA PDF SP_IPS
+  registroActaSpIpsPdf(dto: ActaSpPdfDto, tokenDto: TokenDto): Observable<any> {
+    const body = {
+      dto: dto,
+      tokenDto: tokenDto
+    }
+    return this.httpClient.post<any>(this.acta_SpIps_pdfUrl, body);
+  }
+
+  //REGISTRO ACTA PDF SP_IPS
+  registroActaSpIndPdf(dto: ActaSpPdfDto, tokenDto: TokenDto): Observable<any> {
+    const body = {
+      dto: dto,
+      tokenDto: tokenDto
+    }
+    return this.httpClient.post<any>(this.acta_SpInd_pdfUrl, body);
+  }
 }

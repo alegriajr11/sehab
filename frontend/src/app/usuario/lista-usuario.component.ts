@@ -8,6 +8,7 @@ import { AuthService } from '../services/auth.service';
 import { Usuario } from '../models/usuario';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { TokenDto } from '../models/token.dto';
 
 
 
@@ -74,7 +75,9 @@ export class ListaUsuarioComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.value) {
-        this.usuarioService.delete(id).subscribe(res => this.cargarUsuarios());
+        const token = this.tokenService.getToken()
+        const tokenDto: TokenDto = new TokenDto(token);
+        this.usuarioService.delete(id, tokenDto).subscribe(res => this.cargarUsuarios());
         Swal.fire(
           'OK',
           'Usuario Eliminado',

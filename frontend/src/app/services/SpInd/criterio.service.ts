@@ -21,6 +21,10 @@ export class CriterioIndService {
     return this.httpClient.get<CriterioInd[]>(this.criterioindURL + act)
   }
 
+  // public listAll(act: string): Observable<CriterioInd[]>{
+  //   return this.httpClient.get<CriterioInd[]>(this.criterioindURL + act)
+  // }
+
   public detail(id: number): Observable<CriterioInd> {
     return this.httpClient.get<CriterioInd>(`${this.criteindURL}${id}`);
   }
