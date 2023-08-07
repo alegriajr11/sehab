@@ -70,8 +70,7 @@ export class EvaluacionSicComponent implements OnInit {
 
   ngOnInit(): void {
     
-
-    sessionStorage.getItem("codigo-prestador-sic");
+    console.log(sessionStorage.getItem("cod-pres-sic"))
     this.capturarNombres();
     this.cargarDominio();
     this.cargarCriteriosSic();
@@ -292,18 +291,13 @@ export class EvaluacionSicComponent implements OnInit {
     var copy = document.getElementById("nombre-prestador");
     var captPrestador = sessionStorage.getItem("nombre-pres-sic");
     copy.textContent = " " + captPrestador + "."
-
     //CAPTURAR ID DEL PRESTADOR
-
     this.captCodPres = sessionStorage.getItem("cod-pres-sic");
-
 
     //CAPTURAR NOMBRE DE USUARIO
     this.captUsuario = sessionStorage.getItem("nombre-usuario-sic");
-
     //CAPTURAR CARGO DEL USUARIO
     this.captCargoUsuario = sessionStorage.getItem("cargo-usuario-sic");
-
     //CAPTURAR CARGO DEL PRESTADOR
     this.captCargoPres = sessionStorage.getItem("cargo-prestador-sic")
 

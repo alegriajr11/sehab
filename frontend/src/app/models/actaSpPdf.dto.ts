@@ -1,4 +1,4 @@
-export class ActaPdfDto {
+export class ActaSpPdfDto {
     act_id?: number;
     act_visita_inicial: string;
     act_visita_seguimiento: string;
@@ -11,12 +11,8 @@ export class ActaPdfDto {
     act_barrio: string
     act_telefono: string
     act_email: string
-    act_sede_principal: string
-    act_sede_localidad: string
-    act_sede_direccion: string
     act_representante: string
     act_cod_prestador: string
-    act_cod_sede: string
     act_obj_visita: string
     act_nombre_funcionario: string
     act_cargo_funcionario: string
@@ -36,12 +32,8 @@ export class ActaPdfDto {
         act_barrio: string,
         act_telefono: string,
         act_email: string,
-        act_sede_principal: string,
-        act_sede_localidad: string,
-        act_sede_direccion: string,
         act_representante: string,
         act_cod_prestador: string,
-        act_cod_sede: string,
         act_obj_visita: string,
         act_nombre_funcionario: string,
         act_cargo_funcionario: string,
@@ -62,12 +54,8 @@ export class ActaPdfDto {
         this.act_barrio = act_barrio
         this.act_telefono = act_telefono
         this.act_email = act_email
-        this.act_sede_principal = act_sede_principal
-        this.act_sede_localidad = act_sede_localidad
-        this.act_sede_direccion = act_sede_direccion
         this.act_representante = act_representante
         this.act_cod_prestador = act_cod_prestador
-        this.act_cod_sede = act_cod_sede
         this.act_obj_visita = act_obj_visita
         this.act_nombre_funcionario = act_nombre_funcionario
         this.act_cargo_funcionario = act_cargo_funcionario

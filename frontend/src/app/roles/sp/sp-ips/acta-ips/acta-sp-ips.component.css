@@ -8,15 +8,17 @@ h2 {
     color: black;
 }
 
-h3{
+h3 {
     color: black;
 }
- .sizeh3{
+
+.sizeh3 {
     font-size: large;
     font-weight: bold;
     margin-top: 0.19rem;
     margin-bottom: 0.19rem;
- }
+}
+
 label {
     color: black;
     font-weight: bold;
@@ -31,16 +33,17 @@ hr.medio {
     border: 0.02rem solid;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-.col-12{
+.col-12 {
     margin-top: 0.06rem;
     margin-bottom: 1rem;
 }
+
 .col-md-6 {
     margin-bottom: 1rem;
 }
@@ -76,11 +79,12 @@ input[type=number]::-webkit-outer-spin-button {
     column-gap: 2rem;
 }
 
-.contenedor-form{
+.contenedor-form {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .card {
     width: 100%;
 }

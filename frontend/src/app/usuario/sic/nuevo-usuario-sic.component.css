@@ -9,15 +9,17 @@ h2 {
     font-weight: bold;
 }
 
-h3{
+h3 {
     color: black;
 }
- .sizeh3{
+
+.sizeh3 {
     font-size: large;
     font-weight: bold;
     margin-top: 0.19rem;
     margin-bottom: 0.19rem;
- }
+}
+
 label {
     color: black;
     font-weight: bold;
@@ -39,10 +41,11 @@ hr.medio {
     justify-content: center;
 }
 
-.col-12{
+.col-12 {
     margin-top: 0.06rem;
     margin-bottom: 1rem;
 }
+
 .col-md-6 {
     margin-bottom: 1rem;
 }
@@ -78,11 +81,12 @@ hr.medio {
     column-gap: 2rem;
 }
 
-.contenedor-form{
+.contenedor-form {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .card {
     width: 100%;
 }
@@ -149,3 +153,22 @@ input:checked+.slider:before {
     border-radius: 50%;
 }
 
+/*Estilo Span Firma*/
+.button-like {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #343a40;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-like:hover {
+    background-color: #3d4347;
+}
+
+.btn-span:hover {
+    transform: scale(1.1);
+    transition-duration: 0.2s;
+}

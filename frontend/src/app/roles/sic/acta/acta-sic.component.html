@@ -13,6 +13,9 @@
     </div>
 </div>
 
+<ng-template #modalTemplate>
+    <app-modal-firma [dataFromParent]="modalRef"></app-modal-firma>
+</ng-template>
 
 <br>
 <div class="container">
@@ -24,8 +27,10 @@
             <form #f="ngForm" novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()" id="form">
                 <div class="col-md-1">
                     <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
-                    <input type="number" min="0" class="form-control" id="acta" readonly name="act_id" [(ngModel)]="act_id">
+                    <input type="number" min="0" class="form-control" id="acta" readonly name="act_id"
+                        [(ngModel)]="act_id">
                 </div>
+
                 <div class="col-md-2">
                     <label for="inicial" class="form-label">VISITA INICIAL</label>
                     <label class="switch">
@@ -48,12 +53,13 @@
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
                         name="act_fecha_inicial" [(ngModel)]="act_fecha_inicial" [ngModelOptions]="{standalone: true}"
-                        ngDefaultControl>
+                        ngDefaultControl (change)="habilitarFechaFinal()">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
-                        [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                        [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
+                        [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial">
                 </div>
 
                 <div class="col-12">
@@ -67,8 +73,7 @@
                 <div class="col-md-6">
                     <label for="habilitado" class="form-label">Municipio:</label>
                     <select id="mun_id" name="mun_id" class="form-select form-control"
-                        (change)="cargarPrestadoresByMun()" [(ngModel)]="act_municipio"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                        (change)="cargarPrestadoresByMun()" [(ngModel)]="act_municipio" ngDefaultControl>
                         <option value="" disabled selected hidden>Selecciona un Municipio...</option>
                         <option *ngFor="let municipio of municipio" [value]="municipio.mun_id">
                             {{ municipio.mun_nombre }}
@@ -76,22 +81,24 @@
                     </select>
                 </div>
 
-
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Prestador:</label>
                     <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()"
-                        [(ngModel)]="act_prestador" [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                        [(ngModel)]="act_prestador" ngDefaultControl>
                         <option hidden selected>Selecciona un Prestador...</option>
-                        <option *ngFor="let prestador of prestador" value="{{prestador.pre_cod_habilitacion}}">
-                            {{prestador.pre_nombre}}</option>
+                        <option *ngFor="let prest of prestador" [value]="prest.pre_cod_habilitacion">
+                            {{ prest.pre_nombre }}
+                        </option>
                     </select>
                 </div>
 
+
+
                 <div class="col-6">
                     <label for="nit" class="form-label">Nit:</label>
-                    <input type="text" class="form-control" id="nit" placeholder="Nit" readonly name="act_nit" [(ngModel)]="act_nit">
+                    <input type="text" class="form-control" id="nit" placeholder="Nit" readonly name="act_nit"
+                        [(ngModel)]="act_nit">
                 </div>
-
 
 
                 <div class="col-6">
@@ -124,7 +131,7 @@
 
                     <select id="sedep" class="form-select form-control" (change)="sedePrincipal()"
                         [(ngModel)]="act_sede_principal" [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option hidden selected>Sede Principal...</option>
+                        <option disabled selected hidden>Sede Principal...</option>
                         <option value="si">Si</option>
                         <option value="no">No</option>
                     </select>
@@ -214,6 +221,11 @@
                     <label for="" class="form-label">Cargo:</label>
                     <input type="text" class="form-control" id="cargoPres" name="act_cargo_prestador"
                         placeholder="Cargo..." [(ngModel)]="act_cargo_prestador">
+                </div>
+
+                <!--BOTON MODAL FIRMA-->
+                <div class="col-3">
+                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma Prestador</span>
                 </div>
 
 

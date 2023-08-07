@@ -10,6 +10,12 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { } from 'src/app/models/actaSicpdf.dto';
+import { AuthService } from 'src/app/services/auth.service';
+import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
+import { TokenService } from 'src/app/services/token.service';
+import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
+import { TokenDto } from 'src/app/models/token.dto';
 
 @Component({
   selector: 'app-acta-sp',
@@ -22,21 +28,69 @@ export class ActaSpIpsComponent implements OnInit {
   usuario: Usuario[];
   municipio: Municipio[];
 
+  //DTO DEL PDF ACTA
+  actaPdf: ActaSpPdfDto = null;
+
+
+  //Habilitar la Fecha Final
+  habilitarfechaFin = false;
+
+  //Boton habilitar la evaluacion
+  boton_acta_sp_ips = false;
+
+
   listaVacia: any = undefined;
+
+
+  //VARIABLES PARA TRANSPORTAR EL DTO
+  act_id: number;
+  act_visita_inicial: string;
+  act_visita_seguimiento: string;
+  act_fecha_inicial: string;
+  act_fecha_final: string;
+  act_municipio: string
+  act_prestador: string
+  act_nit: string;
+  act_direccion: string
+  act_barrio: string
+  act_telefono: string
+  act_email: string
+  act_sede_principal: string
+  act_sede_localidad: string
+  act_sede_direccion: string
+  act_representante: string
+  act_cod_prestador: string
+  act_cod_sede: string
+  act_obj_visita: string
+  act_nombre_funcionario: string
+  act_cargo_funcionario: string
+  act_nombre_prestador: string
+  act_cargo_prestador: string
 
   constructor(
     private prestadorService: PrestadorService,
     private municipioService: MunicipioService,
     private usuarioService: UsuarioService,
     private toastrService: ToastrService,
+    private authService: AuthService,
+    private actaPdfService: ActapdfService,
+    private tokenService: TokenService,
     private router: Router
+
   ) { }
 
   ngOnInit(): void {
     this.cargarMunicipio();
     this.cargarUsuario();
     this.unsoloCheckbox();
+    this.obtenerNombres();
+    this.mostrarActaId();
   }
+
+  habilitarFechaFinal() {
+    this.habilitarfechaFin = true;
+  }
+
 
   cargarMunicipio(): void {
     this.municipioService.lista().subscribe(
@@ -46,6 +100,17 @@ export class ActaSpIpsComponent implements OnInit {
       },
       err => {
         this.listaVacia = err.error.message;
+      }
+    )
+  }
+
+  mostrarActaId(): void {
+    this.actaPdfService.listaUltimaSpIps().subscribe(
+      data => {
+        this.actaPdf = data
+        var acta = (document.getElementById('acta')) as HTMLSelectElement
+        acta.value = this.actaPdf.act_id.toString()
+
       }
     )
   }
@@ -63,12 +128,7 @@ export class ActaSpIpsComponent implements OnInit {
   }
 
   cargarPrestadoresByMun(): void {
-    var id = (document.getElementById('mun_id')) as HTMLSelectElement
-    var sel = id.selectedIndex;
-    var opt = id.options[sel]
-    var Value = (<HTMLSelectElement><unknown>opt).value;
-
-    this.prestadorService.listMun(Value).subscribe(
+    this.prestadorService.listMun(this.act_municipio).subscribe(
       data => {
         this.prestador = data;
         this.listaVacia = undefined
@@ -77,18 +137,6 @@ export class ActaSpIpsComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     );
-    var nit = (document.getElementById('nit')) as HTMLSelectElement
-    nit.value = null
-    var direccion = (document.getElementById('direccion')) as HTMLSelectElement
-    direccion.value = null
-    var telefono = (document.getElementById('telefono')) as HTMLSelectElement
-    telefono.value = null
-    var email = (document.getElementById('email')) as HTMLSelectElement
-    email.value = null
-    var rep_legal = (document.getElementById('repleg')) as HTMLSelectElement
-    rep_legal.value = null
-    var cod_pres = (document.getElementById('codpres')) as HTMLSelectElement
-    cod_pres.value = null
   }
 
 
@@ -98,7 +146,6 @@ export class ActaSpIpsComponent implements OnInit {
     var opt = id.options[sel]
     var Codigo = (<HTMLSelectElement><unknown>opt).value;
 
-    console.log(Codigo)
 
     this.prestadorService.listaOne(Codigo).subscribe(
       data => {
@@ -147,28 +194,33 @@ export class ActaSpIpsComponent implements OnInit {
 
   obtenerNombres(): void {
     //OBTENER NOMBRE DEL PRESTADOR
-    var idp = (document.getElementById('prestador')) as HTMLSelectElement
-    var selp = idp.selectedIndex;
-    var optp = idp.options[selp]
-    var valorPrestador = (<HTMLSelectElement><unknown>optp);
-    sessionStorage.setItem("nombre-presips", valorPrestador.textContent);
+    const idp = document.getElementById('prestador') as HTMLSelectElement;
+    const selp = idp.selectedIndex;
+    const optp = idp.options[selp] as HTMLOptionElement;
+    const valorPrestador = optp ? optp.textContent : '';
+    sessionStorage.setItem("nombre-pres-sp-ips", valorPrestador);
 
-    //USUARIO SECRETARIA
-    var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
-    var selUsuSecre = idUsuSecre.selectedIndex;
-    var optUsuSecre = idUsuSecre.options[selUsuSecre]
-    var valorUsuSecre = (<HTMLSelectElement><unknown>optUsuSecre);
-    sessionStorage.setItem("nombre-usuarioips", valorUsuSecre.textContent);
+    //CODIGO PRESTADOR
+    var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
+    var valorCodigoPres = codigoPres.value
+    sessionStorage.setItem("cod-pres-sp-ips", valorCodigoPres);
+
+    // USUARIO SECRETARIA
+    const idUsuSecre = document.getElementById('usu_secretaria') as HTMLSelectElement;
+    const selUsuSecre = idUsuSecre.selectedIndex;
+    const optUsuSecre = idUsuSecre.options[selUsuSecre] as HTMLOptionElement;
+    const valorUsuSecre = optUsuSecre ? optUsuSecre.textContent : '';
+    sessionStorage.setItem("nombre-usuario-sp", valorUsuSecre);
 
     //CARGO USUARIO SECRETARIA
     var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
     var valorCargoSecre = cargoSecre.value
-    sessionStorage.setItem("cargo-usuarioips", valorCargoSecre);
+    sessionStorage.setItem("cargo-usuario-sp-ips", valorCargoSecre);
 
     //CARGO PRESTADOR
     var cargoPres = (document.getElementById('cargoPres')) as HTMLInputElement
     var valorCargoPres = cargoPres.value
-    sessionStorage.setItem("cargo-prestadorips", valorCargoPres);
+    sessionStorage.setItem("cargo-prestador-sp-ips", valorCargoPres);
   }
 
 
@@ -209,16 +261,16 @@ export class ActaSpIpsComponent implements OnInit {
     let fechaFormFinal = formFinal.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
 
     //MUNICIPIO
-    var id = (document.getElementById('mun_id')) as HTMLSelectElement
-    var sel = id.selectedIndex;
-    var opt = id.options[sel]
-    var valorMunicipio = (<HTMLSelectElement><unknown>opt).textContent;
+    const id = document.getElementById('mun_id') as HTMLSelectElement;
+    const sel = id.selectedIndex;
+    const opt = id.options[sel] as HTMLOptionElement;
+    const valorMunicipio = opt ? opt.textContent : '';
 
     //PRESTADOR
-    var idp = (document.getElementById('prestador')) as HTMLSelectElement
-    var selp = idp.selectedIndex;
-    var optp = idp.options[selp]
-    var valorPrestador = (<HTMLSelectElement><unknown>optp).textContent;
+    const idp = document.getElementById('prestador') as HTMLSelectElement;
+    const selp = idp.selectedIndex;
+    const optp = idp.options[selp] as HTMLOptionElement;
+    const valorPrestador = optp ? optp.textContent : '';
 
     //INFORMACION PRESTADOR
     //NIT
@@ -251,17 +303,17 @@ export class ActaSpIpsComponent implements OnInit {
 
 
 
-    //OBJETO VISITA
-    var idObjvisita = (document.getElementById('objVisita')) as HTMLSelectElement
-    var selObjvisita = idObjvisita.selectedIndex;
-    var optObjvisita = idObjvisita.options[selObjvisita]
-    var valorObjvisita = (<HTMLSelectElement><unknown>optObjvisita).textContent;
+    // OBJETO VISITA
+    const idObjvisita = document.getElementById('objVisita') as HTMLSelectElement;
+    const selObjvisita = idObjvisita.selectedIndex;
+    const optObjvisita = idObjvisita.options[selObjvisita] as HTMLOptionElement;
+    const valorObjvisita = optObjvisita ? optObjvisita.textContent : '';
 
-    //USUARIO SECRETARIA
-    var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
-    var selUsuSecre = idUsuSecre.selectedIndex;
-    var optUsuSecre = idUsuSecre.options[selUsuSecre]
-    var valorUsuSecre = (<HTMLSelectElement><unknown>optUsuSecre).textContent;
+    // USUARIO SECRETARIA
+    const idUsuSecre = document.getElementById('usu_secretaria') as HTMLSelectElement;
+    const selUsuSecre = idUsuSecre.selectedIndex;
+    const optUsuSecre = idUsuSecre.options[selUsuSecre] as HTMLOptionElement;
+    const valorUsuSecre = optUsuSecre ? optUsuSecre.textContent : '';
 
     //CARGO USUARIO SECRETARIA
     var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
@@ -270,12 +322,13 @@ export class ActaSpIpsComponent implements OnInit {
     //PRESTADOR FIRMA
     var presNombre = (document.getElementById('nombrePrestador')) as HTMLInputElement
     var valorPresNombre = presNombre.value
+
     //CARGO PRESTADOR
     var cargoPres = (document.getElementById('cargoPres')) as HTMLInputElement
     var valorCargoPres = cargoPres.value
 
-    const fechaGenrada = new Date();
-    const formatoFecha = new Intl.DateTimeFormat('es-ES').format(fechaGenrada);
+    // const fechaGenerada = new Date();
+    // const formatoFecha = new Intl.DateTimeFormat('es-ES').format(fechaGenerada);
 
     const doc = new jsPDF()
     var imgEncabezado = 'assets/img/encabezadoSp.png'
@@ -283,7 +336,6 @@ export class ActaSpIpsComponent implements OnInit {
 
     doc.setFontSize(9)
     doc.setTextColor(128, 128, 128);
-    doc.text(formatoFecha, 150, 26)
     doc.setFontSize(9);
     doc.setTextColor(0, 0, 0);
     doc.setFont("helvetica", "bold")
@@ -314,7 +366,7 @@ export class ActaSpIpsComponent implements OnInit {
     })
 
     //NOMBRE PRESTADOR
-    doc.text("INFORMACION DEL PRESTADOR DE SERVICIOS", 70, 79);
+    doc.text("INFORMACIÓN DEL PRESTADOR DE SERVICIOS", 70, 79);
     autoTable(doc, {
       startY: 80,
       columnStyles: { nombrePres: { halign: 'left' } },
@@ -533,13 +585,14 @@ export class ActaSpIpsComponent implements OnInit {
     }
 
     //VALIDAR MUNICIPIO Y PRESTADOR
-    if (!sel) {
+    if (!valorMunicipio) {
       this.toastrService.error('Selecciona el Municipio', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       })
     }
-    if (!selp) {
+    /**/
+    if (valorMunicipio && !valorPrestador) {
       this.toastrService.error('Selecciona el Prestador', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',
@@ -590,35 +643,89 @@ export class ActaSpIpsComponent implements OnInit {
     if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
       valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && valorActa) {
       if (valorVisitaInicial || valorVisitaSeguim) {
-        Swal.fire({
-          title: '¿Desea descargar el acta?',
-          showCancelButton: true,
-          confirmButtonText: 'Si',
-          cancelButtonText: 'No'
-        }).then((result) => {
-          if (result.value) {
-            // doc.output('dataurlnewwindow', { filename: 'acta-sp-ips.pdf' });
-            doc.save('acta-sp-ips.pdf')
+
+        //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
+        this.act_id = Number(valorActa);
+        this.act_municipio = valorMunicipio
+        this.act_prestador = valorPrestador
+        this.act_nit = valorNit
+        this.act_direccion = valorDireccion
+        this.act_telefono = valorTelefono
+        this.act_email = valorEmail
+        this.act_representante = valorRepresentante
+        this.act_cod_prestador = valorCodigoPres
+        this.act_nombre_prestador = valorPresNombre
+        this.act_nombre_funcionario = valorUsuSecre
+
+        //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
+        this.actaPdf = new ActaSpPdfDto(
+          this.act_id,
+          this.act_visita_inicial,
+          this.act_visita_seguimiento,
+          this.act_fecha_inicial,
+          this.act_fecha_final,
+          this.act_municipio,
+          this.act_prestador,
+          this.act_nit,
+          this.act_direccion,
+          this.act_barrio,
+          this.act_telefono,
+          this.act_email,
+          this.act_representante,
+          this.act_cod_prestador,
+          this.act_obj_visita,
+          this.act_nombre_funcionario,
+          this.act_cargo_funcionario,
+          this.act_nombre_prestador,
+          this.act_cargo_prestador
+        );
+
+        const token = this.tokenService.getToken()
+        const tokenDto: TokenDto = new TokenDto(token);
+        this.authService.registroActaSpIpsPdf(this.actaPdf, tokenDto).subscribe(
+          (data) => {
+            // Verificar si no hay errores enviados por el backend
+            if (!data.error) {
+              //OBTENER EL ESTADO DEL BOTON A TRUE 
+              this.boton_acta_sp_ips = true;
+              localStorage.setItem('boton-acta-sp-ips', 'true');
+
+              Swal.fire({
+                title: '¿Desea descargar el acta?',
+                showCancelButton: true,
+                confirmButtonText: 'Si',
+                cancelButtonText: 'No'
+              }).then((result) => {
+                if (result.value) {
+                  doc.save('acta-sp-ips.pdf');
+                  this.toastrService.success(data.message, 'Ok', {
+                    timeOut: 3000,
+                    positionClass: 'toast-top-center',
+                  });
+                  this.router.navigate(['/sp/home-evaluacion-ips']);
+                  window.scrollTo(0, 0);
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                  this.router.navigate(['/sp/home-evaluacion-ips']);
+                  window.scrollTo(0, 0);
+                }
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message
+              });
+            }
+          },
+          err => {
             Swal.fire({
-              title: '¿Desea Evaluar al Prestador?',
-              showCancelButton: true,
-              confirmButtonText: 'Si',
-              cancelButtonText: 'No'
-            }).then((result => {
-              if (result.value) {
-                this.router.navigate(['/']);
-                window.scrollTo(0, 0);
-              } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                  'Ok'
-                )
-              }
-            }))
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.router.navigate(['/']);
-            window.scrollTo(0, 0);
+              icon: 'error',
+              title: 'Error',
+              text: err.error.message
+            });
           }
-        })
+        );
+
       }
     }
   }

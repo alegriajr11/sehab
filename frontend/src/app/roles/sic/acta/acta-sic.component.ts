@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { PrestadorDto } from 'src/app/models/prestador.dto';
 import { Municipio } from 'src/app/models/Prestador/municipio';
@@ -11,16 +11,13 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
-import { ActaPdfDto } from 'src/app/models/Sic/actapdf.dto';
+import { ActaSicPdfDto } from 'src/app/models/actaSicpdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { TokenService } from 'src/app/services/token.service';
 import { TokenDto } from 'src/app/models/token.dto';
-
-
-
-
-
+import SignaturePad from 'signature_pad';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -29,18 +26,26 @@ import { TokenDto } from 'src/app/models/token.dto';
   styleUrls: ['./acta-sic.component.css']
 })
 export class ActaSicComponent implements OnInit {
+
+
   prestador: PrestadorDto[];
   usuario: Usuario[];
   municipio: Municipio[];
-  actaPdf: ActaPdfDto = null;
-  actaSic: ActaPdfDto[];
 
-  title = 'Probando-PDF';
+  //DTO DEL PDF ACTA
+  actaPdf: ActaSicPdfDto = null;
 
+  //Habilitar la Fecha Final
+  habilitarfechaFin = false;
+
+  //Boton habilitar la evaluacion
   boton_acta_sic = false;
 
 
   listaVacia: any = undefined;
+
+  //MODAL
+  public modalRef: BsModalRef;
 
 
   //VARIABLES PARA TRANSPORTAR EL DTO
@@ -49,8 +54,8 @@ export class ActaSicComponent implements OnInit {
   act_visita_seguimiento: string;
   act_fecha_inicial: string;
   act_fecha_final: string;
-  act_municipio: string;
-  act_prestador: string;
+  act_municipio: string
+  act_prestador: string
   act_nit: string;
   act_direccion: string
   act_barrio: string
@@ -70,6 +75,7 @@ export class ActaSicComponent implements OnInit {
 
 
   constructor(
+    private modalService: BsModalService,
     private prestadorService: PrestadorService,
     private municipioService: MunicipioService,
     private usuarioService: UsuarioService,
@@ -89,6 +95,22 @@ export class ActaSicComponent implements OnInit {
     this.mostrarActaId();
   }
 
+  habilitarFechaFinal() {
+    this.habilitarfechaFin = true;
+  }
+
+  //Metodo Abrir Modal
+  openModal(modalTemplate: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(modalTemplate,
+      {
+        class: 'modal-dialogue-centered modal-md',
+        backdrop: 'static',
+        keyboard: true
+      }
+
+    );
+
+  }
 
 
   cargarMunicipio(): void {
@@ -128,12 +150,7 @@ export class ActaSicComponent implements OnInit {
   }
 
   cargarPrestadoresByMun(): void {
-    var id = (document.getElementById('mun_id')) as HTMLSelectElement
-    var sel = id.selectedIndex;
-    var opt = id.options[sel]
-    var Value = (<HTMLSelectElement><unknown>opt).value;
-
-    this.prestadorService.listMun(Value).subscribe(
+    this.prestadorService.listMun(this.act_municipio).subscribe(
       data => {
         this.prestador = data;
         this.listaVacia = undefined
@@ -142,18 +159,6 @@ export class ActaSicComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     );
-    var nit = (document.getElementById('nit')) as HTMLSelectElement
-    nit.value = null
-    var direccion = (document.getElementById('direccion')) as HTMLSelectElement
-    direccion.value = null
-    var telefono = (document.getElementById('telefono')) as HTMLSelectElement
-    telefono.value = null
-    var email = (document.getElementById('email')) as HTMLSelectElement
-    email.value = null
-    var rep_legal = (document.getElementById('repleg')) as HTMLSelectElement
-    rep_legal.value = null
-    var cod_pres = (document.getElementById('codpres')) as HTMLSelectElement
-    cod_pres.value = null
   }
 
 
@@ -162,8 +167,6 @@ export class ActaSicComponent implements OnInit {
     var sel = id.selectedIndex;
     var opt = id.options[sel]
     var Codigo = (<HTMLSelectElement><unknown>opt).value;
-
-
 
     this.prestadorService.listaOne(Codigo).subscribe(
       data => {
@@ -403,15 +406,13 @@ export class ActaSicComponent implements OnInit {
     var valorCargoPres = cargoPres.value
 
 
-    const fechaGenrada = new Date();
-    const formatoFecha = new Intl.DateTimeFormat('es-ES').format(fechaGenrada);
-
+    // const fechaGenerada = new Date();
+    // const formatoFecha = new Intl.DateTimeFormat('es-ES').format(fechaGenerada);
 
 
     const doc = new jsPDF()
     var imgEncabezado = 'assets/img/encabezadoSic.png'
     doc.addImage(imgEncabezado, 'PNG', 23.5, 4, 160, 25);
-
 
     doc.setFontSize(9)
     doc.setTextColor(128, 128, 128);
@@ -445,7 +446,7 @@ export class ActaSicComponent implements OnInit {
 
 
     //NOMBRE PRESTADOR
-    doc.text("INFORMACION DEL PRESTADOR DE SERVICIOS", 60, 79);
+    doc.text("INFORMACIÓN DEL PRESTADOR DE SERVICIOS", 60, 79);
     autoTable(doc, {
       startY: 80,
       columnStyles: { nombrePres: { halign: 'left' } },
@@ -668,6 +669,7 @@ export class ActaSicComponent implements OnInit {
       }
     })
 
+    //VALIDAR FORMULARIO
     //VALIDAR ACTA
     if (!valorActa.length) {
       this.toastrService.error('El número de acta no puede estar vacia', 'Error', {
@@ -805,7 +807,7 @@ export class ActaSicComponent implements OnInit {
 
 
           //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
-          this.actaPdf = new ActaPdfDto(
+          this.actaPdf = new ActaSicPdfDto(
 
             this.act_id,
             this.act_visita_inicial,
@@ -833,45 +835,49 @@ export class ActaSicComponent implements OnInit {
           );
           const token = this.tokenService.getToken()
           const tokenDto: TokenDto = new TokenDto(token);
-          this.authService.registroActaPdf(this.actaPdf, tokenDto).subscribe();
+          this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
+            data => {
+              // Verificar si no hay errores enviados por el backend
+              if (!data.error) {
+                //OBTENER EL ESTADO DEL BOTON A TRUE 
+                this.boton_acta_sic = true
+                localStorage.setItem('boton-acta-sic', 'true');
 
-
-
-
-          //OBTENER EL ESTADO DEL BOTON A TRUE 
-          this.boton_acta_sic = true
-          localStorage.setItem('boton-acta-sic', 'true');
-
-
-          Swal.fire({
-            title: '¿Desea descargar el acta?',
-            showCancelButton: true,
-            confirmButtonText: 'Si',
-            cancelButtonText: 'No'
-          }).then((result) => {
-            if (result.value) {
-              // doc.output('dataurlnewwindow', { filename: 'acta-sic.pdf' });
-              doc.save('acta-sic.pdf')
+                Swal.fire({
+                  title: '¿Desea descargar el acta?',
+                  showCancelButton: true,
+                  confirmButtonText: 'Si',
+                  cancelButtonText: 'No'
+                }).then((result) => {
+                  if (result.value) {
+                    doc.save('acta-sic.pdf');
+                    this.toastrService.success(data.message, 'Ok', {
+                      timeOut: 3000,
+                      positionClass: 'toast-top-center',
+                    });
+                    this.router.navigate(['/sic/evaluacion']);
+                    window.scrollTo(0, 0);
+                  } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    this.router.navigate(['/sic/evaluacion']);
+                    window.scrollTo(0, 0);
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: data.message
+                });
+              }
+            },
+            err => {
               Swal.fire({
-                title: '¿Desea Evaluar al Prestador?',
-                showCancelButton: true,
-                confirmButtonText: 'Si',
-                cancelButtonText: 'No'
-              }).then((result => {
-                if (result.value) {
-                  this.router.navigate(['/sic/evaluacion']);
-                  window.scrollTo(0, 0);
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                  Swal.fire(
-                    'Ok'
-                  )
-                }
-              }))
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-              this.router.navigate(['/sic/evaluacion']);
-              window.scrollTo(0, 0);
+                icon: 'error',
+                title: 'Error',
+                text: err.error.message
+              });
             }
-          })
+          );
         } //FIN DEL SI - VALIDACIÓN SI LA SEDE ES SI
       }
     }
@@ -884,6 +890,7 @@ export class ActaSicComponent implements OnInit {
         if (valorVisitaInicial || valorVisitaSeguim) {
 
           //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
+          this.act_id = Number(valorActa);
           this.act_municipio = valorMunicipio
           this.act_prestador = valorPrestador
           this.act_nit = valorNit
@@ -897,7 +904,7 @@ export class ActaSicComponent implements OnInit {
 
 
           //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
-          this.actaPdf = new ActaPdfDto(
+          this.actaPdf = new ActaSicPdfDto(
 
             this.act_id,
             this.act_visita_inicial,
@@ -925,48 +932,54 @@ export class ActaSicComponent implements OnInit {
           );
           const token = this.tokenService.getToken()
           const tokenDto: TokenDto = new TokenDto(token);
-          this.authService.registroActaPdf(this.actaPdf, tokenDto).subscribe();
 
+          this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
+            (data) => {
+              // Verificar si no hay errores enviados por el backend
+              if (!data.error) {
+                //OBTENER EL ESTADO DEL BOTON A TRUE 
+                this.boton_acta_sic = true;
+                localStorage.setItem('boton-acta-sic', 'true');
 
-
-          //OBTENER EL ESTADO DEL BOTON A TRUE 
-          this.boton_acta_sic = true
-          localStorage.setItem('boton-acta-sic', 'true');
-
-          Swal.fire({
-            title: '¿Desea descargar el acta?',
-            showCancelButton: true,
-            confirmButtonText: 'Si',
-            cancelButtonText: 'No'
-          }).then((result) => {
-            if (result.value) {
-              // doc.output('dataurlnewwindow', { filename: 'acta-sic.pdf' });
-              doc.save('acta-sic.pdf')
+                Swal.fire({
+                  title: '¿Desea descargar el acta?',
+                  showCancelButton: true,
+                  confirmButtonText: 'Si',
+                  cancelButtonText: 'No'
+                }).then((result) => {
+                  if (result.value) {
+                    doc.save('acta-sic.pdf');
+                    this.toastrService.success(data.message, 'Ok', {
+                      timeOut: 3000,
+                      positionClass: 'toast-top-center',
+                    });
+                    this.router.navigate(['/sic/evaluacion']);
+                    window.scrollTo(0, 0);
+                  } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    this.router.navigate(['/sic/evaluacion']);
+                    window.scrollTo(0, 0);
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: data.message
+                });
+              }
+            },
+            err => {
               Swal.fire({
-                title: '¿Desea Evaluar al Prestador?',
-                showCancelButton: true,
-                confirmButtonText: 'Si',
-                cancelButtonText: 'No'
-              }).then((result => {
-                if (result.value) {
-                  this.router.navigate(['/sic/evaluacion']);
-                  window.scrollTo(0, 0);
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                  Swal.fire(
-                    'Ok'
-                  )
-                }
-              }))
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-              this.router.navigate(['/sic/evaluacion']);
-              window.scrollTo(0, 0);
+                icon: 'error',
+                title: 'Error',
+                text: err.error.message
+              });
             }
-          })
-        } //FIN DEL SI - VALIDACIÓN SI LA SEDE ES NO
+          );
+
+          //FIN DEL NO - VALIDACIÓN SI LA SEDE ES NO
+        }
       }
-
     }
-
-
   }
 }

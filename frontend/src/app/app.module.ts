@@ -86,6 +86,10 @@ import { ActaSpIpsComponent } from './roles/sp/sp-ips/acta-ips/acta-sp-ips.compo
 import { ActaSpProComponent } from './roles/sp/sp-profesionales/acta-pro/acta-sp-pro.component';
 import { EvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluacion-sp-pro/evaluacion-sp-pro.component';
 import { HomeEstandarComponent } from './roles/reso/lista-verificacion/home-estandar/home-estandar.component';
+import { ModalFirmaComponent } from './roles/sic/acta/modal-firma/modal-firma.component';
+import { ModalFirmaPamecComponent } from './usuario/pamec/modal-firma-pamec/modal-firma-pamec.component';
+import { ModalFirmaSicComponent } from './usuario/sic/modal-firma-sic/modal-firma-sic.component';
+import { ModalFirmaSpComponent } from './usuario/sp/modal-firma-sp/modal-firma-sp.component';
 
 
 @NgModule({
@@ -162,7 +166,11 @@ import { HomeEstandarComponent } from './roles/reso/lista-verificacion/home-esta
     HomeCriteriosComponent,
     CriterioTodosServiciosComponent,
     AuditoriaComponent,
-    HomeEvaluacionIpsComponent
+    HomeEvaluacionIpsComponent,
+    ModalFirmaComponent,
+    ModalFirmaPamecComponent,
+    ModalFirmaSicComponent,
+    ModalFirmaSpComponent
   ],
   imports: [
     BrowserModule,

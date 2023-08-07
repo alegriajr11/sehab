@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../models/usuario';
+import { TokenDto } from '../models/token.dto';
 
 
 
@@ -36,8 +37,8 @@ export class UsuarioService {
 
 
 
-  public delete(id: number): Observable<any> {
-    return this.httpClient.delete<any>(`${this.usuarioURL}${id}`);
+  public delete(id: number, tokenDto: TokenDto): Observable<any> {
+    return this.httpClient.delete<any>(`${this.usuarioURL}${id}`, { body: tokenDto});
   }
 
   public pdf(){

@@ -40,7 +40,7 @@ export class EvaluacionesSicComponent implements OnInit {
   }
 
   cargarActas(): void {
-    this.actapdfService.lista().subscribe(
+    this.actapdfService.listaSic().subscribe(
       data => {
         this.evaluaciones = data;
         this.listaVacia = undefined;

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { NuevoUsuarioDto } from 'src/app/models/nuevo-usuario.dto';
+import { TokenDto } from 'src/app/models/token.dto';
 import { AuthService } from 'src/app/services/auth.service';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-nuevo-usuario-pamec',
@@ -20,13 +23,31 @@ export class NuevoUsuarioPamecComponent implements OnInit {
   usu_password: string;
   usu_estado: string;
 
+    //MODAL
+    public modalRef: BsModalRef;
+
   constructor(
+    private modalService: BsModalService,
     private authService: AuthService,
     private toastrService: ToastrService,
+    private tokenService: TokenService,
     private router: Router
   ) { }
 
   ngOnInit(): void {}
+
+    //Metodo Abrir Modal
+    openModal(modalTemplate: TemplateRef<any>) {
+      this.modalRef = this.modalService.show(modalTemplate,
+        {
+          class: 'modal-dialogue-centered modal-md',
+          backdrop: 'static',
+          keyboard: true
+        }
+  
+      );
+    }
+  
 
   onRegister(): void {
     this.usuario = new NuevoUsuarioDto(
@@ -37,7 +58,10 @@ export class NuevoUsuarioPamecComponent implements OnInit {
       this.usu_password,
       this.usu_estado
     );
-    this.authService.registroPamec(this.usuario).subscribe(
+    const token = this.tokenService.getToken()
+    const tokenDto: TokenDto = new TokenDto(token);
+
+    this.authService.registroPamec(this.usuario, tokenDto).subscribe(
       (data) => {
         this.toastrService.success(data.message, 'Ok', {
           timeOut: 3000,
@@ -52,6 +76,7 @@ export class NuevoUsuarioPamecComponent implements OnInit {
         });
       }
     );
+    console.log(this.usu_nombreUsuario)
   }
 
 }

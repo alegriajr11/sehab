@@ -1,1 +1,67 @@
-<p>evaluacion-sp-pro works!</p>
+<app-menu></app-menu>
+
+<div class="container">
+    <h1 class="text-center">SEGURIDAD DEL PACIENTE</h1>
+</div>
+
+<div class="t2">
+    <h2>CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE
+        PROFESIONALES INDEPENDIENTES</h2>
+</div>
+
+<div class="container">
+    <div class="table-wrapper" id="dominio">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8">
+                    <h5><b>Prestador:</b></h5>
+                    <span id="nombre-prestador"></span>
+                </div>
+                <div class="col-sm-7"></div>
+            </div>
+        </div>
+        
+        <h4>hola munndo</h4>
+        <table class="table table-wrapper table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Cod</th>
+                    <th scope="col">Criterio</th>
+                    <th scope="col">Cumplimiento</th>
+
+                </tr>
+            </thead>
+            <!-- <tbody>
+                <tr *ngFor="let criterio of criterioEstandar; let i = index">
+                    <td>{{i+1}} </td>
+                    <td>{{criterio.crie_nombre}}</td>
+                    <td>
+                        <button class="btn btn-outline-dark"
+                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
+                            (click)="openModal(modalTemplate, criterio.crie_id)">
+                            <i class='fa fa-check'></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody> -->
+        </table>
+        <hr style="border-top: 1px solid black;">
+
+        <!-- <ng-template #modalTemplate>
+            <app-modalsic [dataFromParent]="modalRef"></app-modalsic>
+        </ng-template> -->
+
+
+
+        <div class="row">
+            <div class="col-md-1">
+                <button id="boton-evaluacion-sic" class="btn btn-dark " title="Guardar" type="submit">
+                    <i class='fa fa-save fa-lg'></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<app-footer></app-footer>
