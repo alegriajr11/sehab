@@ -119,18 +119,19 @@ export class GenerarpdfService {
                 rows_elements.push(temp_list);
             });
 
-
             const table = {
                 headers: ["Nombres", "Apellidos", "Email", "Nombre de Usuario", "Estado", "Rol"],
                 rows: rows_elements
             };
 
-
-
-
+            
             doc.table(table, {
                 columnsSize: [100, 100, 120, 100, 50, 50],
             });
+            doc.moveDown();
+            
+
+            
 
 
             const buffer = []
@@ -142,7 +143,7 @@ export class GenerarpdfService {
 
             doc.end()
 
-            
+
         })
 
 
@@ -219,7 +220,7 @@ export class GenerarpdfService {
 
             doc.end()
 
-            
+
         })
 
         return pdfBuffer

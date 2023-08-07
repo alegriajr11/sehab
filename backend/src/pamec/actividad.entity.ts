@@ -11,6 +11,9 @@ export class ActividadEntity {
     @Column({ type: 'varchar', length: 70, nullable: false, unique: false })
     act_nombre: string;
 
+    @Column({ type: 'date', nullable: true })
+    evips_creado: Date | null;
+
 
     //Relacion MUCHOS a MUCHOS ACTIVIDAD - PRESTADOR
     @ManyToMany(type => PrestadorEntity, prestador => prestador.actividades, { eager: true })

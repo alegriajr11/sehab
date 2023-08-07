@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
-@Entity({name: 'acta-sp-ips'})
+@Entity({name: 'acta-sp-ips-pdf'})
 export class ActaSpIpsEntity {
 
     @PrimaryGeneratedColumn('increment')
@@ -64,6 +64,18 @@ export class ActaSpIpsEntity {
     @Column({type: 'varchar', length: 50, nullable: false})
     act_cargo_prestador
 
-    @CreateDateColumn()
-    act_creado: Timestamp;
+    @Column({ type: 'date' })
+    act_creado: Date;
+
+    @Column({ type: 'text', nullable: false })
+    act_firma_funcionario: string; // Esta columna almacenará la firma en formato base64
+
+    @Column({ type: 'text', nullable: false })
+    act_firma_prestador: string; // Esta columna almacenará la firma en formato base64
+
+
+    @BeforeInsert()
+    async setDate() {
+        this.act_creado = new Date();
+    }
 }

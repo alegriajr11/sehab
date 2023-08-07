@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PamecActaService } from './pamec-acta.service';
 import { PamecActaController } from './pamec-acta.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ActaPamecIpsEntity } from './pamec-acta-ips.entity';
+import { ActaPamecIpsEntity } from './pamec-acta.entity';
 import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_registro.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';

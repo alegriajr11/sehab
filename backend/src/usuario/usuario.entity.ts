@@ -33,8 +33,9 @@ export class UsuarioEntity {
     @CreateDateColumn()
     usu_creado: Timestamp;
 
-    @Column({ type: 'blob' })
-    usu_firma: Buffer;
+    @Column({ type: 'text', nullable: true })
+    usu_firma: string; // Esta columna almacenará la firma en formato base64
+
 
 
     //Relacion Muchos a Muchos USUARIOS - ROL

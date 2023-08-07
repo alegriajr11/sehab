@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CriteriopamEntity } from "./criteriopam.entity";
 
 
@@ -18,6 +18,6 @@ export class CalificacionpamEntity {
     cal_observaciones: string;
 
 
-    @ManyToMany(type => CriteriopamEntity, criterio => criterio.calificacionpam)
-    criteriopam: CriteriopamEntity[];
+    @ManyToOne(type => CriteriopamEntity, calificacion_pam => calificacion_pam.criterio_calificacionpam)
+    criteriopam_calificacion: CriteriopamEntity;
 }

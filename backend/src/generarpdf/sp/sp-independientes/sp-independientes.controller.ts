@@ -50,4 +50,10 @@ export class SpIndependientesController {
         const { dto,tokenDto}= payload;
         return await this.sp_IndependientesService.updateActaInd(id,payload);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('ultima/acta/spind')
+    getLastActa() {
+        return this.sp_IndependientesService.getLastestActa();
+    }
 }

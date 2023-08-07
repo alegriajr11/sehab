@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
-@Entity({name: 'acta-pamec-ips'})
+@Entity({name: 'acta-pamec-pdf'})
 export class ActaPamecIpsEntity {
 
     @PrimaryGeneratedColumn('increment')
@@ -70,6 +70,18 @@ export class ActaPamecIpsEntity {
     @Column({type: 'varchar', length: 150, nullable: false})
     act_obj_visita
 
-    @CreateDateColumn()
-    act_creado: Timestamp;
+    @Column({ type: 'date' })
+    act_creado: Date;
+
+    @Column({ type: 'text', nullable: false })
+    act_firma_funcionario: string; // Esta columna almacenará la firma en formato base64
+
+    @Column({ type: 'text', nullable: false })
+    act_firma_prestador: string; // Esta columna almacenará la firma en formato base64
+
+    
+    @BeforeInsert()
+    async setDate() {
+        this.act_creado = new Date();
+    }
 }

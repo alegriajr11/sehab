@@ -199,6 +199,8 @@ export class AuditoriaRegistroService {
                 .andWhere('auditoria.creadoEn <= :fechaFin', { fechaFin: fechaFinAjustada });
         }
 
+        query = query.orderBy('auditoria.creadoEn', 'DESC');
+
         const auditorias = await query.getMany();
 
         if (auditorias.length === 0) {

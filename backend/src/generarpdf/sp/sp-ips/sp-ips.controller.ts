@@ -35,6 +35,13 @@ export class SpIpsController {
         return this.sp_IpsService.findAllFromYear(year, numActa);
     }
 
+    //Obtener ultima acta
+    @UseGuards(JwtAuthGuard)
+    @Get('ultima/acta/spips')
+    getLastActa() {
+        return this.sp_IpsService.getLastestActa();
+    }
+
 
     @Post()
     async create(@Body() payload: { dto: IpsDto, tokenDto: TokenDto }) {

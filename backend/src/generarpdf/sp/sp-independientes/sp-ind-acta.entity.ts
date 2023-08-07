@@ -67,6 +67,13 @@ export class ActaSpIndependientePdfEntity {
     @Column({ type: 'date' })
     act_creado: Date;
 
+    @Column({ type: 'text', nullable: false })
+    act_firma_funcionario: string; // Esta columna almacenará la firma en formato base64
+
+    @Column({ type: 'text', nullable: false })
+    act_firma_prestador: string; // Esta columna almacenará la firma en formato base64
+
+
     @BeforeInsert()
     async setDate() {
         this.act_creado = new Date();

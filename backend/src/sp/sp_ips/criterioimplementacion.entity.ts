@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EvaluacionipsEntity } from "./evaluacionips.entity";
-import { ItemEntity } from "./item.entity";
+import { CalificacionImplementacionIpsEntity } from "./calificacionips_implementacion.entity";
 
 @Entity({name: 'criterio_implementacion'})
 export class CriterioImplementacionEntity {
@@ -14,8 +14,12 @@ export class CriterioImplementacionEntity {
     @Column({type: 'varchar', length: 200, nullable: false, unique: false})
     cri_imp_verificacion
     
-    //Relacion Muchos a Uno CRITERIO_AJUSTE - EVALUACIONIPS
-    @ManyToOne(type => EvaluacionipsEntity, criterioajuste => criterioajuste.evaluacionipsAjuste)  
+    //Relacion Muchos a Uno CRITERIO_IMPLEMENTACION - EVALUACIONIPS
+    @ManyToOne(type => EvaluacionipsEntity, criterio_implementacion => criterio_implementacion.evaluacionipsImpl)  
     cri_imp_eva: EvaluacionipsEntity
+
+    //Relacion Uno a Muchos CRITERIO_IMPLEMENTACION - CALIFICACION_IMPLEMENTACIONIPS
+    @OneToMany(type => CalificacionImplementacionIpsEntity, criterio_implementacion => criterio_implementacion.calificacionipsImpl)
+    criterio_implementacion_cal: CalificacionImplementacionIpsEntity
 
 }

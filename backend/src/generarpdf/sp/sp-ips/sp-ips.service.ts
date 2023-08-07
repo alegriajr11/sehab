@@ -49,8 +49,35 @@ export class SpIpsService {
         return actas;
     }
 
-    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA
 
+    //ÚLTIMA ACTA REGISTRADA
+    async getLastestActa(): Promise<ActaSpIpsEntity> {
+        const anioActual: number = new Date().getFullYear();
+
+        const acta = await this.actaSpIpsRepository.createQueryBuilder('acta')
+            .addSelect('acta.act_id')
+            .orderBy('acta.act_id', 'DESC')
+            .getOne();
+
+        if (!acta) {
+            const newActa: ActaSpIpsEntity = new ActaSpIpsEntity();
+            newActa.act_id = 1;
+            return newActa;
+        }
+
+        acta.act_creado = new Date(acta.act_creado);
+
+        if (acta.act_creado.getFullYear() === anioActual) {
+            acta.act_id++;
+        } else {
+            acta.act_id = 1;
+        }
+
+
+        return acta;
+    }
+
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA
     async findAllFromYear(year?: Date, numActa?: number): Promise<ActaSpIpsEntity[]> {
         let query = this.actaSpIpsRepository.createQueryBuilder('acta');
 
@@ -75,35 +102,43 @@ export class SpIpsService {
     async create(payloads: { dto: IpsDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
 
-        const acta_sicpdf = this.actaSpIpsRepository.create(dto);
-        const usuario = await this.jwtService.decode(tokenDto.token);
+        try {
 
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
+            const acta_sicpdf = this.actaSpIpsRepository.create(dto);
+            const usuario = await this.jwtService.decode(tokenDto.token);
 
-        const year = new Date().getFullYear().toString();
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
 
-        await this.actaSpIpsRepository.save(acta_sicpdf);
-        await this.auditoria_registro_services.logCreateSpIps(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.act_id,
-            year,
-            dto.act_prestador,
-            dto.act_cod_prestador
-        );
+            const year = new Date().getFullYear().toString();
+
+            await this.actaSpIpsRepository.save(acta_sicpdf);
+            await this.auditoria_registro_services.logCreateSpIps(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.act_id,
+                year,
+                dto.act_prestador,
+                dto.act_cod_prestador
+            );
+            return { error: false, message: 'El acta ha sido creada' };
+        }catch (error) {
+            console.log(error)
+            // Devuelve un mensaje de error apropiado
+            return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
+        }
     }
 
     //ACTUALIZAR  SP IPS ACTA PDF
-    async updateActaIps(id: number, payload:{ dto: IpsDto, tokenDto: TokenDto}): Promise<any> {
+    async updateActaIps(id: number, payload: { dto: IpsDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payload;
         const ips = await this.findByActa(id);
         if (!ips) {

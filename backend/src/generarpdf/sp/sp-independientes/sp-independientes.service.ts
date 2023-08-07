@@ -77,35 +77,43 @@ export class SpIndependientesService {
     async create(payloads: { dto: IndActaDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
 
-        const acta_sicpdf = this.actaSpIndependientePdfRepository.create(dto);
-        const usuario = await this.jwtService.decode(tokenDto.token);
+        try {
+            const acta_sicpdf = this.actaSpIndependientePdfRepository.create(dto);
+            const usuario = await this.jwtService.decode(tokenDto.token);
 
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
 
-        const year = new Date().getFullYear().toString();
+            const year = new Date().getFullYear().toString();
 
-        await this.actaSpIndependientePdfRepository.save(acta_sicpdf);
-        await this.auditoria_registro_services.logCreateSpIndep(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.act_id,
-            year,
-            dto.act_prestador,
-            dto.act_cod_prestador
-        );
+            await this.actaSpIndependientePdfRepository.save(acta_sicpdf);
+            await this.auditoria_registro_services.logCreateSpIndep(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.act_id,
+                year,
+                dto.act_prestador,
+                dto.act_cod_prestador
+            );
+            return { error: false, message: 'El acta ha sido creada' };
+        } catch (error) {
+            console.log(error)
+            // Devuelve un mensaje de error apropiado
+            return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
+        }
+
     }
 
     //ACTUALIZAR CRITERIOS SP INDEPENDIENTE
-    async updateActaInd(id: number, payload:{ dto: IndActaDto, tokenDto: TokenDto}): Promise<any> {
+    async updateActaInd(id: number, payload: { dto: IndActaDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payload;
         const ips = await this.findByActa(id);
         if (!ips) {
@@ -159,5 +167,32 @@ export class SpIndependientesService {
 
         return new MessageDto(`El acta ha sido Actualizada`);
 
+    }
+
+    //ÚLTIMA ACTA REGISTRADA
+    async getLastestActa(): Promise<ActaSpIndependientePdfEntity> {
+        const anioActual: number = new Date().getFullYear();
+
+        const acta = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
+            .addSelect('acta.act_id')
+            .orderBy('acta.act_id', 'DESC')
+            .getOne();
+
+        if (!acta) {
+            const newActa: ActaSpIndependientePdfEntity = new ActaSpIndependientePdfEntity();
+            newActa.act_id = 1;
+            return newActa;
+        }
+
+        acta.act_creado = new Date(acta.act_creado);
+
+        if (acta.act_creado.getFullYear() === anioActual) {
+            acta.act_id++;
+        } else {
+            acta.act_id = 1;
+        }
+
+
+        return acta;
     }
 }

@@ -23,5 +23,4 @@ export class CumplimientoEstandarSicEntity {
     //Relacion MUCHOS a UNO CUMPLIMIENTOESTANDAR - CRITERIOSESTANDAR SIC
     @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimientoEstandar)
     prestadores: PrestadorEntity;
-
 }
