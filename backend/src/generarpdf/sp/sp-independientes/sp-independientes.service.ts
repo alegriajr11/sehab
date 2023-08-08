@@ -77,14 +77,13 @@ export class SpIndependientesService {
     async create(payloads: { dto: IndActaDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
 
-<<<<<<< HEAD
+
         const acta_sicpdf = this.actaSpIndependientePdfRepository.create(dto);
         const usuario = this.jwtService.decode(tokenDto.token);
-=======
+
         try {
             const acta_sicpdf = this.actaSpIndependientePdfRepository.create(dto);
             const usuario = await this.jwtService.decode(tokenDto.token);
->>>>>>> c6b50d51fbe9d1ea67cfbac2ca70439989e95786
 
             const payloadInterface: PayloadInterface = {
                 usu_id: usuario[`usu_id`],

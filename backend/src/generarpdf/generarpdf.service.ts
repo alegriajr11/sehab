@@ -130,14 +130,14 @@ export class GenerarpdfService {
                 rows: rows_elements
             };
 
-            
+
             doc.table(table, {
                 columnsSize: [100, 100, 120, 100, 50, 50],
             });
             doc.moveDown();
-            
 
-            
+
+
 
 
             const buffer = []
@@ -162,7 +162,7 @@ export class GenerarpdfService {
     async generarPdfEvaluacionEstandarSic(): Promise<Buffer> {
         const cumplimiento = await this.cumplimientoService.getalll()
         const cumplimiento_indicador = await this.cumplimientoService.getallcumple()
-        const pdfBuffer: Buffer = await new Promise(resolve => {   
+        const pdfBuffer: Buffer = await new Promise(resolve => {
             const doc = new PDFDocument(
                 {
                     size: "LETTER",
@@ -217,21 +217,21 @@ export class GenerarpdfService {
             doc.moveDown();
 
             let rows_elements = [];
-            cumplimiento.forEach(item=>{
-                var temp_list = [item.criterioestandar_sic.crie_id,item.criterioestandar_sic.crie_nombre,item.cumpl_cumple,item.cumpl_observaciones];
+            cumplimiento.forEach(item => {
+                var temp_list = [item.criterioestandar_sic.crie_id, item.criterioestandar_sic.crie_nombre, item.cumpl_cumple, item.cumpl_observaciones];
                 rows_elements.push(temp_list)
             })
 
             const table = {
-                headers: ["N°", "Criterios","Cumplimiento","Observaciones"],
+                headers: ["N°", "Criterios", "Cumplimiento", "Observaciones"],
                 rows: rows_elements
             };
-            
+
             doc.table(table, {
                 columnsSize: [20, 235, 65, 200],
                 // cellPadding: 10,
                 // cellAlign: 'justify',
-                
+
             });
 
             doc.addPage();
@@ -256,26 +256,26 @@ export class GenerarpdfService {
             doc.moveDown();
             doc.moveDown();
             doc.moveDown();
-        
+
             let rows_elementss = [];
             let indi = [];
-            cumplimiento_indicador.forEach(item2=>{
-                var temp_list = [item2.criterio_sic.cri_id,item2.criterio_sic.cri_nombre,item2.cumpl_cumple,item2.cumpl_observaciones];
-                var indica=item2.indicadorsic.ind_nombre
+            cumplimiento_indicador.forEach(item2 => {
+                var temp_list = [item2.criterio_sic.cri_id, item2.criterio_sic.cri_nombre, item2.cumpl_cumple, item2.cumpl_observaciones];
+                var indica = item2.indicadorsic.ind_nombre
                 indi.push(indica);
                 rows_elementss.push(temp_list)
             })
 
             const table2 = {
-                title:"{indi}",
-                headers: ["N°", "Criterios","Cumplimiento","Observaciones"],
+                title: "{indi}",
+                headers: ["N°", "Criterios", "Cumplimiento", "Observaciones"],
                 rows: rows_elementss
             };
-            
+
             doc.table(table2, {
                 columnsSize: [20, 235, 65, 200],
             });
-            const buffer = [] 
+            const buffer = []
             doc.on('data', buffer.push.bind(buffer))
             doc.on('end', () => {
                 const data = Buffer.concat(buffer)
@@ -292,196 +292,189 @@ export class GenerarpdfService {
     //FIN DEL METODO - CREACIÓN DE REPORTE DE EVALUACIÓN SIC
 
 
-//GENERACIÓN DE REPORTE DE USUSARIOS CON SU RESPECTIVO ROL Y MOSTRANDO SU ESTADO
-async generarPdfInd(): Promise<Buffer> {
+    //GENERACIÓN DE REPORTE DE CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES
 
-    const titulo_uno = await this.criterioindService.getallcriterioxtitulo()
-    const titulo_dos = await this.criterioindService.getallcriterioxtitulodos()
-    const titulo_tres = await this.criterioindService.getallcriterioxtitulotres()
-    const titulo_cuatro = await this.criterioindService.getallcriterioxtitulocuatro()
-    const pdfBuffer: Buffer = await new Promise(resolve => {   
-        const doc = new PDFDocument(
-            {
-                size: "LETTER",
+
+    // La función para generar el PDF con las tablas ajustadas
+    async generarPdfInd(): Promise<Buffer> {
+        const titulo_uno = await this.criterioindService.getallcriterioxtitulo();
+        const titulo_dos = await this.criterioindService.getallcriterioxtitulodos();
+        const titulo_tres = await this.criterioindService.getallcriterioxtitulotres();
+        const titulo_cuatro = await this.criterioindService.getallcriterioxtitulocuatro();
+
+        const pdfBuffer: Buffer = await new Promise(resolve => {
+            const doc = new PDFDocument({
+                size: 'LETTER',
                 bufferPages: true,
                 autoFirstPage: false,
-            })
+            });
 
-        let pageNumber = 0;
-        doc.on('pageAdded', () => {
-            pageNumber++
-            let bottom = doc.page.margins.bottom;
+            let pageNumber = 0;
 
-            doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 30, { fit: [500, 500], align: 'center' })
-            doc.font("Helvetica-Bold").fontSize(5);
+            doc.on('pageAdded', () => {
+                pageNumber++;
+                let bottom = doc.page.margins.bottom;
+
+                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                doc.moveDown()
+
+                doc.page.margins.top = 115;
+                doc.page.margins.bottom = 0;
+                doc.font("Helvetica").fontSize(14);
+                doc.text(
+                    'Pág. ' + pageNumber,
+                    0.5 * (doc.page.width - 100),
+                    doc.page.height - 50,
+                    {
+                        width: 100,
+                        align: 'center',
+                        lineBreak: false,
+                    }
+                );
+                doc.page.margins.bottom = bottom;
+
+            });
+
+            doc.addPage();
+            doc.text('', 90, 110);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
+            doc.text('', 185, 130);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('PROFESIONALES INDEPENDIENTES');
+            // doc.moveDown();
+            // doc.font('Helvetica').fontSize(14);
+
+            doc.text('', 50, 110);
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            // doc.fontSize(24);
 
 
-            doc.page.margins.bottom = 0;
-            doc.font("Helvetica").fontSize(14);
-            doc.text(
-                'Pág. ' + pageNumber,
-                0.5 * (doc.page.width - 100),
-                doc.page.height - 50,
-                {
-                    width: 100,
-                    align: 'center',
-                    lineBreak: false,
+            // Agregar las tablas a las páginas
+            if (titulo_uno.length) {
+                let rows_elements = [];
+                titulo_uno.forEach(item => {
+                    let calif
+                    let obs
+                    item.calificacion_ind.forEach(cal => {
+                        calif = cal.cal_nota
+                        obs = cal.cal_observaciones
+                    })
+                    var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
+                    rows_elements.push(temp_list)
                 })
-            doc.page.margins.bottom = bottom;
-        })
 
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table = {
+                    title: "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.table(table, tableOptions);
+            }
 
-        doc.addPage();
-        doc.text('', 50, 130);
-        doc.font("Helvetica-Bold").fontSize(14);
-        doc.text("");
-        doc.moveDown();
-        doc.font("Helvetica").fontSize(16);
-        doc.text('', 50, 70)
+            if (titulo_dos.length) {
+                let rows_elements = [];
+                titulo_dos.forEach(item => {
+                    let calif
+                    let obs
+                    item.calificacion_ind.forEach(cal => {
+                        calif = cal.cal_nota
+                        obs = cal.cal_observaciones
+                    })
+                    var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
+                    rows_elements.push(temp_list)
+                })
 
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table2 = {
+                    title: "CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table2, tableOptions);
+            }
 
-        doc.moveDown();
-        doc.text('', 50, 70)
-        doc.fontSize(24);
-        doc.moveDown();
-        doc.moveDown();
-        doc.moveDown();
-        doc.moveDown();
+            if (titulo_tres.length) {
+                let rows_elements = [];
+                titulo_tres.forEach(item => {
+                    let calif
+                    let obs
+                    item.calificacion_ind.forEach(cal => {
+                        calif = cal.cal_nota
+                        obs = cal.cal_observaciones
+                    })
+                    var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
+                    rows_elements.push(temp_list)
+                })
 
-        let rows_elements = [];
-        titulo_uno.forEach(item=>{
-            let calif 
-            let obs
-            item.calificacion_ind.forEach(cal=>{
-                calif=cal.cal_nota
-                obs=cal.cal_observaciones
-            })
-            var temp_list = [item.cri_id,item.cri_nombre,calif,item.cri_verificacion,obs];
-            rows_elements.push(temp_list)
-        })
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table3 = {
+                    title: "REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table3, tableOptions);
+            }
 
-        const table = {
-            title:"COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",
-            headers: ["","CRITERIOS","CALIFICACION","VERIFICACION","OBSERVACIONES"],
-            rows: rows_elements
-        };
-        
-        doc.table(table, {
-            columnsSize: [10,210, 136, 65, 200],
+            if (titulo_cuatro.length) {
+                let rows_elements = [];
+                titulo_cuatro.forEach(item => {
+                    let calif
+                    let obs
+                    item.calificacion_ind.forEach(cal => {
+                        calif = cal.cal_nota
+                        obs = cal.cal_observaciones
+                    })
+                    var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table4 = {
+                    title: "DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table4, tableOptions);
+            }
+
+            const buffer = [];
+            doc.on('data', buffer.push.bind(buffer));
+            doc.on('end', () => {
+                const data = Buffer.concat(buffer);
+                resolve(data);
+            });
+
+            doc.end();
         });
 
-        doc.addPage();
-        doc.text('', 50, 130);
-        doc.font("Helvetica-Bold").fontSize(14);
-        doc.text("");
-        doc.moveDown();
-        doc.font("Helvetica").fontSize(16);
-        doc.text('', 50, 70)
-
-
-        doc.moveDown();
-        doc.text('', 50, 70)
-        doc.fontSize(24);
-        doc.moveDown();
-        doc.moveDown();
-        doc.moveDown();
-        doc.moveDown();
-
-        let rows_elements2 = [];
-        titulo_dos.forEach(item=>{
-            let calif 
-            let obs
-            item.calificacion_ind.forEach(cal=>{
-                calif=cal.cal_nota
-                obs=cal.cal_observaciones
-            })
-            var temp_list2 = [item.cri_id,item.cri_nombre,calif,item.cri_verificacion,obs];
-            rows_elements2.push(temp_list2)
-        })
-
-        const table2 = {
-            title:"CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",
-            headers: ["","CRITERIOS","CALIFICACION","VERIFICACION","OBSERVACIONES"],
-            rows: rows_elements2
-        };
-        
-
-        let rows_elements3 = [];
-        titulo_tres.forEach(item=>{
-            let calif 
-            let obs
-            item.calificacion_ind.forEach(cal=>{
-                calif=cal.cal_nota
-                obs=cal.cal_observaciones
-            })
-            var temp_list3 = [item.cri_id,item.cri_nombre,calif,item.cri_verificacion,obs];
-            rows_elements3.push(temp_list3)
-        })
-
-        const table3 = {
-            title:"REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",
-            headers: ["","CRITERIOS","CALIFICACION","VERIFICACION","OBSERVACIONES"],
-            rows: rows_elements3
-        };
-
-        doc.table(table2, {
-            columnsSize: [10,210, 136, 65, 200],
-        });
-
-        doc.moveDown();
-
-        doc.table(table3, {
-            columnsSize: [10,210, 136, 65, 200],
-        });
-
-        doc.addPage();
-        doc.text('', 50, 130);
-        doc.font("Helvetica-Bold").fontSize(14);
-        doc.text("");
-        doc.moveDown();
-        doc.font("Helvetica").fontSize(16);
-        doc.text('', 50, 70)
-
-
-        doc.moveDown();
-        doc.text('', 50, 70)
-        doc.fontSize(24);
-        doc.moveDown();
-
-        let rows_elements4 = [];
-        titulo_cuatro.forEach(item=>{
-            let calif 
-            let obs
-            item.calificacion_ind.forEach(cal=>{
-                calif=cal.cal_nota
-                obs=cal.cal_observaciones
-            })
-            var temp_list4 = [item.cri_id,item.cri_nombre,calif,item.cri_verificacion,obs];
-            rows_elements4.push(temp_list4)
-        })
-
-        const table4 = {
-            title:"DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",
-            headers: ["","CRITERIOS","CALIFICACION","VERIFICACION","OBSERVACIONES"],
-            rows: rows_elements4
-        };
-        doc.moveDown();
-        doc.table(table4, {
-            columnsSize: [10,210, 136, 65, 200],
-        });
-        
-        const buffer = [] 
-        doc.on('data', buffer.push.bind(buffer))
-        doc.on('end', () => {
-            const data = Buffer.concat(buffer)
-            resolve(data)
-        })
-
-        doc.end()
-
-        
-    })
-
-    return pdfBuffer
-}
+        return pdfBuffer;
+    }
 }

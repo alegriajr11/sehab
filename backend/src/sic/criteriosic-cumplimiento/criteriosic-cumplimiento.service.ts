@@ -66,7 +66,7 @@ export class CriteriosicCumplimientoService {
             .select(['cumplimiento', 'criterioestandar_sic.crie_id', 'criterioestandar_sic.crie_nombre'])
             .innerJoin('cumplimiento.criterioestandar_sic', 'criterioestandar_sic')
             .getMany()
-        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No existen cumpliemientos'))
         return cumplimiento_estandar
     }
 
@@ -80,7 +80,7 @@ export class CriteriosicCumplimientoService {
             .innerJoinAndSelect('indicadorsic.ind_dominio', 'ind_dominio')
             .innerJoinAndSelect('ind_dominio.prestadores', 'prestadores')
             .getMany()
-        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No existen cumpliemientos'))
         return cumplimiento_estandar
     }
 

@@ -85,11 +85,11 @@ export class CriterioindService {
 
         const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
             .select(['etapa', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
             .innerJoin('etapa.eta_item', 'eta_item')
+            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_uno })
             .getMany()
-        if (!criterio.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+
         return criterio
     }
 
@@ -100,11 +100,11 @@ export class CriterioindService {
 
         const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
             .select(['etapa', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
             .innerJoin('etapa.eta_item', 'eta_item')
+            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_dos })
             .getMany()
-        if (!criterio.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+
         return criterio
     }
 
@@ -115,11 +115,11 @@ export class CriterioindService {
 
         const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
             .select(['etapa', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
             .innerJoin('etapa.eta_item', 'eta_item')
+            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_tres })
             .getMany()
-        if (!criterio.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+        
         return criterio
     }
 
@@ -130,11 +130,11 @@ export class CriterioindService {
 
         const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
             .select(['etapa', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
             .innerJoin('etapa.eta_item', 'eta_item')
+            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_cuatro })
             .getMany()
-        if (!criterio.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+
         return criterio
     }
 }
