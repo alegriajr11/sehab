@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioIndEntity } from "./criterioind.entity";
+import { EvaluacionIndependientesEntity } from "./evaluacion-independientes.entity";
 
 
 @Entity({ name: 'etapaind' })
@@ -17,12 +17,9 @@ export class EtapaInd {
     @OneToMany(type => CriterioIndEntity, criterio => criterio.eta_item)
     cri_criterio: CriterioIndEntity;
 
-    //Relacion Muchos a Muchos ETAPA - PRESTADOR
-    @ManyToMany(type => PrestadorEntity, prestador => prestador.etapaInd, { eager: true })
-    @JoinTable({
-        name: 'etap_pres',
-        joinColumn: { name: 'etap_pres_id' },
-        inverseJoinColumn: { name: 'pres_etap_id' }
-    })
-    prestadores: PrestadorEntity[]
+    //Relacion Muchos a Muchos ETAPA-INDEPENDIENTES - EVALUACION-INDEPENDIENTES
+    @ManyToMany(type => EvaluacionIndependientesEntity, evaluacionIndependientes => evaluacionIndependientes.eval_etapa_independientes)
+    eta_evaluacion_independientes: EvaluacionIndependientesEntity;
+
+
 }

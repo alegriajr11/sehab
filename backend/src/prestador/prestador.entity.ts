@@ -5,7 +5,6 @@ import { TipoEntity } from "./tipo/tipo.entity";
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { MunicipioEntity } from "src/municipio/municipio.entity";
 import { DominioEntity } from "src/sic/dominio.entity";
-import { ActividadEntity } from "src/pamec/actividad.entity";
 import { EvaluacionipsEntity } from "src/sp/sp_ips/evaluacionips.entity";
 import { EtapaInd } from "src/sp/sp_ind/etapaind.entity";
 import { RequisitoResEntity } from "src/resolucion/requisitos_condiciones_habilitacion/requisito_res.entity";
@@ -90,6 +89,8 @@ import { CumplimientoHospitCronicoEntity } from "src/resolucion/evaluacion/grupo
 import { CumplimientoHospitalizacionParcialEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_parcial/cumplimiento_hosp_parcial.entity";
 import { CumplimientoHospitalizacionMentalEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/cumplimiento_hosp_salud_mental.entity";
 import { CumplimientoHospitalizacionEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion/cumplimiento_hospitalizacion.entity";
+import { EvaluacionPamecEntity } from "src/pamec/evaluacion-pamec.entity";
+import { EvaluacionIndependientesEntity } from "src/sp/sp_ind/evaluacion-independientes.entity";
 
 
 
@@ -135,6 +136,10 @@ export class PrestadorEntity {
     @ManyToOne(type => MunicipioEntity, municipio => municipio.mun_prestador)
     pre_municipio: MunicipioEntity
 
+    //Relacion Uno a Muchos PRESTADORES - EVALUACION-PAMEC
+    @OneToMany(type => EvaluacionPamecEntity, evaluacionPamec => evaluacionPamec.eval_prestador)
+    prestador_eval_pamec: EvaluacionPamecEntity
+
 
     //Relacion Muchos a Muchos PRESTADOR - DOMINIO
     @ManyToMany(type => DominioEntity, dominio => dominio.prestadores, { eager: true })
@@ -154,12 +159,10 @@ export class PrestadorEntity {
     })
     evaluacionesips: EvaluacionipsEntity[];
 
-    @ManyToMany(type => ActividadEntity, actividad => actividad.prestadores)
-    actividades: ActividadEntity[];
 
-    //Relacion Muchos a Muchos CRITERIOSIC - INDICADOR
-    @ManyToMany(type => EtapaInd, etapa => etapa.prestadores)
-    etapaInd: EtapaInd[];
+    //Relacion Uno a Muchos PRESTADORES - EVALUACION-INDEPENDIENTES
+    @OneToMany(type => EvaluacionIndependientesEntity, evaluacionIndependientes => evaluacionIndependientes.eval_prestador)
+    prestador_eval_independientes: EvaluacionIndependientesEntity
 
 
 

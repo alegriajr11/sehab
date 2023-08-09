@@ -350,17 +350,25 @@ export class GenerarpdfService {
             doc.moveDown();
             doc.moveDown();
             doc.moveDown();
+            doc.moveDown();
+
             // doc.fontSize(24);
 
 
             // Agregar las tablas a las páginas
             if (titulo_uno.length) {
                 let rows_elements = [];
+                let totalCalificaciones = 0
+                let totalCalificacionesCount = 0; // Contador para la cantidad total de calificaciones
+
                 titulo_uno.forEach(item => {
                     let calif
+
                     let obs
                     item.calificacion_ind.forEach(cal => {
-                        calif = cal.cal_nota
+                        calif = '            ' + cal.cal_nota
+                        totalCalificaciones += cal.cal_nota
+                        totalCalificacionesCount++; // Incrementar el contador
                         obs = cal.cal_observaciones
                     })
                     var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
@@ -375,10 +383,15 @@ export class GenerarpdfService {
                 };
                 const table = {
                     title: "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",
-                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    headers: ["", "CRITERIOS", "CALIFICACIÓN", "VERIFICACIÓN", "OBSERVACIONES"],
                     rows: rows_elements
                 };
                 doc.table(table, tableOptions);
+                // Calcular el promedio
+                const promedio = totalCalificaciones / totalCalificacionesCount;
+                const promedioRedondeado = promedio.toFixed(2);
+
+                doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
 
             if (titulo_dos.length) {
@@ -387,7 +400,7 @@ export class GenerarpdfService {
                     let calif
                     let obs
                     item.calificacion_ind.forEach(cal => {
-                        calif = cal.cal_nota
+                        calif = '            ' + cal.cal_nota
                         obs = cal.cal_observaciones
                     })
                     var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
@@ -415,7 +428,7 @@ export class GenerarpdfService {
                     let calif
                     let obs
                     item.calificacion_ind.forEach(cal => {
-                        calif = cal.cal_nota
+                        calif = '            ' + cal.cal_nota
                         obs = cal.cal_observaciones
                     })
                     var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
@@ -443,7 +456,7 @@ export class GenerarpdfService {
                     let calif
                     let obs
                     item.calificacion_ind.forEach(cal => {
-                        calif = cal.cal_nota
+                        calif = '            ' + cal.cal_nota
                         obs = cal.cal_observaciones
                     })
                     var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
