@@ -1,4 +1,4 @@
-export class CriterioInd {
+export class CriterioIndDto {
     cri_id?: number;
     cri_nombre: string;
     cri_verificacion: string;

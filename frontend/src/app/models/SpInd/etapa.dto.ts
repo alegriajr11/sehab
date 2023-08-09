@@ -1,4 +1,4 @@
-export class Etapa {
+export class EtapaDto {
     eta_id?: number;
     eta_nombre: string;
     

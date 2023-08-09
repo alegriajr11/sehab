@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { CriterioInd } from 'src/app/models/SpInd/criterioind.dto';
-import { Etapa } from 'src/app/models/SpInd/etapa.dto';
+import { CriterioIndDto } from 'src/app/models/SpInd/criterioind.dto';
+import { EtapaDto } from 'src/app/models/SpInd/etapa.dto';
 import { CriterioIndService } from 'src/app/services/SpInd/criterio.service';
 import { EtapaService } from 'src/app/services/SpInd/etapa.service';
 
@@ -13,9 +13,9 @@ import { EtapaService } from 'src/app/services/SpInd/etapa.service';
 })
 export class AgregarIndComponent implements OnInit {
 
-  newCriterioind: CriterioInd = null
+  newCriterioind: CriterioIndDto = null
 
-  etapas: Etapa[];
+  etapas: EtapaDto[];
   cri_nombre: string
   cri_verificacion: string
 
@@ -52,7 +52,7 @@ export class AgregarIndComponent implements OnInit {
 
     console.log(ValorEta)
     
-    this.newCriterioind = new CriterioInd(
+    this.newCriterioind = new CriterioIndDto(
       this.cri_nombre,
       this.cri_verificacion
     );

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CriterioInd } from 'src/app/models/SpInd/criterioind.dto';
+import { CriterioIndDto } from 'src/app/models/SpInd/criterioind.dto';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -17,16 +17,17 @@ export class CriterioIndService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public listaAct(act: string): Observable<CriterioInd[]>{
-    return this.httpClient.get<CriterioInd[]>(this.criterioindURL + act)
+  public listaAct(act: string): Observable<CriterioIndDto[]>{
+    return this.httpClient.get<CriterioIndDto[]>(this.criterioindURL + act)
   }
 
   // public listAll(act: string): Observable<CriterioInd[]>{
   //   return this.httpClient.get<CriterioInd[]>(this.criterioindURL + act)
   // }
 
-  public detail(id: number): Observable<CriterioInd> {
-    return this.httpClient.get<CriterioInd>(`${this.criteindURL}${id}`);
+  //ID POR CRITERIO
+  public detail(id: number): Observable<CriterioIndDto> {
+    return this.httpClient.get<CriterioIndDto>(`${this.criteindURL}${id}`);
   }
 
   public delete(id: number): Observable<any> {
@@ -34,11 +35,11 @@ export class CriterioIndService {
   }
 
   
-  public update(id: number, criterio: CriterioInd): Observable<any> {
+  public update(id: number, criterio: CriterioIndDto): Observable<any> {
     return this.httpClient.put<any>(`${this.criterioindURL}${id}`, criterio);
   }
 
-  public save(id: string, criterio: CriterioInd): Observable<any> {
+  public save(id: string, criterio: CriterioIndDto): Observable<any> {
     return this.httpClient.post<any>(`${this.criterioindURL}${id}`, criterio)
 
   }

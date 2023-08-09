@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CriterioInd } from 'src/app/models/SpInd/criterioind.dto';
-import { Etapa } from 'src/app/models/SpInd/etapa.dto';
+import { CriterioIndDto } from 'src/app/models/SpInd/criterioind.dto';
+import { EtapaDto } from 'src/app/models/SpInd/etapa.dto';
 import { CriterioIndService } from 'src/app/services/SpInd/criterio.service';
 import { EtapaService } from 'src/app/services/SpInd/etapa.service';
 import Swal from 'sweetalert2';
@@ -12,8 +12,8 @@ import Swal from 'sweetalert2';
 })
 export class CriterioSpIndComponent implements OnInit {
 
-  etapas: Etapa[];
-  criterioInd: CriterioInd[]
+  etapas: EtapaDto[];
+  criterioInd: CriterioIndDto[]
   controlCriterio = false;
 
   listaVacia: any = undefined;
@@ -44,7 +44,6 @@ export class CriterioSpIndComponent implements OnInit {
     var sel = id.selectedIndex;
     var opt = id.options[sel]
     var ValorEta = (<HTMLSelectElement><unknown>opt).value;
-
     this.critetioindService.listaAct(ValorEta).subscribe(
       data => {
         this.criterioInd = data;

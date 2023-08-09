@@ -21,29 +21,110 @@
             </div>
         </div>
         
-        <h4>hola munndo</h4>
+        <h4>{{Etapa1}}</h4>
         <table class="table table-wrapper table-hover">
             <thead>
                 <tr>
                     <th scope="col">Cod</th>
                     <th scope="col">Criterio</th>
+                    <th scope="col">Verificación</th>
                     <th scope="col">Cumplimiento</th>
 
                 </tr>
             </thead>
-            <!-- <tbody>
-                <tr *ngFor="let criterio of criterioEstandar; let i = index">
+            <tbody>
+                <tr *ngFor="let criterioIndEta1 of criterioIndEtapa1; let i = index">
                     <td>{{i+1}} </td>
-                    <td>{{criterio.crie_nombre}}</td>
+                    <td>{{criterioIndEta1.cri_nombre}}</td>
+                    <td>{{criterioIndEta1.cri_verificacion}}</td>
                     <td>
-                        <button class="btn btn-outline-dark"
-                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-                            (click)="openModal(modalTemplate, criterio.crie_id)">
+                        <button class="btn btn-outline-dark">
                             <i class='fa fa-check'></i>
                         </button>
                     </td>
                 </tr>
-            </tbody> -->
+            </tbody>
+        </table>
+        <hr style="border-top: 1px solid black;">
+        
+        <h4>{{Etapa2}}</h4>
+
+        <table class="table table-wrapper table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Cod</th>
+                    <th scope="col">Criterio</th>
+                    <th scope="col">Verificación</th>
+                    <th scope="col">Cumplimiento</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let criterioIndEta2 of criterioIndEtapa2; let i = index">
+                    <td>{{i+1}} </td>
+                    <td>{{criterioIndEta2.cri_nombre}}</td>
+                    <td>{{criterioIndEta2.cri_verificacion}}</td>
+                    <td>
+                        <button class="btn btn-outline-dark">
+                            <i class='fa fa-check'></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr style="border-top: 1px solid black;">
+
+        <h4>{{Etapa3}}</h4>
+
+        <table class="table table-wrapper table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Cod</th>
+                    <th scope="col">Criterio</th>
+                    <th scope="col">Verificación</th>
+                    <th scope="col">Cumplimiento</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let criterioIndEta3 of criterioIndEtapa3; let i = index">
+                    <td>{{i+1}} </td>
+                    <td>{{criterioIndEta3.cri_nombre}}</td>
+                    <td>{{criterioIndEta3.cri_verificacion}}</td>
+                    <td>
+                        <button class="btn btn-outline-dark">
+                            <i class='fa fa-check'></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr style="border-top: 1px solid black;">
+
+        <h4>{{Etapa4}}</h4>
+
+        <table class="table table-wrapper table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Cod</th>
+                    <th scope="col">Criterio</th>
+                    <th scope="col">Verificación</th>
+                    <th scope="col">Cumplimiento</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let criterioIndEta4 of criterioIndEtapa4; let i = index">
+                    <td>{{i+1}} </td>
+                    <td>{{criterioIndEta4.cri_nombre}}</td>
+                    <td>{{criterioIndEta4.cri_verificacion}}</td>
+                    <td>
+                        <button class="btn btn-outline-dark">
+                            <i class='fa fa-check'></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
         </table>
         <hr style="border-top: 1px solid black;">
 

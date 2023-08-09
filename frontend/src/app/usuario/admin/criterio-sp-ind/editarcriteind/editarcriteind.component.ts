@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { CriterioInd } from 'src/app/models/SpInd/criterioind.dto';
+import { CriterioIndDto } from 'src/app/models/SpInd/criterioind.dto';
 import { CriterioIndService } from 'src/app/services/SpInd/criterio.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { CriterioIndService } from 'src/app/services/SpInd/criterio.service';
 })
 export class EditarcriteindComponent implements OnInit {
 
-  criterioInd: CriterioInd = null;
+  criterioInd: CriterioIndDto = null;
 
   constructor(
     private criterioindService: CriterioIndService,
