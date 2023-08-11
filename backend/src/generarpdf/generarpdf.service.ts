@@ -296,11 +296,14 @@ export class GenerarpdfService {
 
 
     // La función para generar el PDF con las tablas ajustadas
-    async generarPdfInd(): Promise<Buffer> {
+    async generarPdfEvaluacionInd(): Promise<Buffer> {
         const titulo_uno = await this.criterioindService.getallcriterioxtitulo();
         const titulo_dos = await this.criterioindService.getallcriterioxtitulodos();
         const titulo_tres = await this.criterioindService.getallcriterioxtitulotres();
         const titulo_cuatro = await this.criterioindService.getallcriterioxtitulocuatro();
+
+        let totalCalificacionesEtapa1 = 0
+        let totalCalificacionesCountEtapa1 = 0; // Contador para la cantidad total de calificaciones
 
         const pdfBuffer: Buffer = await new Promise(resolve => {
             const doc = new PDFDocument({
@@ -358,8 +361,7 @@ export class GenerarpdfService {
             // Agregar las tablas a las páginas
             if (titulo_uno.length) {
                 let rows_elements = [];
-                let totalCalificaciones = 0
-                let totalCalificacionesCount = 0; // Contador para la cantidad total de calificaciones
+
 
                 titulo_uno.forEach(item => {
                     let calif
@@ -367,8 +369,8 @@ export class GenerarpdfService {
                     let obs
                     item.calificacion_ind.forEach(cal => {
                         calif = '            ' + cal.cal_nota
-                        totalCalificaciones += cal.cal_nota
-                        totalCalificacionesCount++; // Incrementar el contador
+                        totalCalificacionesEtapa1 += cal.cal_nota
+                        totalCalificacionesCountEtapa1++; // Incrementar el contador
                         obs = cal.cal_observaciones
                     })
                     var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
@@ -388,7 +390,7 @@ export class GenerarpdfService {
                 };
                 doc.table(table, tableOptions);
                 // Calcular el promedio
-                const promedio = totalCalificaciones / totalCalificacionesCount;
+                const promedio = totalCalificacionesEtapa1 / totalCalificacionesCountEtapa1;
                 const promedioRedondeado = promedio.toFixed(2);
 
                 doc.text(`Calificación Promedio: ${promedioRedondeado}`);

@@ -97,7 +97,7 @@ export class PamecActaService {
         const year = new Date().getFullYear().toString();
 
         await this.actaPamecIpsRepository.save(acta_sicpdf);
-        await this.auditoria_registro_services.logCreatePamecActa(
+        await this.auditoria_registro_services.logCreateActaPamec(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',
@@ -155,7 +155,7 @@ export class PamecActaService {
         const year = new Date().getFullYear().toString();
 
         await this.actaPamecIpsRepository.save(ips);
-        await this.auditoria_registro_services.logUpdatePamecActa(
+        await this.auditoria_registro_services.logUpdateActaPamec(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',

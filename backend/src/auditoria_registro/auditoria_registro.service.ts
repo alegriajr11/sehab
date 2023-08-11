@@ -23,19 +23,19 @@ export class AuditoriaRegistroService {
 
     /** USUARIOS - ROL ADMIN */
     //CONTROLAR LA CREACIÓN DE USUARO - ADMIN
-    async logCreateAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logCreateUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Usuario ADMIN: ${usu_nombre2}  con nombre de usuario: ${usu_nombreUsuario}  `;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario ADMIN', details, direccionIp);
     }
 
     //CONTROLAR LA ELIMINACIÓN DE USUARIO - ADMIN
-    async logDeleteAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logDeleteUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha eliminado un usuario ADMIN: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario ADMIN', details, direccionIp);
     }
 
     //CONTROLAR LA ACTUALIZACIÓN DE USUARIO - ADMIN
-    async logUpdateAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logUpdateUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un usuario ADMIN: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario ADMIN', details, direccionIp);
     }
@@ -136,13 +136,13 @@ export class AuditoriaRegistroService {
 
     /*ACTAS - PAMEC*/
     //CONTROLAR LA CREACIÓN DE  PAMEC ACTA
-    async logCreatePamecActa(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+    async logCreateActaPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Pamec Acta  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Pamec Acta ', details, direccionIp);
     }
 
     //CONTROLAR LA ACTUALIZACIÓN DE  PAMEC ACTA
-    async logUpdatePamecActa(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+    async logUpdateActaPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Pamec Acta  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion} `;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Pamec Acta ', details, direccionIp);
     }
@@ -151,14 +151,14 @@ export class AuditoriaRegistroService {
 
     /*ACTAS - SP*/
     //CONTROLAR LA CREACIÓN DE  SP INDEPENDIENTE ACTA
-    async logCreateSpIndep(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+    async logCreateActaSpIndep(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta Independiente  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Acta Independiente', details, direccionIp);
     }
 
 
     //CONTROLAR LA ACTUALIZACIÓN DE  SP INDEPENDIENTE ACTA
-    async logUpdateSpIndep(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+    async logUpdateActaSpIndep(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta Independiente  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion} `;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta Independiente ', details, direccionIp);
     }
@@ -166,13 +166,13 @@ export class AuditoriaRegistroService {
 
 
     //CONTROLAR LA CREACIÓN DE  SP IPS ACTA
-    async logCreateSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+    async logCreateActaSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta IPS  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Acta IPS', details, direccionIp);
     }
 
     //CONTROLAR LA ACTUALIZACIÓN DE SP IPS ACTA
-    async logUpdateSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+    async logUpdateActaSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta IPS  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion} `;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta IPS ', details, direccionIp);
     }

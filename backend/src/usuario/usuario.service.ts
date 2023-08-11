@@ -74,7 +74,7 @@ export class UsuarioService {
     //const year = new Date().getFullYear().toString();
 
     await this.usuarioRepository.save(admin);
-    await this.auditoria_registro_services.logCreateAdmin(
+    await this.auditoria_registro_services.logCreateUserAdmin(
       payloadInterface.usu_nombre,
       payloadInterface.usu_apellido,
       'ip',
@@ -90,17 +90,18 @@ export class UsuarioService {
   /*ACTUALIZANDO USUARIO*/
   async update(id: number, payload: { dto: UsuarioDto, tokenDto: TokenDto }): Promise<any> {
     const { dto, tokenDto } = payload;
-    const admin = await this.findById(id);
-    if (!admin)
+    const usuario_actualizar = await this.findById(id);
+
+    if (!usuario_actualizar)
       throw new NotFoundException(new MessageDto('El Usuario No Existe'));
 
-    dto.usu_nombre ? admin.usu_nombre = dto.usu_nombre : admin.usu_nombre = admin.usu_nombre;
+    dto.usu_nombre ? usuario_actualizar.usu_nombre = dto.usu_nombre : usuario_actualizar.usu_nombre = usuario_actualizar.usu_nombre;
 
-    dto.usu_apellido ? admin.usu_apellido = dto.usu_apellido : admin.usu_apellido = admin.usu_apellido;
+    dto.usu_apellido ? usuario_actualizar.usu_apellido = dto.usu_apellido : usuario_actualizar.usu_apellido = usuario_actualizar.usu_apellido;
 
-    dto.usu_nombreUsuario ? admin.usu_nombreUsuario = dto.usu_nombreUsuario : admin.usu_nombreUsuario = admin.usu_nombreUsuario;
+    dto.usu_nombreUsuario ? usuario_actualizar.usu_nombreUsuario = dto.usu_nombreUsuario : usuario_actualizar.usu_nombreUsuario = usuario_actualizar.usu_nombreUsuario;
 
-    dto.usu_estado ? admin.usu_estado = dto.usu_estado : admin.usu_estado = admin.usu_estado;
+    dto.usu_estado ? usuario_actualizar.usu_estado = dto.usu_estado : usuario_actualizar.usu_estado = usuario_actualizar.usu_estado;
 
     const usuario = await this.jwtService.decode(tokenDto.token);
 
@@ -114,9 +115,13 @@ export class UsuarioService {
       usu_roles: usuario[`usu_roles`]
     };
 
+    //SE MANDA A ACTUALIZAR LA ENTIDAD A LA BD
+    await this.usuarioRepository.save(usuario_actualizar);
 
-    await this.usuarioRepository.save(admin);
-    await this.auditoria_registro_services.logUpdateAdmin(
+    //CONDICIONALES PARA TENER EL CUENTA EL ROL Y ASÍ LLAMAR EL METODO LOG QUE LE CORRESPONDA
+    //PENDIENTE...........
+
+    await this.auditoria_registro_services.logUpdateUserAdmin(
       payloadInterface.usu_nombre,
       payloadInterface.usu_apellido,
       'ip',
@@ -128,9 +133,15 @@ export class UsuarioService {
   }
 
   async delete(id: number, tokenDto: TokenDto): Promise<any> {
-    const admin = await this.findById(id);
+    //LISTAR USUARIO AL QUE SE QUIERE ELIMINAR
+    const usuario_eliminar = await this.findById(id);
+
+    let rol_usuario
+
+    //EL USUARIO LOGUEADO - SIEMPRE ES EL ADMIN QUE ELIMINA USUARIOS
     const usuario = await this.jwtService.decode(tokenDto.token);
 
+    //OBJETO QUE TIENE LOS DATOS DEL USUARIO ADMIN LOGUEADO
     const payloadInterface: PayloadInterface = {
       usu_id: usuario[`usu_id`],
       usu_nombre: usuario[`usu_nombre`],
@@ -140,14 +151,24 @@ export class UsuarioService {
       usu_estado: usuario[`usu_estado`],
       usu_roles: usuario[`usu_roles`]
     };
-    await this.usuarioRepository.delete(admin.usu_id)
-    await this.auditoria_registro_services.logDeleteAdmin(
+
+    await this.usuarioRepository.delete(usuario_eliminar.usu_id)
+
+    usuario_eliminar.roles.forEach(data => {
+      rol_usuario = data.rol_nombre
+    })
+
+    //CONDICIONALES PARA TENER EL CUENTA EL ROL Y ASÍ LLAMAR EL METODO LOG QUE LE CORRESPONDA
+    //PENDIENTE...........
+
+    await this.auditoria_registro_services.logDeleteUserAdmin(
       payloadInterface.usu_nombre,
       payloadInterface.usu_apellido,
       'ip',
-      admin.usu_nombre,
-      admin.usu_nombreUsuario
+      usuario_eliminar.usu_nombre,
+      usuario_eliminar.usu_nombreUsuario
     );
+
     return new MessageDto(`Usuario  eliminado`);
   }
 

@@ -120,7 +120,7 @@ export class SpIpsService {
             const year = new Date().getFullYear().toString();
 
             await this.actaSpIpsRepository.save(acta_sicpdf);
-            await this.auditoria_registro_services.logCreateSpIps(
+            await this.auditoria_registro_services.logCreateActaSpIps(
                 payloadInterface.usu_nombre,
                 payloadInterface.usu_apellido,
                 'ip',
@@ -180,7 +180,7 @@ export class SpIpsService {
         const year = new Date().getFullYear().toString();
 
         await this.actaSpIpsRepository.save(ips);
-        await this.auditoria_registro_services.logUpdateSpIps(
+        await this.auditoria_registro_services.logUpdateActaSpIps(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',

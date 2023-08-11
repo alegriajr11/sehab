@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { PrestadorEntity } from "src/prestador/prestador.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { EtapaInd } from "./etapaind.entity";
+import { ActaSpIndependientePdfEntity } from "src/generarpdf/sp/sp-independientes/sp-ind-acta.entity";
 
 
 
@@ -22,8 +23,12 @@ export class EvaluacionIndependientesEntity {
     @ManyToMany(type => EtapaInd, etapaIndependientes => etapaIndependientes.eta_evaluacion_independientes, { eager: true })
     @JoinTable({
         name: 'eta_eva_ind',
-        joinColumn: { name: 'eta_eva_id' },
-        inverseJoinColumn: { name: 'eva_eta_id' }
+        joinColumn: { name: 'eva_eta_id' },
+        inverseJoinColumn: { name: 'eta_eva_id' }
     })
     eval_etapa_independientes: EtapaInd[];
+
+    @OneToOne(() => ActaSpIndependientePdfEntity, actaIndependientes => actaIndependientes.act_eval_ind)
+    @JoinColumn()
+    eval_acta_ind: ActaSpIndependientePdfEntity;
 }

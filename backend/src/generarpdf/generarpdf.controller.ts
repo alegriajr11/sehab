@@ -38,7 +38,7 @@ export class GenerarpdfController {
 
     @Get('sp/ind/evaluacion')
     async descargarPdfCriterioInd(@Res() res): Promise<void> {
-        const buffer = await this.generarPdfService.generarPdfInd()
+        const buffer = await this.generarPdfService.generarPdfEvaluacionInd()
 
         res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ind_sogcs.pdf"');
         res.set({

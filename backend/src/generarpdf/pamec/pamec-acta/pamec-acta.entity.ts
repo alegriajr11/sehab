@@ -34,7 +34,7 @@ export class ActaPamecIpsEntity {
     @Column({type: 'varchar', length: 85, nullable: false})
     act_telefono: string;
 
-    @Column({type: 'varchar', length: 100, nullable: false})
+    @Column({type: 'varchar', length: 120, nullable: false})
     act_email: string;
 
     @Column({type: 'varchar', length: 55, nullable: false})

@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { EvaluacionIndependientesEntity } from "src/sp/sp_ind/evaluacion-independientes.entity";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity({name: 'acta-sp-ind-pdf'})
 export class ActaSpIndependientePdfEntity {
@@ -40,13 +41,13 @@ export class ActaSpIndependientePdfEntity {
     @Column({type: 'varchar', length: 85, nullable: false})
     act_telefono: string;
 
-    @Column({type: 'varchar', length: 100, nullable: false})
+    @Column({type: 'varchar', length: 120, nullable: false})
     act_email: string;
 
     @Column({type: 'varchar', length: 55, nullable: false})
     act_representante: string;
 
-    @Column({type: 'varchar', length: 12, nullable: false})
+    @Column({type: 'varchar', length: 15, nullable: false})
     act_cod_prestador
 
     @Column({type: 'varchar', length: 150, nullable: false})
@@ -67,10 +68,10 @@ export class ActaSpIndependientePdfEntity {
     @Column({ type: 'date' })
     act_creado: Date;
 
-    @Column({ type: 'text', nullable: false })
+    @Column({ type: 'text', nullable: true })
     act_firma_funcionario: string; // Esta columna almacenará la firma en formato base64
 
-    @Column({ type: 'text', nullable: false })
+    @Column({ type: 'text', nullable: true })
     act_firma_prestador: string; // Esta columna almacenará la firma en formato base64
 
 
@@ -79,4 +80,8 @@ export class ActaSpIndependientePdfEntity {
         this.act_creado = new Date();
     }
 
+    
+
+    @OneToOne(() => EvaluacionIndependientesEntity, evaluacionIndependientes => evaluacionIndependientes.eval_acta_ind)
+    act_eval_ind: EvaluacionIndependientesEntity;
 }

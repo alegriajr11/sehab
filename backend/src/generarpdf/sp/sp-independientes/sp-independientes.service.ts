@@ -8,12 +8,25 @@ import { TokenDto } from 'src/auth/dto/token.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
 import { PayloadInterface } from 'src/auth/payload.interface';
+import { EvaluacionIndependientesRepository } from 'src/sp/sp_ind/evaluacion-independientes.repository';
+import { EvaluacionIndependientesEntity } from 'src/sp/sp_ind/evaluacion-independientes.entity';
+import { EvaluacionIndependientesDto } from 'src/sp/sp_ind/dto/evaluacion-independientes.dto';
+import { PrestadorEntity } from 'src/prestador/prestador.entity';
+import { PrestadorRepository } from 'src/prestador/prestador.repository';
+import { EtapaInd } from 'src/sp/sp_ind/etapaind.entity';
+import { EtapaIndRepository } from 'src/sp/sp_ind/etapaind.repository';
 
 @Injectable()
 export class SpIndependientesService {
     constructor(
         @InjectRepository(ActaSpIndependientePdfEntity)
         private readonly actaSpIndependientePdfRepository: ActaSpIndependientePdfRepository,
+        @InjectRepository(EvaluacionIndependientesEntity)
+        private readonly evaluacionIndependientesRepository: EvaluacionIndependientesRepository,
+        @InjectRepository(PrestadorEntity)
+        private readonly prestadorRepository: PrestadorRepository,
+        @InjectRepository(EtapaInd)
+        private readonly etapaIndependientesRepository: EtapaIndRepository,
         private readonly jwtService: JwtService,
         private readonly auditoria_registro_services: AuditoriaRegistroService
     ) { }
@@ -98,7 +111,56 @@ export class SpIndependientesService {
             const year = new Date().getFullYear().toString();
 
             await this.actaSpIndependientePdfRepository.save(acta_sicpdf);
-            await this.auditoria_registro_services.logCreateSpIndep(
+
+            const acta_ultima = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
+                .addSelect('acta.id')
+                .orderBy('acta.act_id', 'DESC')
+                .getOne();
+
+            //CONSULTAR LA ULTIMA ACTA QUE SE ASIGNARA A LA EVALUACION
+            const acta = await this.actaSpIndependientePdfRepository.findOne({ where: { id: acta_ultima.id } })
+
+            //ASIGNAMOS LOS DATOS DE LA ACTA REGISTRADA PARA CONSTRUIR EL DTO DE EVALUACION-INDEPENDIENTES
+            const eva_creado = acta_ultima.act_creado;
+            const eva_acta_prestador = acta_ultima.act_cod_prestador; // Valor del ID del prestador
+
+            //CONSULTAR EL PRESTADOR QUE TIENE EL ACTA
+            const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: eva_acta_prestador } })
+
+
+            //ASIGNAMOS LOS DATOS AL DTO
+            const evaluacionDto: EvaluacionIndependientesDto = {
+                eva_creado
+            }
+
+            //CREAMOS EL DTO
+            const evaluacion_ind = await this.evaluacionIndependientesRepository.create(evaluacionDto)
+
+            //ASIGNACION DE FORANEA ACTA UNO A UNO
+            evaluacion_ind.eval_acta_ind = acta
+            //ASIGNACION DE FORANEA PRESTADOR UNO A MUCHOS
+            evaluacion_ind.eval_prestador = prestador
+
+            //GUARDAMOS EN LA ENTIDAD EVALUACION-INDEPENDIENTES
+            await this.evaluacionIndependientesRepository.save(evaluacion_ind)
+
+            //CONSULTAR LA ÚLTIMA EVALUACIÓN EXISTENTE
+            const evaluacion_ultima = await this.evaluacionIndependientesRepository.createQueryBuilder('evaluacion')
+                .addSelect('evaluacion.eva_id')
+                .orderBy('evaluacion.eva_id', 'DESC')
+                .getOne();
+
+            //CONSULTAR LAS ETAPAS EXISTENTES
+            const etapas = await this.etapaIndependientesRepository.find()
+
+            //ASIGNAR LA EVALUACIÓN A LAS ETAPAS
+            evaluacion_ultima.eval_etapa_independientes = etapas
+
+            //GUARDAR LA RELACIÓN ENTRE EVALUACIÓN Y ETAPAS
+            await this.evaluacionIndependientesRepository.save(evaluacion_ultima);
+
+            //ASIGNAR LA AUDITORIA DEL ACTA CREADA
+            await this.auditoria_registro_services.logCreateActaSpIndep(
                 payloadInterface.usu_nombre,
                 payloadInterface.usu_apellido,
                 'ip',
@@ -107,7 +169,10 @@ export class SpIndependientesService {
                 dto.act_prestador,
                 dto.act_cod_prestador
             );
+
+
             return { error: false, message: 'El acta ha sido creada' };
+            
         } catch (error) {
             console.log(error)
             // Devuelve un mensaje de error apropiado
@@ -115,6 +180,7 @@ export class SpIndependientesService {
         }
 
     }
+
 
     //ACTUALIZAR CRITERIOS SP INDEPENDIENTE
     async updateActaInd(id: number, payload: { dto: IndActaDto, tokenDto: TokenDto }): Promise<any> {
@@ -159,7 +225,7 @@ export class SpIndependientesService {
         const year = new Date().getFullYear().toString();
 
         await this.actaSpIndependientePdfRepository.save(ips);
-        await this.auditoria_registro_services.logUpdateSpIndep(
+        await this.auditoria_registro_services.logUpdateActaSpIndep(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',

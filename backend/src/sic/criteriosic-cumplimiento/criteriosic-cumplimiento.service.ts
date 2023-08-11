@@ -66,7 +66,7 @@ export class CriteriosicCumplimientoService {
             .select(['cumplimiento', 'criterioestandar_sic.crie_id', 'criterioestandar_sic.crie_nombre'])
             .innerJoin('cumplimiento.criterioestandar_sic', 'criterioestandar_sic')
             .getMany()
-        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No existen cumpliemientos'))
+        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No existen en la lista'))
         return cumplimiento_estandar
     }
 
@@ -80,43 +80,43 @@ export class CriteriosicCumplimientoService {
             .innerJoinAndSelect('indicadorsic.ind_dominio', 'ind_dominio')
             .innerJoinAndSelect('ind_dominio.prestadores', 'prestadores')
             .getMany()
-        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No existen cumpliemientos'))
+        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
         return cumplimiento_estandar
     }
 
     //CREAR CUMPLIMIENTO ESTANDAR 
-    async createCumplimientoEstandar(dto: CumplimientoEstandarSicDto): Promise<any> {
-        const { crie_id, pre_cod_habilitacion } = dto
+    // async createCumplimientoEstandar(dto: CumplimientoEstandarSicDto): Promise<any> {
+    //     const { crie_id, pre_cod_habilitacion } = dto
 
-        const criterio_estandarsic = await this.criterioEstandarSicRepository.findOne({ where: { crie_id: crie_id } });
-        if (!criterio_estandarsic) {
-            throw new InternalServerErrorException(new MessageDto('El criterio no ha sido creado'))
-        }
+    //     const criterio_estandarsic = await this.criterioEstandarSicRepository.findOne({ where: { crie_id: crie_id } });
+    //     if (!criterio_estandarsic) {
+    //         throw new InternalServerErrorException(new MessageDto('El criterio no ha sido creado'))
+    //     }
 
-        const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: pre_cod_habilitacion } })
-        if (!prestador) {
-            throw new InternalServerErrorException(new MessageDto('El Prestador no ha sido creado'))
-        }
-        const cumpl_cri = await this.cumplimientoEstandarSicRepository.findOne({ where: { criterioestandar_sic: criterio_estandarsic } })
-        const cumpl_pres = await this.cumplimientoEstandarSicRepository.findOne({ where: { prestadores: prestador } })
+    //     const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: pre_cod_habilitacion } })
+    //     if (!prestador) {
+    //         throw new InternalServerErrorException(new MessageDto('El Prestador no ha sido creado'))
+    //     }
+    //     const cumpl_cri = await this.cumplimientoEstandarSicRepository.findOne({ where: { criterioestandar_sic: criterio_estandarsic } })
+    //     const cumpl_pres = await this.cumplimientoEstandarSicRepository.findOne({ where: { prestadores: prestador } })
 
 
-        const cumplimiento = await this.cumplimientoEstandarSicRepository.create(dto)
+    //     const cumplimiento = await this.cumplimientoEstandarSicRepository.create(dto)
 
-        cumplimiento.criterioestandar_sic = criterio_estandarsic
-        cumplimiento.prestadores = prestador
+    //     cumplimiento.criterioestandar_sic = criterio_estandarsic
+    //     cumplimiento.prestadores = prestador
 
-        await this.cumplimientoEstandarSicRepository.save(cumplimiento)
-        return new MessageDto('Cumplimiento Asignado');
-    }
+    //     await this.cumplimientoEstandarSicRepository.save(cumplimiento)
+    //     return new MessageDto('Cumplimiento Asignado');
+    // }
 
     //ENCONTRAR CUMPLIMIENTO ESTANDAR POR CRI_ID CUMPLIDO
-    async findByIdCumpl(crie_id: number): Promise<CumplimientoEstandarSicEntity> {
-        const criterio_estandarsic = await this.criterioEstandarSicRepository.findOne({ where: { crie_id: crie_id } });
-        const cumplimientoEstandar = await this.cumplimientoEstandarSicRepository.findOne({ where: { criterioestandar_sic: criterio_estandarsic } });
-        if (!cumplimientoEstandar) {
-            throw new NotFoundException(new MessageDto('El Cumplimiento No Existe'));
-        }
-        return cumplimientoEstandar;
-    }
+    // async findByIdCumpl(crie_id: number): Promise<CumplimientoEstandarSicEntity> {
+    //     const criterio_estandarsic = await this.criterioEstandarSicRepository.findOne({ where: { crie_id: crie_id } });
+    //     const cumplimientoEstandar = await this.cumplimientoEstandarSicRepository.findOne({ where: { criterioestandar_sic: criterio_estandarsic } });
+    //     if (!cumplimientoEstandar) {
+    //         throw new NotFoundException(new MessageDto('El Cumplimiento No Existe'));
+    //     }
+    //     return cumplimientoEstandar;
+    // }
 }

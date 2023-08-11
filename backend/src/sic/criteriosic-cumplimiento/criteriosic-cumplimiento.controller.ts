@@ -9,11 +9,11 @@ export class CriteriosicCumplimientoController {
         private readonly criterioCumplimientosicService: CriteriosicCumplimientoService
     ) { }
 
-    @UsePipes(new ValidationPipe({ whitelist: true }))
-    @Post('estandar')
-    async create(@Body() dto: CumplimientoEstandarSicDto) {
-        return this.criterioCumplimientosicService.createCumplimientoEstandar(dto);
-    }
+    // @UsePipes(new ValidationPipe({ whitelist: true }))
+    // @Post('estandar')
+    // async create(@Body() dto: CumplimientoEstandarSicDto) {
+    //     return this.criterioCumplimientosicService.createCumplimientoEstandar(dto);
+    // }
 
     //LISTAR TODOS LOS USUARIOS
 
@@ -38,8 +38,8 @@ export class CriteriosicCumplimientoController {
         return await this.criterioCumplimientosicService.findByIdCumliSic(id);
     }
 
-    @Get('cumple/:id')
-    async getAllCumple(@Param('id', ParseIntPipe) id: number) {
-        return await this.criterioCumplimientosicService.findByIdCumpl(id);
-    }
+    // @Get('cumple/:id')
+    // async getAllCumple(@Param('id', ParseIntPipe) id: number) {
+    //     return await this.criterioCumplimientosicService.findByIdCumpl(id);
+    // }
 }
