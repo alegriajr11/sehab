@@ -10,7 +10,6 @@ import { NuevoUsuarioDto } from './dto/nuevo-usuario.dto';
 import { RequestResetPasswordDTO } from './dto/request-reset-password.dto';
 import { RessetPasswordDto } from './dto/reset-password.dto';
 import { TokenDto } from './dto/token.dto';
-import { MailerservicesService } from './mailerservices/mailerservices.service';
 import { RolDecorator } from 'src/decorators/rol.decorator';
 import { RolNombre } from 'src/rol/rol.enum';
 import { RolesGuard } from 'src/guards/rol.guard';
@@ -21,7 +20,6 @@ export class AuthController {
 
     constructor(
         private readonly authService: AuthService,
-        private readonly mailerService: MailerservicesService
     ) { }
 
     @UseGuards(JwtAuthGuard)
