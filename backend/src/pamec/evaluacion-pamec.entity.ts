@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { PrestadorEntity } from "src/prestador/prestador.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ActividadEntity } from "./actividad.entity";
+import { ActaPamecIpsEntity } from "src/generarpdf/pamec/pamec-acta/pamec-acta.entity";
 
 
 @Entity({ name: 'evaluacion-pamec' })
@@ -27,4 +28,8 @@ export class EvaluacionPamecEntity {
     })
     eval_actividadpam: ActividadEntity[];
 
+    //Relacion UNO a UNO EVALUACION PAMEC - ACTAS PAMEC
+    @OneToOne(() => ActaPamecIpsEntity, actaPamec => actaPamec.act_eval_pamec)
+    @JoinColumn()
+    eval_acta_pamec: ActaPamecIpsEntity;
 }

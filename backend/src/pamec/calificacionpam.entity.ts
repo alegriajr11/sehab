@@ -5,6 +5,9 @@ import { CriteriopamEntity } from "./criteriopam.entity";
 
 @Entity({name: 'calificacionpam'})
 export class CalificacionpamEntity {
+    forEach(arg0: (cal: any) => void) {
+        throw new Error('Method not implemented.');
+    }
     @PrimaryGeneratedColumn('increment')
     cal_id: number;
 

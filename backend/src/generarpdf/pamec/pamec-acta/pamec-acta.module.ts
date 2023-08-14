@@ -7,10 +7,13 @@ import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_regist
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PrestadorEntity } from 'src/prestador/prestador.entity';
+import { ActividadEntity } from 'src/pamec/actividad.entity';
+import { EvaluacionPamecEntity } from 'src/pamec/evaluacion-pamec.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ActaPamecIpsEntity]),
+  imports: [TypeOrmModule.forFeature([ActaPamecIpsEntity,PrestadorEntity,ActividadEntity,EvaluacionPamecEntity]),
     AuditoriaRegistroModule,
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),

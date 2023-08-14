@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { PrestadorEntity } from "src/prestador/prestador.entity";
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { IndicadorEntity } from "./indicador.entity";
+import { EvaluacionSicEntity } from "./evaluacionsic.entity";
 
 @Entity({name: 'dominio'})
 export class DominioEntity {
@@ -11,11 +12,11 @@ export class DominioEntity {
     @Column({type: 'varchar', length: 70, nullable: false, unique: false})
     dom_nombre: string;
     
-    //Relacion Muchos a Muchos DOMINIO - PRESTADOR
-    @ManyToMany(type => PrestadorEntity, prestador => prestador.dominios)
-    prestadores: PrestadorEntity[];
-
     //Relacion Uno a Muchos DOMINIO - INDICADOR
     @OneToMany(type => IndicadorEntity, indicador => indicador.ind_dominio)
     dom_indicador: IndicadorEntity;
+
+    //Relacion MUCHOS a UNO DOMINIO - EVALUACION SIC
+    @ManyToOne(type => EvaluacionSicEntity, evasic => evasic.eva_sic_dom)
+    dom_eva_sic: EvaluacionSicEntity;
 }

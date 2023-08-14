@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { EvaluacionipsEntity } from "src/sp/sp_ips/evaluacionips.entity";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity({name: 'acta-sp-ips-pdf'})
 export class ActaSpIpsEntity {
@@ -78,4 +79,8 @@ export class ActaSpIpsEntity {
     async setDate() {
         this.act_creado = new Date();
     }
+
+    //Relacion UNO a UNO EVALUACION SP IPS - ACTAS SP IPS
+    @OneToOne(() => EvaluacionipsEntity, evaluacionIps => evaluacionIps.eval_acta_spips)
+    act_eval_ips: EvaluacionipsEntity;
 }

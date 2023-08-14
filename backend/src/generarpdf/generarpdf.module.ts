@@ -21,12 +21,16 @@ import { CriterioindModule } from 'src/sp/sp_ind/criterioind/criterioind.module'
 import { CriterioindService } from 'src/sp/sp_ind/criterioind/criterioind.service';
 import { CriterioIndEntity } from 'src/sp/sp_ind/criterioind.entity';
 import { EtapaInd } from 'src/sp/sp_ind/etapaind.entity';
+import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.service';
+import { CriteriopamModule } from 'src/pamec/actividad/criteriopam/criteriopam.module';
+import { ActividadEntity } from 'src/pamec/actividad.entity';
+import { CriteriopamEntity } from 'src/pamec/criteriopam.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd]), SicActaModule, 
-  SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule, JwtModule, CriteriosicCumplimientoModule,CriterioindModule],
+  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd,ActividadEntity,CriteriopamEntity]), SicActaModule, 
+  SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule, JwtModule, CriteriosicCumplimientoModule,CriterioindModule,CriteriopamModule],
 
   controllers: [GenerarpdfController, SicActaController],
-  providers: [GenerarpdfService, UsuarioService, SicActaService,CriterioindService]
+  providers: [GenerarpdfService, UsuarioService, SicActaService,CriterioindService,CriteriopamService]
 })
 export class GenerarpdfModule {}

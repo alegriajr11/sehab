@@ -51,6 +51,7 @@ import { CumplimientoHospitalizacionMentalEntity } from "src/resolucion/evaluaci
 import { CumplimientoHospitalizacionEntity } from "src/resolucion/evaluacion/grupo_internacion/hospitalizacion/cumplimiento_hospitalizacion.entity";
 import { EvaluacionPamecEntity } from "src/pamec/evaluacion-pamec.entity";
 import { EvaluacionIndependientesEntity } from "src/sp/sp_ind/evaluacion-independientes.entity";
+import { EvaluacionSicEntity } from "src/sic/evaluacionsic.entity";
 
 
 
@@ -100,31 +101,17 @@ export class PrestadorEntity {
     @OneToMany(type => EvaluacionPamecEntity, evaluacionPamec => evaluacionPamec.eval_prestador)
     prestador_eval_pamec: EvaluacionPamecEntity
 
-
-    //Relacion Muchos a Muchos PRESTADOR - DOMINIO
-    @ManyToMany(type => DominioEntity, dominio => dominio.prestadores, { eager: true })
-    @JoinTable({
-        name: 'dom_pre',
-        joinColumn: { name: 'dom_pre_id' },
-        inverseJoinColumn: { name: 'pre_dom_id' }
-    })
-    dominios: DominioEntity[];
-
-    //Relacion Muchos a Muchos PRESTADOR - EVALUACIONIPS
-    @ManyToMany(type => EvaluacionipsEntity, evaluacionips => evaluacionips.prestadores, { eager: true })
-    @JoinTable({
-        name: 'evaips_pre',
-        joinColumn: { name: 'pre_eva_id' },
-        inverseJoinColumn: { name: 'eva_pre_id' }
-    })
-    evaluacionesips: EvaluacionipsEntity[];
-
-
     //Relacion Uno a Muchos PRESTADORES - EVALUACION-INDEPENDIENTES
     @OneToMany(type => EvaluacionIndependientesEntity, evaluacionIndependientes => evaluacionIndependientes.eval_prestador)
     prestador_eval_independientes: EvaluacionIndependientesEntity
 
+    //Relacion Uno a Muchos PRESTADORES - EVALUACION - SP IPS
+    @OneToMany(type => EvaluacionipsEntity, evaluacionIps => evaluacionIps.eval_acta_spips)
+    prestator_eval_ips: EvaluacionipsEntity;
 
+    //Relacion Uno a Muchos PRESTADORES - EVALUACION-SIC
+    @OneToMany(type => EvaluacionSicEntity, evaluacionSic => evaluacionSic.eval_sic_prestator)
+    prestator_eval_sic: EvaluacionSicEntity;
 
     //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
     @OneToMany(type => ServiciosVerificadosEntity, servicios_verf => servicios_verf.prestadores)

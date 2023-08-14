@@ -83,5 +83,166 @@ export class CriteriopamService {
         return new MessageDto('El criterio ha sido Creado');
     }
 
+    //actividad
+    async getallcriterioxtitulouno(): Promise<CriteriopamEntity[]> {
+
+        let titulo_uno
+        titulo_uno = "ACTIVIDADES PREVIAS"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_uno })
+            .getMany()
+
+        return criterio
+    }
+
+    //actividad
+    async getallcriterioxtitulodos(): Promise<CriteriopamEntity[]> {
+
+        let titulo_dos
+        titulo_dos = "AUTOEVALUACIÓN"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_dos })
+            .getMany()
+
+        return criterio
+    }
+
+    //actividad
+    async getallcriterioxtitulotres(): Promise<CriteriopamEntity[]> {
+
+        let titulo_tres
+        titulo_tres = "SELECCIÓN DE LOS PROCESOS A MEJORAR"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_tres })
+            .getMany()
+
+        return criterio
+    }
+
+    //actividad
+    async getallcriterioxtitulocuatro(): Promise<CriteriopamEntity[]> {
+
+        let titulo_cuatro
+        titulo_cuatro = "PRIORIZACION"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_cuatro })
+            .getMany()
+
+        return criterio
+    }
+
+    //actividad
+    async getallcriterioxtitulocinco(): Promise<CriteriopamEntity[]> {
+
+        let titulo_cinco
+        titulo_cinco = "DEFINICIÓN DE LA CALIDAD ESPERADA"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_cinco })
+            .getMany()
+
+        return criterio
+    }
+
+    //actividad
+    async getallcriterioxtituloseis(): Promise<CriteriopamEntity[]> {
+
+        let titulo_seis
+        titulo_seis = "DEFINICIÓN DE LA CALIDAD OBSERVADA"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_seis })
+            .getMany()
+
+        return criterio
+    }
+
+    //actividad
+    async getallcriterioxtitulosiete(): Promise<CriteriopamEntity[]> {
+
+        let titulo_siete
+        titulo_siete = "PLAN DE MEJORAMIENTO PARA EL CIERRE DE BRECHAS"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_siete })
+            .getMany()
+
+        return criterio
+    }
+
+    //actividad
+    async getallcriterioxtituloocho(): Promise<CriteriopamEntity[]> {
+
+        let titulo_ocho
+        titulo_ocho = "EJECUCION Y SEGUIMIENTO AL PLAN DE MEJORAMIENTO"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_ocho })
+            .getMany()
+
+        return criterio
+    }
+
+
+    //actividad
+    async getallcriterioxtitulonueve(): Promise<CriteriopamEntity[]> {
+
+        let titulo_nueve
+        titulo_nueve = "EVALUACION PLAN DE MEJORAMIENTO"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_nueve })
+            .getMany()
+
+        return criterio
+    }
+
+    //actividad
+    async getallcriterioxtitulodiez(): Promise<CriteriopamEntity[]> {
+
+        let titulo_diez
+        titulo_diez = "APRENDIZAJE ORGANIZACIONAL"
+
+        const criterio = await this.criteriopamRepository.createQueryBuilder('actividad')
+            .select(['actividad', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica','criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre'])
+            .innerJoin('actividad.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('actividad.criterio_calificacionpam', 'criterio_calificacionpam')
+            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_diez })
+            .getMany()
+
+        return criterio
+    }
+
 
 }

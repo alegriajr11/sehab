@@ -47,4 +47,14 @@ export class GenerarpdfController {
         res.end(buffer)
     }
     
+    @Get('pamec/evaluacion')
+    async descargarPdfCriterioPamec(@Res() res): Promise<void> {
+        const buffer = await this.generarPdfService.generarPdfEvaluacionPamec()
+
+        res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ind_sogcs.pdf"');
+        res.set({
+            'Content-Length': buffer.length,
+        })
+        res.end(buffer)
+    }
 }

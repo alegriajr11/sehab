@@ -13,6 +13,7 @@ import { CriterioEstandarSicRepository } from 'src/sic/criteriosEstandar.reposit
 import { stringify } from 'querystring';
 import { CalificacionpamecService } from 'src/pamec/calificacionpamec/calificacionpamec.service';
 import { CriterioindService } from 'src/sp/sp_ind/criterioind/criterioind.service';
+import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.service';
 
 
 const PDFDocument = require('pdfkit-table')
@@ -34,7 +35,9 @@ export class GenerarpdfService {
         @Inject(CriteriosicCumplimientoService)
         private readonly cumplimientoService: CriteriosicCumplimientoService,
         @Inject(CriterioindService)
-        private readonly criterioindService: CriterioindService
+        private readonly criterioindService: CriterioindService,
+        @Inject(CriteriopamService)
+        private readonly criteriopamService: CriteriopamService
 
     ) { }
 
@@ -478,6 +481,483 @@ export class GenerarpdfService {
                 };
                 doc.moveDown();
                 doc.table(table4, tableOptions);
+            }
+
+            const buffer = [];
+            doc.on('data', buffer.push.bind(buffer));
+            doc.on('end', () => {
+                const data = Buffer.concat(buffer);
+                resolve(data);
+            });
+
+            doc.end();
+        });
+
+        return pdfBuffer;
+    }
+
+
+    //GENERACIÓN DE REPORTE DE CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES
+
+
+    // La función para generar el PDF con las tablas ajustadas
+    async generarPdfEvaluacionPamec(): Promise<Buffer> {
+        const titulo_uno = await this.criteriopamService.getallcriterioxtitulouno();
+        const titulo_dos = await this.criteriopamService.getallcriterioxtitulodos();
+        const titulo_tres = await this.criteriopamService.getallcriterioxtitulotres();
+        const titulo_cuatro = await this.criteriopamService.getallcriterioxtitulocuatro();
+        const titulo_cinco = await this.criteriopamService.getallcriterioxtitulocuatro();
+        const titulo_seis = await this.criteriopamService.getallcriterioxtitulocuatro();
+        const titulo_siete = await this.criteriopamService.getallcriterioxtitulocuatro();
+        const titulo_ocho = await this.criteriopamService.getallcriterioxtitulocuatro();
+        const titulo_nueve = await this.criteriopamService.getallcriterioxtitulocuatro();
+        const titulo_diez = await this.criteriopamService.getallcriterioxtitulocuatro();
+
+        let totalCalificacionesActividad1 = 0
+        let totalCalificacionesCountActividad1 = 0; // Contador para la cantidad total de calificaciones
+
+        const pdfBuffer: Buffer = await new Promise(resolve => {
+            const doc = new PDFDocument({
+                size: 'LETTER',
+                bufferPages: true,
+                autoFirstPage: false,
+            });
+
+            let pageNumber = 0;
+
+            doc.on('pageAdded', () => {
+                pageNumber++;
+                let bottom = doc.page.margins.bottom;
+
+                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                doc.moveDown()
+
+                doc.page.margins.top = 115;
+                doc.page.margins.bottom = 0;
+                doc.font("Helvetica").fontSize(14);
+                doc.text(
+                    'Pág. ' + pageNumber,
+                    0.5 * (doc.page.width - 100),
+                    doc.page.height - 50,
+                    {
+                        width: 100,
+                        align: 'center',
+                        lineBreak: false,
+                    }
+                );
+                doc.page.margins.bottom = bottom;
+
+            });
+
+            doc.addPage();
+            doc.text('', 90, 110);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
+            doc.text('', 185, 130);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('PAMEC');
+            // doc.moveDown();
+            // doc.font('Helvetica').fontSize(14);
+
+            doc.text('', 50, 110);
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+
+            // doc.fontSize(24);
+
+
+            // Agregar las tablas a las páginas
+            if (titulo_uno.length) {
+                let rows_elements = [];
+
+
+                titulo_uno.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table = {
+                    title: "ACTIVIDADES PREVIAS",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.table(table, tableOptions);
+                // Calcular el promedio
+                const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                const promedioRedondeado = promedio.toFixed(2);
+
+                doc.text(`Calificación Promedio: ${promedioRedondeado}`);
+            }
+
+            if (titulo_dos.length) {
+                let rows_elements = [];
+                titulo_dos.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table2 = {
+                    title: "AUTOEVALUACION",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table2, tableOptions);
+            }
+
+            if (titulo_tres.length) {
+                let rows_elements = [];
+                titulo_tres.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table3 = {
+                    title: "SELECCIÓN DE LOS PROCESOS A MEJORAR",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table3, tableOptions);
+            }
+
+            if (titulo_cuatro.length) {
+                let rows_elements = [];
+                titulo_cuatro.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table4 = {
+                    title: "PRIORIZACION",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table4, tableOptions);
+            }
+
+            if (titulo_cuatro.length) {
+                let rows_elements = [];
+                titulo_cuatro.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table4 = {
+                    title: "PRIORIZACION",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table4, tableOptions);
+            }
+
+            if (titulo_cuatro.length) {
+                let rows_elements = [];
+                titulo_cuatro.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table4 = {
+                    title: "PRIORIZACION",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table4, tableOptions);
+            }
+
+            if (titulo_cinco.length) {
+                let rows_elements = [];
+                titulo_cinco.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table5 = {
+                    title: "DEFINICIÓN DE LA CALIDAD ESPERADA",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table5, tableOptions);
+            }
+
+            if (titulo_seis.length) {
+                let rows_elements = [];
+                titulo_seis.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table6 = {
+                    title: "DEFINICIÓN DE LA CALIDAD OBSERVADA",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table6, tableOptions);
+            }
+
+            if (titulo_siete.length) {
+                let rows_elements = [];
+                titulo_siete.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table7 = {
+                    title: "PLAN DE MEJORAMIENTO PARA EL CIERRE DE BRECHAS",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table7, tableOptions);
+            }
+
+            if (titulo_ocho.length) {
+                let rows_elements = [];
+                titulo_ocho.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table8 = {
+                    title: "EJECUCION Y SEGUIMIENTO AL PLAN DE MEJORAMIENTO",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table8, tableOptions);
+            }
+
+            if (titulo_nueve.length) {
+                let rows_elements = [];
+                titulo_nueve.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table9 = {
+                    title: "EVALUACION PLAN DE MEJORAMIENTO",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table9, tableOptions);
+            }
+
+            if (titulo_diez.length) {
+                let rows_elements = [];
+                titulo_diez.forEach(item => {
+                    let calif
+                    let obs
+                    let apli
+                    item.criterio_calificacionpam.forEach(cal => {
+                        calif = '            ' + cal.cal_nota
+                        totalCalificacionesActividad1 += cal.cal_nota
+                        totalCalificacionesCountActividad1++; // Incrementar el contador
+                        obs = cal.cal_observaciones
+                        apli = cal.cal_aplica
+                    })
+                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 42, 15, 145],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table10 = {
+                    title: "APRENDIZAJE ORGANIZACIONAL",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                doc.table(table10, tableOptions);
             }
 
             const buffer = [];

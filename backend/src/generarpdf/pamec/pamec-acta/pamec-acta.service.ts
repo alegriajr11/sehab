@@ -8,6 +8,13 @@ import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
 import { TokenDto } from 'src/auth/dto/token.dto';
 import { PayloadInterface } from 'src/auth/payload.interface';
+import { PrestadorEntity } from 'src/prestador/prestador.entity';
+import { PrestadorRepository } from 'src/prestador/prestador.repository';
+import { EvaluacionPamecEntity } from 'src/pamec/evaluacion-pamec.entity';
+import { EvaluacionPamecRepository } from 'src/pamec/evaluacion-pamec.repository';
+import { EvaluacionPamecDto } from 'src/pamec/dto/evaluacionpamec.dto';
+import { ActividadEntity } from 'src/pamec/actividad.entity';
+import { ActividadRepository } from 'src/pamec/actividad.repository';
 
 @Injectable()
 export class PamecActaService {
@@ -15,7 +22,13 @@ export class PamecActaService {
         @InjectRepository(ActaPamecIpsEntity)
         private readonly actaPamecIpsRepository: ActaPamecIpsRepository,
         private readonly jwtService: JwtService,
-        private readonly auditoria_registro_services: AuditoriaRegistroService
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+        @InjectRepository(PrestadorEntity)
+        private readonly prestadorRepository: PrestadorRepository,
+        @InjectRepository(EvaluacionPamecEntity)
+        private readonly evaluacionPamecRepository: EvaluacionPamecRepository,
+        @InjectRepository(ActividadEntity)
+        private readonly actividadRepository: ActividadRepository,
     ) { }
 
     //LISTAR TODAS PAMEC IPS ACTA PDF
@@ -77,35 +90,98 @@ export class PamecActaService {
     }
 
 
-    /*CREACIÓN PAMEC IPS ACTA PDF */
     async create(payloads: { dto: ActaPamecIpsDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
 
+
         const acta_sicpdf = this.actaPamecIpsRepository.create(dto);
-        const usuario = await this.jwtService.decode(tokenDto.token);
+        const usuario = this.jwtService.decode(tokenDto.token);
 
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
+        try {
+            const acta_sicpdf = this.actaPamecIpsRepository.create(dto);
+            const usuario = await this.jwtService.decode(tokenDto.token);
 
-        const year = new Date().getFullYear().toString();
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
 
-        await this.actaPamecIpsRepository.save(acta_sicpdf);
-        await this.auditoria_registro_services.logCreateActaPamec(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.act_id,
-            year,
-            dto.act_prestador,
-            dto.act_cod_prestador
-        );
+            const year = new Date().getFullYear().toString();
+
+            await this.actaPamecIpsRepository.save(acta_sicpdf);
+
+            const acta_ultima = await this.actaPamecIpsRepository.createQueryBuilder('acta')
+                .addSelect('acta.id')
+                .orderBy('acta.act_id', 'DESC')
+                .getOne();
+
+            //CONSULTAR LA ULTIMA ACTA QUE SE ASIGNARA A LA EVALUACION
+            const acta = await this.actaPamecIpsRepository.findOne({ where: { id: acta_ultima.id } })
+
+            //ASIGNAMOS LOS DATOS DE LA ACTA REGISTRADA PARA CONSTRUIR EL DTO DE EVALUACION-INDEPENDIENTES
+            const eva_creado = acta_ultima.act_creado;
+            const eva_acta_prestador = acta_ultima.act_cod_prestador; // Valor del ID del prestador
+
+            //CONSULTAR EL PRESTADOR QUE TIENE EL ACTA
+            const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: eva_acta_prestador } })
+
+
+            //ASIGNAMOS LOS DATOS AL DTO
+            const evaluacionDto: EvaluacionPamecDto = {
+                eva_creado
+            }
+
+            //CREAMOS EL DTO
+            const evaluacion_pamec = await this.evaluacionPamecRepository.create(evaluacionDto)
+
+            //ASIGNACION DE FORANEA ACTA UNO A UNO
+            evaluacion_pamec.eval_acta_pamec = acta
+            //ASIGNACION DE FORANEA PRESTADOR UNO A MUCHOS
+            evaluacion_pamec.eval_prestador = prestador
+
+            //GUARDAMOS EN LA ENTIDAD EVALUACION-INDEPENDIENTES
+            await this.evaluacionPamecRepository.save(evaluacion_pamec)
+
+            //CONSULTAR LA ÚLTIMA EVALUACIÓN EXISTENTE
+            const evaluacion_ultima = await this.evaluacionPamecRepository.createQueryBuilder('evaluacion')
+                .addSelect('evaluacion.eva_id')
+                .orderBy('evaluacion.eva_id', 'DESC')
+                .getOne();
+
+            //CONSULTAR LAS ETAPAS EXISTENTES
+            const actividad = await this.actividadRepository.find()
+
+            //ASIGNAR LA EVALUACIÓN A LAS ETAPAS
+            evaluacion_ultima.eval_actividadpam = actividad
+
+            //GUARDAR LA RELACIÓN ENTRE EVALUACIÓN Y ETAPAS
+            await this.evaluacionPamecRepository.save(evaluacion_ultima);
+
+            //ASIGNAR LA AUDITORIA DEL ACTA CREADA
+            await this.auditoria_registro_services.logCreateActaSpIndep(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.act_id,
+                year,
+                dto.act_prestador,
+                dto.act_cod_prestador
+            );
+
+
+            return { error: false, message: 'El acta ha sido creada' };
+            
+        } catch (error) {
+            console.log(error)
+            // Devuelve un mensaje de error apropiado
+            return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
+        }
+
     }
 
 

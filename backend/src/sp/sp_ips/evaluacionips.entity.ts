@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { PrestadorEntity } from "src/prestador/prestador.entity";
-import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioAjusteEntity } from "./criterioajuste.entity";
 import { CriterioImplementacionEntity } from "./criterioimplementacion.entity";
 import { CriterioPlaneacionEntity } from "./criterioplaneacion.entity";
 import { CriterioVerificacionEntity } from "./criterioverificacion.entity";
 import { ItemEntity } from "./item.entity";
+import { ActaSpIpsEntity } from "src/generarpdf/sp/sp-ips/sp-ips.entity";
 
 @Entity({ name: 'evaluacionips' })
 export class EvaluacionipsEntity {
@@ -19,9 +20,9 @@ export class EvaluacionipsEntity {
     evips_creado: Date | null;    
 
 
-    //Relacion Muchos a Muchos EVALUACIONIPS - PRESTADOR
-    @ManyToMany(type => PrestadorEntity, prestador => prestador.evaluacionesips)
-    prestadores: PrestadorEntity[];
+    //Relacion MUCHOS a UNO EVALUACIONIPS - PRESTADOR
+    @ManyToOne(type => PrestadorEntity, prestador => prestador.prestator_eval_ips)
+    eval_ips_prestator: PrestadorEntity;
 
 
     //Relacion Uno a Muchos EVALUACIONIPS - ITEM
@@ -51,5 +52,10 @@ export class EvaluacionipsEntity {
     //Relacion Uno a Muchos EVALUACIONIPS - CRITERIO_PLANEACION
     @OneToMany(type => CriterioPlaneacionEntity, evaluacionips => evaluacionips.cri_pla_eva)
     evaluacionipsPlane: CriterioPlaneacionEntity
+
+    //Relacion UNO a UNO EVALUACION SP IPS - ACTAS SP IPS
+    @OneToOne(() => ActaSpIpsEntity, actaIps => actaIps.act_eval_ips)
+    @JoinColumn()
+    eval_acta_spips: ActaSpIpsEntity;
 
 }

@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { EvaluacionPamecEntity } from "src/pamec/evaluacion-pamec.entity";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity({name: 'acta-pamec-pdf'})
 export class ActaPamecIpsEntity {
@@ -84,4 +85,8 @@ export class ActaPamecIpsEntity {
     async setDate() {
         this.act_creado = new Date();
     }
+
+    // RELACION UNO A UNO PAMEC ACTA - EVALUACION ACTA
+    @OneToOne(() => EvaluacionPamecEntity, evaluacionPamec => evaluacionPamec.eval_acta_pamec)
+    act_eval_pamec: EvaluacionPamecEntity;
 }

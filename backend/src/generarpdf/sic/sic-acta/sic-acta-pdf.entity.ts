@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { EvaluacionSicEntity } from "src/sic/evaluacionsic.entity";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity({ name: 'acta-sic-pdf' })
 export class ActaSicPdfEntity {
@@ -91,4 +92,7 @@ export class ActaSicPdfEntity {
         this.act_creado = new Date();
     }
 
+    
+    @OneToOne(() => EvaluacionSicEntity, evaluacionSic => evaluacionSic.eval_acta_sic)
+    act_eval_sic: EvaluacionSicEntity;
 }
