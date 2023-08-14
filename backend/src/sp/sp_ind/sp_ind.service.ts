@@ -14,6 +14,7 @@ export class SpIndService {
         private etapaIndRepository: EtapaIndRepository
     ){}
 
+    //LISTAR ETAPAS DE IND
     async getall(): Promise<EtapaInd[]> {
         const criterios = await this.etapaIndRepository.find();
         if(!criterios.length) throw new NotFoundException(new MessageDto('No hay etapas en la lista'))
