@@ -13,7 +13,6 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { EncoderService } from './encoder.service';
 import { UsuarioService } from 'src/usuario/usuario.service';
-import { MailerservicesService } from './mailerservices/mailerservices.service';
 import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_registro.module';
 import { AuditoriaRegistroRepository } from 'src/auditoria_registro/auditoria_registro.repository';
 
@@ -33,7 +32,7 @@ import { AuditoriaRegistroRepository } from 'src/auditoria_registro/auditoria_re
     inject: [ConfigService],
   }),
   AuditoriaRegistroModule],
-  providers: [AuthService, ConfigService, JwtStrategy, EncoderService, UsuarioService, MailerservicesService],
+  providers: [AuthService, ConfigService, JwtStrategy, EncoderService, UsuarioService],
   controllers: [AuthController],
   exports: [PassportModule, JwtStrategy]
 })
