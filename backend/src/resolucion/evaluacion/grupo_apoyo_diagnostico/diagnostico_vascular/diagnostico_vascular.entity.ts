@@ -13,6 +13,9 @@ export class DiagnosticoVascularEntity {
     diag_vas_id: number;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
+    diag_vas_nombre_servicio: string;
+
+    @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
     diag_vas_nombre_estandar: string;
 
     //Relacion UNO a MUCHOS VACUNACIÓN (ESTANDARES) - CRITERIOS_DIAGNOSTICO_VASCULAR
