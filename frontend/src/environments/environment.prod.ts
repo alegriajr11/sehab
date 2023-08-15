@@ -2,58 +2,69 @@ export const environment = {
   production: true,
   API_URL: 'http://sehab.site/sehab',
   
-    // USUARIOS
-    usuarioURL: 'http://sehab.site/sehab/usuario/',
-    usuarioNewURL: 'http://sehab.site/sehab/auth/nuevo/',
-    authURL: 'http://sehab.site/sehab/auth/',
-    restablecerContraseña: 'http://sehab.site/sehab/auth/request-reset-password/',
-    prestadorURL: 'http://sehab.site/sehab/prestador/',
-    prestadorMunicipioURL: 'http://sehab.site/sehab/prestador/mun/',
-    prestadorPamecMunicipioURL: 'http://sehab.site/sehab/prestador/mun/pamec/',
-    rolURL: 'http://sehab.site/sehab/rol/',
-    claseURL: 'http://sehab.site/sehab/clase/',
-    generarPdfURL: 'http://sehab.site/sehab/generarpdf/usuarios/',
+   //USUARIOS
+  usuarioURL: 'http://localhost:8080/usuario/',
+  usuarioNewURL: 'http://localhost:8080/auth/nuevo/',
+  authURL: 'http://localhost:8080/auth/',
+  restablecerContraseña: 'http://localhost:8080/auth/request-reset-password/',
+  prestadorURL: 'http://localhost:8080/prestador/',
+  prestadorMunicipioURL: 'http://localhost:8080/prestador/mun/',
+  prestadorPamecMunicipioURL: 'http://localhost:8080/prestador/mun/pamec/',
+  rolURL: 'http://localhost:8080/rol/',
+  claseURL: 'http://localhost:8080/clase/',
+  generarPdfURL: 'http://localhost:8080/generarpdf/usuarios/',
+
+
+  //SIC
+  criterioSicURL: 'http://localhost:8080/criteriosic/',
+  indicadorURL: 'http://localhost:8080/indicador/',
+  criterios_URL: 'http://localhost:8080/criterio/',
+  criterioURL: 'http://localhost:8080/criteriosic/criterio/',
+  cumplimientoEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/estandar/',
+  cumpleEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/cumple/',
   
-    // SIC
-    criterioSicURL: 'http://sehab.site/sehab/criteriosic/',
-    indicadorURL: 'http://sehab.site/sehab/indicador/',
-    criterios_URL: 'http://sehab.site/sehab/criterio/',
-    criterioURL: 'http://sehab.site/sehab/criteriosic/criterio/',
-    cumplimientoEstandarURL: 'http://sehab.site/sehab/criteriosic-cumplimiento/estandar/',
-    cumpleEstandarURL: 'http://sehab.site/sehab/criteriosic-cumplimiento/cumple/',
-    // SIC-PDF
-    acta_pdf_URL: 'http://sehab.site/sehab/sic-acta/',
-  
-    // PAMEC
-    actividadURL: 'http://sehab.site/sehab/actividad/',
-    criteriopamURL: 'http://sehab.site/sehab/criteriopam/',
-    criteriopam1URL: 'http://sehab.site/sehab/criteriopam/criterio/',
-  
-    // SEGURIDAD DEL PACIENTE - PROFESIONALES INDEPENDIENTE
-    etapaURL: 'http://sehab.site/sehab/sp-ind/',
-    criterioindURL: 'http://sehab.site/sehab/criterioind/',
-    criteindURL: 'http://sehab.site/sehab/criterioind/criterio/',
-  
-    // SEGURIDAD DEL PACIENTE - IPS
-    evaluacionipsURL: 'http://sehab.site/sehab/evaluacionips/',
-    itemipsURL: 'http://sehab.site/sehab/itemips/',
-    planeacionURL: 'http://sehab.site/sehab/planeacion/',
-    planeacionOneURL: 'http://sehab.site/sehab/planeacion/criterio/',
-    implementacionURL: 'http://sehab.site/sehab/criterioimple/',
-    implementacionOneURL: 'http://sehab.site/sehab/criterioimple/implementacion/',
-    ajusteURL: 'http://sehab.site/sehab/criterioajuste/',
-    ajusteDetailURL: 'http://sehab.site/sehab/criterioajuste/ajuste/',
-    verificacionURL: 'http://sehab.site/sehab/criterioverif/',
-    verificacionOneURL: 'http://sehab.site/sehab/criterioverif/verificacion/',
-  
-    // RESOLUCIÓN 3100/2019
-    todos_serviciosURL: 'http://sehab.site/sehab/criterio-servicios/',
-  
-    // PRESTADOR
-    municipioURL: 'http://sehab.site/sehab/municipio/',
-    clasificacionURL: 'http://sehab.site/sehab/clasificacion/',
-    tipoURL: 'http://sehab.site/sehab/tipo/',
-  
-    // AUDITORIA
-    auditoriaUrl: 'http://sehab.site/sehab/auditoria-registro/'
+  //SIC-PDF
+  actaSic_pdf_URL: 'http://localhost:8080/sic-acta/',
+
+
+  //PAMEC
+  actividadURL: 'http://localhost:8080/actividad/',
+  criteriopamURL: 'http://localhost:8080/criteriopam/',
+  criteriopam1URL: 'http://localhost:8080/criteriopam/criterio/',
+
+  //SEGURIDAD DEL PACIENTE - PROFESIONALES INDEPENDIENTE
+  etapaURL: 'http://localhost:8080/sp-ind/',
+  criterioindURL: 'http://localhost:8080/criterioind/',
+  criteindURL: 'http://localhost:8080/criterioind/criterio/',
+
+
+  //SEGURIDAD DEL PACIENTE - IPS
+  evaluacionipsURL: 'http://localhost:8080/evaluacionips/',
+  itemipsURL: 'http://localhost:8080/itemips/',
+  planeacionURL: 'http://localhost:8080/planeacion/',
+  planeacionOneURL: 'http://localhost:8080/planeacion/criterio/',
+  implementacionURL: 'http://localhost:8080/criterioimple/',
+  implementacionOneURL: 'http://localhost:8080/criterioimple/implementacion/',
+  ajusteURL: 'http://localhost:8080/criterioajuste/',
+  ajusteDetailURL: 'http://localhost:8080/criterioajuste/ajuste/',
+  verificacionURL: 'http://localhost:8080/criterioverif/',
+  verificacionOneURL: 'http://localhost:8080/criterioverif/verificacion/',
+
+  //SP-PDF
+  actaSpIps_pdf_URL: 'http://localhost:8080/sp-ips/',
+  actaSpInd_pdf_URL: 'http://localhost:8080/sp-independientes/',
+
+
+
+  //RESOLUCIÓN 3100/2019
+  todos_serviciosURL: 'http://localhost:8080/criterio-servicios/',
+
+  //PRESTADOR
+  municipioURL: 'http://localhost:8080/municipio/',
+  clasificacionURL: 'http://localhost:8080/clasificacion/',
+  tipoURL: 'http://localhost:8080/tipo/',
+
+
+  //AUDITORIA
+  auditoriaUrl: 'http://localhost:8080/auditoria-registro/'
 };

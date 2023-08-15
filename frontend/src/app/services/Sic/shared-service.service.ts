@@ -12,11 +12,21 @@ export class SharedServiceService {
 
   criteriosGuardados: number[] = [];
 
+  private firma: string;
+
 
   //NOMBRES PRESTADORES MODAL
   pres_nombre: string
     
   constructor() { }
+
+  setFirma(firma: string){
+    this.firma = firma
+  }
+
+  getFirma(): string{
+    return this.firma
+  }
 
   setId(id: number) {
     this.id = id;
@@ -25,6 +35,8 @@ export class SharedServiceService {
   setNombrePrestador(name: string){
     this.pres_nombre = name
   }
+
+
 
   setIdPrestador(id: string){
     this.pre_cod_habilitacion = id
