@@ -73,6 +73,9 @@ export class ActaSicPdfDto {
     act_nombre_prestador: string
 
     @IsNotBlank()
+    act_firma_prestador: string
+
+    @IsNotBlank()
     act_cargo_prestador: string
 
     act_creado: string

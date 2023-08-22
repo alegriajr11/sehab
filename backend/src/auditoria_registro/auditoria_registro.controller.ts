@@ -23,4 +23,10 @@ export class AuditoriaRegistroController {
         return this.auditoriaRegistroService.findAllFromDate(fechaInicio,fechaFin,accion);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('all/auditorias/list')
+    async getAudtiorias() {
+        return await this.auditoriaRegistroService.getAllAuditorias()
+    }
+
 }

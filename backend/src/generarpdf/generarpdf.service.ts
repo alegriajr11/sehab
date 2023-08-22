@@ -356,15 +356,21 @@ export class GenerarpdfService {
             doc.moveDown();
             doc.moveDown();
             doc.moveDown();
-            doc.moveDown();
+            // doc.moveDown();
+            // doc.moveDown();
+            // doc.moveDown();
 
             // doc.fontSize(24);
-
+            function hayEspacioSuficiente(alturaContenido: number) {
+                const margenInferior = doc.page.margins.bottom;
+                const alturaPagina = doc.page.height;
+                const espacioRestante = alturaPagina - margenInferior - alturaContenido;
+                return espacioRestante >= 0;
+            }
 
             // Agregar las tablas a las páginas
             if (titulo_uno.length) {
                 let rows_elements = [];
-
 
                 titulo_uno.forEach(item => {
                     let calif
@@ -391,6 +397,13 @@ export class GenerarpdfService {
                     headers: ["", "CRITERIOS", "CALIFICACIÓN", "VERIFICACIÓN", "OBSERVACIONES"],
                     rows: rows_elements
                 };
+
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
                 doc.table(table, tableOptions);
                 // Calcular el promedio
                 const promedio = totalCalificacionesEtapa1 / totalCalificacionesCountEtapa1;
@@ -398,6 +411,7 @@ export class GenerarpdfService {
 
                 doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
 
             if (titulo_dos.length) {
                 let rows_elements = [];
@@ -423,9 +437,17 @@ export class GenerarpdfService {
                     headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
                     rows: rows_elements
                 };
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
                 doc.moveDown();
                 doc.table(table2, tableOptions);
             }
+
+            // doc.moveDown();
+            // doc.moveDown();
 
             if (titulo_tres.length) {
                 let rows_elements = [];
@@ -452,8 +474,16 @@ export class GenerarpdfService {
                     rows: rows_elements
                 };
                 doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
                 doc.table(table3, tableOptions);
             }
+
+            // doc.moveDown();
+            // doc.moveDown();
 
             if (titulo_cuatro.length) {
                 let rows_elements = [];
@@ -480,6 +510,11 @@ export class GenerarpdfService {
                     rows: rows_elements
                 };
                 doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
                 doc.table(table4, tableOptions);
             }
 
@@ -585,7 +620,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -621,7 +656,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -653,7 +688,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -685,7 +720,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -717,7 +752,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -749,7 +784,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -781,7 +816,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -813,7 +848,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -845,7 +880,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -877,7 +912,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -909,7 +944,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 
@@ -941,7 +976,7 @@ export class GenerarpdfService {
                         obs = cal.cal_observaciones
                         apli = cal.cal_aplica
                     })
-                    var temp_list = [item.crip_nombre,item.crip_desarrollo_etapas, calif, apli, obs];
+                    var temp_list = [item.crip_nombre, item.crip_desarrollo_etapas, calif, apli, obs];
                     rows_elements.push(temp_list)
                 })
 

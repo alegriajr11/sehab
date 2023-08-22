@@ -219,14 +219,18 @@ export class AuditoriaRegistroService {
     //LISTAR TODAS LAS AUDITORIAS POR NOMBRE Y APELLIDOS DEL FUNCIONARIO
     async findAllAuditoriaNomApel(usu_nombre_apellido: string): Promise<AuditoriaRegistroEntity[]> {
         const usu_nombres = usu_nombre_apellido.trim()
-        console.log(usu_nombre_apellido)
 
         const aduditoria = await this.auditoria_registroRepository.createQueryBuilder('auditoria')
             .where('CONCAT(auditoria.usu_nombre, " ", auditoria.usu_apellido) LIKE :usu_nombres', { usu_nombres: `%${usu_nombres}%` })
             .getMany();
 
         return aduditoria
+    }
 
+    async getAllAuditorias(): Promise<AuditoriaRegistroEntity[]>{
+        const auditoria = await this.auditoria_registroRepository.find({ order: { id: 'DESC' },});
+        if (!auditoria.length) throw new NotFoundException(new MessageDto('No hay Auditorias en la lista'))
+        return auditoria;
     }
 
 

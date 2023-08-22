@@ -38,8 +38,19 @@ export class SicActaService {
         return acta;
     }
 
+    //ÚLTIMA ACTA REGISTRADA ID PRIMARY KEY
+    async ultimaActaIdPk(): Promise<ActaSicPdfEntity> {
+        const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
+        .addSelect('acta.id')
+        .orderBy('acta.id', 'DESC')
+        .getOne();
+        if (!acta) {
+            throw new NotFoundException(new MessageDto('No Existe'));
+        }
+        return acta
+    }
 
-    //ÚLTIMA ACTA REGISTRADA
+    //ÚLTIMA ACTA REGISTRADA Y SE INCREMENTA A UNO
     async getLastestActa(): Promise<ActaSicPdfEntity> {
         const anioActual: number = new Date().getFullYear();
 
@@ -61,7 +72,6 @@ export class SicActaService {
         } else {
             acta.act_id = 1;
         }
-
 
         return acta;
     }

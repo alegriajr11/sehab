@@ -14,9 +14,10 @@ import { ClaseController } from './clase/clase.controller';
 import { ClasificacionService } from './clasificacion/clasificacion.service';
 import { TipoService } from './tipo/tipo.service';
 import { TipoController } from './tipo/tipo.controller';
+import { SedeModule } from './sede/sede.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PrestadorEntity, MunicipioEntity, ClasificacionEntity, ClaseEntity, TipoEntity])],
+  imports: [TypeOrmModule.forFeature([PrestadorEntity, MunicipioEntity, ClasificacionEntity, ClaseEntity, TipoEntity]), SedeModule],
   providers: [PrestadorService, ClaseService, ClasificacionService, TipoService],
   controllers: [PrestadorController, ClasificacionController, ClaseController, TipoController],
 })

@@ -20,12 +20,5 @@ export class CirugiaEntity {
     @OneToMany(type => CriterioCirugiaEntity, cri_cirugia => cri_cirugia.cirugia)
     criterios_cirugia: CriterioCirugiaEntity;
 
-    // //Relación MUCHOS a UNO CIRUGIA - PRESTADOR
-    // @ManyToOne(type => PrestadorEntity, prestador => prestador.cirugia)
-    // prestador: PrestadorEntity
-
-    // //Relación MUCHOS a UNO CIRUGIA - CUMPLIMIENTO_CIRUGIA
-    // @ManyToOne(type => CumplimientoCirugiaEntity, cumplimineto_cirugia => cumplimineto_cirugia.cirugia)
-    // cumplimineto_cirugia: CumplimientoCirugiaEntity
 
 }

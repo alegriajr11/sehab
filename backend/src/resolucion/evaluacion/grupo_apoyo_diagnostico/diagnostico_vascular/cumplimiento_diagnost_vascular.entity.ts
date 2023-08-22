@@ -28,9 +28,6 @@ export class CumplimientoDiagnosticoVascularEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_diagv_fecha_limite: string;
 
-    //Relacion MUCHOS A UNO CUMPLIMIENTO DIAGNOSTICO VASCULAR a PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_diag_vascular)
-    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioDiagnostVascularEntity)

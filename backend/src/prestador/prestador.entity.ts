@@ -52,6 +52,7 @@ import { CumplimientoHospitalizacionEntity } from "src/resolucion/evaluacion/gru
 import { EvaluacionPamecEntity } from "src/pamec/evaluacion-pamec.entity";
 import { EvaluacionIndependientesEntity } from "src/sp/sp_ind/evaluacion-independientes.entity";
 import { EvaluacionSicEntity } from "src/sic/evaluacionsic.entity";
+import { SedeEntity } from "./sede/sede.entity";
 
 
 
@@ -93,6 +94,9 @@ export class PrestadorEntity {
     @ManyToOne(type => TipoEntity, tipo => tipo.tip_prestador)
     pre_tipo: TipoEntity;
 
+    //Relacion UNO a MUCHOS PRESTADOR - SEDE
+    @OneToMany(type => SedeEntity, sede => sede.sede_prestador)
+    pre_sede: SedeEntity
 
     @ManyToOne(type => MunicipioEntity, municipio => municipio.mun_prestador)
     pre_municipio: MunicipioEntity
@@ -151,11 +155,7 @@ export class PrestadorEntity {
     cump_vacunacion: CumplimientoVacunacionEntity
 
 
-    //-----GRUPO APOYO DIAGNOSTICO-----///
-    //--------------------------------///
-    //Relación Uno a Muchos PRESTADORES - DIAGNOSTICO_VASCULAR
-    @OneToMany(type => CumplimientoDiagnosticoVascularEntity, cum_diag_vascular => cum_diag_vascular.prestador)
-    cum_diag_vascular: CumplimientoDiagnosticoVascularEntity
+
 
     //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO DIALISIS
     @OneToMany(type => CumplimientoDialisisEntity, cumplimiento_dialisis => cumplimiento_dialisis.prestador)

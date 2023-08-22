@@ -28,5 +28,5 @@ export class CreateUsuarioDto {
 
     usu_creado: string;
 
-    usu_actualizado: string
+
 }

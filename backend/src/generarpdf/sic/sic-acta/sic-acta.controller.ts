@@ -19,8 +19,8 @@ export class SicActaController {
         return this.sic_act_pdfService.getallActas();
     }
 
-    //OBTENER ACTAS POR ID
-    @UseGuards(JwtAuthGuard)
+    //OBTENER ACTA POR ID
+    //@UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.sic_act_pdfService.findByActa(id);
@@ -36,7 +36,7 @@ export class SicActaController {
     @Get('/year/date')
     async findAllFromYear(@Query('year') year: Date,
         @Query('numActa') numActa: number) {
-        return this.sic_act_pdfService.findAllFromYear(year,numActa);
+        return this.sic_act_pdfService.findAllFromYear(year, numActa);
     }
 
     //ÚLTIMA ACTA SIC
@@ -46,20 +46,27 @@ export class SicActaController {
         return this.sic_act_pdfService.getLastestActa();
     }
 
+    //ÚLTIMA ACTA SIC PRIMARY KEY
+    //@UseGuards(JwtAuthGuard)
+    @Get('ultima/acta/sic/pk')
+    getLastActaPk() {
+        return this.sic_act_pdfService.ultimaActaIdPk();
+    }
+
     //CREAR ACTA
     @Post()
     async create(@Body() payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }) {
         const { dto, tokenDto } = payload;
         return this.sic_act_pdfService.create(payload);
-    }    
+    }
 
 
 
     //ACTUALIZAR PAMEC IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: ActaSicPdfDto, tokenDto: TokenDto }) {
-        const { dto,tokenDto}= payload;
-        return await this.sic_act_pdfService.updateActa(id,payload);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return await this.sic_act_pdfService.updateActa(id, payload);
     }
 }
