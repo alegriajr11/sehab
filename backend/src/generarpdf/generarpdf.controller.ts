@@ -57,4 +57,5 @@ export class GenerarpdfController {
         })
         res.end(buffer)
     }
+
 }

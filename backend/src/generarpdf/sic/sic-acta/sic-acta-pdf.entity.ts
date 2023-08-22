@@ -83,6 +83,8 @@ export class ActaSicPdfEntity {
     @Column({ type: 'text', nullable: true })
     act_firma_prestador: string; // Esta columna almacenará la firma en formato base64
 
+    @Column({ type: 'varchar', nullable: false,  default:true})
+    act_estado: string;
 
     @Column({ type: 'date' })
     act_creado: Date;

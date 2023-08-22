@@ -12,13 +12,13 @@ import { TokenDto } from 'src/auth/dto/token.dto';
 @Controller('usuario')
 export class UsuarioController {
 
-    constructor(private readonly usuarioService: UsuarioService){}
+    constructor(private readonly usuarioService: UsuarioService) { }
 
     //LISTAR TODOS LOS USUARIOS
     @RolDecorator(RolNombre.ADMIN)
     @UseGuards(JwtAuthGuard)
     @Get()
-    async getAll(){
+    async getAll() {
         return await this.usuarioService.getall()
     }
 
@@ -26,20 +26,20 @@ export class UsuarioController {
     @RolDecorator(RolNombre.ADMIN)
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    async getOne(@Param('id', ParseIntPipe) id: number){
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.usuarioService.findById(id);
     }
-    
+
     //ELIMINAR USUARIO
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
-    async delete(@Param('id', ParseIntPipe) id: number,@Body()tokenDto: TokenDto) {
-        return await this.usuarioService.delete(id,tokenDto);
+    async delete(@Param('id', ParseIntPipe) id: number, @Body() tokenDto: TokenDto) {
+        return await this.usuarioService.delete(id, tokenDto);
     }
 
     //CREAR USUARIO ADMINISTRADOR
-    // @RolDecorator(RolNombre.ADMIN)
-    // @UseGuards(JwtAuthGuard, RolesGuard) => GUARD
+    @RolDecorator(RolNombre.ADMIN)
+    @UseGuards(JwtAuthGuard, RolesGuard) 
     @UsePipes(new ValidationPipe({whitelist: true}))
     @Post()
     async create(@Body()payload: {dto: CreateUsuarioDto, tokenDto: TokenDto}){
@@ -47,12 +47,13 @@ export class UsuarioController {
         return this.usuarioService.create(payload);
     }
 
+
     //ACTUALIZAR USUARIO
     @RolDecorator(RolNombre.ADMIN)
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body()payload: {dto: UsuarioDto, tokenDto: TokenDto}){
-        const { dto,tokenDto}= payload;
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: UsuarioDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
         return await this.usuarioService.update(id, payload);
     }
 

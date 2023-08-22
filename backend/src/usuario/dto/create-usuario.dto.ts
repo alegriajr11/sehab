@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsBoolean, IsEmail, IsString, MaxLength } from "class-validator";
+import { IsEmail, IsString, MaxLength } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 
 

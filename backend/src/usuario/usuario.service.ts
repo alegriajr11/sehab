@@ -14,6 +14,7 @@ import { TokenDto } from 'src/auth/dto/token.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
 import { PayloadInterface } from 'src/auth/payload.interface';
+import { isEmpty } from 'class-validator';
 
 @Injectable()
 export class UsuarioService {
@@ -91,6 +92,7 @@ export class UsuarioService {
   async update(id: number, payload: { dto: UsuarioDto, tokenDto: TokenDto }): Promise<any> {
     const { dto, tokenDto } = payload;
     const usuario_actualizar = await this.findById(id);
+    let rol_usuario
 
     if (!usuario_actualizar)
       throw new NotFoundException(new MessageDto('El Usuario No Existe'));
@@ -120,14 +122,65 @@ export class UsuarioService {
 
     //CONDICIONALES PARA TENER EL CUENTA EL ROL Y ASÍ LLAMAR EL METODO LOG QUE LE CORRESPONDA
     //PENDIENTE...........
+    usuario_actualizar.roles.forEach(data => {
+      rol_usuario = data.rol_nombre
+    })
 
-    await this.auditoria_registro_services.logUpdateUserAdmin(
-      payloadInterface.usu_nombre,
-      payloadInterface.usu_apellido,
-      'ip',
-      dto.usu_nombre,
-      dto.usu_nombreUsuario
-    );
+    switch (rol_usuario) {
+      case 'ADMIN':
+        await this.auditoria_registro_services.logUpdateUserAdmin(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          dto.usu_nombre,
+          dto.usu_nombreUsuario
+        );
+        break;
+
+      case 'PAMEC':
+        await this.auditoria_registro_services.logUpdateUserPamec(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          dto.usu_nombre,
+          dto.usu_nombreUsuario
+        );
+        break;
+
+      case 'SP':
+        await this.auditoria_registro_services.logUpdateUserSp(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          dto.usu_nombre,
+          dto.usu_nombreUsuario
+        );
+        break;
+
+      case 'RES':
+        await this.auditoria_registro_services.logUpdateUserRes(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          dto.usu_nombre,
+          dto.usu_nombreUsuario
+        );
+        break;
+
+      case 'SIC':
+        await this.auditoria_registro_services.logUpdateUserSic(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          dto.usu_nombre,
+          dto.usu_nombreUsuario
+        );
+        break;
+
+      default:
+        new MessageDto(`Rol no encontrado`);
+        break;
+    }
 
     return new MessageDto(`Usuario Actualizado`);
   }
@@ -160,14 +213,62 @@ export class UsuarioService {
 
     //CONDICIONALES PARA TENER EL CUENTA EL ROL Y ASÍ LLAMAR EL METODO LOG QUE LE CORRESPONDA
     //PENDIENTE...........
+    switch (rol_usuario) {
+      case 'ADMIN':
+        await this.auditoria_registro_services.logUpdateUserAdmin(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          usuario_eliminar.usu_nombre,
+          usuario_eliminar.usu_nombreUsuario
+        );
+        break;
 
-    await this.auditoria_registro_services.logDeleteUserAdmin(
-      payloadInterface.usu_nombre,
-      payloadInterface.usu_apellido,
-      'ip',
-      usuario_eliminar.usu_nombre,
-      usuario_eliminar.usu_nombreUsuario
-    );
+      case 'PAMEC':
+        await this.auditoria_registro_services.logUpdateUserPamec(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          usuario_eliminar.usu_nombre,
+          usuario_eliminar.usu_nombreUsuario
+        );
+        break;
+
+      case 'SP':
+        await this.auditoria_registro_services.logUpdateUserSp(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          usuario_eliminar.usu_nombre,
+          usuario_eliminar.usu_nombreUsuario
+        );
+        break;
+
+      case 'RES':
+        await this.auditoria_registro_services.logUpdateUserRes(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          usuario_eliminar.usu_nombre,
+          usuario_eliminar.usu_nombreUsuario
+        );
+        break;
+
+      case 'SIC':
+        await this.auditoria_registro_services.logUpdateUserSic(
+          payloadInterface.usu_nombre,
+          payloadInterface.usu_apellido,
+          'ip',
+          usuario_eliminar.usu_nombre,
+          usuario_eliminar.usu_nombreUsuario
+        );
+        break;
+
+      default:
+        new MessageDto(`Rol no encontrado`);
+        break;
+    }
+
 
     return new MessageDto(`Usuario  eliminado`);
   }
