@@ -18,9 +18,6 @@ export class TodoServiciosEntity {
     @OneToMany(type => Criterio_servicios,  criServicios=> criServicios.todos_servicios)
     criteriosServ: Criterio_servicios;
 
-    //Relación MUCHOS a UNO TODOS_SERVICIOS - PRESTAOR
-    // @ManyToOne(type => PrestadorEntity, prestador => prestador.todos_servicios)
-    // prestador: PrestadorEntity
 
 
 

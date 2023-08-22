@@ -698,16 +698,17 @@ export class ActaSpIpsComponent implements OnInit {
               }).then((result) => {
                 if (result.value) {
                   doc.save('acta-sp-ips.pdf');
-                  this.toastrService.success(data.message, 'Ok', {
-                    timeOut: 3000,
-                    positionClass: 'toast-top-center',
-                  });
                   this.router.navigate(['/sp/home-evaluacion-ips']);
                   window.scrollTo(0, 0);
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                   this.router.navigate(['/sp/home-evaluacion-ips']);
                   window.scrollTo(0, 0);
                 }
+                // Mostrar mensaje de éxito independientemente de la opción seleccionada
+                this.toastrService.success(data.message, 'Ok', {
+                  timeOut: 3000,
+                  positionClass: 'toast-top-center',
+                });
               });
             } else {
               Swal.fire({

@@ -18,6 +18,7 @@ import { TokenService } from 'src/app/services/token.service';
 import { TokenDto } from 'src/app/models/token.dto';
 import SignaturePad from 'signature_pad';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { SharedServiceService } from 'src/app/services/Sic/shared-service.service';
 
 
 @Component({
@@ -73,6 +74,8 @@ export class ActaSicComponent implements OnInit {
   act_nombre_prestador: string
   act_cargo_prestador: string
 
+  firma: string;
+
 
   constructor(
     private modalService: BsModalService,
@@ -83,6 +86,7 @@ export class ActaSicComponent implements OnInit {
     private authService: AuthService,
     private actaPdfService: ActapdfService,
     private tokenService: TokenService,
+    public sharedService: SharedServiceService,
     private router: Router
 
   ) { }
@@ -406,6 +410,7 @@ export class ActaSicComponent implements OnInit {
     var valorCargoPres = cargoPres.value
 
 
+
     // const fechaGenerada = new Date();
     // const formatoFecha = new Intl.DateTimeFormat('es-ES').format(fechaGenerada);
 
@@ -608,6 +613,8 @@ export class ActaSicComponent implements OnInit {
       tableWidth: 'auto',
     })
 
+
+
     //NOMBRE USUARIO1 Y 2, CARGO USUARIO1 Y 2 Y FIRMA1 Y 2
     autoTable(doc, {
       startY: 227,
@@ -633,353 +640,369 @@ export class ActaSicComponent implements OnInit {
 
 
 
-    autoTable(doc, {
-      startY: 252,
-      headStyles: {
-        fillColor: [220, 220, 220],
-        textColor: [0, 0, 0],
-        halign: 'center'
-      },
-      columns: [
-        { header: 'POR PRESTADOR DE SERVICIO DE SALUD', dataKey: 'mensaje' },
-      ],
-      tableWidth: 'auto',
-    })
 
-    //NOMBRE PRESTADOR 1 Y 2, CARGO PRESTADOR 1 Y 2 Y FIRMA1 Y 2
-    autoTable(doc, {
-      startY: 260,
-      columnStyles: { sede: { halign: 'left' } },
 
-      body: [
-        { nombre: valorPresNombre, cargo: valorCargoPres, firma: '' },
-      ],
-      columns: [
-        { header: 'Nombre:', dataKey: 'nombre' },
-        { header: 'Cargo:', dataKey: 'cargo' },
-        { header: 'Firma:', dataKey: 'firma' },
 
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
+      autoTable(doc, {
+        startY: 252,
+        headStyles: {
+          fillColor: [220, 220, 220],
+          textColor: [0, 0, 0],
+          halign: 'center'
+        },
+        columns: [
+          { header: 'POR PRESTADOR DE SERVICIO DE SALUD', dataKey: 'mensaje' },
+        ],
+        tableWidth: 'auto',
+      })
+
+      //NOMBRE PRESTADOR 1 Y 2, CARGO PRESTADOR 1 Y 2 Y FIRMA1 Y 2
+      autoTable(doc, {
+        startY: 260,
+        columnStyles: { sede: { halign: 'left' } },
+
+        body: [
+          { nombre: valorPresNombre, cargo: valorCargoPres, firma: '' },
+        ],
+        columns: [
+          { header: 'Nombre:', dataKey: 'nombre' },
+          { header: 'Cargo:', dataKey: 'cargo' },
+          { header: 'Firma:', dataKey: 'firma' },
+
+        ],
+        headStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0]
+        },
+        styles: {
+          fontSize: 10
+        }
+      })
+
+      this.firma = this.sharedService.getFirma();
+
+      // Convertir la firma base64 a Uint8Array
+      const firmaData = atob(this.firma.split(',')[1]);
+      const firmaUint8Array = new Uint8Array(firmaData.length);
+      for (let i = 0; i < firmaData.length; i++) {
+        firmaUint8Array[i] = firmaData.charCodeAt(i);
       }
-    })
+  
+        doc.addImage(firmaUint8Array, 'PNG', 165, 265, 30, 10.25)
 
-    //VALIDAR FORMULARIO
-    //VALIDAR ACTA
-    if (!valorActa.length) {
-      this.toastrService.error('El número de acta no puede estar vacia', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR FECHAS
-    if (!valorfechaFinal && !valorfechaInicial) {
-      this.toastrService.error('Las fechas no pueden estar vacias', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-    if (!valorfechaInicial) {
-      this.toastrService.error('La fecha Inicial no pueden estar vacia', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-    if (!valorfechaFinal) {
-      this.toastrService.error('La fecha Final no pueden estar vacia', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR VISITA INICIAL Y SEGUIMIENTO
-    if (valorVisitaInicial === false && valorVisitaSeguim === false) {
-      this.toastrService.error('Debes Escoger una visita', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR BARRIO
-    if (!valorBarrio) {
-      this.toastrService.error('El Barrio no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR OBJETO
-    if (!selObjvisita) {
-      this.toastrService.error('Selecciona el Objeto', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR USUARIO
-    if (!selUsuSecre) {
-      this.toastrService.error('Selecciona el Usuario', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    if (!valorCargoSecre) {
-      this.toastrService.error('El cargo del Usuario no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR CARGO PRESTADOR
-    if (!valorCargoPres) {
-      this.toastrService.error('El cargo del Prestador no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR MUNICIPIO Y PRESTADOR
-    if (!valorMunicipio) {
-      this.toastrService.error('Selecciona el Municipio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-    /**/
-    if (valorMunicipio && !valorPrestador) {
-      this.toastrService.error('Selecciona el Prestador', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR SELECCION DE SEDE SI
-    if (!selSede) {
-      this.toastrService.error('Selecciona Sede Principal', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR LOCALIDAD Y DIRECCION SI SEDEP ES NO
-    if (valorSede === 'No') {
-      if (!valorLocalidad) {
-        this.toastrService.error('La localidad no puede estar vacia', 'Error', {
+      //VALIDAR FORMULARIO
+      //VALIDAR ACTA
+      if (!valorActa.length) {
+        this.toastrService.error('El número de acta no puede estar vacia', 'Error', {
           timeOut: 3000,
           positionClass: 'toast-top-center',
         })
       }
-      if (!valorDirSede) {
-        this.toastrService.error('La direccion de la sede no puede estar vacia', 'Error', {
+
+      //VALIDAR FECHAS
+      if (!valorfechaFinal && !valorfechaInicial) {
+        this.toastrService.error('Las fechas no pueden estar vacias', 'Error', {
           timeOut: 3000,
           positionClass: 'toast-top-center',
         })
       }
-    }
-
-
-
-    //VALIDANDO POR VALOR DE SEDE Y ENVIAR SOLICITUD DE DESCARGA DE ACTA
-    if (valorSede === 'Si') {
-      if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
-        valorCargoSecre && valorCargoPres && valorUsuSecre && valorObjvisita && valorMunicipio && valorPrestador && valorSede && valorActa) {
-        if (valorVisitaInicial || valorVisitaSeguim) {
-
-          //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
-          this.act_id = Number(valorActa);
-          this.act_municipio = valorMunicipio
-          this.act_prestador = valorPrestador
-          this.act_nit = valorNit
-          this.act_direccion = valorDireccion
-          this.act_telefono = valorTelefono
-          this.act_email = valorEmail
-          this.act_representante = valorRepresentante
-          this.act_cod_prestador = valorCodigoPres
-          this.act_nombre_prestador = valorPresNombre
-          this.act_nombre_funcionario = valorUsuSecre
-
-
-          //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
-          this.actaPdf = new ActaSicPdfDto(
-
-            this.act_id,
-            this.act_visita_inicial,
-            this.act_visita_seguimiento,
-            this.act_fecha_inicial,
-            this.act_fecha_final,
-            this.act_municipio,
-            this.act_prestador,
-            this.act_nit,
-            this.act_direccion,
-            this.act_barrio,
-            this.act_telefono,
-            this.act_email,
-            this.act_sede_principal,
-            this.act_sede_localidad,
-            this.act_sede_direccion,
-            this.act_representante,
-            this.act_cod_prestador,
-            this.act_cod_sede,
-            this.act_obj_visita,
-            this.act_nombre_funcionario,
-            this.act_cargo_funcionario,
-            this.act_nombre_prestador,
-            this.act_cargo_prestador
-          );
-          const token = this.tokenService.getToken()
-          const tokenDto: TokenDto = new TokenDto(token);
-          this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
-            data => {
-              // Verificar si no hay errores enviados por el backend
-              if (!data.error) {
-                //OBTENER EL ESTADO DEL BOTON A TRUE 
-                this.boton_acta_sic = true
-                localStorage.setItem('boton-acta-sic', 'true');
-
-                Swal.fire({
-                  title: '¿Desea descargar el acta?',
-                  showCancelButton: true,
-                  confirmButtonText: 'Si',
-                  cancelButtonText: 'No'
-                }).then((result) => {
-                  if (result.value) {
-                    doc.save('acta-sic.pdf');
-                    this.toastrService.success(data.message, 'Ok', {
-                      timeOut: 3000,
-                      positionClass: 'toast-top-center',
-                    });
-                    this.router.navigate(['/sic/evaluacion']);
-                    window.scrollTo(0, 0);
-                  } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    this.router.navigate(['/sic/evaluacion']);
-                    window.scrollTo(0, 0);
-                  }
-                });
-              } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: data.message
-                });
-              }
-            },
-            err => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: err.error.message
-              });
-            }
-          );
-        } //FIN DEL SI - VALIDACIÓN SI LA SEDE ES SI
+      if (!valorfechaInicial) {
+        this.toastrService.error('La fecha Inicial no pueden estar vacia', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
       }
-    }
+      if (!valorfechaFinal) {
+        this.toastrService.error('La fecha Final no pueden estar vacia', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
 
-    //VALIDACIÓN PARA PDF
-    if (valorSede === 'No') {
-      if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
-        valorCargoSecre && valorCargoPres && valorUsuSecre && valorObjvisita && valorMunicipio && valorPrestador && valorSede && valorActa
-        && valorLocalidad && valorDirSede) {
-        if (valorVisitaInicial || valorVisitaSeguim) {
+      //VALIDAR VISITA INICIAL Y SEGUIMIENTO
+      if (valorVisitaInicial === false && valorVisitaSeguim === false) {
+        this.toastrService.error('Debes Escoger una visita', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
 
-          //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
-          this.act_id = Number(valorActa);
-          this.act_municipio = valorMunicipio
-          this.act_prestador = valorPrestador
-          this.act_nit = valorNit
-          this.act_direccion = valorDireccion
-          this.act_telefono = valorTelefono
-          this.act_email = valorEmail
-          this.act_representante = valorRepresentante
-          this.act_cod_prestador = valorCodigoPres
-          this.act_nombre_prestador = valorPresNombre
-          this.act_nombre_funcionario = valorUsuSecre
+      //VALIDAR BARRIO
+      if (!valorBarrio) {
+        this.toastrService.error('El Barrio no puede estar vacio', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
+
+      //VALIDAR OBJETO
+      if (!selObjvisita) {
+        this.toastrService.error('Selecciona el Objeto', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
+
+      //VALIDAR USUARIO
+      if (!selUsuSecre) {
+        this.toastrService.error('Selecciona el Usuario', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
+
+      if (!valorCargoSecre) {
+        this.toastrService.error('El cargo del Usuario no puede estar vacio', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
+
+      //VALIDAR CARGO PRESTADOR
+      if (!valorCargoPres) {
+        this.toastrService.error('El cargo del Prestador no puede estar vacio', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
+
+      //VALIDAR MUNICIPIO Y PRESTADOR
+      if (!valorMunicipio) {
+        this.toastrService.error('Selecciona el Municipio', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
+      /**/
+      if (valorMunicipio && !valorPrestador) {
+        this.toastrService.error('Selecciona el Prestador', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
+
+      //VALIDAR SELECCION DE SEDE SI
+      if (!selSede) {
+        this.toastrService.error('Selecciona Sede Principal', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        })
+      }
+
+      //VALIDAR LOCALIDAD Y DIRECCION SI SEDEP ES NO
+      if (valorSede === 'No') {
+        if (!valorLocalidad) {
+          this.toastrService.error('La localidad no puede estar vacia', 'Error', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          })
+        }
+        if (!valorDirSede) {
+          this.toastrService.error('La direccion de la sede no puede estar vacia', 'Error', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          })
+        }
+      }
 
 
-          //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
-          this.actaPdf = new ActaSicPdfDto(
 
-            this.act_id,
-            this.act_visita_inicial,
-            this.act_visita_seguimiento,
-            this.act_fecha_inicial,
-            this.act_fecha_final,
-            this.act_municipio,
-            this.act_prestador,
-            this.act_nit,
-            this.act_direccion,
-            this.act_barrio,
-            this.act_telefono,
-            this.act_email,
-            this.act_sede_principal,
-            this.act_sede_localidad,
-            this.act_sede_direccion,
-            this.act_representante,
-            this.act_cod_prestador,
-            this.act_cod_sede,
-            this.act_obj_visita,
-            this.act_nombre_funcionario,
-            this.act_cargo_funcionario,
-            this.act_nombre_prestador,
-            this.act_cargo_prestador
-          );
-          const token = this.tokenService.getToken()
-          const tokenDto: TokenDto = new TokenDto(token);
+      //VALIDANDO POR VALOR DE SEDE Y ENVIAR SOLICITUD DE DESCARGA DE ACTA
+      if (valorSede === 'Si') {
+        if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
+          valorCargoSecre && valorCargoPres && valorUsuSecre && valorObjvisita && valorMunicipio && valorPrestador && valorSede && valorActa) {
+          if (valorVisitaInicial || valorVisitaSeguim) {
 
-          this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
-            (data) => {
-              // Verificar si no hay errores enviados por el backend
-              if (!data.error) {
-                //OBTENER EL ESTADO DEL BOTON A TRUE 
-                this.boton_acta_sic = true;
-                localStorage.setItem('boton-acta-sic', 'true');
+            //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
+            this.act_id = Number(valorActa);
+            this.act_municipio = valorMunicipio
+            this.act_prestador = valorPrestador
+            this.act_nit = valorNit
+            this.act_direccion = valorDireccion
+            this.act_telefono = valorTelefono
+            this.act_email = valorEmail
+            this.act_representante = valorRepresentante
+            this.act_cod_prestador = valorCodigoPres
+            this.act_nombre_prestador = valorPresNombre
+            this.act_nombre_funcionario = valorUsuSecre
 
-                Swal.fire({
-                  title: '¿Desea descargar el acta?',
-                  showCancelButton: true,
-                  confirmButtonText: 'Si',
-                  cancelButtonText: 'No'
-                }).then((result) => {
-                  if (result.value) {
-                    doc.save('acta-sic.pdf');
+
+            //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
+            this.actaPdf = new ActaSicPdfDto(
+
+              this.act_id,
+              this.act_visita_inicial,
+              this.act_visita_seguimiento,
+              this.act_fecha_inicial,
+              this.act_fecha_final,
+              this.act_municipio,
+              this.act_prestador,
+              this.act_nit,
+              this.act_direccion,
+              this.act_barrio,
+              this.act_telefono,
+              this.act_email,
+              this.act_sede_principal,
+              this.act_sede_localidad,
+              this.act_sede_direccion,
+              this.act_representante,
+              this.act_cod_prestador,
+              this.act_cod_sede,
+              this.act_obj_visita,
+              this.act_nombre_funcionario,
+              this.act_cargo_funcionario,
+              this.act_nombre_prestador,
+              this.act_cargo_prestador
+            );
+            const token = this.tokenService.getToken()
+            const tokenDto: TokenDto = new TokenDto(token);
+            this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
+              data => {
+                // Verificar si no hay errores enviados por el backend
+                if (!data.error) {
+                  //OBTENER EL ESTADO DEL BOTON A TRUE 
+                  this.boton_acta_sic = true
+                  localStorage.setItem('boton-acta-sic', 'true');
+
+                  Swal.fire({
+                    title: '¿Desea descargar el acta?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                  }).then((result) => {
+                    if (result.value) {
+                      doc.save('acta-sic.pdf');
+                      this.router.navigate(['/sic/evaluacion']);
+                      window.scrollTo(0, 0);
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                      this.router.navigate(['/sic/evaluacion']);
+                      window.scrollTo(0, 0);
+                    }
+                    // Mostrar mensaje de éxito independientemente de la opción seleccionada
                     this.toastrService.success(data.message, 'Ok', {
                       timeOut: 3000,
                       positionClass: 'toast-top-center',
                     });
-                    this.router.navigate(['/sic/evaluacion']);
-                    window.scrollTo(0, 0);
-                  } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    this.router.navigate(['/sic/evaluacion']);
-                    window.scrollTo(0, 0);
-                  }
-                });
-              } else {
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message
+                  });
+                }
+              },
+              err => {
                 Swal.fire({
                   icon: 'error',
                   title: 'Error',
-                  text: data.message
+                  text: err.error.message
                 });
               }
-            },
-            err => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: err.error.message
-              });
-            }
-          );
+            );
+          } //FIN DEL SI - VALIDACIÓN SI LA SEDE ES SI
+        }
+      }
 
-          //FIN DEL NO - VALIDACIÓN SI LA SEDE ES NO
+      //VALIDACIÓN PARA PDF
+      if (valorSede === 'No') {
+        if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
+          valorCargoSecre && valorCargoPres && valorUsuSecre && valorObjvisita && valorMunicipio && valorPrestador && valorSede && valorActa
+          && valorLocalidad && valorDirSede) {
+          if (valorVisitaInicial || valorVisitaSeguim) {
+
+            //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
+            this.act_id = Number(valorActa);
+            this.act_municipio = valorMunicipio
+            this.act_prestador = valorPrestador
+            this.act_nit = valorNit
+            this.act_direccion = valorDireccion
+            this.act_telefono = valorTelefono
+            this.act_email = valorEmail
+            this.act_representante = valorRepresentante
+            this.act_cod_prestador = valorCodigoPres
+            this.act_nombre_prestador = valorPresNombre
+            this.act_nombre_funcionario = valorUsuSecre
+
+
+            //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
+            this.actaPdf = new ActaSicPdfDto(
+
+              this.act_id,
+              this.act_visita_inicial,
+              this.act_visita_seguimiento,
+              this.act_fecha_inicial,
+              this.act_fecha_final,
+              this.act_municipio,
+              this.act_prestador,
+              this.act_nit,
+              this.act_direccion,
+              this.act_barrio,
+              this.act_telefono,
+              this.act_email,
+              this.act_sede_principal,
+              this.act_sede_localidad,
+              this.act_sede_direccion,
+              this.act_representante,
+              this.act_cod_prestador,
+              this.act_cod_sede,
+              this.act_obj_visita,
+              this.act_nombre_funcionario,
+              this.act_cargo_funcionario,
+              this.act_nombre_prestador,
+              this.act_cargo_prestador
+            );
+            const token = this.tokenService.getToken()
+            const tokenDto: TokenDto = new TokenDto(token);
+
+            this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
+              (data) => {
+                // Verificar si no hay errores enviados por el backend
+                if (!data.error) {
+                  //OBTENER EL ESTADO DEL BOTON A TRUE 
+                  this.boton_acta_sic = true;
+                  localStorage.setItem('boton-acta-sic', 'true');
+
+                  Swal.fire({
+                    title: '¿Desea descargar el acta?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                  }).then((result) => {
+                    if (result.value) {
+                      doc.save('acta-sic.pdf');
+                      this.router.navigate(['/sic/evaluacion']);
+                      window.scrollTo(0, 0);
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                      this.router.navigate(['/sic/evaluacion']);
+                      window.scrollTo(0, 0);
+                    }
+                    // Mostrar mensaje de éxito independientemente de la opción seleccionada
+                    this.toastrService.success(data.message, 'Ok', {
+                      timeOut: 3000,
+                      positionClass: 'toast-top-center',
+                    });
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message
+                  });
+                }
+              },
+              err => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: err.error.message
+                });
+              }
+            );
+
+            //FIN DEL NO - VALIDACIÓN SI LA SEDE ES NO
+          }
         }
       }
     }
   }
-}
