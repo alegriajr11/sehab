@@ -63,6 +63,9 @@ export class ActaPamecIpsDto {
 
     act_cargo_prestador2: string
 
+    @IsString()
+    act_estado: string;
+
     @IsNotBlank()
     act_obj_visita: string
 

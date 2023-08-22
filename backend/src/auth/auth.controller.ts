@@ -35,22 +35,6 @@ export class AuthController {
         return this.authService.createUserSic(payload);
     }
 
-    //ACTUALIZAR USUARIO
-    @RolDecorator(RolNombre.SIC)
-    @UseGuards(JwtAuthGuard)
-    @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return await this.authService.updateUserSic(id, payload);
-    }
-
-    //ELIMINAR USUARIO
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Delete(':id')
-    async delete(@Param('id', ParseIntPipe) id: number, @Body() tokenDto: TokenDto) {
-        return await this.authService.deleteUserSic(id, tokenDto);
-    }
-
     @UseGuards(JwtAuthGuard)
     @Post('nuevo/sp')
     createUserSP(@Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
@@ -58,21 +42,6 @@ export class AuthController {
         return this.authService.createUserSP(payload);
     }
 
-    //ACTUALIZAR USUARIO
-    @RolDecorator(RolNombre.SP)
-    @UseGuards(JwtAuthGuard)
-    @Put(':id')
-    async updateUserSP(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return await this.authService.updateUserSP(id, payload);
-    }
-
-    //ELIMINAR USUARIO
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Delete(':id')
-    async deleteUserSP(@Param('id', ParseIntPipe) id: number, @Body() tokenDto: TokenDto) {
-        return await this.authService.deleteUserSp(id, tokenDto);
-    }
 
     @UseGuards(JwtAuthGuard)
     @Post('nuevo/pamec')
@@ -82,43 +51,13 @@ export class AuthController {
         return this.authService.createUserPamec(payload);
     }
 
-    //ACTUALIZAR USUARIO
-    @RolDecorator(RolNombre.PAMEC)
-    @UseGuards(JwtAuthGuard)
-    @Put(':id')
-    async updateUserPamec(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return await this.authService.updateUserPamec(id, payload);
-    }
 
-    //ELIMINAR USUARIO
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Delete(':id')
-    async deleteUserPamec(@Param('id', ParseIntPipe) id: number, @Body() tokenDto: TokenDto) {
-        return await this.authService.deleteUserPamec(id, tokenDto);
-    }
 
     @UseGuards(JwtAuthGuard)
     @Post('nuevo/res')
     createUserRes(@Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
         const { dto, tokenDto } = payload;
         return this.authService.createUserRes(payload);
-    }
-
-    //ACTUALIZAR USUARIO
-    @RolDecorator(RolNombre.RES)
-    @UseGuards(JwtAuthGuard)
-    @Put(':id')
-    async updateUserRes(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return await this.authService.updateUserRes(id, payload);
-    }
-
-    //ELIMINAR USUARIO
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Delete(':id')
-    async deleteUserRes(@Param('id', ParseIntPipe) id: number, @Body() tokenDto: TokenDto) {
-        return await this.authService.deleteUserRes(id, tokenDto);
     }
 
 

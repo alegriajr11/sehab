@@ -79,6 +79,8 @@ export class ActaSicPdfDto {
     act_cargo_prestador: string
 
     act_creado: string
-
+    
+    @IsString()
+    act_estado: string;
 
 }

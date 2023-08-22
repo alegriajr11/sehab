@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 
+import { IsString } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 import { Column } from "typeorm";
 
@@ -62,5 +63,6 @@ export class IndActaDto {
     @IsNotBlank()
     act_cargo_prestador: string
 
-
+    @IsString()
+    act_estado: string;
 }

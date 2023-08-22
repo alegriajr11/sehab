@@ -53,7 +53,7 @@ export class AuthService {
     }
 
 
-    /*CREANDO USUARIO SIC*/
+    // /*CREANDO USUARIO SIC*/
     async createUserSic(payloads: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
         const { usu_nombreUsuario, usu_email } = dto;
@@ -88,70 +88,6 @@ export class AuthService {
 
     }
 
-    /*ACTUALIZANDO USUARIO SIC*/
-    async updateUserSic(id: number, payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payload;
-        const sic = await this.findById(id);
-        if (!sic)
-            throw new NotFoundException(new MessageDto('El Usuario No Existe'));
-
-        dto.usu_nombre ? sic.usu_nombre = dto.usu_nombre : sic.usu_nombre = sic.usu_nombre;
-
-        dto.usu_apellido ? sic.usu_apellido = dto.usu_apellido : sic.usu_apellido = sic.usu_apellido;
-
-        dto.usu_nombreUsuario ? sic.usu_nombreUsuario = dto.usu_nombreUsuario : sic.usu_nombreUsuario = sic.usu_nombreUsuario;
-
-        dto.usu_estado ? sic.usu_estado = dto.usu_estado : sic.usu_estado = sic.usu_estado;
-
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-
-        await this.authRepository.save(sic);
-        await this.auditoria_registroService.logUpdateUserSic(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.usu_nombre,
-            dto.usu_nombreUsuario
-        );
-
-        return new MessageDto(`Usuario Actualizado`);
-    }
-
-    /*ELIMINANDO USUARIO SIC*/
-    async deleteUserSic(id: number, tokenDto: TokenDto): Promise<any> {
-        const sic = await this.findById(id);
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-        await this.authRepository.delete(sic.usu_id)
-        await this.auditoria_registroService.logDeleteUserSic(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            sic.usu_nombre,
-            sic.usu_nombreUsuario
-        );
-        return new MessageDto(`Usuario  eliminado`);
-    }
 
     /*CREANDO USUARIO SP*/
     async createUserSP(payloads: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
@@ -186,71 +122,6 @@ export class AuthService {
         );
         return new MessageDto('Usuario Creado');
 
-    }
-
-    /*ACTUALIZANDO USUARIO SP*/
-    async updateUserSP(id: number, payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payload;
-        const sp = await this.findById(id);
-        if (!sp)
-            throw new NotFoundException(new MessageDto('El Usuario No Existe'));
-
-        dto.usu_nombre ? sp.usu_nombre = dto.usu_nombre : sp.usu_nombre = sp.usu_nombre;
-
-        dto.usu_apellido ? sp.usu_apellido = dto.usu_apellido : sp.usu_apellido = sp.usu_apellido;
-
-        dto.usu_nombreUsuario ? sp.usu_nombreUsuario = dto.usu_nombreUsuario : sp.usu_nombreUsuario = sp.usu_nombreUsuario;
-
-        dto.usu_estado ? sp.usu_estado = dto.usu_estado : sp.usu_estado = sp.usu_estado;
-
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-
-        await this.authRepository.save(sp);
-        await this.auditoria_registroService.logUpdateUserSp(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.usu_nombre,
-            dto.usu_nombreUsuario
-        );
-
-        return new MessageDto(`Usuario Actualizado`);
-    }
-
-    /*ELIMINANDO USUARIO SP*/
-    async deleteUserSp(id: number, tokenDto: TokenDto): Promise<any> {
-        const sp = await this.findById(id);
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-        await this.authRepository.delete(sp.usu_id)
-        await this.auditoria_registroService.logDeleteUserSp(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            sp.usu_nombre,
-            sp.usu_nombreUsuario
-        );
-        return new MessageDto(`Usuario  eliminado`);
     }
 
 
@@ -289,71 +160,6 @@ export class AuthService {
 
     }
 
-    /*ACTUALIZANDO USUARIO PAMEC*/
-    async updateUserPamec(id: number, payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payload;
-        const pamec = await this.findById(id);
-        if (!pamec)
-            throw new NotFoundException(new MessageDto('El Usuario No Existe'));
-
-        dto.usu_nombre ? pamec.usu_nombre = dto.usu_nombre : pamec.usu_nombre = pamec.usu_nombre;
-
-        dto.usu_apellido ? pamec.usu_apellido = dto.usu_apellido : pamec.usu_apellido = pamec.usu_apellido;
-
-        dto.usu_nombreUsuario ? pamec.usu_nombreUsuario = dto.usu_nombreUsuario : pamec.usu_nombreUsuario = pamec.usu_nombreUsuario;
-
-        dto.usu_estado ? pamec.usu_estado = dto.usu_estado : pamec.usu_estado = pamec.usu_estado;
-
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-
-        await this.authRepository.save(pamec);
-        await this.auditoria_registroService.logUpdateUserPamec(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.usu_nombre,
-            dto.usu_nombreUsuario
-        );
-
-        return new MessageDto(`Usuario Actualizado`);
-    }
-
-    /*ELIMINANDO USUARIO PAMEC*/
-    async deleteUserPamec(id: number, tokenDto: TokenDto): Promise<any> {
-        const pamec = await this.findById(id);
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-        await this.authRepository.delete(pamec.usu_id)
-        await this.auditoria_registroService.logDeleteUserPamec(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            pamec.usu_nombre,
-            pamec.usu_nombreUsuario
-        );
-        return new MessageDto(`Usuario  eliminado`);
-    }
-
     /*CREANDO USUARIO RES*/
     async createUserRes(payloads: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
@@ -388,72 +194,6 @@ export class AuthService {
         return new MessageDto('Usuario Creado');
 
     }
-
-    /*ACTUALIZANDO USUARIO RES*/
-    async updateUserRes(id: number, payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payload;
-        const res = await this.findById(id);
-        if (!res)
-            throw new NotFoundException(new MessageDto('El Usuario No Existe'));
-
-        dto.usu_nombre ? res.usu_nombre = dto.usu_nombre : res.usu_nombre = res.usu_nombre;
-
-        dto.usu_apellido ? res.usu_apellido = dto.usu_apellido : res.usu_apellido = res.usu_apellido;
-
-        dto.usu_nombreUsuario ? res.usu_nombreUsuario = dto.usu_nombreUsuario : res.usu_nombreUsuario = res.usu_nombreUsuario;
-
-        dto.usu_estado ? res.usu_estado = dto.usu_estado : res.usu_estado = res.usu_estado;
-
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-
-        await this.authRepository.save(res);
-        await this.auditoria_registroService.logUpdateUserRes(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.usu_nombre,
-            dto.usu_nombreUsuario
-        );
-
-        return new MessageDto(`Usuario Actualizado`);
-    }
-
-    /*ELIMINANDO USUARIO RES*/
-    async deleteUserRes(id: number, tokenDto: TokenDto): Promise<any> {
-        const res = await this.findById(id);
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-        await this.authRepository.delete(res.usu_id)
-        await this.auditoria_registroService.logDeleteUserRes(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            res.usu_nombre,
-            res.usu_nombreUsuario
-        );
-        return new MessageDto(`Usuario  eliminado`);
-    }
-
 
     async login(dto: LoginUsuarioDto): Promise<any> {
         const { usu_nombreUsuario, } = dto;

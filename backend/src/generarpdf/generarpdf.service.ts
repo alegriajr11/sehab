@@ -6,17 +6,15 @@ import { PrestadorRepository } from 'src/prestador/prestador.repository';
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
 import { UsuarioRepository } from 'src/usuario/usuario.repository';
 import { UsuarioService } from 'src/usuario/usuario.service';
-import * as fs from 'fs';
 import { CriteriosicCumplimientoService } from 'src/sic/criteriosic-cumplimiento/criteriosic-cumplimiento.service';
-import { CriterioEstandarSicEntity } from 'src/sic/criteriosEstandar.entity';
-import { CriterioEstandarSicRepository } from 'src/sic/criteriosEstandar.repository';
-import { stringify } from 'querystring';
-import { CalificacionpamecService } from 'src/pamec/calificacionpamec/calificacionpamec.service';
 import { CriterioindService } from 'src/sp/sp_ind/criterioind/criterioind.service';
 import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.service';
 
 
-const PDFDocument = require('pdfkit-table')
+//const PDFDocument = require('pdfkit-table')
+const { PDFDocument } = require('pdf-lib')
+
+const fs = require('fs')
 
 
 
@@ -1007,4 +1005,8 @@ export class GenerarpdfService {
 
         return pdfBuffer;
     }
+
+
+    
+
 }
