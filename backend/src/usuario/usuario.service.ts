@@ -201,90 +201,6 @@ export class UsuarioService {
     return new MessageDto(`Usuario Actualizado`);
   }
 
-<<<<<<< HEAD
-  async delete(id: number, tokenDto: TokenDto): Promise<any> {
-    //LISTAR USUARIO AL QUE SE QUIERE ELIMINAR
-    const usuario_eliminar = await this.findById(id);
-
-    let rol_usuario
-
-    //EL USUARIO LOGUEADO - SIEMPRE ES EL ADMIN QUE ELIMINA USUARIOS
-    const usuario = await this.jwtService.decode(tokenDto.token);
-
-    //OBJETO QUE TIENE LOS DATOS DEL USUARIO ADMIN LOGUEADO
-    const payloadInterface: PayloadInterface = {
-      usu_id: usuario[`usu_id`],
-      usu_nombre: usuario[`usu_nombre`],
-      usu_apellido: usuario[`usu_apellido`],
-      usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-      usu_email: usuario[`usu_email`],
-      usu_estado: usuario[`usu_estado`],
-      usu_roles: usuario[`usu_roles`]
-    };
-
-    await this.usuarioRepository.delete(usuario_eliminar.usu_cedula)
-
-    usuario_eliminar.roles.forEach(data => {
-      rol_usuario = data.rol_nombre
-    })
-
-    //CONDICIONALES PARA TENER EL CUENTA EL ROL Y ASÍ LLAMAR EL METODO LOG QUE LE CORRESPONDA
-    //PENDIENTE...........
-    switch (rol_usuario) {
-      case 'ADMIN':
-        await this.auditoria_registro_services.logUpdateUserAdmin(
-          payloadInterface.usu_nombre,
-          payloadInterface.usu_apellido,
-          'ip',
-          usuario_eliminar.usu_nombre,
-          usuario_eliminar.usu_nombreUsuario
-        );
-        break;
-
-      case 'PAMEC':
-        await this.auditoria_registro_services.logUpdateUserPamec(
-          payloadInterface.usu_nombre,
-          payloadInterface.usu_apellido,
-          'ip',
-          usuario_eliminar.usu_nombre,
-          usuario_eliminar.usu_nombreUsuario
-        );
-        break;
-
-      case 'SP':
-        await this.auditoria_registro_services.logUpdateUserSp(
-          payloadInterface.usu_nombre,
-          payloadInterface.usu_apellido,
-          'ip',
-          usuario_eliminar.usu_nombre,
-          usuario_eliminar.usu_nombreUsuario
-        );
-        break;
-
-      case 'RES':
-        await this.auditoria_registro_services.logUpdateUserRes(
-          payloadInterface.usu_nombre,
-          payloadInterface.usu_apellido,
-          'ip',
-          usuario_eliminar.usu_nombre,
-          usuario_eliminar.usu_nombreUsuario
-        );
-        break;
-
-      case 'SIC':
-        await this.auditoria_registro_services.logUpdateUserSic(
-          payloadInterface.usu_nombre,
-          payloadInterface.usu_apellido,
-          'ip',
-          usuario_eliminar.usu_nombre,
-          usuario_eliminar.usu_nombreUsuario
-        );
-        break;
-
-      default:
-        new MessageDto(`Rol no encontrado`);
-        break;
-=======
   async delete(id: number, tokenDto: TokenDto): Promise<MessageDto> {
     try {
       const usuario_eliminar = await this.findById(id);
@@ -368,7 +284,6 @@ export class UsuarioService {
       return new MessageDto(`Usuario eliminado`);
     } catch (error) {
       throw new Error(`Error al eliminar el usuario: ${error.message}`);
->>>>>>> 576e15c4bd04303f2bda5e86c44f4a0db0354870
     }
   }
   

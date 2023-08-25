@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
 import { AuditoriaRegistroEntity } from './auditoria_registro.entity';
 import { AuditoriaRegistroRepository } from './auditoria_registro.repository';
-import * as ExcelJS from 'exceljs';
+
 
 
 @Injectable()
@@ -234,31 +234,6 @@ export class AuditoriaRegistroService {
         const auditoria = await this.auditoria_registroRepository.find({ order: { id: 'DESC' }, });
         if (!auditoria.length) throw new NotFoundException(new MessageDto('No hay Auditorias en la lista'))
         return auditoria;
-    }
-
-    async generateReport(): Promise<Buffer> {
-
-        const auditorias = await this.getAllAuditorias()
-
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Report');
-
-        // Agregar encabezados
-        const headers = Object.keys(auditorias[0]);
-        worksheet.addRow(headers);
-
-        // Agregar datos
-        auditorias.forEach(item => {
-            const row = [];
-            headers.forEach(header => {
-                row.push(item[header]);
-            });
-            worksheet.addRow(row);
-        });
-
-        // Crear el archivo Excel y guardarlo en un buffer
-        const buffer = await workbook.xlsx.writeBuffer();
-        return ;
     }
 
 
