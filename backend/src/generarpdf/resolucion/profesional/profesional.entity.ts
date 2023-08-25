@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { ActaVerificacionEntity } from '../verificacion/acta-verificacion.entity';
 
 @Entity({ name: 'profesional-apoyo' })
-export class ProfesionalEntity {
+export class ProfesionalApoyoEntity {
     @PrimaryGeneratedColumn()
     id: number;
 

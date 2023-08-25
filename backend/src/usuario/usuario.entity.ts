@@ -10,7 +10,7 @@ export class UsuarioEntity {
     @PrimaryGeneratedColumn('increment')
     usu_id: number;
 
-    @Column({ type: 'varchar', length: 15, nullable: true })
+    @Column({ type: 'varchar', length: 15, nullable: false })
     usu_cedula: string;
 
     @Column({ type: 'varchar', length: 20, nullable: true })

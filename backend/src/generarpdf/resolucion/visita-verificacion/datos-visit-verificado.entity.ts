@@ -1,7 +1,7 @@
 import { SedeEntity } from "src/prestador/sede/sede.entity";
 import { UsuarioEntity } from "src/usuario/usuario.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
-import { ProfesionalEntity } from "../profesional/profesional.entity";
+import { ProfesionalApoyoEntity } from "../profesional/profesional.entity";
 import { ActaVerificacionEntity } from "../verificacion/acta-verificacion.entity";
 
 @Entity({name: 'datos-verificados'})

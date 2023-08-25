@@ -1,7 +1,7 @@
 import { SedeEntity } from "src/prestador/sede/sede.entity";
 import { UsuarioEntity } from "src/usuario/usuario.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
-import { ProfesionalEntity } from "../profesional/profesional.entity";
+import { ProfesionalApoyoEntity } from "../profesional/profesional.entity";
 import { DatosVisitVErificadoEntity } from "../visita-verificacion/datos-visit-verificado.entity";
 
 @Entity({name: 'acta-verificacion'})
@@ -83,13 +83,13 @@ export class ActaVerificacionEntity {
 
     @ManyToMany(type => UsuarioEntity, usuario => usuario.usuario_verificacion, { eager: true })
     @JoinTable({
-        name: 'veri_sede',
-        joinColumn: { name: 'veri_sede_id' },
-        inverseJoinColumn: { name: 'sede_veri_id' }
+        name: 'verif_usuario',
+        joinColumn: { name: 'verif_usu_id' },
+        inverseJoinColumn: { name: 'usu_verif_id' }
     })
     verificacion_usuario: SedeEntity[];
 
-    @ManyToMany(type => ProfesionalEntity, profecional => profecional.profesional_verificacion)
-    verificacion_profecional: ProfesionalEntity;
+    @ManyToMany(type => ProfesionalApoyoEntity, profecional => profecional.profesional_verificacion)
+    verificacion_profecional: ProfesionalApoyoEntity;
     
 }
