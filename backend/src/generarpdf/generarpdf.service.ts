@@ -11,10 +11,10 @@ import { CriterioindService } from 'src/sp/sp_ind/criterioind/criterioind.servic
 import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.service';
 
 
-//const PDFDocument = require('pdfkit-table')
-const { PDFDocument } = require('pdf-lib')
 
-const fs = require('fs')
+const PDFDocument = require('pdfkit-table')
+
+
 
 
 

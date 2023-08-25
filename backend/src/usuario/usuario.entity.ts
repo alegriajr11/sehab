@@ -27,7 +27,7 @@ export class UsuarioEntity {
     @Column({ type: 'uuid', unique: true, name: 'reset_password_token', nullable: true })
     resetPasswordToken: string;
 
-    @Column({ type: 'varchar', nullable: false })
+    @Column({ type: 'varchar', length: 10, nullable: false })
     usu_estado: string;
 
     @CreateDateColumn()

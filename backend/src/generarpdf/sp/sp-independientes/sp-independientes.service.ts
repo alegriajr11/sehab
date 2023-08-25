@@ -36,7 +36,7 @@ export class SpIndependientesService {
         const indep = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
             .select(['acta'])
             .getMany()
-        if (indep.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas SIC en la lista'))
+        if (indep.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas en la lista'))
         return indep;
     }
 
@@ -56,7 +56,7 @@ export class SpIndependientesService {
             .where('acta.act_creado = :date', { date })
             .getMany();
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
+            throw new NotFoundException(new MessageDto('No hay Actas en esa fecha'));
         }
 
         return actas;
@@ -78,7 +78,7 @@ export class SpIndependientesService {
         const actas = await query.getMany();
 
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
+            throw new NotFoundException(new MessageDto('No hay Actas con los filtros especificados'));
         }
 
         return actas;
