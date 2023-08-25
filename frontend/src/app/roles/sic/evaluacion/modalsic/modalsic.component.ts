@@ -6,7 +6,7 @@ import { CriterioSicEstandarDto } from 'src/app/models/Sic/criterioSicEstandar.d
 import { CumplimientoSicEstandarDto } from 'src/app/models/Sic/cumplimientoEstandar.dto';
 import { CriterioSicService } from 'src/app/services/Sic/criterio.service';
 import { CumplimientoEstandarService } from 'src/app/services/Sic/cumplimiento-estandar.service';
-import { SharedServiceService } from 'src/app/services/Sic/shared-service.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
 
 
 @Component({

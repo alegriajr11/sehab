@@ -65,12 +65,8 @@ export class AgregarIndComponent implements OnInit {
         this.router.navigate(['/criterioind']);
       },
       (err) => {
-        this.toastrService.error(err.error.message, 'Error', {
-          timeOut: 3000,
-          positionClass: 'toast-top-center',
-        });
         if(err.status === 404){
-          this.toastrService.error('Debes Seleccionar la Etapa', 'Error', {
+          this.toastrService.error('Debe Seleccionar el Item', 'Error', {
             timeOut: 3000,
             positionClass: 'toast-top-center',
           });

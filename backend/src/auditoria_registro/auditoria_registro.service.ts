@@ -205,7 +205,7 @@ export class AuditoriaRegistroService {
                 .andWhere('auditoria.creadoEn <= :fechaFin', { fechaFin: fechaFinAjustada });
         }
 
-        query = query.orderBy('auditoria.creadoEn', 'DESC');
+        query = query.orderBy('auditoria.id', 'DESC');
 
         const auditorias = await query.getMany();
 
@@ -221,11 +221,13 @@ export class AuditoriaRegistroService {
     async findAllAuditoriaNomApel(usu_nombre_apellido: string): Promise<AuditoriaRegistroEntity[]> {
         const usu_nombres = usu_nombre_apellido.trim()
 
-        const aduditoria = await this.auditoria_registroRepository.createQueryBuilder('auditoria')
+        const auditoria = await this.auditoria_registroRepository.createQueryBuilder('auditoria')
             .where('CONCAT(auditoria.usu_nombre, " ", auditoria.usu_apellido) LIKE :usu_nombres', { usu_nombres: `%${usu_nombres}%` })
             .getMany();
 
-        return aduditoria
+        if (!auditoria.length) throw new NotFoundException(new MessageDto('No hay Auditorias en la lista'))
+
+        return auditoria
     }
 
     async getAllAuditorias(): Promise<AuditoriaRegistroEntity[]> {

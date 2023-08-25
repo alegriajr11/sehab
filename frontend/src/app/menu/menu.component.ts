@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenService } from '../services/token.service';
 import {MenubarModule} from 'primeng/menubar';
@@ -26,7 +26,9 @@ export class MenuComponent implements OnInit {
 
   constructor(
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private renderer: Renderer2,
+    private el: ElementRef
   ) { }
 
   ngOnInit(): void {
@@ -37,9 +39,6 @@ export class MenuComponent implements OnInit {
     this.isPamec = this.tokenService.IsPamec();
     this.isReso = this.tokenService.IsReso();
     this.usu_nombreUsuario = this.tokenService.getNombreUsuario();
-
-
-
   }
 
   logOut(): void {
@@ -48,10 +47,5 @@ export class MenuComponent implements OnInit {
   }
 
 
-//   button?.addEventListener('click', function handleClick(event) {
-//   console.log('button clicked');
-//   console.log(event);
-//   console.log(event.target);
-// });
 
 }

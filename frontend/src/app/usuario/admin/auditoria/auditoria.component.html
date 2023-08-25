@@ -16,12 +16,17 @@
 
 <div class="wrapper">
 
-    <div class="container">
+    <div class="size">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-10">
+                    <div class="col-sm-9">
                         <h2><b>ACCIONES REALIZADAS</b></h2>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-secondary" title="Exportar Excel">
+                            <i class='fa fa-file-excel-o'></i>
+                            <span class="id-excel">Exportar Excel</span></button>
                     </div>
                 </div>
             </div>
@@ -68,22 +73,19 @@
                 <thead>
                     <tr>
                         <th scope="col" colspan="1">N°</th>
-                        <th scope="col" colspan="1">FUNCIONARIO</th>
+                        <th scope="col" colspan="1" class="funcionario-cell">FUNCIONARIO</th>
                         <th scope="col" colspan="1">FECHA ACCIÓN</th>
-                        <th scope="col" colspan="1">ACCIÓN</th>
-                        <th scope="col" colspan="1">DETALLES</th>
-                        <th scope="col" colspan="1">DIRECCIÓN IP</th>
-
+                        <th scope="col" colspan="1" >ACCIÓN</th>
+                        <th scope="col" colspan="2">DETALLES</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let auditoria of this.auditoria | paginate: { itemsPerPage: 10, currentPage: page}; let i = index" >
-                        <td>{{calcularIDGlobal(i, page, 10)}}</td>
-                        <td>{{auditoria.usu_nombre + ' ' + auditoria.usu_apellido}}</td>
-                        <td>{{auditoria.creadoEn}}</td>
-                        <td>{{auditoria.accion}}</td>
+                        <td style="text-align: center;">{{calcularIDGlobal(i, page, 10)}}</td>
+                        <td style="text-align: center;">{{auditoria.usu_nombre + ' ' + auditoria.usu_apellido}}</td>
+                        <td style="text-align: center;">{{auditoria.creadoEn | date: 'dd/MM/yyyy'}}</td>
+                        <td style="text-align: center;">{{auditoria.accion}}</td>
                         <td>{{auditoria.detalles}}</td>
-                        <td>{{auditoria.direccionIp}}</td>
                     </tr>
                 </tbody>
             </table>

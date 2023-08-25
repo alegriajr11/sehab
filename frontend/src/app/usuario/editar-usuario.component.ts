@@ -23,7 +23,7 @@ export class EditarUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.params['id'];
-    this.usuarioService.detail(id).subscribe(
+    this.usuarioService.oneUser(id).subscribe(
       data => {
         this.usuario = data;
       },

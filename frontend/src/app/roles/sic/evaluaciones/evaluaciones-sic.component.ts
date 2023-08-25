@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Usuario } from 'src/app/models/usuario';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
-import { SharedServiceService } from 'src/app/services/Sic/shared-service.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { TokenService } from 'src/app/services/token.service';
 
 
@@ -58,7 +58,7 @@ export class EvaluacionesSicComponent implements OnInit {
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',
-        backdrop: 'static',
+        backdrop: true,
         keyboard: true
       }
 
@@ -92,6 +92,22 @@ export class EvaluacionesSicComponent implements OnInit {
     }
   }
 
+    //CARGAR ACTAS POR NOMBRE DE PRESTADOR O NIT
+    // cargarAuditoriaUsuario() {
+    //   this.auditoria_services.listAuditoriaNombreUsuario(this.nombre_usuario).subscribe(
+    //     data => {
+    //       this.auditoria = data
+    //       this.listaVacia = undefined
+    //     },
+    //     err => {
+    //       this.listaVacia = err.error.message;
+    //       this.auditoria = []
+    //     }
+    //   )
+    //   if(!this.nombre_usuario){
+    //     this.getAllAuditorias();
+    //   }
+    // }
 
 
 }

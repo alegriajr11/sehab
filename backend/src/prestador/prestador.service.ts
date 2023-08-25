@@ -62,10 +62,8 @@ export class PrestadorService {
             .where('pre_municipio.mun_id = :mun', { mun: id })
             .andWhere('pre_clasificacion.cla_id IN (:clasificacion)', { clasificacion: ['1', '2'] })
             .andWhere('prestador.pre_habilitado LIKE :habilitado', { habilitado: '%SI%' })
-            //.where('post.status IN (:statuses)', { statuses: ['published', 'draft'] })
             .getMany()
         return prestadores;
-
     }
 
 

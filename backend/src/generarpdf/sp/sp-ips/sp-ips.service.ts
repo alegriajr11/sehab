@@ -23,7 +23,7 @@ export class SpIpsService {
         const ips = await this.actaSpIpsRepository.createQueryBuilder('acta')
             .select(['acta'])
             .getMany()
-        if (ips.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas SIC en la lista'))
+        if (ips.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas IPS en la lista'))
         return ips;
     }
 
@@ -92,7 +92,7 @@ export class SpIpsService {
         const actas = await query.getMany();
 
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
+            throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
         }
 
         return actas;

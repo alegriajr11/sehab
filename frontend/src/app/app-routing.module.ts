@@ -70,6 +70,19 @@ import { HomeCriteriosComponent } from './usuario/admin/resolucion/home-criterio
 import { CriterioTodosServiciosComponent } from './usuario/admin/resolucion/criterio-todos-servicios/criterio-todos-servicios.component';
 import { AuditoriaComponent } from './usuario/admin/auditoria/auditoria.component';
 import { HomeEstandarComponent } from './roles/reso/lista-verificacion/home-estandar/home-estandar.component';
+import { EvaluacionUnoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-uno/evaluacion-uno.component';
+import { EvaluacionDosComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-dos/evaluacion-dos.component';
+import { EvaluacionTresComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-tres/evaluacion-tres.component';
+import { EvaluacionCuatroComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-cuatro/evaluacion-cuatro.component';
+import { EvaluacionCincoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-cinco/evaluacion-cinco.component';
+import { EvaluacionSeisComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-seis/evaluacion-seis.component';
+import { EvaluacionSieteComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-siete/evaluacion-siete.component';
+import { EvaluacionOchoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-ocho/evaluacion-ocho.component';
+import { EvaluacionNueveComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-nueve/evaluacion-nueve.component';
+import { ActaVisitaVerificacionComponent } from './roles/reso/acta-visita-verificacion/acta-visita-verificacion.component';
+import { ActaVisitaIvcComponent } from './roles/reso/acta-visita-ivc/acta-visita-ivc.component';
+import { InformeResolucionComponent } from './roles/reso/informe-resolucion/informe-resolucion.component';
+import { InformesRealizadosResolucionComponent } from './roles/reso/informes-realizados-resolucion/informes-realizados-resolucion.component';
 
 
 const routes: Routes = [
@@ -129,7 +142,16 @@ const routes: Routes = [
   { path: 'sp/acta-ips', component: ActaSpIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/evaluaciones-ips', component: EvaluacionesSpIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   //{ path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard,], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/home-evaluacion-ips', component: HomeEvaluacionIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/home-evaluacion-ips', component: HomeEvaluacionIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-uno', component: EvaluacionUnoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-dos', component: EvaluacionDosComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-tres', component: EvaluacionTresComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-cuatro', component: EvaluacionCuatroComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-cinco', component: EvaluacionCincoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-seis', component: EvaluacionSeisComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-siete', component: EvaluacionSieteComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-ocho', component: EvaluacionOchoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-nueve', component: EvaluacionNueveComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
 
   //Rutas SP - PROFESIONALES
   { path: 'sp/acta-pro', component: ActaSpProComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
@@ -147,6 +169,11 @@ const routes: Routes = [
   { path: 'reso', component: HomeResoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'lista-verificacion', component: ListaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'servicios-capacidad', component: CapacidadInstaladaComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
+  //RUTAS ACTA - RESOLUCIÓN 3100
+  { path: 'reso/visita-verificacion', component: ActaVisitaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'reso/visita-ivc', component: ActaVisitaIvcComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  
   //ESTANDARES - RESOLUCION
   { path: 'home-estandar', component: HomeEstandarComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'todos-servicios', component: TodosServiciosComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
@@ -165,6 +192,11 @@ const routes: Routes = [
   { path: 'apoyo-diagnostico', component: ApoyoDiagnosticoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'internacion', component: InternacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'quirurgico', component: QuirurgicoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
+
+  //INFORME RESOLUCION - 3100 2019
+  { path: 'reso/informe', component: InformeResolucionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'reso/informes-realizados', component: InformesRealizadosResolucionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
 
 
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },

@@ -199,7 +199,7 @@ export class ActaPamecComponent implements OnInit {
   }
 
   cargarUsuario(): void {
-    this.usuarioService.lista().subscribe(
+    this.usuarioService.listaUserEstado().subscribe(
       data => {
         this.usuario = data;
         this.listaVacia = undefined;
@@ -209,7 +209,6 @@ export class ActaPamecComponent implements OnInit {
       }
     )
   }
-
 
 
 

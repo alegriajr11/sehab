@@ -87,8 +87,9 @@ h6 {
     position: relative;
     cursor: pointer;
     z-index: 1;
-    
+
 }
+
 .dropdown_ser a {
     color: white;
 }
@@ -99,7 +100,7 @@ h6 {
     position: absolute;
     width: 150%;
     overflow: auto;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+    box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.4);
     border-radius: 5px;
     font-size: 18px;
 }
@@ -116,10 +117,43 @@ h6 {
     background-color: white;
     text-decoration: none;
     padding-top: 1rem;
-    
+
 }
 
 .dropdown-content a:hover {
     color: white;
     background-color: #4e4e4e;
+}
+
+/*ESTILOS IMG HEADER*/
+.small-image {
+    width: 50px;
+    /* Cambia este valor al ancho deseado */
+    height: auto;
+}
+
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    height: 70px;
+    /* Ajusta la altura según tus necesidades */
+}
+
+.centered-content a,
+.centered-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+img {
+    margin-left: 6px;
+}
+
+/*MEDIA QUERY*/
+@media (max-width: 1000px) {
+    .navbar-collapse {
+        display: none;
+    }
 }

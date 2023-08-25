@@ -1,4 +1,4 @@
-.titulo2{
+.titulo2 {
     text-align: center;
     color: white;
 }
@@ -8,7 +8,7 @@
     grid-template-columns: 7fr 6fr;
     align-content: center;
     justify-content: center;
-    
+
 }
 
 .btn-dark:hover {
@@ -16,4 +16,23 @@
     transition-duration: 0.2s;
 }
 
+/* Estilos generales para jumbotrons */
+.jumbotron {
+    margin-bottom: 20px;
+    /* Agrega espacio entre los jumbotrons */
+}
 
+/* Estilos para pantallas mayores o iguales a 1120px */
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Estilos para pantallas menores a 1119px */
+@media (max-width: 1119px) {
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        /* Apila los elementos uno encima del otro */
+    }
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
-import { SharedServiceService } from 'src/app/services/Sic/shared-service.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { TokenService } from 'src/app/services/token.service';
 
 @Component({

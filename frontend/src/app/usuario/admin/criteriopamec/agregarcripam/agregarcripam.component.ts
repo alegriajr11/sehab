@@ -84,16 +84,13 @@ export class AgregarcripamComponent implements OnInit {
         this.router.navigate(['/criteriopam']);
       },
       (err) => {
-        this.toastrService.error(err.error.message, 'Error', {
-          timeOut: 3000,
-          positionClass: 'toast-top-center',
-        });
         if(err.status === 404){
-          this.toastrService.error('Debes Seleccionar la Actividad', 'Error', {
+          this.toastrService.error('Debe Seleccionar la Actividad', 'Error', {
             timeOut: 3000,
             positionClass: 'toast-top-center',
           });
         }
+        
       }
     );
   }

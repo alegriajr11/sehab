@@ -22,3 +22,36 @@
 .button-like:hover {
     background-color: #3d4347;
 }
+
+.btn-secondary:hover {
+    transform: scale(1.1);
+    transition-duration: 0.2s;
+}
+
+#img-firma {
+    font-size: x-large;
+    font-weight: bold;
+    color: black;
+}
+/* Estilo para el contenedor del input personalizado */
+.custom-file-label {
+    display: inline-block;
+    background-color: #3d4347;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+/* Cambiar el texto "Browse" */
+.custom-file-label::after {
+    content: "Seleccionar archivo";
+}
+
+.disabled-span {
+    pointer-events: none;
+    opacity: 0.6; /* Opcional: Cambiar la opacidad para indicar deshabilitado */
+    /* Otros estilos de deshabilitado que desees agregar */
+}
+

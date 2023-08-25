@@ -22,6 +22,12 @@ export class UsuarioController {
         return await this.usuarioService.getall()
     }
 
+    /*LISTANDO USUARIOS SIN ADMIN Y SOLO ACTIVOS*/
+    @Get('estado/limitado')
+    async getAllUserEstado() {
+        return await this.usuarioService.getallUser()
+    }
+
     //LISTAR USUARIO POR ID
     @RolDecorator(RolNombre.ADMIN)
     @UseGuards(JwtAuthGuard)
@@ -31,7 +37,7 @@ export class UsuarioController {
     }
 
     //ELIMINAR USUARIO
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    //@UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number, @Body() tokenDto: TokenDto) {
         return await this.usuarioService.delete(id, tokenDto);
@@ -39,10 +45,10 @@ export class UsuarioController {
 
     //CREAR USUARIO ADMINISTRADOR
     @RolDecorator(RolNombre.ADMIN)
-    @UseGuards(JwtAuthGuard, RolesGuard) 
-    @UsePipes(new ValidationPipe({whitelist: true}))
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post()
-    async create(@Body()payload: {dto: CreateUsuarioDto, tokenDto: TokenDto}){
+    async create(@Body() payload: { dto: CreateUsuarioDto, tokenDto: TokenDto }) {
         const { dto, tokenDto } = payload;
         return this.usuarioService.create(payload);
     }

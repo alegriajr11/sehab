@@ -39,11 +39,23 @@ export class UsuarioService {
   }
 
 
-  /*LISTANDO USUARIOS */
+  /*LISTANDO TODOS LOS USUARIOS */
   async getall(): Promise<UsuarioEntity[]> {
     const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
       .select(['usuario', 'roles.rol_nombre'])
       .innerJoin('usuario.roles', 'roles')
+      .getMany()
+    if (!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+    return usuario
+  }
+
+  /*LISTANDO USUARIOS SIN ADMIN Y SOLO ACTIVOS*/
+  async getallUser(): Promise<UsuarioEntity[]> {
+    const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
+      .select(['usuario', 'roles.rol_nombre'])
+      .innerJoin('usuario.roles', 'roles')
+      .where('roles.rol_id IN (:rol)', {rol: ['2','3','4','5']})
+      .andWhere('usuario.usu_estado LIKE :estado', {estado: '%true%'})
       .getMany()
     if (!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
     return usuario
@@ -189,6 +201,7 @@ export class UsuarioService {
     return new MessageDto(`Usuario Actualizado`);
   }
 
+<<<<<<< HEAD
   async delete(id: number, tokenDto: TokenDto): Promise<any> {
     //LISTAR USUARIO AL QUE SE QUIERE ELIMINAR
     const usuario_eliminar = await this.findById(id);
@@ -271,11 +284,94 @@ export class UsuarioService {
       default:
         new MessageDto(`Rol no encontrado`);
         break;
+=======
+  async delete(id: number, tokenDto: TokenDto): Promise<MessageDto> {
+    try {
+      const usuario_eliminar = await this.findById(id);
+  
+      let rol_usuario;
+  
+      const usuario = await this.jwtService.decode(tokenDto.token);
+  
+      const payloadInterface: PayloadInterface = {
+        usu_id: usuario[`usu_id`],
+        usu_nombre: usuario[`usu_nombre`],
+        usu_apellido: usuario[`usu_apellido`],
+        usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+        usu_email: usuario[`usu_email`],
+        usu_estado: usuario[`usu_estado`],
+        usu_roles: usuario[`usu_roles`]
+      };
+  
+      await this.usuarioRepository.delete(usuario_eliminar.usu_id);
+  
+      usuario_eliminar.roles.forEach((data) => {
+        rol_usuario = data.rol_nombre;
+      });
+  
+      switch (rol_usuario) {
+        case 'admin':
+          await this.auditoria_registro_services.logUpdateUserAdmin(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            usuario_eliminar.usu_nombre,
+            usuario_eliminar.usu_nombreUsuario
+          );
+          break;
+  
+        case 'pamec':
+          await this.auditoria_registro_services.logDeleteUserPamec(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            usuario_eliminar.usu_nombre,
+            usuario_eliminar.usu_nombreUsuario
+          );
+          break;
+  
+        case 'sp':
+          await this.auditoria_registro_services.logDeleteUserSp(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            usuario_eliminar.usu_nombre,
+            usuario_eliminar.usu_nombreUsuario
+          );
+          break;
+  
+        case 'res':
+          await this.auditoria_registro_services.logDeleteUserRes(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            usuario_eliminar.usu_nombre,
+            usuario_eliminar.usu_nombreUsuario
+          );
+          break;
+  
+        case 'sic':
+          await this.auditoria_registro_services.logDeleteUserSic(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            usuario_eliminar.usu_nombre,
+            usuario_eliminar.usu_nombreUsuario
+          );
+          break;
+  
+  
+        default:
+          throw new Error(`Rol no encontrado`);
+      }
+  
+      return new MessageDto(`Usuario eliminado`);
+    } catch (error) {
+      throw new Error(`Error al eliminar el usuario: ${error.message}`);
+>>>>>>> 576e15c4bd04303f2bda5e86c44f4a0db0354870
     }
-
-
-    return new MessageDto(`Usuario  eliminado`);
   }
+  
 
   async findOneByResetPasswordToken(resetPasswordToken: string): Promise<UsuarioEntity> {
     const usuario = await this.usuarioRepository.findOne({ where: { resetPasswordToken } });

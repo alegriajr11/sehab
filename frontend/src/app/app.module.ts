@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {  LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -90,6 +91,24 @@ import { ModalFirmaComponent } from './roles/sic/acta/modal-firma/modal-firma.co
 import { ModalFirmaPamecComponent } from './usuario/pamec/modal-firma-pamec/modal-firma-pamec.component';
 import { ModalFirmaSicComponent } from './usuario/sic/modal-firma-sic/modal-firma-sic.component';
 import { ModalFirmaSpComponent } from './usuario/sp/modal-firma-sp/modal-firma-sp.component';
+import { ActaModule } from './roles/sic/acta/acta.module';
+import { EvaluacionUnoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-uno/evaluacion-uno.component';
+import { EvaluacionDosComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-dos/evaluacion-dos.component';
+import { EvaluacionTresComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-tres/evaluacion-tres.component';
+import { EvaluacionCuatroComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-cuatro/evaluacion-cuatro.component';
+import { EvaluacionCincoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-cinco/evaluacion-cinco.component';
+import { EvaluacionSeisComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-seis/evaluacion-seis.component';
+import { EvaluacionSieteComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-siete/evaluacion-siete.component';
+import { EvaluacionOchoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-ocho/evaluacion-ocho.component';
+import { EvaluacionNueveComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-nueve/evaluacion-nueve.component';
+import { ActaVisitaVerificacionComponent } from './roles/reso/acta-visita-verificacion/acta-visita-verificacion.component';
+import { ActaVisitaIvcComponent } from './roles/reso/acta-visita-ivc/acta-visita-ivc.component';
+import { ModalFirmaVerificacionComponent } from './roles/reso/acta-visita-verificacion/modal-firma-verificacion/modal-firma-verificacion.component';
+import { InformeResolucionComponent } from './roles/reso/informe-resolucion/informe-resolucion.component';
+import { InformesRealizadosResolucionComponent } from './roles/reso/informes-realizados-resolucion/informes-realizados-resolucion.component';
+import { ModalInformeResolucionComponent } from './roles/reso/informe-resolucion/modal-informe-resolucion/modal-informe-resolucion.component';
+import { ModalInformesRealizadosResComponent } from './roles/reso/informes-realizados-resolucion/modal-informes-realizados-res/modal-informes-realizados-res.component';
+
 
 
 @NgModule({
@@ -170,7 +189,24 @@ import { ModalFirmaSpComponent } from './usuario/sp/modal-firma-sp/modal-firma-s
     ModalFirmaComponent,
     ModalFirmaPamecComponent,
     ModalFirmaSicComponent,
-    ModalFirmaSpComponent
+    ModalFirmaSpComponent,
+    EvaluacionUnoComponent,
+    EvaluacionDosComponent,
+    EvaluacionTresComponent,
+    EvaluacionCuatroComponent,
+    EvaluacionCincoComponent,
+    EvaluacionSeisComponent,
+    EvaluacionSieteComponent,
+    EvaluacionOchoComponent,
+    EvaluacionNueveComponent,
+    ActaVisitaVerificacionComponent,
+    ActaVisitaIvcComponent,
+    ModalFirmaVerificacionComponent,
+    InformeResolucionComponent,
+    InformesRealizadosResolucionComponent,
+    ModalInformeResolucionComponent,
+    ModalInformesRealizadosResComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -183,7 +219,9 @@ import { ModalFirmaSpComponent } from './usuario/sp/modal-firma-sp/modal-firma-s
     AppRoutingModule,
     NgxPaginationModule,
     Ng2SearchPipeModule,
-    ModalModule
+    ModalModule,
+    ActaModule,
+    ReactiveFormsModule
     
 
   ],
