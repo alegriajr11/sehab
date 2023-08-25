@@ -26,12 +26,16 @@ export class ActapdfService {
   }
 
   //SOLICITUD ULTIMA ACTA DEL ROL SIC
-  public listaUltimaSic(): Observable<ActaSicPdfDto> {
+  public obtenerUltimaActaSic(): Observable<ActaSicPdfDto> {
     return this.httpClient.get<ActaSicPdfDto>(this.actasic_pdfUrl + 'ultima/acta/sic')
   }
 
+  public ultimaActaSicPk():Observable<ActaSicPdfDto>{
+    return this.httpClient.get<ActaSicPdfDto>(this.actasic_pdfUrl + 'ultima/acta/sic/pk')
+  }
+
   //SOLICITUD MOSTRAR UN ACTA DEL ROL SIC
-  public one(id: number): Observable<ActaSicPdfDto> {
+  public oneActaSic(id: number): Observable<ActaSicPdfDto> {
     return this.httpClient.get<ActaSicPdfDto>(`${this.actasic_pdfUrl}${id}`);
   }
 
@@ -39,10 +43,6 @@ export class ActapdfService {
   public actaSicDate(dateString: string): Observable<ActaSicPdfDto[]> {
     return this.httpClient.get<ActaSicPdfDto[]>(this.actasic_pdfUrl + 'fecha/' + dateString)
   }
-
-
-
-
 
   /*ROL SP*/
   /*ROL SP - IPS*/

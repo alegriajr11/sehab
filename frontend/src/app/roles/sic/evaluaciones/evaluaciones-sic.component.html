@@ -19,7 +19,7 @@
 
 <div class="wrapper">
 
-    <div class="container">
+    <div class="size">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -45,17 +45,8 @@
                 </div>
 
 
-                <div class="col-md-1 button-container">
-                    <button class="btn btn-outline-dark" title="Buscar Evaluaciones"><i class='fa fa-search'
-                            style="font-size:20px;"></i></button>
-                </div>
 
-                <div class="col-md-1 button-container">
-                    <button class="btn btn-outline-dark" title="Mostrar Actas" (click)="cargarActas()"><i
-                            class='fa fa-list-alt' style="font-size:20px;"></i></button>
-                </div>
-
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <label for="">Nombre de Prestador o NIT:</label>
                     <input class="form-control" type="text" name="search" [(ngModel)]="searchText"
                         placeholder="Buscar Prestador">
@@ -69,21 +60,21 @@
                 <thead>
                     <tr>
                         <th scope="col">N°ACTA</th>
-                        <th scope="col">PRESTADOR</th>
-                        <th scope="col">NIT</th>
-                        <th scope="col">MUNICIPIO</th>
-                        <th scope="col">FECHA DE CREACIÓN</th>
+                        <th scope="col" style="text-align: center;">PRESTADOR</th>
+                        <th scope="col" style="text-align: center;">NIT</th>
+                        <th scope="col" style="text-align: center;">MUNICIPIO</th>
+                        <th scope="col" style="text-align: center;">FECHA DE CREACIÓN</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr
                         *ngFor="let evaluacion of evaluaciones | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page}">
-                        <td class="text-center">{{evaluacion.act_id}}</td>
-                        <td>{{evaluacion.act_prestador}}</td>
+                        <td style="text-align: center;">{{evaluacion.act_id}}</td>
+                        <td style="text-align: justify;">{{evaluacion.act_prestador}}</td>
                         <td>{{evaluacion.act_nit}}</td>
-                        <td class="text-center">{{evaluacion.act_municipio}}</td>
-                        <td>{{evaluacion.act_creado | date: 'dd/MM/yyyy' }}</td>
+                        <td style="text-align: center;">{{evaluacion.act_municipio}}</td>
+                        <td style="text-align: center;">{{evaluacion.act_creado | date: 'dd/MM/yyyy' }}</td>
                         <td>
                             <button class="btn btn-outline-dark"
                                 (click)="openModal(modalTemplate, evaluacion.id, evaluacion.act_prestador)">
@@ -99,6 +90,7 @@
             <div class="container" *ngIf="listaVacia">
                 <div class="p-3 mb-2 bg-dark text-white text-center">
                     <h2>{{ listaVacia }}</h2>
+                    
                 </div>
             </div>
 

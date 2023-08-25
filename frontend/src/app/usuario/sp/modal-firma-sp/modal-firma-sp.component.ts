@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import SignaturePad from 'signature_pad';
-import { SharedServiceService } from 'src/app/services/Sic/shared-service.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
 
 @Component({
   selector: 'app-modal-firma-sp',

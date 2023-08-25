@@ -8,7 +8,7 @@ import { CriterioSicService } from 'src/app/services/Sic/criterio.service';
 import { DominioService } from 'src/app/services/Sic/dominio.service';
 import { IndicadorService } from 'src/app/services/Sic/indicador.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { SharedServiceService } from 'src/app/services/Sic/shared-service.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { CumplimientoEstandarService } from 'src/app/services/Sic/cumplimiento-estandar.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -215,7 +215,7 @@ export class EvaluacionSicComponent implements OnInit {
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',
-        backdrop: 'static',
+        backdrop: true,
         keyboard: true
       }
 

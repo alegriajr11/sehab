@@ -22,18 +22,17 @@ export class AuditoriaComponent {
   habilitarfechaFin = false;
 
   listaVacia: any = undefined;
-  public page: number;
+  public page: number = 1;
 
 
   constructor(private auditoria_services: AuditoriaService) { }
 
 
   ngOnInit(): void {
-
+    this.getAllAuditorias()
   }
   limpiarFechaFinal() {
     this.fechaFin = null
-    this.auditoria = []
   }
 
   habilitarFechaFinal() {
@@ -57,6 +56,7 @@ export class AuditoriaComponent {
   }
 
 
+  //CARGAR AUDITORIAS POR FECHAS O ACCION
   cargarAuditorias(){
     const fechaFinAjustada = new Date(this.fechaFin);
     fechaFinAjustada.setDate(fechaFinAjustada.getDate() + 1);
@@ -72,7 +72,20 @@ export class AuditoriaComponent {
     )
     this.page = 1;
   }
+  getAllAuditorias() {
+    this.auditoria_services.listAllAuditorias().subscribe(
+      data => {
+        this.auditoria = data
+        this.listaVacia = undefined
+      },
+      err => {
+        this.listaVacia = err.error.message;
+        this.auditoria = []
+      }
+    )
+  }
 
+  //CARGAR AUDITORIAS POR NOMBRE DE USUARIO
   cargarAuditoriaUsuario() {
     this.auditoria_services.listAuditoriaNombreUsuario(this.nombre_usuario).subscribe(
       data => {
@@ -84,6 +97,9 @@ export class AuditoriaComponent {
         this.auditoria = []
       }
     )
+    if(!this.nombre_usuario){
+      this.getAllAuditorias();
+    }
   }
 
   // Método para calcular el ID global

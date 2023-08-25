@@ -4,6 +4,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { NuevoUsuarioDto } from 'src/app/models/nuevo-usuario.dto';
 import { AuthService } from 'src/app/services/auth.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
 
 @Component({
   selector: 'app-nuevo-usuario-sp',
@@ -20,6 +21,7 @@ export class NuevoUsuarioSpComponent implements OnInit {
   usu_email: string;
   usu_nombreUsuario: string;
   usu_password: string;
+  usu_firma: string
   usu_estado: string;
 
   //MODAL
@@ -29,6 +31,7 @@ export class NuevoUsuarioSpComponent implements OnInit {
     private modalService: BsModalService,
     private authService: AuthService,
     private toastrService: ToastrService,
+    public sharedService: SharedServiceService,
     private router: Router
   ) { }
 
@@ -39,7 +42,7 @@ export class NuevoUsuarioSpComponent implements OnInit {
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',
-        backdrop: 'static',
+        backdrop: true,
         keyboard: true
       }
 
@@ -47,12 +50,14 @@ export class NuevoUsuarioSpComponent implements OnInit {
   }
 
   onRegister(): void {
+    this.usu_firma = this.sharedService.getFirmaUsuario()
     this.usuario = new NuevoUsuarioDto(
       this.usu_nombre,
       this.usu_apellido,
       this.usu_email,
       this.usu_nombreUsuario,
       this.usu_password,
+      this.usu_firma,
       this.usu_estado
     );
     this.authService.registroSp(this.usuario).subscribe(
@@ -70,6 +75,9 @@ export class NuevoUsuarioSpComponent implements OnInit {
         });
       }
     );
+    //Reiniciar el valor de la firma y enviarlo al servicio compartido
+    this.usu_firma = null
+    this.sharedService.setFirmaUsuario(this.usu_firma)
   }
 
 }

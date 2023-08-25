@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { NuevoUsuarioDto } from 'src/app/models/nuevo-usuario.dto';
 import { AuthService } from 'src/app/services/auth.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
 
 @Component({
   selector: 'app-nuevo-usuario-reso',
@@ -17,23 +18,27 @@ export class NuevoUsuarioResoComponent implements OnInit {
   usu_email: string;
   usu_nombreUsuario: string;
   usu_password: string;
+  usu_firma: string;
   usu_estado: string;
 
   constructor(
     private authService: AuthService,
     private toastrService: ToastrService,
+    public sharedService: SharedServiceService,
     private router: Router
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onRegister(): void {
+    this.usu_firma = this.sharedService.getFirmaUsuario()
     this.usuario = new NuevoUsuarioDto(
       this.usu_nombre,
       this.usu_apellido,
       this.usu_email,
       this.usu_nombreUsuario,
       this.usu_password,
+      this.usu_firma,
       this.usu_estado
     );
     this.authService.registroReso(this.usuario).subscribe(
@@ -51,6 +56,9 @@ export class NuevoUsuarioResoComponent implements OnInit {
         });
       }
     );
+    //Reiniciar el valor de la firma y enviarlo al servicio compartido
+    this.usu_firma = null
+    this.sharedService.setFirmaUsuario(this.usu_firma)
   }
 
 }

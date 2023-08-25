@@ -19,6 +19,7 @@ export class NuevoUsuarioAdminComponent implements OnInit {
   usu_nombreUsuario: string;
   usu_password: string;
   usu_estado: string;
+  usu_firma: string;
 
   constructor(
     private authService: AuthService,
@@ -29,12 +30,14 @@ export class NuevoUsuarioAdminComponent implements OnInit {
   ngOnInit(): void {}
 
   onRegister(): void {
+    this.usu_firma = null
     this.usuario = new NuevoUsuarioDto(
       this.usu_nombre,
       this.usu_apellido,
       this.usu_email,
       this.usu_nombreUsuario,
       this.usu_password,
+      this.usu_firma,
       this.usu_estado
     );
     this.authService.registroAdmin(this.usuario).subscribe(

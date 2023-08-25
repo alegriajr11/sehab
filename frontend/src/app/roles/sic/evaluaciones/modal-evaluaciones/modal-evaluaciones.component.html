@@ -19,22 +19,23 @@
 
 
         <div class="row">
-            <div class="col-md-6">
-                <button class="btn btn-dark esp btn-circle btn-xl" title="DESCARGAR ACTA" (click)="generarPdfActa()">
-                    <i class='fas fa-file-pdf fa-lg'></i>
+            <div [ngClass]="{'col-md-6': isAdmin, 'col-md-9': !isAdmin}">
+                <button class="btn btn-dark esp btn-circle btn-xl" title="Descargar Acta" (click)="generarPdfActa()">
+                    <i class='fas fa-file-download fa-lg'></i>
                 </button>
                 <span class="tittle-button">ACTA</span>
             </div>
 
             <div class="col-md-3">
-                <button class="btn btn-dark esp btn-circle btn-xl">
+                <button class="btn btn-dark esp btn-circle btn-xl" title="Editar Acta">
                     <i class='fa fa-edit fa-lg'></i>
                 </button>
             </div>
 
-            <div class="col-md-3">
-                <button class="btn btn-dark esp btn-circle btn-xl">
-                    <i class='fa fa-window-close fa-lg'></i>
+            <div class="col-md-3" *ngIf="isAdmin">
+                <button class="btn btn-dark esp btn-circle btn-xl" (mouseover)="changeIcon()" title="Cerrar Acta"
+                    (mouseout)="restoreIcon()">
+                    <i [class]="iconClass"></i>
                 </button>
             </div>
 
@@ -43,14 +44,14 @@
             </div>
 
             <div class="col-md-9">
-                <button class="btn btn-dark esp btn-circle btn-xl" title="DESCARGAR EVALUACIÓN">
-                    <i class='fa fa-file-text fa-lg'></i>
+                <button class="btn btn-dark esp btn-circle btn-xl" title="Descargar Evaluación">
+                    <i class='fas fa-file-download fa-lg'></i>
                 </button>
                 <span class="tittle-button">EVALUACIÓN</span>
             </div>
 
             <div class="col-md-3">
-                <button class="btn btn-dark esp btn-circle btn-xl">
+                <button class="btn btn-dark esp btn-circle btn-xl" title="Editar Evaluación">
                     <i class='fa fa-edit fa-lg'></i>
                 </button>
             </div>

@@ -19,11 +19,17 @@ export class UsuarioService {
 
   constructor(private httpClient: HttpClient) { }
 
+  //SOLICITUD LISTAR TODOS LOS USUARIOS
   public lista(): Observable<Usuario[]> {
     return this.httpClient.get<Usuario[]>(`${this.usuarioURL}`);
   }
 
-  public detail(id: number): Observable<Usuario> {
+  //SOLICITUD LISTAR USUARIOS ACTIVOS Y SIN ADMIN
+  public listaUserEstado(): Observable<Usuario[]> {
+    return this.httpClient.get<Usuario[]>(`${this.usuarioURL}` + 'estado/limitado');
+  }
+
+  public oneUser(id: number): Observable<Usuario> {
     return this.httpClient.get<Usuario>(`${this.usuarioURL}${id}`);
   }
 

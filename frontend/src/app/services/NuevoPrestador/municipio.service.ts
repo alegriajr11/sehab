@@ -16,4 +16,8 @@ export class MunicipioService {
   public lista(): Observable<Municipio[]> {
     return this.httpClient.get<Municipio[]>(`${this.municipioURL}`);
   }
+
+  public oneMunicipio(id: string): Observable<Municipio> {
+    return this.httpClient.get<Municipio>(`${this.municipioURL}` + id);
+  }
 }

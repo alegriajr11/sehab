@@ -24,7 +24,7 @@
             <h2 class="card-title text-center">INDICADORES PARA EL MONITOREO DE LA CALIDAD/PRESTADORES DE SERVICIOS
                 ACTA DE VERIFICACION Y SEGUIMIENTO</h2>
             <hr class="up">
-            <form #f="ngForm" novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()" id="form">
+            <form novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()" id="form">
                 <div class="col-md-1">
                     <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
                     <input type="number" min="0" class="form-control" id="acta" readonly name="act_id"
@@ -73,7 +73,7 @@
                 <div class="col-md-6">
                     <label for="habilitado" class="form-label">Municipio:</label>
                     <select id="mun_id" name="mun_id" class="form-select form-control"
-                        (change)="cargarPrestadoresByMun()" [(ngModel)]="act_municipio" ngDefaultControl>
+                        (change)="cargarPrestadoresByMun()" [(ngModel)]="act_municipioId" ngDefaultControl>
                         <option value="" disabled selected hidden>Selecciona un Municipio...</option>
                         <option *ngFor="let municipio of municipio" [value]="municipio.mun_id">
                             {{ municipio.mun_nombre }}
@@ -84,15 +84,13 @@
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Prestador:</label>
                     <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()"
-                        [(ngModel)]="act_prestador" ngDefaultControl>
-                        <option hidden selected>Selecciona un Prestador...</option>
+                        [(ngModel)]="act_prestadorId" ngDefaultControl>
+                        <option value="" disabled selected hidden>Selecciona un Prestador...</option>
                         <option *ngFor="let prest of prestador" [value]="prest.pre_cod_habilitacion">
                             {{ prest.pre_nombre }}
                         </option>
                     </select>
                 </div>
-
-
 
                 <div class="col-6">
                     <label for="nit" class="form-label">Nit:</label>
@@ -129,15 +127,14 @@
                 <div class="col-12">
                     <label for="principal" class="form-label">Sede Principal:</label>
 
-                    <select id="sedep" class="form-select form-control" (change)="sedePrincipal()"
+                    <select id="sedep" class="form-select form-control"
                         [(ngModel)]="act_sede_principal" [ngModelOptions]="{standalone: true}" ngDefaultControl>
                         <option disabled selected hidden>Sede Principal...</option>
                         <option value="si">Si</option>
                         <option value="no">No</option>
                     </select>
                 </div>
-                <div class="col-md-12" id="msj">
-                </div>
+
                 <div class="col-md-6">
                     <label for="inputAddress2" class="form-label">Localidad:</label>
                     <input type="text" class="form-control" id="localidad" name="act_sede_localidad"
@@ -177,7 +174,7 @@
                     <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
                     <select id="objVisita" class="form-select form-control" [(ngModel)]="act_obj_visita"
                         [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option hidden selected>Objeto de visita...</option>
+                        <option value="" disabled selected hidden>Selecciona el Objeto...</option>
                         <option>Realizar seguimiento a la implementación del sistema de información para la calidad que
                             define la resolución 256 de 2016</option>
                     </select>
@@ -192,8 +189,8 @@
                 </div>
 
                 <div class="col-12">
-                    <label for="" class="form-label">Nombre:</label>
-                    <select id="usu_secretaria" class="form-select form-control" [(ngModel)]="act_nombre_funcionario"
+                    <label for="" class="form-label">Verificador SOGCS:</label>
+                    <select id="usu_secretaria" class="form-select form-control" [(ngModel)]="act_funcionarioId"
                         [ngModelOptions]="{standalone: true}" ngDefaultControl>
                         <option hidden>Selecciona el Nombre...</option>
                         <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
@@ -235,8 +232,8 @@
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>
-
             </form>
+
         </div>
     </div>
 </div>
