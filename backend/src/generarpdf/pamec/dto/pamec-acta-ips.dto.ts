@@ -63,6 +63,12 @@ export class ActaPamecIpsDto {
 
     act_cargo_prestador2: string
 
+    @IsNotBlank()
+    act_firma_funcionario: string
+    
+    @IsNotBlank()
+    act_firma_prestador: string
+
     @IsString()
     act_estado: string;
 

@@ -35,6 +35,15 @@ export class PamecActaController {
         return this.pamecActaService.findAllFromYear(year, numActa);
     }
 
+    //OBTENER ACTAS POR AÑO Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
+    @Get('/busqueda')
+    async findAllBusqueda(@Query('year') year: Date,
+        @Query('numActa') numActa: number, 
+        @Query('nomPresta') nomPresta: string,
+        @Query('nit') nit: string) {
+        return this.pamecActaService.findAllBusqueda(year, numActa, nomPresta,nit);
+    }
+
     //CREAR PAMEC IPS ACTA PDF
     @Post()
     async create(@Body() payload: { dto: ActaPamecIpsDto, tokenDto: TokenDto }) {

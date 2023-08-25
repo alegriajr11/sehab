@@ -32,11 +32,14 @@ export class SicActaController {
         return this.sic_act_pdfService.findAllFromDate(dateString);
     }
 
-    //OBTENER ACTAS POR AÑO
-    @Get('/year/date')
-    async findAllFromYear(@Query('year') year: Date,
-        @Query('numActa') numActa: number) {
-        return this.sic_act_pdfService.findAllFromYear(year, numActa);
+    //OBTENER ACTAS POR AÑO Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
+    @Get('/busqueda/fecha/acta/prestador/nit')
+    async findAllBusqueda(@Query('year') year: Date,
+        @Query('acta_id') acta_id: string, 
+        @Query('act_prestador') act_prestador: string,
+        @Query('act_nit') act_nit: string) {
+            const numericActaId = parseInt(acta_id);
+        return this.sic_act_pdfService.findAllBusqueda(year, numericActaId, act_prestador,act_nit);
     }
 
     //ÚLTIMA ACTA SIC

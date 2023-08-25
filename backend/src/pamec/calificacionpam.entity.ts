@@ -11,7 +11,7 @@ export class CalificacionpamEntity {
     @PrimaryGeneratedColumn('increment')
     cal_id: number;
 
-    @Column({type: 'int'})
+    @Column({})
     cal_nota: number;
     
     @Column({type: 'varchar', length: 11, nullable: false, unique: false})

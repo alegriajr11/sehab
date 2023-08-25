@@ -105,6 +105,10 @@ export class UsuarioService {
 
     dto.usu_estado ? usuario_actualizar.usu_estado = dto.usu_estado : usuario_actualizar.usu_estado = usuario_actualizar.usu_estado;
 
+    dto.usu_cargo ? usuario_actualizar.usu_cargo = dto.usu_cargo : usuario_actualizar.usu_cargo = usuario_actualizar.usu_cargo;
+
+    dto.usu_area_profesional ? usuario_actualizar.usu_area_profesional = dto.usu_area_profesional : usuario_actualizar.usu_area_profesional = usuario_actualizar.usu_area_profesional;
+
     const usuario = await this.jwtService.decode(tokenDto.token);
 
     const payloadInterface: PayloadInterface = {
@@ -205,7 +209,7 @@ export class UsuarioService {
       usu_roles: usuario[`usu_roles`]
     };
 
-    await this.usuarioRepository.delete(usuario_eliminar.usu_id)
+    await this.usuarioRepository.delete(usuario_eliminar.usu_cedula)
 
     usuario_eliminar.roles.forEach(data => {
       rol_usuario = data.rol_nombre

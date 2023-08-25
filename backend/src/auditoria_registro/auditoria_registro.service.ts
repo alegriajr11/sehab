@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
 import { AuditoriaRegistroEntity } from './auditoria_registro.entity';
 import { AuditoriaRegistroRepository } from './auditoria_registro.repository';
+import * as ExcelJS from 'exceljs';
 
 
 @Injectable()
@@ -23,19 +24,19 @@ export class AuditoriaRegistroService {
 
     /** USUARIOS - ROL ADMIN */
     //CONTROLAR LA CREACIÓN DE USUARO - ADMIN
-    async logCreateUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logCreateUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Usuario ADMIN: ${usu_nombre2}  con nombre de usuario: ${usu_nombreUsuario}  `;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario ADMIN', details, direccionIp);
     }
 
     //CONTROLAR LA ELIMINACIÓN DE USUARIO - ADMIN
-    async logDeleteUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logDeleteUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha eliminado un usuario ADMIN: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario ADMIN', details, direccionIp);
     }
 
     //CONTROLAR LA ACTUALIZACIÓN DE USUARIO - ADMIN
-    async logUpdateUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logUpdateUserAdmin(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un usuario ADMIN: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario ADMIN', details, direccionIp);
     }
@@ -44,18 +45,18 @@ export class AuditoriaRegistroService {
 
     /** USUARIOS - ROL SIC */
     //CONTROLAR LA CREACIÓN DE UN USUARIO DE ROL SIC
-    async logCreateUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logCreateUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Usuario SIC: ${usu_nombre2}  con nombre de usuario: ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario Sic', details, direccionIp);
     }
-    
+
     //logUpdateUserSic
-    async logUpdateUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logUpdateUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un usuario SIC: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario Sic', details, direccionIp);
     }
     //logDeleteUserSic
-    async logDeleteUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logDeleteUserSic(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha eliminado un usuario SIC: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario Sic', details, direccionIp);
     }
@@ -63,34 +64,34 @@ export class AuditoriaRegistroService {
 
     /** USUARIOS - ROL PAMEC */
     //logCreateUserPamec
-    async logCreateUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logCreateUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Usuario PAMEC: ${usu_nombre2}  con nombre de usuario: ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario PAMEC', details, direccionIp);
     }
     //logUpdateUserPamec
-    async logUpdateUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logUpdateUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un usuario PAMEC: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario PAMEC', details, direccionIp);
     }
     //logDeleteUserPamec
-    async logDeleteUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logDeleteUserPamec(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha eliminado un usuario PAMEC: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario PAMEC', details, direccionIp);
     }
 
     /** USUARIOS - ROL SP */
     //logCreateUserSP
-    async logCreateUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logCreateUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Usuario SP: ${usu_nombre2}  con nombre de usuario: ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario SP', details, direccionIp);
     }
     //logUpdateUserSP
-    async logUpdateUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logUpdateUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un usuario SP: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario SP', details, direccionIp);
     }
     //logDeleteUserSP
-    async logDeleteUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logDeleteUserSp(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha eliminado un usuario SP: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario SP', details, direccionIp);
     }
@@ -101,17 +102,17 @@ export class AuditoriaRegistroService {
 
     /** USUARIOS - ROL RES */
     //logCreateUserRES
-    async logCreateUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logCreateUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Usuario RES: ${usu_nombre2}  con nombre de usuario: ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Usuario RES', details, direccionIp);
     }
     //logUpdateUserRES
-    async logUpdateUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logUpdateUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un usuario RES: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Usuario RES', details, direccionIp);
     }
     //logDeleteUserRES
-    async logDeleteUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario:string): Promise<void> {
+    async logDeleteUserRes(usu_nombre: string, usu_apellido: string, direccionIp: string, usu_nombre2: string, usu_nombreUsuario: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha eliminado un usuario RES: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(usu_nombre, usu_apellido, 'Eliminación Usuario RES', details, direccionIp);
     }
@@ -177,9 +178,9 @@ export class AuditoriaRegistroService {
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta IPS ', details, direccionIp);
     }
 
-/*EVALUACION CRITERIOS - APOYO DIAGNOSTICO*/
+    /*EVALUACION CRITERIOS - APOYO DIAGNOSTICO*/
     //CONTROLAR LA CREACIÓN DEL CRITERIO DIAGNOSTICO VASCULAR
-    async logCreateDiagnostico(usu_nombre: string, usu_apellido: string, direccionIp: string,  anio: string): Promise<void> {
+    async logCreateDiagnostico(usu_nombre: string, usu_apellido: string, direccionIp: string, anio: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un criterio diagnostico vascular con fecha ${anio} `;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Criterio Diagnostico Vascular', details, direccionIp);
     }
@@ -227,10 +228,35 @@ export class AuditoriaRegistroService {
         return aduditoria
     }
 
-    async getAllAuditorias(): Promise<AuditoriaRegistroEntity[]>{
-        const auditoria = await this.auditoria_registroRepository.find({ order: { id: 'DESC' },});
+    async getAllAuditorias(): Promise<AuditoriaRegistroEntity[]> {
+        const auditoria = await this.auditoria_registroRepository.find({ order: { id: 'DESC' }, });
         if (!auditoria.length) throw new NotFoundException(new MessageDto('No hay Auditorias en la lista'))
         return auditoria;
+    }
+
+    async generateReport(): Promise<Buffer> {
+
+        const auditorias = await this.getAllAuditorias()
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Report');
+
+        // Agregar encabezados
+        const headers = Object.keys(auditorias[0]);
+        worksheet.addRow(headers);
+
+        // Agregar datos
+        auditorias.forEach(item => {
+            const row = [];
+            headers.forEach(header => {
+                row.push(item[header]);
+            });
+            worksheet.addRow(row);
+        });
+
+        // Crear el archivo Excel y guardarlo en un buffer
+        const buffer = await workbook.xlsx.writeBuffer();
+        return ;
     }
 
 

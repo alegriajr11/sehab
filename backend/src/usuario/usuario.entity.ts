@@ -1,13 +1,17 @@
 /* eslint-disable prettier/prettier */
 import { hash } from "bcrypt";
+import { ActaVerificacionEntity } from "src/generarpdf/resolucion/verificacion/acta-verificacion.entity";
 import { RolEntity } from "src/rol/rol.entity";
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
 @Entity({ name: 'usuario' })
 export class UsuarioEntity {
 
     @PrimaryGeneratedColumn('increment')
     usu_id: number;
+
+    @Column({ type: 'varchar', length: 15, nullable: true })
+    usu_cedula: string;
 
     @Column({ type: 'varchar', length: 20, nullable: true })
     usu_nombre: string;
@@ -29,6 +33,12 @@ export class UsuarioEntity {
 
     @Column({ type: 'varchar', nullable: false })
     usu_estado: string;
+
+    @Column({ type: 'varchar', nullable: false })
+    usu_cargo: string;
+
+    @Column({ type: 'varchar', nullable: false })
+    usu_area_profesional: string;
 
     @CreateDateColumn()
     usu_creado: Timestamp;
@@ -52,4 +62,7 @@ export class UsuarioEntity {
         if (!this.usu_password) return;
         this.usu_password = await hash(this.usu_password, 10)
     }
+
+    @ManyToMany(type => ActaVerificacionEntity, verificacion => verificacion.verificacion_usuario)
+    usuario_verificacion: ActaVerificacionEntity;
 }

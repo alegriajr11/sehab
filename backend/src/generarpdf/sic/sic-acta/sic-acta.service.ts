@@ -91,14 +91,24 @@ export class SicActaService {
         return actas;
     }
 
-    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA
 
-    async findAllFromYear(year?: Date, numActa?: number): Promise<ActaSicPdfEntity[]> {
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
+
+    async findAllBusqueda(year?: Date, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSicPdfEntity[]> {
         let query = this.acta_sic_pdfRepository.createQueryBuilder('acta');
 
         if (numActa) {
             query = query.where('acta.act_id = :numActa', { numActa });
         }
+
+        if (nomPresta) {
+            query = query.andWhere('acta.act_prestador = :nomPresta', { nomPresta });
+        }
+
+        if (nit) {
+            query = query.andWhere('acta.act_nit = :nit', { nit });
+        }
+
 
         if (year) {
             query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
@@ -107,7 +117,7 @@ export class SicActaService {
         const actas = await query.getMany();
 
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
+            throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
         }
 
         return actas;
@@ -185,8 +195,10 @@ export class SicActaService {
         dto.act_obj_visita ? acta.act_obj_visita = dto.act_obj_visita : acta.act_obj_visita = acta.act_obj_visita;
         dto.act_nombre_funcionario ? acta.act_nombre_funcionario = dto.act_nombre_funcionario : acta.act_nombre_funcionario = acta.act_nombre_funcionario;
         dto.act_cargo_funcionario ? acta.act_cargo_funcionario = dto.act_cargo_funcionario : acta.act_cargo_funcionario = acta.act_cargo_funcionario;
+        dto.act_firma_funcionario ? acta.act_firma_funcionario = dto.act_firma_funcionario : acta.act_firma_funcionario = acta.act_firma_funcionario;
         dto.act_nombre_prestador ? acta.act_nombre_prestador = dto.act_nombre_prestador : acta.act_nombre_prestador = acta.act_nombre_prestador;
         dto.act_cargo_prestador ? acta.act_cargo_prestador = dto.act_cargo_prestador : acta.act_cargo_prestador = acta.act_cargo_prestador;
+        dto.act_firma_prestador ? acta.act_firma_prestador = dto.act_firma_prestador : acta.act_firma_prestador = acta.act_firma_prestador;
 
         const usuario = await this.jwtService.decode(tokenDto.token);
 

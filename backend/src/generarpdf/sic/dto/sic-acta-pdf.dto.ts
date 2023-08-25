@@ -70,6 +70,9 @@ export class ActaSicPdfDto {
     act_cargo_funcionario: string
 
     @IsNotBlank()
+    act_firma_funcionario: string
+
+    @IsNotBlank()
     act_nombre_prestador: string
 
     @IsNotBlank()

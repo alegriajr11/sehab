@@ -84,6 +84,37 @@ export class SpIndependientesService {
         return actas;
     }
 
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
+
+    async findAllBusqueda(year?: Date, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSpIndependientePdfEntity[]> {
+        let query = this.actaSpIndependientePdfRepository.createQueryBuilder('acta');
+
+        if (numActa) {
+            query = query.where('acta.act_id = :numActa', { numActa });
+        }
+
+        if (nomPresta) {
+            query = query.andWhere('acta.act_nombre_prestador = :nomPresta', { nomPresta });
+        }
+
+        if (nit) {
+            query = query.andWhere('acta.act_nit = :nit', { nit });
+        }
+
+
+        if (year) {
+            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+        }
+
+        const actas = await query.getMany();
+
+        if (actas.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
+        }
+
+        return actas;
+    }
+
 
 
     /*CREACIÓN SP INDEPENDIENTE ACTA PDF */
@@ -208,7 +239,9 @@ export class SpIndependientesService {
         dto.act_cargo_funcionario ? ips.act_cargo_funcionario = dto.act_cargo_funcionario : ips.act_cargo_funcionario = ips.act_cargo_funcionario;
         dto.act_nombre_prestador ? ips.act_nombre_prestador = dto.act_nombre_prestador : ips.act_nombre_prestador = ips.act_nombre_prestador;
         dto.act_cargo_prestador ? ips.act_cargo_prestador = dto.act_cargo_prestador : ips.act_cargo_prestador = ips.act_cargo_prestador;
-
+        dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
+        dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
+        
 
         const usuario = await this.jwtService.decode(tokenDto.token);
 

@@ -29,11 +29,20 @@ export class SpIndependientesController {
         return this.sp_IndependientesService.findAllFromDate(dateString);
     }
 
-    //OBTENER ACTAS POR AÑO
+    //OBTENER ACTAS POR AÑO Y/O NUMERO ACTA
     @Get('/year/date')
     async findAllFromYear(@Query('year') year: Date,
         @Query('numActa') numActa: number) {
         return this.sp_IndependientesService.findAllFromYear(year, numActa);
+    }
+
+    //OBTENER ACTAS POR AÑO Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
+    @Get('/busqueda')
+    async findAllBusqueda(@Query('year') year: Date,
+        @Query('numActa') numActa: number, 
+        @Query('nomPresta') nomPresta: string,
+        @Query('nit') nit: string) {
+        return this.sp_IndependientesService.findAllBusqueda(year, numActa, nomPresta,nit);
     }
 
     //CREAR SP INDEPENDIENTE ACTA PDF

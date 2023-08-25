@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn,  ManyToOne,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { PrestadorEntity } from "../prestador.entity";
+import { ActaVerificacionEntity } from "src/generarpdf/resolucion/verificacion/acta-verificacion.entity";
 
 @Entity({ name: 'sede' })
 export class SedeEntity {
@@ -28,4 +29,11 @@ export class SedeEntity {
     //Relacion Uno a Muchos SEDE - PRESTADOR
     @ManyToOne(type => PrestadorEntity, prestador => prestador.pre_sede)
     sede_prestador: PrestadorEntity;
+
+     //Relacion Uno a uno SEDE - ACTA VERIFICACION 
+    @OneToOne(() => ActaVerificacionEntity, actaVerificacion => actaVerificacion.act_sede_veri)
+    @JoinColumn()
+    acta_verificacion_sede: ActaVerificacionEntity;
+
+
 }

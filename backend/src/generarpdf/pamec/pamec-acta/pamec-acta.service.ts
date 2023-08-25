@@ -49,8 +49,6 @@ export class PamecActaService {
         return ips;
     }
 
-    //async getallActasYear(): Promise<ActaPamecIpsEntity[]> {
-
 
     //ENCONTRAR POR ACTA POR FECHAS
     async findAllFromDate(date: string): Promise<ActaPamecIpsEntity[]> {
@@ -75,6 +73,37 @@ export class PamecActaService {
         if (numActa) {
             query = query.where('acta.act_id = :numActa', { numActa });
         }
+
+        if (year) {
+            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+        }
+
+        const actas = await query.getMany();
+
+        if (actas.length === 0) {
+            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
+        }
+
+        return actas;
+    }
+
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
+
+    async findAllBusqueda(year?: Date, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaPamecIpsEntity[]> {
+        let query = this.actaPamecIpsRepository.createQueryBuilder('acta');
+
+        if (numActa) {
+            query = query.where('acta.act_id = :numActa', { numActa });
+        }
+
+        if (nomPresta) {
+            query = query.andWhere('acta.act_nombre_prestador = :nomPresta', { nomPresta });
+        }
+
+        if (nit) {
+            query = query.andWhere('acta.act_nit = :nit', { nit });
+        }
+
 
         if (year) {
             query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
@@ -214,8 +243,9 @@ export class PamecActaService {
         ips.act_nombre_prestador2 = dto.act_nombre_prestador2 !== undefined ? dto.act_nombre_prestador2 : "";
         ips.act_cargo_prestador2 = dto.act_cargo_prestador2 !== undefined ? dto.act_cargo_prestador2 : "";
         dto.act_obj_visita ? ips.act_obj_visita = dto.act_obj_visita : ips.act_obj_visita = ips.act_obj_visita;
-
-
+        dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
+        dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
+        
         const usuario = await this.jwtService.decode(tokenDto.token);
 
         const payloadInterface: PayloadInterface = {

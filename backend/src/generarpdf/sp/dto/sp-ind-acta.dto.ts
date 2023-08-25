@@ -63,6 +63,12 @@ export class IndActaDto {
     @IsNotBlank()
     act_cargo_prestador: string
 
+    @IsNotBlank()
+    act_firma_funcionario: string
+    
+    @IsNotBlank()
+    act_firma_prestador: string
+
     @IsString()
     act_estado: string;
 }

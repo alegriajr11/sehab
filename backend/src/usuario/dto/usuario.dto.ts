@@ -21,4 +21,10 @@ export class UsuarioDto {
     @IsString()
     usu_estado: string;
 
+    @IsString()
+    usu_cargo: string;
+
+    @IsString()
+    usu_area_profesional: string;
+
 }
