@@ -108,6 +108,7 @@ import { ServiciosVerificadosModule } from './resolucion/servicios_capacidad/ser
 import { AuditoriaRegistroModule } from './auditoria_registro/auditoria_registro.module';
 import { CapacidadInstaladaController } from './resolucion/servicios_capacidad/capacidad_instalada/capacidad_instalada.controller';
 import { GenerarExcelModule } from './generar_excel/generar_excel.module';
+import { EvaluacionSicModule } from './sic/evaluacion-sic/evaluacion-sic.module';
 
 
 
@@ -196,6 +197,7 @@ import { GenerarExcelModule } from './generar_excel/generar_excel.module';
     CapacidadInstaladaModule,
     ServiciosVerificadosModule,
     GenerarExcelModule,
+    EvaluacionSicModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 

@@ -13,26 +13,26 @@ export class CriteriopamController {
     }
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    async getOne(@Param('id', ParseIntPipe) id: number){
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriopamService.findByAct(id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get()
-    async getAll(){
+    async getAll() {
         return await this.criteriopamService.getall()
     }
 
 
     @UseGuards(JwtAuthGuard)
     @Get('criterio/:id')
-    async getOneCriterio(@Param('id', ParseIntPipe) id: number){
+    async getOneCriterio(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriopamService.findByCri(id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('actividad/:id')
-    async getOneActividad(@Param('id', ParseIntPipe) id: number){
+    async getOneActividad(@Param('id', ParseIntPipe) id: number) {
         return await this.criteriopamService.findAct(id);
     }
 
@@ -43,16 +43,16 @@ export class CriteriopamController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({whitelist: true, transformOptions: {enableImplicitConversion: true}}))
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioPamDto){
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioPamDto) {
         return await this.criteriopamService.update(id, dto);
     }
 
-    @UsePipes(new ValidationPipe({whitelist: true}))
+    @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioPamDto){
-        return this.criteriopamService.create(id,dto);
+    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioPamDto) {
+        return this.criteriopamService.create(id, dto);
     }
 
 }

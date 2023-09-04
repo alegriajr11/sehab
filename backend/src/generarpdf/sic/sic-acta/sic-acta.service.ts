@@ -9,6 +9,13 @@ import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_regis
 import { TokenDto } from 'src/auth/dto/token.dto';
 import { JwtService } from '@nestjs/jwt';
 import { PayloadInterface } from 'src/auth/payload.interface';
+import { PrestadorEntity } from 'src/prestador/prestador.entity';
+import { PrestadorRepository } from 'src/prestador/prestador.repository';
+import { EvaluacionSicDto } from 'src/sic/dto/evaluacionsic.dto';
+import { EvaluacionSicEntity } from 'src/sic/evaluacionsic.entity';
+import { EvaluacionsicRepository } from 'src/sic/evaluacionsic.repository';
+import { DominioEntity } from 'src/sic/dominio.entity';
+import { DominioRepository } from 'src/sic/dominio.repository';
 
 @Injectable()
 export class SicActaService {
@@ -17,6 +24,12 @@ export class SicActaService {
         @InjectRepository(ActaSicPdfEntity)
         private readonly acta_sic_pdfRepository: ActaSicPdfRepository,
         private readonly jwtService: JwtService,
+        @InjectRepository(PrestadorEntity)
+        private readonly prestadorRepository: PrestadorRepository,
+        @InjectRepository(EvaluacionSicEntity)
+        private readonly evaluacionSicRepository: EvaluacionsicRepository,
+        @InjectRepository(DominioEntity)
+        private readonly dominioRepository: DominioRepository,
         private readonly auditoria_registro_services: AuditoriaRegistroService
     ) { }
 
@@ -41,9 +54,9 @@ export class SicActaService {
     //ÚLTIMA ACTA REGISTRADA ID PRIMARY KEY
     async ultimaActaIdPk(): Promise<ActaSicPdfEntity> {
         const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
-        .addSelect('acta.id')
-        .orderBy('acta.id', 'DESC')
-        .getOne();
+            .addSelect('acta.id')
+            .orderBy('acta.id', 'DESC')
+            .getOne();
         if (!acta) {
             throw new NotFoundException(new MessageDto('No Existe'));
         }
@@ -93,25 +106,27 @@ export class SicActaService {
 
 
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
-
-    async findAllBusqueda(year?: Date, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSicPdfEntity[]> {
+    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSicPdfEntity[]> {
         let query = this.acta_sic_pdfRepository.createQueryBuilder('acta');
 
         if (numActa) {
             query = query.where('acta.act_id = :numActa', { numActa });
         }
 
+        if (year) {
+            if (numActa) {
+                query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+            } else {
+                query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+            }
+        }
+
         if (nomPresta) {
-            query = query.andWhere('acta.act_prestador = :nomPresta', { nomPresta });
+            query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
         }
 
         if (nit) {
-            query = query.andWhere('acta.act_nit = :nit', { nit });
-        }
-
-
-        if (year) {
-            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+            query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
         }
 
         const actas = await query.getMany();
@@ -145,6 +160,55 @@ export class SicActaService {
             const year = new Date().getFullYear().toString();
 
             await this.acta_sic_pdfRepository.save(acta_sicpdf);
+
+            const acta_ultima = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
+                .addSelect('acta.id')
+                .orderBy('acta.act_id', 'DESC')
+                .getOne();
+
+            //CONSULTAR LA ULTIMA ACTA QUE SE ASIGNARA A LA EVALUACION
+            const acta = await this.acta_sic_pdfRepository.findOne({ where: { id: acta_ultima.id } })
+
+            //ASIGNAMOS LOS DATOS DE LA ACTA REGISTRADA PARA CONSTRUIR EL DTO DE EVALUACION-INDEPENDIENTES
+            const eva_creado = acta_ultima.act_creado;  //Fecha de creación del acta
+            const eva_acta_prestador = acta_ultima.act_cod_prestador; // Valor del ID del prestador
+
+            //CONSULTAR EL PRESTADOR QUE TIENE EL ACTA
+            const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: eva_acta_prestador } })
+
+            //ASIGNAMOS LOS DATOS AL DTO
+            const evaluacionDto: EvaluacionSicDto = {
+                eva_creado
+            }
+
+            //CREAMOS EL DTO
+            const evaluacion_sic = await this.evaluacionSicRepository.create(evaluacionDto)
+
+            //ASIGNACION DE FORANEA ACTA UNO A UNO
+            evaluacion_sic.eval_acta_sic = acta
+            //ASIGNACION DE FORANEA PRESTADOR UNO A MUCHOS
+            evaluacion_sic.eval_sic_prestator = prestador
+
+            //GUARDAMOS EN LA ENTIDAD EVALUACION-SIC DE LA BASE DATOS
+            await this.evaluacionSicRepository.save(evaluacion_sic)
+
+
+            //CONSULTAR LA ÚLTIMA EVALUACIÓN EXISTENTE
+            const evaluacion_ultima = await this.evaluacionSicRepository.createQueryBuilder('evaluacion')
+                .addSelect('evaluacion.eva_id')
+                .orderBy('evaluacion.eva_id', 'DESC')
+                .getOne();
+
+            //CONSULTAR LOS DOMINIOS EXISTENTES
+            const dominios = await this.dominioRepository.find()
+
+            evaluacion_ultima.eva_sic_dom = dominios
+
+            //GUARDAR LA RELACIÓN ENTRE EVALUACIÓN Y ETAPAS
+            await this.evaluacionSicRepository.save(evaluacion_ultima);
+
+
+            //ASIGNAR LA AUDITORIA DEL ACTA CREADA
             await this.auditoria_registro_services.logCreateActaSic(
                 payloadInterface.usu_nombre,
                 payloadInterface.usu_apellido,
@@ -164,11 +228,56 @@ export class SicActaService {
     }
 
 
+    //CERRAR ACTA
+    async cerrarActa(id: number, payload: { tokenDto: TokenDto }): Promise<any> {
+
+        const { tokenDto } = payload;
+
+        try {
+            const acta = await this.findByActa(id);
+            console.log(acta)
+
+            if (!acta) {
+                throw new NotFoundException(new MessageDto('El Acta no existe'));
+            }
+
+            acta.act_estado = '0'
+
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
+            await this.acta_sic_pdfRepository.save(acta);
+            await this.auditoria_registro_services.logCierreActaSic(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                acta.act_id,
+                year,
+                acta.act_prestador,
+                acta.act_cod_prestador
+            );
+
+            return new MessageDto('El Acta ha sido Cerrada');
+        } catch (error) {
+            // Devuelve un mensaje de error apropiado
+            return { error: true, message: 'Ocurrió un error al cerrar el Acta' };
+        }
+    }
 
 
 
-
-    //ACTUALIZAR CRITERIOS SP INDEPENDIENTE
+    //ACTUALIZAR ACTA SIC
     async updateActa(id: number, payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payload;
         const acta = await this.findByActa(id);

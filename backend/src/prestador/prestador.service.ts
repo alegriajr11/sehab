@@ -45,6 +45,7 @@ export class PrestadorService {
         return prestador;
     }
 
+    //LISTAR PRESTADORES POR MUNICIPIO
     async findByMunicipio(id: string): Promise<PrestadorEntity[]> {
         const prestadores = await this.prestadorRepository.createQueryBuilder('prestador')
             .innerJoin('prestador.pre_municipio', 'pre_municipio')
@@ -53,6 +54,7 @@ export class PrestadorService {
             .getMany()
         return prestadores;
     }
+
 
     async findByMunicipioPamec(id: string): Promise<PrestadorEntity[]> {
         const prestadores = await this.prestadorRepository.createQueryBuilder('prestador')

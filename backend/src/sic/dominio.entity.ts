@@ -4,19 +4,21 @@ import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColum
 import { IndicadorEntity } from "./indicador.entity";
 import { EvaluacionSicEntity } from "./evaluacionsic.entity";
 
-@Entity({name: 'dominio'})
+@Entity({ name: 'dominio' })
 export class DominioEntity {
     @PrimaryGeneratedColumn('increment')
     dom_id: number;
 
-    @Column({type: 'varchar', length: 70, nullable: false, unique: false})
+    @Column({ type: 'varchar', length: 70, nullable: false, unique: false })
     dom_nombre: string;
-    
+
     //Relacion Uno a Muchos DOMINIO - INDICADOR
     @OneToMany(type => IndicadorEntity, indicador => indicador.ind_dominio)
     dom_indicador: IndicadorEntity;
 
     //Relacion MUCHOS a UNO DOMINIO - EVALUACION SIC
-    @ManyToOne(type => EvaluacionSicEntity, evasic => evasic.eva_sic_dom)
+    @ManyToMany(type => EvaluacionSicEntity, evasic => evasic.eva_sic_dom)
     dom_eva_sic: EvaluacionSicEntity;
+
+
 }

@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SedeService } from './sede.service';
 import { SedeDto } from '../dto/sede.dto';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('sede')
 export class SedeController {
@@ -9,13 +10,32 @@ export class SedeController {
         private readonly sedeService: SedeService
     ) { }
 
-    @Get('/mun/:id')
-    async getManyMun(@Param('id') id: string) {
-        return await this.sedeService.findBySede(id);
+
+    //OBTENER TODAS LAS SEDES
+    //@UseGuards(JwtAuthGuard)
+    @Get()
+    getAll() {
+        return this.sedeService.getallSedes();
     }
 
-    //CREAR CRITERIO GESTION PRETRANSFUNSIONAL POR ESTANDAR
-   
+    //@UseGuards(JwtAuthGuard)
+    @Get('nombre/sede')
+    async getAudtioriaNomApe(@Query('sede_nombre') sede_nombre: string) {
+        return await this.sedeService.findByNombreSede(sede_nombre);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('nombre/sede/prestador/:id')
+    async getManySedePrestador(@Param('id') id: string) {
+        return await this.sedeService.findBySedePrestador(id);
+    }
+
+    @Get(':id')
+    async getManyMun(@Param('id') id: number) {
+        return await this.sedeService.findByIdSede(id);
+    }
+
+    //CREAR SEDE
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
     async create(@Param('id', ParseIntPipe) id: string, @Body() dto: SedeDto) {

@@ -14,6 +14,9 @@ export class SedeEntity {
     @Column({ type: 'varchar', length: 100, nullable: false })
     sede_nombre: string
 
+    @Column({ type: 'varchar', length: 70, nullable: true })
+    sede_gerente: string
+
     @Column({ type: 'varchar', length: 3, nullable: false })
     sede_principal: string
 

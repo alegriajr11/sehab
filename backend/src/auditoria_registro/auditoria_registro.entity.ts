@@ -14,17 +14,19 @@ export class AuditoriaRegistroEntity {
     @Column()
     accion: string;
 
-    @Column()
+    @Column({type: 'varchar', length: 455, nullable: false})
     detalles: string;
 
     @Column()
     direccionIp: string;
 
-    @Column({ type: 'date' })
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     creadoEn: Date;
-
+    
     @BeforeInsert()
     async setDate() {
-        this.creadoEn = new Date();
+        this.creadoEn = new Date(); // Esto captura la fecha y hora actuales en la aplicación
     }
+    
+    
 }

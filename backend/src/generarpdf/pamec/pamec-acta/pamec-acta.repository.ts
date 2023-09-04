@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import { EntityRepository, Repository } from "typeorm";
-import { ActaPamecIpsEntity } from "./pamec-acta.entity";
+import { ActaPamecEntity } from "./pamec-acta.entity";
 
 
 
 
-@EntityRepository(ActaPamecIpsEntity)
-export class ActaPamecIpsRepository extends Repository<ActaPamecIpsEntity> {
+@EntityRepository(ActaPamecEntity)
+export class ActaPamecIpsRepository extends Repository<ActaPamecEntity> {
         
 }

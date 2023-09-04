@@ -53,6 +53,7 @@ import { EvaluacionPamecEntity } from "src/pamec/evaluacion-pamec.entity";
 import { EvaluacionIndependientesEntity } from "src/sp/sp_ind/evaluacion-independientes.entity";
 import { EvaluacionSicEntity } from "src/sic/evaluacionsic.entity";
 import { SedeEntity } from "./sede/sede.entity";
+import { EvaluacionipsCreadasEntity } from "src/sp/sp_ips/evaluacion_ips_creada.entity";
 
 
 
@@ -110,8 +111,8 @@ export class PrestadorEntity {
     prestador_eval_independientes: EvaluacionIndependientesEntity
 
     //Relacion Uno a Muchos PRESTADORES - EVALUACION - SP IPS
-    @OneToMany(type => EvaluacionipsEntity, evaluacionIps => evaluacionIps.eval_acta_spips)
-    prestator_eval_ips: EvaluacionipsEntity;
+    @OneToMany(type => EvaluacionipsCreadasEntity, evaluacionIps => evaluacionIps.eval_ips_prestator)
+    prestator_eval_ips: EvaluacionipsCreadasEntity;
 
     //Relacion Uno a Muchos PRESTADORES - EVALUACION-SIC
     @OneToMany(type => EvaluacionSicEntity, evaluacionSic => evaluacionSic.eval_sic_prestator)
@@ -124,11 +125,6 @@ export class PrestadorEntity {
     //Relacion Uno a Muchos PRESTADORES - CAPACIDAD INSTALADA
     @OneToMany(type => CapacidadInstaladaEntity, capacidad_instalada => capacidad_instalada.prestadores)
     capacidad_instalada: CapacidadInstaladaEntity
-
-
-    //Relacion Uno a Muchos PRESTADORES - CUMPLIMIENTOESTANDARSIC
-    @OneToMany(type => CumplimientoEstandarSicEntity, cumplimientoestandar => cumplimientoestandar.prestadores)
-    cumplimientoEstandar: CumplimientoEstandarSicEntity
 
 
     //Relación Uno a Muchos PRESTADORES - TODOS_SERVICIOS

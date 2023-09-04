@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CumplimientoEstandarSicDto } from 'src/usuario/dto/Sic/cumplimientoEstandar.dto';
 import { CriteriosicCumplimientoService } from './criteriosic-cumplimiento.service';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('criteriosic-cumplimiento')
 export class CriteriosicCumplimientoController {
@@ -15,28 +16,28 @@ export class CriteriosicCumplimientoController {
     //     return this.criterioCumplimientosicService.createCumplimientoEstandar(dto);
     // }
 
-    //LISTAR TODOS LOS USUARIOS
+    @Post()
+    async create(@Body() payload: { dto: CumplimientoEstandarSicDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.criterioCumplimientosicService.createCumplimientoEstandar(payload);
+    }
 
+    //LISTAR CUMPLIMIENTOS POR ID CRITERIO Y ID EVALUACION
     @Get()
-    async getAlll() {
-        return await this.criterioCumplimientosicService.getalll()
-    }
-
-    @Get('estan')
-    async getAllestandar() {
-        return await this.criterioCumplimientosicService.getallcumple()
+    async getCumplimientoIdCE(
+        @Query('crie_id') crie_id: number,
+        @Query('eva_id') eva_id: number,
+    ) {
+        return await this.criterioCumplimientosicService.getCumplimientoId(crie_id, eva_id)
     }
 
 
-    @Get(':id')
-    async getAll(@Param('id', ParseIntPipe) id: number) {
-        return await this.criterioCumplimientosicService.findByIdEstandarSic(id);
+
+    @Get('ultimo-cumplimiendo-estandar')
+    async getAllCumplimientos() {
+        return await this.criterioCumplimientosicService.getUltimoCumplimiento()
     }
 
-    @Get('indicador/:id')
-    async getid(@Param('id', ParseIntPipe) id: string) {
-        return await this.criterioCumplimientosicService.findByIdCumliSic(id);
-    }
 
     // @Get('cumple/:id')
     // async getAllCumple(@Param('id', ParseIntPipe) id: number) {

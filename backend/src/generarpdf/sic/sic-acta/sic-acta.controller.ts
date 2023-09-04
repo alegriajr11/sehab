@@ -34,12 +34,12 @@ export class SicActaController {
 
     //OBTENER ACTAS POR AÑO Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
     @Get('/busqueda/fecha/acta/prestador/nit')
-    async findAllBusqueda(@Query('year') year: Date,
-        @Query('acta_id') acta_id: string, 
+    async findAllBusqueda(@Query('year') year: number,
+        @Query('acta_id') acta_id: string,
         @Query('act_prestador') act_prestador: string,
         @Query('act_nit') act_nit: string) {
-            const numericActaId = parseInt(acta_id);
-        return this.sic_act_pdfService.findAllBusqueda(year, numericActaId, act_prestador,act_nit);
+        const numericActaId = parseInt(acta_id);
+        return this.sic_act_pdfService.findAllBusqueda(year, numericActaId, act_prestador, act_nit);
     }
 
     //ÚLTIMA ACTA SIC
@@ -65,11 +65,18 @@ export class SicActaController {
 
 
 
-    //ACTUALIZAR PAMEC IPS ACTA PDF
-    @UseGuards(JwtAuthGuard)
-    @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return await this.sic_act_pdfService.updateActa(id, payload);
+    //ACTUALIZAR ACTA-SIC PDF
+    // @UseGuards(JwtAuthGuard)
+    // @Put(':id')
+    // async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }) {
+    //     const { dto, tokenDto } = payload;
+    //     return await this.sic_act_pdfService.updateActa(id, payload);
+    // }
+
+    //CERRAR ACTA SIC
+    @Put('cerrar/:id')
+    async cerrarActa(
+        @Param('id', ParseIntPipe) id: number, @Body() payload: { tokenDto: TokenDto }) {
+        return this.sic_act_pdfService.cerrarActa(id, payload);
     }
 }

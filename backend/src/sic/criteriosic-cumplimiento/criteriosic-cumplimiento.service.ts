@@ -20,6 +20,13 @@ import { DominioEntity } from '../dominio.entity';
 import { DominioRepository } from '../dominio.repository';
 import { IndicadorEntity } from '../indicador.entity';
 import { IndicadorRepository } from '../indicador.repository';
+import { EvaluacionSicEntity } from '../evaluacionsic.entity';
+import { EvaluacionsicRepository } from '../evaluacionsic.repository';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { PayloadInterface } from 'src/auth/payload.interface';
+import { JwtService } from '@nestjs/jwt';
+import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
+import { EvaluacionSicService } from '../evaluacion-sic/evaluacion-sic.service';
 
 @Injectable()
 export class CriteriosicCumplimientoService {
@@ -35,10 +42,15 @@ export class CriteriosicCumplimientoService {
         private readonly dominioRepository: DominioRepository,
         @InjectRepository(IndicadorEntity)
         private readonly indicadorRepository: IndicadorRepository,
+        @InjectRepository(EvaluacionSicEntity)
+        private readonly evaluacionSicRepository: EvaluacionsicRepository,
         @InjectRepository(CriteriosicEntity)
         private readonly criterioSicRepository: CriterioSicRepository,
         @InjectRepository(CumplimientoSicEntity)
         private readonly cumplimientoSicRepository: CumplimientoSicRepository,
+        private readonly jwtService: JwtService,
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+
     ) { }
 
 
@@ -60,55 +72,99 @@ export class CriteriosicCumplimientoService {
         return criterioEstandarsic;
     }
 
-    /*LISTANDO CRITERIOSIC */
-    async getalll(): Promise<CumplimientoEstandarSicEntity[]> {
+    /*LISTANDO CUMPLIMIENTO POR ID CRITERIO Y EVA_ID */
+    async getCumplimientoId(crie_id: number, eva_id: number): Promise<CumplimientoEstandarSicEntity[]> {
         const cumplimiento_estandar = await this.cumplimientoEstandarSicRepository.createQueryBuilder('cumplimiento')
-            .select(['cumplimiento', 'criterioestandar_sic.crie_id', 'criterioestandar_sic.crie_nombre'])
+            .select(['cumplimiento', 'criterioestandar_sic'])
             .innerJoin('cumplimiento.criterioestandar_sic', 'criterioestandar_sic')
+            .innerJoinAndSelect('cumplimiento.cumplimiento_eva_sic', 'cumplimiento_eva_sic')
+            .where('criterioestandar_sic.crie_id = :id_criterio', {id_criterio: crie_id})
+            .andWhere('cumplimiento_eva_sic.eva_id = :id_evaluacion', {id_evaluacion: eva_id})
             .getMany()
-        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No existen en la lista'))
+        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No existen cumplimientos en la lista'))
+        
         return cumplimiento_estandar
     }
 
+    //LISTANDO TODOS LOS CUMPLIMIENTOS ASIGNADOS
+    async getUltimoCumplimiento(): Promise<CumplimientoEstandarSicEntity> {
+        const cumplimiento_estandar = await this.cumplimientoEstandarSicRepository.createQueryBuilder('cumplimiento')
+        .select(['cumplimiento'])
+        .orderBy('cumplimiento.cumpl_id', 'DESC')
+        .getOne();
 
-    async getallcumple(): Promise<CumplimientoSicEntity[]> {
-        const cumplimiento_estandar = await this.cumplimientoSicRepository.createQueryBuilder('cumplimiento')
-            // .select(['cumplimiento','criterio_sic.cri_id','criterio_sic.cumpl_cumple','prestadores.pre_nombre','criterio_sic.cri_id','criterio_sic.cri_nombre'])
-            .select(['cumplimiento', 'criterio_sic.cri_id', 'criterio_sic.cri_nombre', 'indicadorsic.ind_id','indicadorsic.ind_nombre','ind_dominio.dom_nombre','prestadores.pre_nombre'])
-            .innerJoin('cumplimiento.criterio_sic', 'criterio_sic')
-            .innerJoin('cumplimiento.indicadorsic', 'indicadorsic')
-            .innerJoinAndSelect('indicadorsic.ind_dominio', 'ind_dominio')
-            .innerJoinAndSelect('ind_dominio.prestadores', 'prestadores')
-            .getMany()
-        if (!cumplimiento_estandar.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+        if (!cumplimiento_estandar) throw new NotFoundException(new MessageDto('No existe cumplimiento en la lista'))
         return cumplimiento_estandar
     }
 
-    //CREAR CUMPLIMIENTO ESTANDAR 
-    // async createCumplimientoEstandar(dto: CumplimientoEstandarSicDto): Promise<any> {
-    //     const { crie_id, pre_cod_habilitacion } = dto
+    //CREAR CUMPLIMIENTO ESTANDAR SIC
+    async createCumplimientoEstandar(payloads: { dto: CumplimientoEstandarSicDto, tokenDto: TokenDto }): Promise<any> {
+        try {
+            const { dto, tokenDto } = payloads;
 
-    //     const criterio_estandarsic = await this.criterioEstandarSicRepository.findOne({ where: { crie_id: crie_id } });
-    //     if (!criterio_estandarsic) {
-    //         throw new InternalServerErrorException(new MessageDto('El criterio no ha sido creado'))
-    //     }
+            const usuario = await this.jwtService.decode(tokenDto.token);
 
-    //     const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: pre_cod_habilitacion } })
-    //     if (!prestador) {
-    //         throw new InternalServerErrorException(new MessageDto('El Prestador no ha sido creado'))
-    //     }
-    //     const cumpl_cri = await this.cumplimientoEstandarSicRepository.findOne({ where: { criterioestandar_sic: criterio_estandarsic } })
-    //     const cumpl_pres = await this.cumplimientoEstandarSicRepository.findOne({ where: { prestadores: prestador } })
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
 
+            const year = new Date().getFullYear().toString();
 
-    //     const cumplimiento = await this.cumplimientoEstandarSicRepository.create(dto)
+            // SE BUSCA EL CRITERIO QUE SE ASIGNA AL CUMPLIMIENTO
+            const criterio_estandarsic = await this.criterioEstandarSicRepository.findOne({ where: { crie_id: dto.crie_id } });
+            if (!criterio_estandarsic) {
+                throw new Error('El criterio no ha sido creado');
+            }
 
-    //     cumplimiento.criterioestandar_sic = criterio_estandarsic
-    //     cumplimiento.prestadores = prestador
+            const nombre_criterio = criterio_estandarsic.crie_nombre;
 
-    //     await this.cumplimientoEstandarSicRepository.save(cumplimiento)
-    //     return new MessageDto('Cumplimiento Asignado');
-    // }
+            // SE BUSCA LA EVALUACION QUE SE ASIGNA AL CUMPLIMIENTO
+            const evaluacion_sic = await this.evaluacionSicRepository.findOne({ where: { eva_id: dto.eva_id }, relations: ['eval_acta_sic'] });
+            if (!evaluacion_sic) {
+                throw new Error('La evaluación no ha sido creada');
+            }
+
+            //ASIGNO EL ACTA ID
+            const acta_idSic = evaluacion_sic.eval_acta_sic.act_id;
+
+            // ASIGNO EL CUMPLIMIENTO EN ASIGNADO
+            dto.cumpl_asignado = 'asignado';
+            
+
+            // CREAMOS EL DTO DEL CUMPLIMIENTO
+            const cumplimiento = await this.cumplimientoEstandarSicRepository.create(dto);
+
+            // ASIGNAMOS LA FORANEA DE CUMPLIMIENTO CON CRITERIO_ESTANDAR
+            cumplimiento.criterioestandar_sic = criterio_estandarsic;
+            // ASIGNAMOS LA FORANEA DE CUMPLIMIENTO CON EVALUACIÓN_SIC CREADA
+            cumplimiento.cumplimiento_eva_sic = evaluacion_sic;
+
+            // GUARDAMOS EL CUMPLIMIENTO A LA BASE DE DATOS
+            await this.cumplimientoEstandarSicRepository.save(cumplimiento);
+
+            // ASIGNAR LA AUDITORIA DEL CUMPLIMIENTO ASIGNADO AL CRITERIO
+            await this.auditoria_registro_services.logCreateCumplimientoSic(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.cumpl_cumple,
+                nombre_criterio,
+                acta_idSic,
+                year,
+            );
+            return new MessageDto('Cumplimiento Asignado');
+        } catch (error) {
+            // Aquí puedes manejar el error, por ejemplo, lanzar una excepción personalizada o registrar el error en un registro de errores.
+            throw new InternalServerErrorException(new MessageDto(error.message));
+        }
+    }
+
 
     //ENCONTRAR CUMPLIMIENTO ESTANDAR POR CRI_ID CUMPLIDO
     // async findByIdCumpl(crie_id: number): Promise<CumplimientoEstandarSicEntity> {

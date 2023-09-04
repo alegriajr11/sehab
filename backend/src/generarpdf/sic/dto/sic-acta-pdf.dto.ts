@@ -42,7 +42,7 @@ export class ActaSicPdfDto {
     @IsNotBlank()
     act_email: string
 
-    
+    @IsNotBlank()
     act_sede_principal: string
 
     

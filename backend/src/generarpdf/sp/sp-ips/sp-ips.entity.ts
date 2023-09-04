@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { EvaluacionipsCreadasEntity } from "src/sp/sp_ips/evaluacion_ips_creada.entity";
 import { EvaluacionipsEntity } from "src/sp/sp_ips/evaluacionips.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 
@@ -56,13 +57,13 @@ export class ActaSpIpsEntity {
     @Column({type: 'varchar', length: 70, nullable: false})
     act_nombre_funcionario
 
-    @Column({type: 'varchar', length: 50, nullable: false})
+    @Column({type: 'varchar', length: 70, nullable: false})
     act_cargo_funcionario
 
     @Column({type: 'varchar', length: 70, nullable: false})
     act_nombre_prestador
 
-    @Column({type: 'varchar', length: 50, nullable: false})
+    @Column({type: 'varchar', length: 70, nullable: false})
     act_cargo_prestador
 
     @Column({ type: 'date' })
@@ -84,6 +85,6 @@ export class ActaSpIpsEntity {
     }
 
     //Relacion UNO a UNO EVALUACION SP IPS - ACTAS SP IPS
-    @OneToOne(() => EvaluacionipsEntity, evaluacionIps => evaluacionIps.eval_acta_spips)
-    act_eval_ips: EvaluacionipsEntity;
+    @OneToOne(() => EvaluacionipsCreadasEntity, evaluacionIps => evaluacionIps.eval_acta_spips)
+    act_eval_ips: EvaluacionipsCreadasEntity;
 }

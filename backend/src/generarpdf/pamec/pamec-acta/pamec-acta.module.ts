@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PamecActaService } from './pamec-acta.service';
 import { PamecActaController } from './pamec-acta.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ActaPamecIpsEntity } from './pamec-acta.entity';
+import { ActaPamecEntity } from './pamec-acta.entity';
 import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_registro.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -13,7 +13,7 @@ import { EvaluacionPamecEntity } from 'src/pamec/evaluacion-pamec.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ActaPamecIpsEntity,PrestadorEntity,ActividadEntity,EvaluacionPamecEntity]),
+  imports: [TypeOrmModule.forFeature([ActaPamecEntity,PrestadorEntity,ActividadEntity,EvaluacionPamecEntity]),
     AuditoriaRegistroModule,
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),

@@ -4,7 +4,7 @@ import { IsString, MaxLength } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 import { Column } from "typeorm";
 
-export class ActaPamecIpsDto {
+export class ActaPamecDto {
 
 
     @IsNotBlank()
@@ -58,10 +58,6 @@ export class ActaPamecIpsDto {
 
     @IsNotBlank()
     act_cargo_prestador: string
-
-    act_nombre_prestador2: string
-
-    act_cargo_prestador2: string
 
     @IsNotBlank()
     act_firma_funcionario: string

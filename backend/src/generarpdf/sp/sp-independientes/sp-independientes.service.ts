@@ -49,6 +49,8 @@ export class SpIndependientesService {
         return indep;
     }
 
+
+
     //ENCONTRAR POR ACTA POR FECHAS
     async findAllFromDate(date: string): Promise<ActaSpIndependientePdfEntity[]> {
 
@@ -62,9 +64,9 @@ export class SpIndependientesService {
         return actas;
     }
 
-    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA
 
-    async findAllFromYear(year?: Date, numActa?: number): Promise<ActaSpIndependientePdfEntity[]> {
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
+    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSpIndependientePdfEntity[]> {
         let query = this.actaSpIndependientePdfRepository.createQueryBuilder('acta');
 
         if (numActa) {
@@ -72,44 +74,25 @@ export class SpIndependientesService {
         }
 
         if (year) {
-            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
-        }
-
-        const actas = await query.getMany();
-
-        if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay Actas con los filtros especificados'));
-        }
-
-        return actas;
-    }
-
-    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
-
-    async findAllBusqueda(year?: Date, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSpIndependientePdfEntity[]> {
-        let query = this.actaSpIndependientePdfRepository.createQueryBuilder('acta');
-
-        if (numActa) {
-            query = query.where('acta.act_id = :numActa', { numActa });
+            if (numActa) {
+                query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+            } else {
+                query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+            }
         }
 
         if (nomPresta) {
-            query = query.andWhere('acta.act_nombre_prestador = :nomPresta', { nomPresta });
+            query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
         }
 
         if (nit) {
-            query = query.andWhere('acta.act_nit = :nit', { nit });
-        }
-
-
-        if (year) {
-            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+            query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
         }
 
         const actas = await query.getMany();
 
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
+            throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
         }
 
         return actas;
@@ -120,10 +103,6 @@ export class SpIndependientesService {
     /*CREACIÓN SP INDEPENDIENTE ACTA PDF */
     async create(payloads: { dto: IndActaDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
-
-
-        const acta_sicpdf = this.actaSpIndependientePdfRepository.create(dto);
-        const usuario = this.jwtService.decode(tokenDto.token);
 
         try {
             const acta_sicpdf = this.actaSpIndependientePdfRepository.create(dto);
@@ -152,12 +131,11 @@ export class SpIndependientesService {
             const acta = await this.actaSpIndependientePdfRepository.findOne({ where: { id: acta_ultima.id } })
 
             //ASIGNAMOS LOS DATOS DE LA ACTA REGISTRADA PARA CONSTRUIR EL DTO DE EVALUACION-INDEPENDIENTES
-            const eva_creado = acta_ultima.act_creado;
+            const eva_creado = acta_ultima.act_creado;  //Fecha de creación del acta
             const eva_acta_prestador = acta_ultima.act_cod_prestador; // Valor del ID del prestador
 
             //CONSULTAR EL PRESTADOR QUE TIENE EL ACTA
             const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: eva_acta_prestador } })
-
 
             //ASIGNAMOS LOS DATOS AL DTO
             const evaluacionDto: EvaluacionIndependientesDto = {
@@ -172,7 +150,7 @@ export class SpIndependientesService {
             //ASIGNACION DE FORANEA PRESTADOR UNO A MUCHOS
             evaluacion_ind.eval_prestador = prestador
 
-            //GUARDAMOS EN LA ENTIDAD EVALUACION-INDEPENDIENTES
+            //GUARDAMOS EN LA ENTIDAD EVALUACION-INDEPENDIENTES DE LA BASE DATOS
             await this.evaluacionIndependientesRepository.save(evaluacion_ind)
 
             //CONSULTAR LA ÚLTIMA EVALUACIÓN EXISTENTE
@@ -201,15 +179,61 @@ export class SpIndependientesService {
                 dto.act_cod_prestador
             );
 
-
             return { error: false, message: 'El acta ha sido creada' };
-            
+
         } catch (error) {
             console.log(error)
             // Devuelve un mensaje de error apropiado
             return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
         }
+    }
 
+
+    //CERRAR ACTA SP
+    async cerrarActa(id: number, payload: { tokenDto: TokenDto }): Promise<any> {
+
+        const { tokenDto } = payload;
+
+        try {
+            const acta = await this.findByActa(id);
+            console.log(acta)
+
+            if (!acta) {
+                throw new NotFoundException(new MessageDto('El Acta no existe'));
+            }
+
+            acta.act_estado = '0'
+
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
+            await this.actaSpIndependientePdfRepository.save(acta);
+            await this.auditoria_registro_services.logCierreActaSpInd(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                acta.act_id,
+                year,
+                acta.act_prestador,
+                acta.act_cod_prestador
+            );
+
+            return new MessageDto('El Acta ha sido Cerrada');
+        } catch (error) {
+            // Devuelve un mensaje de error apropiado
+            return { error: true, message: 'Ocurrió un error al cerrar el Acta' };
+        }
     }
 
 
@@ -241,7 +265,7 @@ export class SpIndependientesService {
         dto.act_cargo_prestador ? ips.act_cargo_prestador = dto.act_cargo_prestador : ips.act_cargo_prestador = ips.act_cargo_prestador;
         dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
         dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
-        
+
 
         const usuario = await this.jwtService.decode(tokenDto.token);
 

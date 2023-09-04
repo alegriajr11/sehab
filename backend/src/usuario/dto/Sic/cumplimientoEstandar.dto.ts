@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsNumber, IsString, MaxLength, MinLength } from "class-validator";
+import { IsBoolean, IsNumber, IsString, MaxLength, MinLength } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 import { IsOptional } from 'class-validator';
 
@@ -17,10 +17,13 @@ export class CumplimientoEstandarSicDto {
     @MaxLength(300, {message: 'La Observacion debe tener: longitud máxima de 300 caracteres'})
     cumpl_observaciones: any;
 
+    @IsString()
+    cumpl_asignado: string
+
     @IsNumber()
     crie_id: number
 
-    @IsString()
-    pre_cod_habilitacion: string
+    @IsNumber()
+    eva_id: number
     
 }

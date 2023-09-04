@@ -34,10 +34,10 @@ export class UsuarioEntity {
     @Column({ type: 'varchar', length: 10, nullable: false })
     usu_estado: string;
 
-    @Column({ type: 'varchar', nullable: false })
+    @Column({ type: 'varchar', length: 70, nullable: false })
     usu_cargo: string;
 
-    @Column({ type: 'varchar', nullable: false })
+    @Column({ type: 'varchar', length: 70, nullable: false })
     usu_area_profesional: string;
 
     @CreateDateColumn()

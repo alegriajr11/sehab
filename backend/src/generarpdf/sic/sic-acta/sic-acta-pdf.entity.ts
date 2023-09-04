@@ -68,13 +68,13 @@ export class ActaSicPdfEntity {
     @Column({ type: 'varchar', length: 70, nullable: false })
     act_nombre_funcionario
 
-    @Column({ type: 'varchar', length: 50, nullable: false })
+    @Column({ type: 'varchar', length: 70, nullable: false })
     act_cargo_funcionario
 
     @Column({ type: 'varchar', length: 70, nullable: false })
     act_nombre_prestador
 
-    @Column({ type: 'varchar', length: 50, nullable: false })
+    @Column({ type: 'varchar', length: 70, nullable: false })
     act_cargo_prestador
 
     @Column({ type: 'text', nullable: false })

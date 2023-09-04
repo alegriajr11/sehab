@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PamecActaService } from './pamec-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
-import { ActaPamecIpsDto } from '../dto/pamec-acta-ips.dto';
+import { ActaPamecDto } from '../dto/pamec-acta.dto';
 import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('pamec-acta')
@@ -22,31 +22,24 @@ export class PamecActaController {
         return await this.pamecActaService.findByActa(id);
     }
 
-    //OBTENER ACTAS POR FECHA
-    @Get('/fecha/:date')
-    async findAllFromDate(@Param('date') dateString: string) {
-        return this.pamecActaService.findAllFromDate(dateString);
-    }
-
-    //OBTENER ACTAS POR AÑO
-    @Get('/year/date')
-    async findAllFromYear(@Query('year') year: Date,
-        @Query('numActa') numActa: number) {
-        return this.pamecActaService.findAllFromYear(year, numActa);
-    }
-
     //OBTENER ACTAS POR AÑO Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
-    @Get('/busqueda')
-    async findAllBusqueda(@Query('year') year: Date,
-        @Query('numActa') numActa: number, 
-        @Query('nomPresta') nomPresta: string,
-        @Query('nit') nit: string) {
-        return this.pamecActaService.findAllBusqueda(year, numActa, nomPresta,nit);
+    @Get('/busqueda/fecha/acta/prestador/nit')
+    async findAllBusqueda(@Query('year') year: number,
+        @Query('acta_id') act_id: number,
+        @Query('act_prestador') act_prestador: string,
+        @Query('act_nit') act_nit: string) {
+        return this.pamecActaService.findAllBusqueda(year, act_id, act_prestador, act_nit);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('ultima/acta/pamec')
+    getLastActa() {
+        return this.pamecActaService.getLastestActa();
     }
 
     //CREAR PAMEC IPS ACTA PDF
     @Post()
-    async create(@Body() payload: { dto: ActaPamecIpsDto, tokenDto: TokenDto }) {
+    async create(@Body() payload: { dto: ActaPamecDto, tokenDto: TokenDto }) {
         const { dto, tokenDto } = payload;
         return this.pamecActaService.create(payload);
     }
@@ -54,7 +47,7 @@ export class PamecActaController {
     //ACTUALIZAR PAMEC IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: ActaPamecIpsDto, tokenDto: TokenDto }) {
+    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: ActaPamecDto, tokenDto: TokenDto }) {
         const { dto,tokenDto}= payload;
         return await this.pamecActaService.updateActaipspam(id,payload);
     }

@@ -16,32 +16,57 @@ export class SedeService {
         private readonly prestadorRepository: PrestadorRepository
     ) { }
 
-    //ENCONTRAR SEDE POR ID PRESTADOR
-    async findBySede(id: string): Promise<SedeEntity[]> {
-        const prestadores = await this.sedeRepository.createQueryBuilder('prestador')
-            .innerJoin('prestador.sede_prestador', 'sede_prestador')
-            .where('sede_prestador.pre_cod_habilitacion = :habilitada', { habilitada: id })
+
+    //LISTAR TODAS LAS SEDES
+    async getallSedes(): Promise<SedeEntity[]> {
+        const sede = await this.sedeRepository.createQueryBuilder('sede')
+            .select(['sede'])
             .getMany()
-        return prestadores;
+        if (sede.length === 0) throw new NotFoundException(new MessageDto('No hay sedes en la lista'))
+        return sede;
     }
 
-    //ENCONTRAR POR ID - CRITERIO PRETANSFUNCIONAL
-    async findById(sede_id: number): Promise<SedeEntity> {
+
+    //ENCONTRAR POR ID - SEDE
+    async findByIdSede(sede_id: number): Promise<SedeEntity> {
         const cri_pre_trans = await this.sedeRepository.findOne({ where: { sede_id } });
         if (!cri_pre_trans) {
-            throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+            throw new NotFoundException(new MessageDto('La Sede No Existe'));
         }
         return cri_pre_trans;
     }
 
+    //ENCONTRAR POR NOMBRE - SEDE
+    async findByNombreSede(sede_nombre: string): Promise<SedeEntity[]> {
+        const sedes = await this.sedeRepository.createQueryBuilder('sede')
+            .where('sede.sede_nombre LIKE :nombre_sedes', { nombre_sedes: `%${sede_nombre}%` })
+            .getMany();
+        if (!sedes.length) {
+            throw new NotFoundException(new MessageDto('No hay Sedes con ese nombre en la lista'))
+        }
+        return sedes;
+    }
+
+
+    //LISTAR SEDES POR ID PRESTADOR
+    async findBySedePrestador(pre_cod_habilitacion: string): Promise<SedeEntity[]> {
+        const sede_prestador = await this.sedeRepository.createQueryBuilder('sede')
+            .innerJoin('sede.sede_prestador', 'sede_prestador')
+            .where('sede_prestador.pre_cod_habilitacion = :cod_prestador', {cod_prestador: pre_cod_habilitacion})
+            // .andWhere('sede.sede_principal LIKE :principal', { principal: '%NO%' })
+            .getMany()
+        return sede_prestador
+    }
+
+
     //CREAR SEDE
     async create(pre_cod_habilitacion: string, dto: SedeDto): Promise<any> {
-        const {sede_nombre} = dto;
-        const exists = await this.sedeRepository.findOne({where: [{sede_nombre: sede_nombre}]});
-        if(exists) throw new BadRequestException(new MessageDto('Esa sede ya existe'));
-        const prestador = await this.prestadorRepository.findOne({where: {pre_cod_habilitacion: pre_cod_habilitacion}});
+        const { sede_nombre } = dto;
+        const exists = await this.sedeRepository.findOne({ where: [{ sede_nombre: sede_nombre }] });
+        if (exists) throw new BadRequestException(new MessageDto('Esa sede ya existe'));
+        const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: pre_cod_habilitacion } });
         console.log(pre_cod_habilitacion)
-        if(!prestador) throw new InternalServerErrorException(new MessageDto('El prestador no ha sido creado'))
+        if (!prestador) throw new InternalServerErrorException(new MessageDto('El prestador no ha sido creado'))
         const sede = this.sedeRepository.create(dto)
         sede.sede_prestador = prestador
         await this.sedeRepository.save(sede)
@@ -50,9 +75,9 @@ export class SedeService {
 
     //ACTUALIZAR SEDE
     async updateSede(id: number, dto: SedeDto): Promise<any> {
-        const sede= await this.findById(id);
+        const sede = await this.findByIdSede(id);
         if (!sede) {
-            throw new NotFoundException(new MessageDto('El criterio no existe'))
+            throw new NotFoundException(new MessageDto('La Sede no existe'))
         }
         dto.sede_numero ? sede.sede_numero = dto.sede_numero : sede.sede_numero = sede.sede_numero;
         dto.sede_nombre ? sede.sede_nombre = dto.sede_nombre : sede.sede_nombre = sede.sede_nombre;
@@ -69,9 +94,9 @@ export class SedeService {
 
     //ELIMINAR SEDE
     async delete(id: number): Promise<any> {
-        const sede = await this.findById(id);
+        const sede = await this.findByIdSede(id);
         await this.sedeRepository.delete(sede.sede_id)
-        return new MessageDto(`Criterio Eliminado`);
+        return new MessageDto(`Sede Eliminada`);
     }
 
 }

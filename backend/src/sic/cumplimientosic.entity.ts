@@ -16,6 +16,8 @@ export class CumplimientoSicEntity {
     @Column({ type: 'varchar', length: 300, nullable: false, unique: false })
     cumpl_observaciones: string;
 
+    @Column({ type: 'varchar', length: 11, nullable: false})
+    cumpl_asignado: string
 
     //Relacion MUCHOS a UNO CUMPLIMIENTO - CRITERIOS SIC
     @ManyToOne(type => CriteriosicEntity, criterio_sic => criterio_sic.cumplimiento_sic)

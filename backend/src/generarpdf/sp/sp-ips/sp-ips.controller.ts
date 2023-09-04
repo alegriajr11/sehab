@@ -16,32 +16,21 @@ export class SpIpsController {
     }
 
     //OBTENER UN SP IPS ACTA PDF POR ID
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.sp_IpsService.findByActa(id);
     }
 
-    //OBTENER ACTAS POR FECHA
-    @Get('/fecha/:date')
-    async findAllFromDate(@Param('date') dateString: string) {
-        return this.sp_IpsService.findAllFromDate(dateString);
-    }
 
-    //OBTENER ACTAS POR AÑO Y/O NUMERO ACTA
-    @Get('/year/date')
-    async findAllFromYear(@Query('year') year: Date,
-        @Query('numActa') numActa: number) {
-        return this.sp_IpsService.findAllFromYear(year, numActa);
-    }
 
     //OBTENER ACTAS POR AÑO Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
-    @Get('/busqueda')
-    async findAllBusqueda(@Query('year') year: Date,
-        @Query('numActa') numActa: number, 
-        @Query('nomPresta') nomPresta: string,
-        @Query('nit') nit: string) {
-        return this.sp_IpsService.findAllBusqueda(year, numActa, nomPresta,nit);
+    @Get('/busqueda/fecha/acta/prestador/nit')
+    async findAllBusqueda(@Query('year') year: number,
+        @Query('acta_id') act_id: number,
+        @Query('act_prestador') act_prestador: string,
+        @Query('act_nit') act_nit: string) {
+        return this.sp_IpsService.findAllBusqueda(year, act_id, act_prestador, act_nit);
     }
 
     //Obtener ultima acta
@@ -61,8 +50,16 @@ export class SpIpsController {
     //ACTUALIZAR SP IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: IpsDto, tokenDto: TokenDto }) {
-        const { dto,tokenDto}= payload;
-        return await this.sp_IpsService.updateActaIps(id,payload);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: IpsDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return await this.sp_IpsService.updateActaIps(id, payload);
+    }
+
+
+    //CERRAR ACTA SP-IPS
+    @Put('cerrar/:id')
+    async cerrarActa(
+        @Param('id', ParseIntPipe) id: number, @Body() payload: { tokenDto: TokenDto }) {
+        return this.sp_IpsService.cerrarActa(id, payload);
     }
 }

@@ -1,9 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ActaPamecIpsEntity } from './pamec-acta.entity';
+import { ActaPamecEntity } from './pamec-acta.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActaPamecIpsRepository } from './pamec-acta.repository';
 import { MessageDto } from 'src/common/message.dto';
-import { ActaPamecIpsDto } from 'src/generarpdf/pamec/dto/pamec-acta-ips.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
 import { TokenDto } from 'src/auth/dto/token.dto';
@@ -15,12 +14,13 @@ import { EvaluacionPamecRepository } from 'src/pamec/evaluacion-pamec.repository
 import { EvaluacionPamecDto } from 'src/pamec/dto/evaluacionpamec.dto';
 import { ActividadEntity } from 'src/pamec/actividad.entity';
 import { ActividadRepository } from 'src/pamec/actividad.repository';
+import { ActaPamecDto } from '../dto/pamec-acta.dto';
 
 @Injectable()
 export class PamecActaService {
     constructor(
-        @InjectRepository(ActaPamecIpsEntity)
-        private readonly actaPamecIpsRepository: ActaPamecIpsRepository,
+        @InjectRepository(ActaPamecEntity)
+        private readonly actaPamecRepository: ActaPamecIpsRepository,
         private readonly jwtService: JwtService,
         private readonly auditoria_registro_services: AuditoriaRegistroService,
         @InjectRepository(PrestadorEntity)
@@ -32,8 +32,8 @@ export class PamecActaService {
     ) { }
 
     //LISTAR TODAS PAMEC IPS ACTA PDF
-    async getallActas(): Promise<ActaPamecIpsEntity[]> {
-        const indep = await this.actaPamecIpsRepository.createQueryBuilder('acta')
+    async getallActas(): Promise<ActaPamecEntity[]> {
+        const indep = await this.actaPamecRepository.createQueryBuilder('acta')
             .select(['acta'])
             .getMany()
         if (indep.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas en la lista'))
@@ -41,8 +41,8 @@ export class PamecActaService {
     }
 
     //ENCONTRAR POR ACTA
-    async findByActa(id: number): Promise<ActaPamecIpsEntity> {
-        const ips = await this.actaPamecIpsRepository.findOne({ where: { id } });
+    async findByActa(id: number): Promise<ActaPamecEntity> {
+        const ips = await this.actaPamecRepository.findOne({ where: { id } });
         if (!ips) {
             throw new NotFoundException(new MessageDto('No Existe'));
         }
@@ -50,84 +50,73 @@ export class PamecActaService {
     }
 
 
-    //ENCONTRAR POR ACTA POR FECHAS
-    async findAllFromDate(date: string): Promise<ActaPamecIpsEntity[]> {
-
-        const actas = await this.actaPamecIpsRepository.createQueryBuilder('acta')
-            .where('acta.act_creado = :date', { date })
-            .getMany();
-        if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
+        //ÚLTIMA ACTA REGISTRADA
+        async getLastestActa(): Promise<ActaPamecDto> {
+            const anioActual: number = new Date().getFullYear();
+    
+            const acta = await this.actaPamecRepository.createQueryBuilder('acta')
+                .addSelect('acta.act_id')
+                .orderBy('acta.act_id', 'DESC')
+                .getOne();
+    
+            if (!acta) {
+                const newActa: ActaPamecEntity = new ActaPamecEntity();
+                newActa.act_id = 1;
+                return newActa;
+            }
+    
+            acta.act_creado = new Date(acta.act_creado);
+    
+            if (acta.act_creado.getFullYear() === anioActual) {
+                acta.act_id++;
+            } else {
+                acta.act_id = 1;
+            }
+    
+    
+            return acta;
         }
 
-        return actas;
-    }
 
-    
-
-    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA
-
-    async findAllFromYear(year?: Date, numActa?: number): Promise<ActaPamecIpsEntity[]> {
-        let query = this.actaPamecIpsRepository.createQueryBuilder('acta');
+    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
+    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaPamecEntity[]> {
+        let query = this.actaPamecRepository.createQueryBuilder('acta');
 
         if (numActa) {
             query = query.where('acta.act_id = :numActa', { numActa });
         }
 
         if (year) {
-            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
-        }
-
-        const actas = await query.getMany();
-
-        if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay Actas con los filtros especificados'));
-        }
-
-        return actas;
-    }
-
-    //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
-
-    async findAllBusqueda(year?: Date, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaPamecIpsEntity[]> {
-        let query = this.actaPamecIpsRepository.createQueryBuilder('acta');
-
-        if (numActa) {
-            query = query.where('acta.act_id = :numActa', { numActa });
+            if (numActa) {
+                query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+            } else {
+                query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+            }
         }
 
         if (nomPresta) {
-            query = query.andWhere('acta.act_nombre_prestador = :nomPresta', { nomPresta });
+            query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
         }
 
         if (nit) {
-            query = query.andWhere('acta.act_nit = :nit', { nit });
-        }
-
-
-        if (year) {
-            query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+            query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
         }
 
         const actas = await query.getMany();
 
         if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay auditorias con los filtros especificados'));
+            throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
         }
 
         return actas;
     }
 
 
-    async create(payloads: { dto: ActaPamecIpsDto, tokenDto: TokenDto }): Promise<any> {
+    async create(payloads: { dto: ActaPamecDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
 
-
-        const acta_sicpdf = this.actaPamecIpsRepository.create(dto);
-        const usuario = this.jwtService.decode(tokenDto.token);
-
         try {
-            const acta_sicpdf = this.actaPamecIpsRepository.create(dto);
+            const acta_sicpdf = this.actaPamecRepository.create(dto);
             const usuario = await this.jwtService.decode(tokenDto.token);
 
             const payloadInterface: PayloadInterface = {
@@ -142,15 +131,15 @@ export class PamecActaService {
 
             const year = new Date().getFullYear().toString();
 
-            await this.actaPamecIpsRepository.save(acta_sicpdf);
+            await this.actaPamecRepository.save(acta_sicpdf);
 
-            const acta_ultima = await this.actaPamecIpsRepository.createQueryBuilder('acta')
+            const acta_ultima = await this.actaPamecRepository.createQueryBuilder('acta')
                 .addSelect('acta.id')
                 .orderBy('acta.act_id', 'DESC')
                 .getOne();
 
             //CONSULTAR LA ULTIMA ACTA QUE SE ASIGNARA A LA EVALUACION
-            const acta = await this.actaPamecIpsRepository.findOne({ where: { id: acta_ultima.id } })
+            const acta = await this.actaPamecRepository.findOne({ where: { id: acta_ultima.id } })
 
             //ASIGNAMOS LOS DATOS DE LA ACTA REGISTRADA PARA CONSTRUIR EL DTO DE EVALUACION-INDEPENDIENTES
             const eva_creado = acta_ultima.act_creado;
@@ -216,7 +205,7 @@ export class PamecActaService {
 
     //ACTUALIZAR PAMEC IPS ACTA PDF
     
-    async updateActaipspam(id: number, payload:{ dto: ActaPamecIpsDto, tokenDto: TokenDto}): Promise<any> {
+    async updateActaipspam(id: number, payload:{ dto: ActaPamecDto, tokenDto: TokenDto}): Promise<any> {
         const { dto, tokenDto } = payload;
         const ips = await this.findByActa(id);
         if (!ips) {
@@ -236,12 +225,10 @@ export class PamecActaService {
         dto.act_cod_prestador ? ips.act_cod_prestador = dto.act_cod_prestador : ips.act_cod_prestador = ips.act_cod_prestador;
         dto.act_nombre_funcionario ? ips.act_nombre_funcionario = dto.act_nombre_funcionario : ips.act_nombre_funcionario = ips.act_nombre_funcionario;
         dto.act_cargo_funcionario ? ips.act_cargo_funcionario = dto.act_cargo_funcionario : ips.act_cargo_funcionario = ips.act_cargo_funcionario;
-        ips.act_nombre_funcionario2 = dto.act_nombre_funcionario2 !== undefined ? dto.act_nombre_funcionario2 : "";
-        ips.act_cargo_funcionario2 = dto.act_cargo_funcionario2 !== undefined ? dto.act_cargo_funcionario2 : "";
+        dto.act_nombre_funcionario2 = dto.act_nombre_funcionario2 !== undefined ? dto.act_nombre_funcionario2 : "";
+        dto.act_cargo_funcionario2 = dto.act_cargo_funcionario2 !== undefined ? dto.act_cargo_funcionario2 : "";
         dto.act_nombre_prestador ? ips.act_nombre_prestador = dto.act_nombre_prestador : ips.act_nombre_prestador = ips.act_nombre_prestador;
         dto.act_cargo_prestador ? ips.act_cargo_prestador = dto.act_cargo_prestador : ips.act_cargo_prestador = ips.act_cargo_prestador;
-        ips.act_nombre_prestador2 = dto.act_nombre_prestador2 !== undefined ? dto.act_nombre_prestador2 : "";
-        ips.act_cargo_prestador2 = dto.act_cargo_prestador2 !== undefined ? dto.act_cargo_prestador2 : "";
         dto.act_obj_visita ? ips.act_obj_visita = dto.act_obj_visita : ips.act_obj_visita = ips.act_obj_visita;
         dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
         dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
@@ -260,7 +247,7 @@ export class PamecActaService {
 
         const year = new Date().getFullYear().toString();
 
-        await this.actaPamecIpsRepository.save(ips);
+        await this.actaPamecRepository.save(ips);
         await this.auditoria_registro_services.logUpdateActaPamec(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,

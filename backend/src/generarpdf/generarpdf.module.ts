@@ -27,9 +27,11 @@ import { ActividadEntity } from 'src/pamec/actividad.entity';
 import { CriteriopamEntity } from 'src/pamec/criteriopam.entity';
 import { IvcModule } from './resolucion/ivc/ivc.module';
 import { VerificacionModule } from './resolucion/verificacion/verificacion.module';
+import { EvaluacionSicEntity } from 'src/sic/evaluacionsic.entity';
+import { DominioEntity } from 'src/sic/dominio.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd,ActividadEntity,CriteriopamEntity]), SicActaModule, 
+  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd,ActividadEntity,CriteriopamEntity, EvaluacionSicEntity, DominioEntity]), SicActaModule, 
   SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule, JwtModule, CriteriosicCumplimientoModule,CriterioindModule,CriteriopamModule, IvcModule, VerificacionModule],
 
   controllers: [GenerarpdfController, SicActaController],

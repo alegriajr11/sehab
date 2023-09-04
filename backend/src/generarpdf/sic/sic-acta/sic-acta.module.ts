@@ -9,11 +9,14 @@ import { AuthModule } from 'src/auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PrestadorEntity } from 'src/prestador/prestador.entity';
+import { EvaluacionSicEntity } from 'src/sic/evaluacionsic.entity';
+import { DominioEntity } from 'src/sic/dominio.entity';
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ActaSicPdfEntity]),
+  imports: [TypeOrmModule.forFeature([ActaSicPdfEntity, EvaluacionSicEntity, PrestadorEntity, DominioEntity]),
   AuditoriaRegistroModule, 
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),

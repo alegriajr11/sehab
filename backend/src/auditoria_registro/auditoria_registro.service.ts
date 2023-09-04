@@ -132,6 +132,22 @@ export class AuditoriaRegistroService {
         await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta SIC', details, direccionIp);
     }
 
+    //CONTROLAR LOG CIERRE DE ACTA SIC
+    async logCierreActaSic(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Cerrado el Acta No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion} `;
+        await this.logActivity(usu_nombre, usu_apellido, 'Cierre Acta SIC', details, direccionIp);
+    }
+    //CONTROLAR LOG CIERRE DE ACTA SP -IPS
+    async logCierreActaSpIps(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Cerrado el Acta No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion} `;
+        await this.logActivity(usu_nombre, usu_apellido, 'Cierre Acta SP IPS', details, direccionIp);
+    }
+    //CONTROLAR LOG CIERRE DE ACTA SP-IND
+    async logCierreActaSpInd(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Cerrado el Acta No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion} `;
+        await this.logActivity(usu_nombre, usu_apellido, 'Cierre Acta SP Independientes', details, direccionIp);
+    }
+
 
 
 
@@ -153,15 +169,15 @@ export class AuditoriaRegistroService {
     /*ACTAS - SP*/
     //CONTROLAR LA CREACIÓN DE  SP INDEPENDIENTE ACTA
     async logCreateActaSpIndep(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta Independiente  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
-        await this.logActivity(usu_nombre, usu_apellido, 'Creación Acta Independiente', details, direccionIp);
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta SP Independiente  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Creación Acta SP Independiente', details, direccionIp);
     }
 
 
     //CONTROLAR LA ACTUALIZACIÓN DE  SP INDEPENDIENTE ACTA
     async logUpdateActaSpIndep(usu_nombre: string, usu_apellido: string, direccionIp: string, act_id: number, anio: string, pre_nombre: string, pre_cod_habilitacion): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta Independiente  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion} `;
-        await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta Independiente ', details, direccionIp);
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Acta SP Independiente  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion} `;
+        await this.logActivity(usu_nombre, usu_apellido, 'Actualización Acta SP Independiente ', details, direccionIp);
     }
 
 
@@ -183,6 +199,16 @@ export class AuditoriaRegistroService {
     async logCreateDiagnostico(usu_nombre: string, usu_apellido: string, direccionIp: string, anio: string): Promise<void> {
         const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un criterio diagnostico vascular con fecha ${anio} `;
         await this.logActivity(usu_nombre, usu_apellido, 'Creación Criterio Diagnostico Vascular', details, direccionIp);
+    }
+
+
+
+
+    //CONTROLAR EL CUMPLIMIENTO SIC ASIGNADO POR EL USUARIO
+    //CONTROLAR LA CREACIÓN DE  SP INDEPENDIENTE ACTA
+    async logCreateCumplimientoSic(usu_nombre: string, usu_apellido: string, direccionIp: string, cumpl_cumple:string, cri_nombre: string, act_id: number, anio: string): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha asignado un Cumplimiento Sic (${cumpl_cumple}) del criterio "${cri_nombre}" del acta No. ${act_id} del año ${anio}`;
+        await this.logActivity(usu_nombre, usu_apellido, 'Cumplimiento Sic', details, direccionIp);
     }
 
 

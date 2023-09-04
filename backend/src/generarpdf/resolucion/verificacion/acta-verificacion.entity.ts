@@ -70,7 +70,7 @@ export class ActaVerificacionEntity {
     @Column({ type: 'text', nullable: false })
     act_firma_prestador: string; 
 
-    @Column({ type: 'varchar', length: 40, nullable: false })
+    @Column({ type: 'varchar', length: 40, nullable: true })
     act_usu_adicional: string;
     
 
