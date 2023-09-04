@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -11,6 +11,9 @@ import { catchError, concatMap, Observable, throwError } from 'rxjs';
 import { TokenService } from '../services/token.service';
 import { TokenDto } from '../models/token.dto';
 import { AuthService } from '../services/auth.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 
 const AUTHORIZATION = 'Authorization';
 const BEARER = 'Bearer ';
@@ -18,10 +21,46 @@ const BEARER = 'Bearer ';
 @Injectable()
 export class UsuarioInterceptor implements HttpInterceptor {
 
+  @Input('dataFromParent') public modalRef: BsModalRef;
+
   constructor(private tokenService: TokenService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private router: Router) {
+    this.checkInactivity();
+  }
+
+  private lastInteractionTime: Date;
+
+  private checkInactivity() {
+    // Función para verificar la inactividad cada cierto intervalo de tiempo
+    setInterval(() => {
+      const currentTime = new Date();
+      const timeDifference = currentTime.getTime() - this.lastInteractionTime.getTime();
+      const maxInactiveTime = 60 * 60 * 1000; // 1 hora en milisegundos
+
+      if (timeDifference > maxInactiveTime && this.tokenService.isLogged()) {
+        // Realizar las acciones necesarias para cerrar la sesión
+        this.tokenService.logOut();
+        // Mostrar la alerta usando SweetAlert
+        Swal.fire({
+          icon: 'warning',
+          title: '¡Sesión expirada!',
+          text: 'Tu sesión ha expirado debido a la inactividad.',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/login']); // Redirigir a la página de inicio de sesión
+            this.modalRef.hide()
+          }
+        });
+
+      }
+    }, 1000); // Verificar cada segundo
+  }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+
+    this.lastInteractionTime = new Date(); // Registrar la última interacción
+
     if (!this.tokenService.isLogged()) {
       return next.handle(request);
     }

@@ -31,6 +31,7 @@ export class NuevoPrestadorComponent implements OnInit {
   pre_nombre: string;
   pre_nit: string;
   pre_direccion: string;
+  pre_barrio: string;
   pre_telefono: string;
   pre_email: string;
   pre_habilitado: string;

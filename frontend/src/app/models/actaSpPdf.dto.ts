@@ -1,4 +1,5 @@
 export class ActaSpPdfDto {
+    id?: number;
     act_id?: number;
     act_visita_inicial: string;
     act_visita_seguimiento: string;
@@ -16,8 +17,11 @@ export class ActaSpPdfDto {
     act_obj_visita: string
     act_nombre_funcionario: string
     act_cargo_funcionario: string
+    act_firma_funcionario: string
     act_nombre_prestador: string
     act_cargo_prestador: string
+    act_firma_prestador: string
+    act_estado: string
 
     constructor(
         act_id: number, 
@@ -37,9 +41,10 @@ export class ActaSpPdfDto {
         act_obj_visita: string,
         act_nombre_funcionario: string,
         act_cargo_funcionario: string,
+        act_firma_funcionario: string,
         act_nombre_prestador: string,
-        act_cargo_prestador: string
-
+        act_cargo_prestador: string,
+        act_firma_prestador: string,
 
         ){
         this.act_id = act_id
@@ -59,8 +64,10 @@ export class ActaSpPdfDto {
         this.act_obj_visita = act_obj_visita
         this.act_nombre_funcionario = act_nombre_funcionario
         this.act_cargo_funcionario = act_cargo_funcionario
+        this.act_firma_funcionario = act_firma_funcionario
         this.act_nombre_prestador = act_nombre_prestador
         this.act_cargo_prestador = act_cargo_prestador
+        this.act_firma_prestador = act_firma_prestador
 
     }
 }

@@ -1,21 +1,36 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedServiceService {
 
-  id: number;
-  pre_cod_habilitacion: string
 
-  cumpl_cumple: string
+  id_evaluacion_sic: number;
+  id_evaluacion_sp_ind: number;
+  id_evaluacion_sp_ips: number;
+  id_evaluacion_pamec: number;
+  pre_cod_habilitacion: string;
+
+  id_acta_sic: number
+
+  crie_id: number
+  cumpl_asignado: string
 
   criteriosGuardados: number[] = [];
 
   private firmaActaSic: string;
+  private firmaActaSpIps: string;
+  private firmaActaSpInd: string;
+  private firmaActaPamec: string;
   private firmaActaVisitaVerificacion: string;
   private firmaActaVisitaIvc: string;
   private firmaUsuario: string;
+
+  private cumplAsignadoSubject = new BehaviorSubject<string>(''); // Inicializado con un valor vacío
+  cumplAsignado$: Observable<string> = this.cumplAsignadoSubject.asObservable();
+
 
 
   //NOMBRES PRESTADORES MODAL
@@ -27,6 +42,19 @@ export class SharedServiceService {
   setFirmaActaSic(firmaActaSic: string){
     this.firmaActaSic = firmaActaSic
   }
+
+  setFirmaActaSpIps(firmaActaSpIps: string){
+    this.firmaActaSpIps = firmaActaSpIps
+  }
+
+  setFirmaActaSpInd(firmaActaSpInd: string){
+    this.firmaActaSpInd = firmaActaSpInd
+  }
+
+  setFirmaActaPamec(firmaActaPamec: string){
+    this.firmaActaPamec = firmaActaPamec
+  }
+
 
   setFirmaActaVisitaVerificacion(firmaVisitaVerificacion: string){
     this.firmaActaVisitaVerificacion = firmaVisitaVerificacion
@@ -46,6 +74,18 @@ export class SharedServiceService {
     return this.firmaActaSic
   }
 
+  getFirmaActaSpIps(): string{
+    return this.firmaActaSpIps
+  }
+
+  getFirmaActaSpInd(): string{
+    return this.firmaActaSpInd
+  }
+
+  getFirmaActaPamec(): string{
+    return this.firmaActaPamec
+  }
+
   getFirmaActaVisitaVerificacion(): string{
     return this.firmaActaVisitaVerificacion
   }
@@ -59,9 +99,29 @@ export class SharedServiceService {
   }
 
 
+  setIdSic(id: number) {
+    this.id_evaluacion_sic = id;
+  }
 
-  setId(id: number) {
-    this.id = id;
+  setIdActaSic(id: number) {
+    this.id_acta_sic = id
+  }
+
+  setIdCriterioSic(id: number) {
+    this.crie_id = id;
+  }
+
+
+  setIdSpIps(id: number) {
+    this.id_evaluacion_sp_ips = id;
+  }
+
+  setIdSpInd(id: number) {
+    this.id_evaluacion_sp_ind = id;
+  }
+
+  setIdPamec(id: number) {
+    this.id_evaluacion_pamec = id;
   }
 
   setNombrePrestador(name: string){
@@ -69,24 +129,12 @@ export class SharedServiceService {
   }
 
 
-
   setIdPrestador(id: string){
     this.pre_cod_habilitacion = id
   }
 
-  setCumple(cumple: string){
-    this.cumpl_cumple = cumple
+  setCumpleAsignado(cumpleAsignado: string) {
+    this.cumplAsignadoSubject.next(cumpleAsignado);
   }
 
-  // cumplimientosCreados(): void {
-  //   this.municipioService.lista().subscribe(
-  //     data => {
-  //       this.municipio = data;
-  //       this.listaVacia = undefined;
-  //     },
-  //     err => {
-  //       this.listaVacia = err.error.message;
-  //     }
-  //   )
-  // }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { PrestadorDto } from 'src/app/models/prestador.dto';
@@ -16,6 +16,9 @@ import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { TokenService } from 'src/app/services/token.service';
 import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
 import { TokenDto } from 'src/app/models/token.dto';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
+import { GenerarPdfActaIpsService } from 'src/app/services/SpIps/generar-pdf-acta-ips.service';
 
 @Component({
   selector: 'app-acta-sp',
@@ -36,11 +39,14 @@ export class ActaSpIpsComponent implements OnInit {
   habilitarfechaFin = false;
 
   //Boton habilitar la evaluacion
-  boton_acta_sp_ips = false;
+  boton_acta_sp_ind = false;
 
+  //MODAL
+  public modalRef: BsModalRef;
 
   listaVacia: any = undefined;
 
+  id_acta: number
 
   //VARIABLES PARA TRANSPORTAR EL DTO
   act_id: number;
@@ -55,37 +61,63 @@ export class ActaSpIpsComponent implements OnInit {
   act_barrio: string
   act_telefono: string
   act_email: string
-  act_sede_principal: string
-  act_sede_localidad: string
-  act_sede_direccion: string
   act_representante: string
   act_cod_prestador: string
-  act_cod_sede: string
   act_obj_visita: string
   act_nombre_funcionario: string
   act_cargo_funcionario: string
+  act_firma_funcionario: string
   act_nombre_prestador: string
   act_cargo_prestador: string
+  act_firma_prestador: string
+
+  //ATRIBUTOS ID DE SELECTS
+  act_municipioId: string
+  act_prestadorId: string
+  act_funcionarioId: string
+
+  firma: string;
+
+
+  //ATRIBUTOS CONTROLAR MENSAJES VALIDACION
+  showTipoVisitaMessage: boolean = false;
+  showFechaInicialMessage: boolean = false;
+  showFechaFinalMessage: boolean = false;
+  showMunicipioMessage: boolean = false;
+  showPrestadorMessage: boolean = false;
+  showBarrioMessage: boolean = false;
+  showObjVisitaMessage: boolean = false;
+  showVerificadorMessage: boolean = false;
+  showPresadorNombreMessage: boolean = false;
+  showPrestadorCargoMessage: boolean = false;
 
   constructor(
+    private modalService: BsModalService,
     private prestadorService: PrestadorService,
     private municipioService: MunicipioService,
     private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private authService: AuthService,
     private actaPdfService: ActapdfService,
+    public sharedService: SharedServiceService,
+    private generarPdfActaSpIps: GenerarPdfActaIpsService,
     private tokenService: TokenService,
     private router: Router
 
   ) { }
 
   ngOnInit(): void {
+    this.inicializarDatos();
+  }
+
+  inicializarDatos() {
     this.cargarMunicipio();
     this.cargarUsuario();
     this.unsoloCheckbox();
     this.obtenerNombres();
     this.mostrarActaId();
   }
+
 
   habilitarFechaFinal() {
     this.habilitarfechaFin = true;
@@ -102,6 +134,7 @@ export class ActaSpIpsComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     )
+    this.act_municipioId = ''
   }
 
   mostrarActaId(): void {
@@ -110,11 +143,11 @@ export class ActaSpIpsComponent implements OnInit {
         this.actaPdf = data
         var acta = (document.getElementById('acta')) as HTMLSelectElement
         acta.value = this.actaPdf.act_id.toString()
-
       }
     )
   }
 
+  //LISTAR USUARIOS
   cargarUsuario(): void {
     this.usuarioService.listaUserEstado().subscribe(
       data => {
@@ -125,10 +158,24 @@ export class ActaSpIpsComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     )
+    this.act_funcionarioId = ''
   }
 
+  //LISTAR ÚLTIMA ACTA REGISTRADA
+  ultimaActaId(): void {
+    this.actaPdfService.listaUltimaSpIps().subscribe(
+      data => {
+        this.actaPdf = data
+        var acta = (document.getElementById('acta')) as HTMLSelectElement
+        acta.value = this.actaPdf.act_id.toString()
+      }
+    )
+  }
+
+  //LISTAR PRESTADORES POR MUNICIPIO
+  //LISTAR PRESTADORES POR MUNICIPIO
   cargarPrestadoresByMun(): void {
-    this.prestadorService.listMun(this.act_municipio).subscribe(
+    this.prestadorService.listMun(this.act_municipioId).subscribe(
       data => {
         this.prestador = data;
         this.listaVacia = undefined
@@ -137,9 +184,59 @@ export class ActaSpIpsComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     );
+    this.act_prestadorId = ''
   }
 
 
+  //Metodo Abrir Modal
+  openModal(modalTemplate: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(modalTemplate,
+      {
+        class: 'modal-dialogue-centered modal-md',
+        backdrop: true,
+        keyboard: true
+      }
+    );
+  }
+
+  //COMPLETAR INPUT_CARGO POR USUARIO SELECCIONADO
+  cargoUsuario() {
+    var id = (document.getElementById('usu_secretaria')) as HTMLSelectElement
+    var sel = id.selectedIndex;
+    var opt = id.options[sel]
+    var Codigo = (<HTMLSelectElement><unknown>opt).value;
+
+    const idUsuarioComoNumero = parseInt(Codigo, 10);
+    this.usuarioService.oneUser(idUsuarioComoNumero).subscribe(
+      data => {
+        for (const usu of this.usuario) {
+          if (usu.usu_id === idUsuarioComoNumero) {
+            var cargo_usuario = (document.getElementById('cargoSecre')) as HTMLSelectElement
+            cargo_usuario.value = usu.usu_cargo
+            this.act_cargo_funcionario = cargo_usuario.value
+          }
+        }
+      }
+    )
+  }
+
+  //VERIFICAR QUE SOLO SE SELECCIONE UN CHECKBOX
+  unsoloCheckbox(): void {
+    var checkbox1 = (document.getElementById("inicial")) as HTMLInputElement;
+    var checkbox2 = (document.getElementById("segumiento")) as HTMLInputElement;
+    checkbox1.onclick = function () {
+      if (checkbox1.checked != false) {
+        checkbox2.checked = null;
+      }
+    }
+    checkbox2.onclick = function () {
+      if (checkbox2.checked != false) {
+        checkbox1.checked = null;
+      }
+    }
+  }
+
+  //COMPLETAR CAMPOS AL SELECCIONAR EL PRESTADOR
   llenarCampos() {
     var id = (document.getElementById('prestador')) as HTMLSelectElement
     var sel = id.selectedIndex;
@@ -172,23 +269,83 @@ export class ActaSpIpsComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     );
-
   }
 
 
-
-  unsoloCheckbox(): void {
-    var checkbox1 = (document.getElementById("inicial")) as HTMLInputElement;
-    var checkbox2 = (document.getElementById("segumiento")) as HTMLInputElement;
-    checkbox1.onclick = function () {
-      if (checkbox1.checked != false) {
-        checkbox2.checked = null;
-      }
+  async obtenerNombreSelects(): Promise<void> {
+    //SELECT MUNICIPIO
+    if (this.act_municipioId) {
+      const idMunicipioSeleccionado = this.act_municipioId;
+      const mun = await this.municipioService.oneMunicipio(idMunicipioSeleccionado).toPromise();
+      this.act_municipio = mun.mun_nombre
     }
-    checkbox2.onclick = function () {
-      if (checkbox2.checked != false) {
-        checkbox1.checked = null;
-      }
+
+    if (this.act_prestadorId) {
+      //SELECT PRESTADOR
+      const idPrestadorSeleccionado = this.act_prestadorId;
+      const pres = await this.prestadorService.listaOne(idPrestadorSeleccionado).toPromise();
+      this.act_prestador = pres.pre_nombre
+    }
+
+    if (this.act_funcionarioId) {
+      //SELECT FUNCIONARIO VERIFICADOR
+      const idFuncionarioSeleccionado = this.act_funcionarioId;
+      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
+      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
+      this.act_nombre_funcionario = func.usu_nombre + ' ' + func.usu_apellido
+    }
+  }
+
+  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
+  async obtenerFirmaFuncionario(): Promise<void> {
+    if (this.act_funcionarioId) {
+      const idFuncionarioSeleccionado = this.act_funcionarioId
+      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
+      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
+      this.act_firma_funcionario = func.usu_firma
+    }
+  }
+
+  //MENSAJES DE VALIDACION DIVS
+  ocultarMensajes() {
+    if (this.act_visita_inicial || this.act_visita_seguimiento) {
+      this.showTipoVisitaMessage = false
+    }
+
+    if (this.act_fecha_inicial) {
+      this.showFechaInicialMessage = false
+    }
+
+    if (this.act_fecha_final) {
+      this.showFechaFinalMessage = false
+    }
+
+    if (this.act_municipioId) {
+      this.showMunicipioMessage = false
+    }
+
+    if (this.act_prestadorId) {
+      this.showPrestadorMessage = false
+    }
+
+    if (this.act_barrio) {
+      this.showBarrioMessage = false
+    }
+
+    if (this.act_obj_visita) {
+      this.showObjVisitaMessage = false
+    }
+
+    if (this.act_funcionarioId) {
+      this.showVerificadorMessage = false
+    }
+
+    if (this.act_nombre_prestador) {
+      this.showPresadorNombreMessage = false
+    }
+
+    if (this.act_cargo_prestador) {
+      this.showPrestadorCargoMessage = false
     }
   }
 
@@ -198,7 +355,9 @@ export class ActaSpIpsComponent implements OnInit {
     const selp = idp.selectedIndex;
     const optp = idp.options[selp] as HTMLOptionElement;
     const valorPrestador = optp ? optp.textContent : '';
-    sessionStorage.setItem("nombre-pres-sp-ips", valorPrestador);
+    localStorage.setItem("nombre-pres-sp-ips", valorPrestador);
+    this.sharedService.setNombrePrestador(valorPrestador);
+
 
     //CODIGO PRESTADOR
     var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
@@ -224,7 +383,9 @@ export class ActaSpIpsComponent implements OnInit {
   }
 
 
-  onRegister(): void {
+
+  //REGISTRAR Y GENERAR ACTA PDF
+  async onRegister(): Promise<void> {
     //FORMULARIO
     //NÚMERO DE ACTA
     var acta = (document.getElementById('acta')) as HTMLInputElement
@@ -241,49 +402,24 @@ export class ActaSpIpsComponent implements OnInit {
     //VISITA SEGUIMIENTO
     var visitaSeguim = (document.getElementById('segumiento')) as HTMLInputElement
     var valorVisitaSeguim = visitaSeguim.checked
-    var final = '';
+    var seguimiento = '';
     if (valorVisitaSeguim) {
-      final = 'X';
+      seguimiento = 'X';
     }
 
-    //FECHA INICIAL
-    var fechaInicial = (document.getElementById('fecha-inicial')) as HTMLInputElement
-    var valorfechaInicial = fechaInicial.value
-    //FORMATO A FECHA INICIAL
-    let formInicial = new Date(valorfechaInicial);
-    let fechaFormInicial = formInicial.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
-
-    //FECHA FINAL
-    var fechaFinal = (document.getElementById('fecha-final')) as HTMLInputElement
-    var valorfechaFinal = fechaFinal.value
-    //FORMATO A FECHA INICIAL
-    let formFinal = new Date(valorfechaFinal);
-    let fechaFormFinal = formFinal.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
-
-    //MUNICIPIO
-    const id = document.getElementById('mun_id') as HTMLSelectElement;
-    const sel = id.selectedIndex;
-    const opt = id.options[sel] as HTMLOptionElement;
-    const valorMunicipio = opt ? opt.textContent : '';
-
-    //PRESTADOR
-    const idp = document.getElementById('prestador') as HTMLSelectElement;
-    const selp = idp.selectedIndex;
-    const optp = idp.options[selp] as HTMLOptionElement;
-    const valorPrestador = optp ? optp.textContent : '';
+    //INPUTS BLOQUEADOS Y SE ASIGNA A LAS VARIABLES DEL DTO
+    //No ACTA
+    var acta = (document.getElementById('acta')) as HTMLInputElement
+    var valorActa = acta.value
 
     //INFORMACION PRESTADOR
     //NIT
     var nit = (document.getElementById('nit')) as HTMLInputElement
     var valorNit = nit.value
 
-    //DIRECCION
+    //DIRECCIÓN
     var direccion = (document.getElementById('direccion')) as HTMLInputElement
     var valorDireccion = direccion.value
-
-    //BARRIO
-    var barrio = (document.getElementById('barrio')) as HTMLInputElement
-    var valorBarrio = barrio.value
 
     //TELEFONO
     var telefono = (document.getElementById('telefono')) as HTMLInputElement
@@ -301,436 +437,215 @@ export class ActaSpIpsComponent implements OnInit {
     var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
     var valorCodigoPres = codigoPres.value
 
-
-
-    // OBJETO VISITA
-    const idObjvisita = document.getElementById('objVisita') as HTMLSelectElement;
-    const selObjvisita = idObjvisita.selectedIndex;
-    const optObjvisita = idObjvisita.options[selObjvisita] as HTMLOptionElement;
-    const valorObjvisita = optObjvisita ? optObjvisita.textContent : '';
-
-    // USUARIO SECRETARIA
-    const idUsuSecre = document.getElementById('usu_secretaria') as HTMLSelectElement;
-    const selUsuSecre = idUsuSecre.selectedIndex;
-    const optUsuSecre = idUsuSecre.options[selUsuSecre] as HTMLOptionElement;
-    const valorUsuSecre = optUsuSecre ? optUsuSecre.textContent : '';
-
-    //CARGO USUARIO SECRETARIA
-    var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
-    var valorCargoSecre = cargoSecre.value
-
-    //PRESTADOR FIRMA
+    //NOMBRE DEL PRESTADOR - FIRMA PRESTADOR
     var presNombre = (document.getElementById('nombrePrestador')) as HTMLInputElement
     var valorPresNombre = presNombre.value
 
-    //CARGO PRESTADOR
-    var cargoPres = (document.getElementById('cargoPres')) as HTMLInputElement
-    var valorCargoPres = cargoPres.value
+    //SE OBTIENE LA FIRMA DEL MODAL DEL SERVICIO SHARED Y SE ASIGNA EN LA VARIABLE firma
+    this.firma = this.sharedService.getFirmaActaSpIps();
 
-    // const fechaGenerada = new Date();
-    // const formatoFecha = new Intl.DateTimeFormat('es-ES').format(fechaGenerada);
+    //OBTENER NOMBRES DE LOS SELECTS
+    await this.obtenerNombreSelects();
 
-    const doc = new jsPDF()
-    var imgEncabezado = 'assets/img/encabezadoSp.png'
-    doc.addImage(imgEncabezado, 'PNG', 23.5, 4, 160, 25);
+    //OBTENER FIRMA FUNCIONARIO
+    await this.obtenerFirmaFuncionario();
 
-    doc.setFontSize(9)
-    doc.setTextColor(128, 128, 128);
-    doc.setFontSize(9);
-    doc.setTextColor(0, 0, 0);
-    doc.setFont("helvetica", "bold")
-    doc.text("ACTA DE VISITA DE VERIFICACIÓN DEL CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE", 26, 40);
-    doc.text("INSTITUCIONES PRESTADORAS DE SERVICIOS DE SALUD (IPS)", 59, 45);
+    //ASIGNANDO LOS VALORES DEL ACTA PARA ASIGNARLAS EN EL DTO
+    this.act_id = Number(valorActa);
+    this.act_nit = valorNit
+    this.act_visita_inicial = inicial
+    this.act_visita_seguimiento = seguimiento
+    this.act_direccion = valorDireccion
+    this.act_telefono = valorTelefono
+    this.act_email = valorEmail
+    this.act_representante = valorRepresentante
+    this.act_cod_prestador = valorCodigoPres
+    this.act_nombre_prestador = valorPresNombre
+    this.act_firma_prestador = this.firma
 
-    //INCIAL DEL ACTA
-    autoTable(doc, {
-      margin: { top: 52 },
-      columnStyles: { acta: { halign: 'left' }, inicial: { halign: 'center' }, segumiento: { halign: 'center' } },
-      body: [
-        { acta: valorActa, inicial: inicial, segumiento: final, feinicio: fechaFormInicial, fefinal: fechaFormFinal },
-      ],
-      columns: [
-        { header: 'Número de acta', dataKey: 'acta' },
-        { header: 'Visita Inicial', dataKey: 'inicial' },
-        { header: 'Visita Seguimiento', dataKey: 'segumiento' },
-        { header: 'Fecha de Inicio', dataKey: 'feinicio' },
-        { header: 'Fecha Final', dataKey: 'fefinal' },
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
+    //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
+    this.actaPdf = new ActaSpPdfDto(
+      this.act_id,
+      this.act_visita_inicial,
+      this.act_visita_seguimiento,
+      this.act_fecha_inicial,
+      this.act_fecha_final,
+      this.act_municipio,
+      this.act_prestador,
+      this.act_nit,
+      this.act_direccion,
+      this.act_barrio,
+      this.act_telefono,
+      this.act_email,
+      this.act_representante,
+      this.act_cod_prestador,
+      this.act_obj_visita,
+      this.act_nombre_funcionario,
+      this.act_cargo_funcionario,
+      this.act_firma_funcionario,
+      this.act_nombre_prestador,
+      this.act_cargo_prestador,
+      this.act_firma_prestador
+    );
+
+    //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
+    const token = this.tokenService.getToken()
+    //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
+    const tokenDto: TokenDto = new TokenDto(token);
+
+    if (
+      !this.act_id ||
+      (!this.act_visita_inicial && !this.act_visita_seguimiento) ||
+      !this.act_fecha_inicial ||
+      !this.act_fecha_final ||
+      !this.act_municipioId ||
+      !this.act_prestador ||
+      !this.act_nit ||
+      !this.act_direccion ||
+      !this.act_barrio ||
+      !this.act_telefono ||
+      !this.act_email ||
+      !this.act_representante ||
+      !this.act_cod_prestador ||
+      !this.act_obj_visita ||
+      !this.act_nombre_funcionario ||
+      !this.act_cargo_funcionario ||
+      !this.act_nombre_prestador ||
+      !this.act_cargo_prestador
+    ) {
+      //ASIGNANDO LOS RESPECTIVOS MENSAJES EN CASO DE ENTRAR AL IF DE VALIDACIÓN
+      let mensajeError = 'Por favor, complete los siguientes campos:';
+
+      if (!this.act_visita_inicial && !this.act_visita_seguimiento) {
+        mensajeError += ' Tipo de Visita,';
+        this.showTipoVisitaMessage = true
       }
-    })
 
-    //NOMBRE PRESTADOR
-    doc.text("INFORMACIÓN DEL PRESTADOR DE SERVICIOS", 70, 79);
-    autoTable(doc, {
-      startY: 80,
-      columnStyles: { nombrePres: { halign: 'left' } },
-      body: [
-        { nombrePres: valorPrestador },
-      ],
-      columns: [
-        { header: 'Nombre:', dataKey: 'nombrePres' },
-      ],
-      tableWidth: 'auto',
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
+      if (!this.act_fecha_inicial) {
+        mensajeError += ' Fecha Inicial,';
+        this.showFechaInicialMessage = true
       }
-    })
 
-    //NIT, MUNICIPIO, DIRECCION PRESTADOR
-    autoTable(doc, {
-      startY: 98,
-      columnStyles: { nit: { halign: 'left' } },
-      body: [
-        { nit: valorNit, municipio: valorMunicipio, direccion: valorDireccion },
-      ],
-      columns: [
-        { header: 'Nit:', dataKey: 'nit' },
-        { header: 'Municipio:', dataKey: 'municipio' },
-        { header: 'Dirección:', dataKey: 'direccion' },
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
+      if (this.act_fecha_inicial && !this.act_fecha_final) {
+        mensajeError += ' Fecha Final,';
+        this.showFechaFinalMessage = true
       }
-    })
 
-    //BARRIO, TELEFONO, EMAIL
-    autoTable(doc, {
-      startY: 115,
-      columnStyles: { nit: { halign: 'left' } },
-      body: [
-        { barrio: valorBarrio, telefono: valorTelefono, email: valorEmail },
-      ],
-      columns: [
-        { header: 'Barrio:', dataKey: 'barrio' },
-        { header: 'Telefono:', dataKey: 'telefono' },
-        { header: 'Email:', dataKey: 'email' },
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
+      if (!this.act_municipioId) {
+        mensajeError += ' Municipio,';
+        this.showMunicipioMessage = true
       }
-    })
 
-    //REPRESENTANTE LEGAL, CODIGO PRESTADOR, CODIGO SEDE VISITADA
-    autoTable(doc, {
-      startY: 131,
-      columnStyles: { sede: { halign: 'left' } },
-      body: [
-        { representante: valorRepresentante, codpres: valorCodigoPres },
-      ],
-      columns: [
-        { header: 'Representante Legal:', dataKey: 'representante' },
-        { header: 'Código Prestador:', dataKey: 'codpres' },
-
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
+      if (!this.act_prestador && this.act_municipioId) {
+        mensajeError += ' Prestador,';
+        this.showPrestadorMessage = true
       }
-    })
 
-    //OBJETO DE LA VISITA
-    autoTable(doc, {
-      startY: 148,
-      columnStyles: { objeto: { halign: 'left' } },
-      body: [
-        { objeto: valorObjvisita },
-      ],
-      columns: [
-        { header: 'Objeto de la Visita:', dataKey: 'objeto' },
-      ],
-      tableWidth: 'auto',
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
+      if (!this.act_barrio) {
+        mensajeError += ' Barrio,';
+        this.showBarrioMessage = true
       }
-    })
-    doc.text("FIRMAS:", 96, 171);
 
-    //MENSAJE FIRMAS POR SECRETARIA DE SALUD
-    autoTable(doc, {
-      startY: 175,
-      headStyles: {
-        fillColor: [220, 220, 220],
-        textColor: [0, 0, 0],
-        halign: 'center'
-      },
-      columns: [
-        { header: 'POR SECRETARIA DE SALUD DEPARTAMENTAL', dataKey: 'mensaje' },
-      ],
-      tableWidth: 'auto',
-    })
+      if (!this.act_obj_visita) {
+        mensajeError += ' Objeto de visita,';
+        this.showObjVisitaMessage = true
 
-    //NOMBRE USUARIO, CARGO USUARIO Y FIRMA
-    autoTable(doc, {
-      startY: 183,
-      columnStyles: { sede: { halign: 'left' } },
-      body: [
-        { nombre: valorUsuSecre, cargo: valorCargoSecre, firma: '' },
-      ],
-      columns: [
-        { header: 'Nombre:', dataKey: 'nombre' },
-        { header: 'Cargo:', dataKey: 'cargo' },
-        { header: 'Firma:', dataKey: 'firma' },
-
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
       }
-    })
 
-
-    //MENSAJE FIRMAS POR SECRETARIA DE SALUD
-    autoTable(doc, {
-      startY: 205,
-      headStyles: {
-        fillColor: [220, 220, 220],
-        textColor: [0, 0, 0],
-        halign: 'center'
-      },
-      columns: [
-        { header: 'PRESTADOR DE SERVICIOS DE SALUD', dataKey: 'mensaje' },
-      ],
-      tableWidth: 'auto',
-    })
-
-    //NOMBRE USUARIO, CARGO USUARIO Y FIRMA
-    autoTable(doc, {
-      startY: 212,
-      columnStyles: { sede: { halign: 'left' } },
-      body: [
-        { nombre: valorPresNombre, cargo: valorCargoPres, firma: '' },
-      ],
-      columns: [
-        { header: 'Nombre:', dataKey: 'nombre' },
-        { header: 'Cargo:', dataKey: 'cargo' },
-        { header: 'Firma:', dataKey: 'firma' },
-
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
+      if (!this.act_nombre_funcionario) {
+        mensajeError += ' Verificador SOGCS,';
+        this.showVerificadorMessage = true
       }
-    })
 
-    var imgPiePagina = 'assets/img/piePaginaSpIps.png'
-    doc.addImage(imgPiePagina, 'PNG', -2, 278, 220, 20);
+      if (!this.act_nombre_prestador) {
+        mensajeError += ' Nombre del Prestador Firma,';
+        this.showPresadorNombreMessage = true
+      }
 
+      if (!this.act_cargo_prestador) {
+        mensajeError += ' Cargo Prestador Firma,';
+        this.showPrestadorCargoMessage = true
+      }
 
-    //VALIDAR FORMULARIO
-    //VALIDAR ACTA
-    if (!valorActa.length) {
-      this.toastrService.error('El número de acta no puede estar vacia', 'Error', {
+      mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA
+
+      //MOSTRAR MENSAJE POR MEDIO DE TOASTR_SERVICE
+      this.toastrService.error(mensajeError, 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-top-center',
+      });
+
+    } else if (!this.act_firma_prestador) { //VERIFICAR QUE LA FIRMA DEL PRESTADOR SEA ASIGNADA
+      this.toastrService.error('Por favor, agregue una firma', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       })
-    }
 
-    //VALIDAR VISITA INICIAL Y SEGUIMIENTO
-    if (valorVisitaInicial === false && valorVisitaSeguim === false) {
-      this.toastrService.error('Debes Escoger una visita', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR FECHAS
-    if (!valorfechaFinal && !valorfechaInicial) {
-      this.toastrService.error('Las fechas no pueden estar vacias', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-    if (!valorfechaInicial) {
-      this.toastrService.error('La fecha Inicial no pueden estar vacia', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-    if (!valorfechaFinal) {
-      this.toastrService.error('La fecha Final no pueden estar vacia', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR MUNICIPIO Y PRESTADOR
-    if (!valorMunicipio) {
-      this.toastrService.error('Selecciona el Municipio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-    /**/
-    if (valorMunicipio && !valorPrestador) {
-      this.toastrService.error('Selecciona el Prestador', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR BARRIO
-    if (!valorBarrio) {
-      this.toastrService.error('El Barrio no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-
-    //VALIDAR OBJETO
-    if (!selObjvisita) {
-      this.toastrService.error('Selecciona el Objeto', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR USUARIO
-    if (!selUsuSecre) {
-      this.toastrService.error('Selecciona el Usuario', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    if (!valorCargoSecre) {
-      this.toastrService.error('El cargo del Usuario no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR CARGO PRESTADOR
-    if (!valorCargoPres) {
-      this.toastrService.error('El cargo del Prestador no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDACIÓN PARA PDF
-    if (valorfechaInicial && valorfechaFinal && valorBarrio && valorObjvisita && valorUsuSecre &&
-      valorCargoSecre && valorCargoPres && selUsuSecre && selObjvisita && sel && selp && valorActa) {
-      if (valorVisitaInicial || valorVisitaSeguim) {
-
-        //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
-        this.act_id = Number(valorActa);
-        this.act_municipio = valorMunicipio
-        this.act_prestador = valorPrestador
-        this.act_nit = valorNit
-        this.act_direccion = valorDireccion
-        this.act_telefono = valorTelefono
-        this.act_email = valorEmail
-        this.act_representante = valorRepresentante
-        this.act_cod_prestador = valorCodigoPres
-        this.act_nombre_prestador = valorPresNombre
-        this.act_nombre_funcionario = valorUsuSecre
-
-        //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
-        this.actaPdf = new ActaSpPdfDto(
-          this.act_id,
-          this.act_visita_inicial,
-          this.act_visita_seguimiento,
-          this.act_fecha_inicial,
-          this.act_fecha_final,
-          this.act_municipio,
-          this.act_prestador,
-          this.act_nit,
-          this.act_direccion,
-          this.act_barrio,
-          this.act_telefono,
-          this.act_email,
-          this.act_representante,
-          this.act_cod_prestador,
-          this.act_obj_visita,
-          this.act_nombre_funcionario,
-          this.act_cargo_funcionario,
-          this.act_nombre_prestador,
-          this.act_cargo_prestador
-        );
-
-        const token = this.tokenService.getToken()
-        const tokenDto: TokenDto = new TokenDto(token);
-        this.authService.registroActaSpIpsPdf(this.actaPdf, tokenDto).subscribe(
-          (data) => {
-            // Verificar si no hay errores enviados por el backend
-            if (!data.error) {
-              //OBTENER EL ESTADO DEL BOTON A TRUE 
-              this.boton_acta_sp_ips = true;
-              localStorage.setItem('boton-acta-sp-ips', 'true');
-
-              Swal.fire({
-                title: '¿Desea descargar el acta?',
-                showCancelButton: true,
-                confirmButtonText: 'Si',
-                cancelButtonText: 'No'
-              }).then((result) => {
-                if (result.value) {
-                  doc.save('acta-sp-ips.pdf');
-                  this.router.navigate(['/sp/home-evaluacion-ips']);
-                  window.scrollTo(0, 0);
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                  this.router.navigate(['/sp/home-evaluacion-ips']);
-                  window.scrollTo(0, 0);
+    } else {
+      console.log(this.actaPdf)
+      //SOLICITUD DE REGISTRO DE ACTA ENVIANDO COMO PARAMETRO LA ACTA_DTO Y EL TOKEN_DTO
+      this.authService.registroActaSpIpsPdf(this.actaPdf, tokenDto).subscribe(
+        data => {
+          if (!data.error) {
+            localStorage.setItem('boton-acta-sp-ips', 'true'); //HABILITAR LA RUTA RESTRINGIDA - EVALUACIÓN_IND
+            //DESPUÉS DE REGISTRAR EL ACTA, SE SOLICITA LA ÚLTIMA ACTA
+            this.actaPdfService.listaUltimaSpIps().subscribe(
+              ultimaActa => {
+                //VERIFICA QUE EXISTA EL ACTA REGISTRADA
+                if (ultimaActa && ultimaActa.id) {
+                  this.id_acta = ultimaActa.id;
+                  
+                  Swal.fire({
+                    title: '¿Desea descargar el acta?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                  }).then((result) => {
+                    //SOLICITUD AL SERVICIO QUE GENERA EL ACTA_PDF PASANDO COMO PARAMETRO LA ULTIMA ACTA REGISTRADA
+                    if (result.value) {
+                      this.generarPdfActaSpIps.ActaPdf(this.id_acta);
+                      //ASIGNAR NULL EL ATRIBUTO FIRMA PARA UNA NUEVA ACTA
+                      this.act_firma_prestador = null
+                      this.sharedService.setFirmaActaSpIps(this.act_firma_prestador) //ENVIAMOS LA FIRMA NULL PARA UNA NUEVA ACTA
+                      this.router.navigate(['/sp/home-evaluacion-ips']);
+                      window.scrollTo(0, 0);
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                      this.router.navigate(['/sp/home-evaluacion-ips']);
+                      window.scrollTo(0, 0);
+                    }
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo obtener el ID del acta.'
+                  });
                 }
-                // Mostrar mensaje de éxito independientemente de la opción seleccionada
-                this.toastrService.success(data.message, 'Ok', {
-                  timeOut: 3000,
-                  positionClass: 'toast-top-center',
-                });
-              });
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: data.message
-              });
-            }
-          },
-          err => {
+              },
+            );
+            //TOASTR PARA ENVIAR MENSAJE DE ÉXITO
+            this.toastrService.success(data.message, 'Éxito', {
+              timeOut: 3000,
+              positionClass: 'toast-top-center',
+            });
+          } else {
+            //TOASTR PARA ENVIAR MENSAJE DE ERROR
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: err.error.message
+              text: data.message
             });
           }
-        );
-
-      }
+        },
+        err => {
+          //MANEJAR EL ERROR DEL SUSCRIBE DATA - registroActaSicPdf
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err.error.message
+          });
+        }
+      )
     }
   }
-
-
-
 }

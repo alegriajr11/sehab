@@ -26,6 +26,8 @@ export class ActaSicPdfDto {
     act_firma_prestador: string
     act_cargo_prestador: string
 
+    act_estado: string;
+
     constructor(
         act_id: number, 
         act_visita_inicial: string, 

@@ -35,7 +35,7 @@
                     <label for="inicial" class="form-label">VISITA INICIAL</label>
                     <label class="switch">
                         <input type="checkbox" id="inicial" onclick="unsoloCheckbox()" name="act_visita_inicial"
-                            [(ngModel)]="act_visita_inicial">
+                            [(ngModel)]="act_visita_inicial" (change)="ocultarMensajes()">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -44,22 +44,29 @@
                     <label for="segumiento" class="form-label">VISITA DE SEGUIMIENTO</label>
                     <label class="switch">
                         <input type="checkbox" id="segumiento" onclick="unsoloCheckbox()" name="act_visita_seguimiento"
-                            [(ngModel)]="act_visita_seguimiento">
+                            [(ngModel)]="act_visita_seguimiento" (change)="ocultarMensajes()">
                         <span class="slider round"></span>
                     </label>
                 </div>
+                <div *ngIf="showTipoVisitaMessage" class="validation-message-visita">Seleccione un Tipo de
+                    Visita.</div>
 
                 <div class="col-md-3">
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
                         name="act_fecha_inicial" [(ngModel)]="act_fecha_inicial" [ngModelOptions]="{standalone: true}"
-                        ngDefaultControl (change)="habilitarFechaFinal()">
+                        ngDefaultControl (change)="habilitarFechaFinal(); ocultarMensajes()">
+                    <div *ngIf="showFechaInicialMessage" class="validation-message">Seleccione la Fecha
+                        Inicial.</div>
                 </div>
+
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
                         [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial">
+                        [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial" (change)="ocultarMensajes()">
+                    <div *ngIf="showFechaFinalMessage" class="validation-message">Seleccione la Fecha
+                        Final.</div>
                 </div>
 
                 <div class="col-12">
@@ -73,23 +80,29 @@
                 <div class="col-md-6">
                     <label for="habilitado" class="form-label">Municipio:</label>
                     <select id="mun_id" name="mun_id" class="form-select form-control"
-                        (change)="cargarPrestadoresByMun()" [(ngModel)]="act_municipioId" ngDefaultControl>
+                        (change)="cargarPrestadoresByMun(); ocultarMensajes(); vaciarPorMunicipioSelect()"
+                        [(ngModel)]="act_municipioId" ngDefaultControl>
                         <option value="" disabled selected hidden>Selecciona un Municipio...</option>
                         <option *ngFor="let municipio of municipio" [value]="municipio.mun_id">
                             {{ municipio.mun_nombre }}
                         </option>
                     </select>
+                    <div *ngIf="showMunicipioMessage" class="validation-message">Seleccione el Municipio.
+                    </div>
                 </div>
 
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Prestador:</label>
                     <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()"
-                        [(ngModel)]="act_prestadorId" ngDefaultControl>
+                        [(ngModel)]="act_prestadorId" ngDefaultControl
+                        (change)="ocultarMensajes(); habilitarSede(); cargarSedesByPrestador()">
                         <option value="" disabled selected hidden>Selecciona un Prestador...</option>
                         <option *ngFor="let prest of prestador" [value]="prest.pre_cod_habilitacion">
                             {{ prest.pre_nombre }}
                         </option>
                     </select>
+                    <div *ngIf="showPrestadorMessage" class="validation-message">Seleccione el Prestador.
+                    </div>
                 </div>
 
                 <div class="col-6">
@@ -108,7 +121,8 @@
                 <div class="col-6">
                     <label for="barrio" class="form-label">Barrio:</label>
                     <input type="text" class="form-control" id="barrio" name="act_barrio" placeholder="Barrio Prestador"
-                        required [(ngModel)]="act_barrio">
+                        required [(ngModel)]="act_barrio" (input)="ocultarMensajes()">
+                    <div *ngIf="showBarrioMessage" class="validation-message-barrio">Ingresa el Barrio.</div>
                 </div>
 
                 <div class="col-6">
@@ -124,32 +138,37 @@
                 </div>
 
 
-                <div class="col-12">
-                    <label for="principal" class="form-label">Sede Principal:</label>
 
-                    <select id="sedep" class="form-select form-control"
-                        [(ngModel)]="act_sede_principal" [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option disabled selected hidden>Sede Principal...</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
+                <div class="col-12">
+                    <label for="principal" class="form-label">Sede:</label>
+
+                    <select id="sedep" class="form-select form-control" [(ngModel)]="act_sede_principalId"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl
+                        (change)="ocultarMensajes(); sedeSeleccionada()" [disabled]="!habilitarSelectSede">
+                        <option value="" disabled selected hidden>Selecciona una Sede...</option>
+                        <option *ngFor="let list_sede of sede" [value]="list_sede.sede_id">
+                            {{ list_sede.sede_nombre }}
+                        </option>
                     </select>
+                    <div *ngIf="showSedeMessage" class="validation-message-sede ">Seleccione la Sede.</div>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="inputAddress2" class="form-label">Localidad:</label>
-                    <input type="text" class="form-control" id="localidad" name="act_sede_localidad"
+                    <label for="inputAddress2" class="form-label">Barrio:</label>
+                    <input type="text" class="form-control" id="barrioSede" name="act_sede_localidad"
                         placeholder="Localidad" disabled [(ngModel)]="act_sede_localidad">
                 </div>
+
                 <div class="col-md-6">
                     <label for="inputAddress2" class="form-label">Dirección:</label>
-                    <input type="text" class="form-control" id="dirubic" name="act_sede_direccion"
+                    <input type="text" class="form-control" id="direccionSede" name="act_sede_direccion"
                         placeholder="Dirección" disabled [(ngModel)]="act_sede_direccion">
                 </div>
 
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Representante Legal:</label>
-                    <input type="text" class="form-control" id="repleg" placeholder="Representante Legal" readonly>
+                    <input type="text" class="form-control" id="repleg" placeholder="Representante Legal">
                     <input type="hidden" name="act_representante" [(ngModel)]="act_representante">
                 </div>
 
@@ -163,7 +182,7 @@
                 <div class="col-md-6">
                     <label for="codsede" class="form-label">Codigo Sede Visitada:</label>
                     <input type="text" class="form-control" id="codsede" name="act_cod_sede"
-                        placeholder="Código sede visitada..." [(ngModel)]="act_cod_sede">
+                        placeholder="Código sede visitada..." readonly [(ngModel)]="act_cod_sede">
                 </div>
 
                 <div class="col-12">
@@ -173,11 +192,12 @@
                 <div class="col-12">
                     <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
                     <select id="objVisita" class="form-select form-control" [(ngModel)]="act_obj_visita"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="ocultarMensajes()">
                         <option value="" disabled selected hidden>Selecciona el Objeto...</option>
                         <option>Realizar seguimiento a la implementación del sistema de información para la calidad que
                             define la resolución 256 de 2016</option>
                     </select>
+                    <div *ngIf="showObjVisitaMessage" class="validation-message-ovpc">Seleccione el Objeto.</div>
                 </div>
 
                 <div class="col-12">
@@ -191,17 +211,20 @@
                 <div class="col-12">
                     <label for="" class="form-label">Verificador SOGCS:</label>
                     <select id="usu_secretaria" class="form-select form-control" [(ngModel)]="act_funcionarioId"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option hidden>Selecciona el Nombre...</option>
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl
+                        (change)="cargoUsuario(); ocultarMensajes()">
+                        <option value="" disabled selected hidden>Selecciona el Verificador...</option>
                         <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
                             {{usuario.usu_apellido}}</option>
                     </select>
+                    <div *ngIf="showVerificadorMessage" class="validation-message-ovpc">Seleccione el Verificador.
+                    </div>
                 </div>
 
                 <div class="col-12">
                     <label for="" class="form-label">Cargo:</label>
-                    <input type="text" class="form-control" id="cargoSecre" name="act_cargo_funcionario"
-                        placeholder="Cargo..." [(ngModel)]="act_cargo_funcionario">
+                    <input type="text" class="form-control" id="cargoSecre" placeholder="Cargo Verificador..." readonly>
+                    <input type="hidden" name="act_cargo_funcionario" [(ngModel)]="act_cargo_funcionario">
                 </div>
 
                 <div class="col-12 bg-h3 contenedor-form">
@@ -211,14 +234,22 @@
                 <div class="col-12">
                     <label for="" class="form-label">Prestador:</label>
                     <input type="text" class="form-control" id="nombrePrestador" name="act_nombre_prestador"
-                        placeholder="Prestador..." [(ngModel)]="act_nombre_prestador">
+                        placeholder="Prestador..." [(ngModel)]="act_nombre_prestador" (input)="ocultarMensajes()">
+                    <div *ngIf="showPresadorNombreMessage" class="validation-message-ovpc">Ingresa el Nombre Prestador a
+                        cargo.
+                    </div>
                 </div>
+
 
                 <div class="col-12">
                     <label for="" class="form-label">Cargo:</label>
                     <input type="text" class="form-control" id="cargoPres" name="act_cargo_prestador"
-                        placeholder="Cargo..." [(ngModel)]="act_cargo_prestador">
+                        placeholder="Cargo..." [(ngModel)]="act_cargo_prestador" (input)="ocultarMensajes()">
+                    <div *ngIf="showPrestadorCargoMessage" class="validation-message-ovpc">Ingresa el Cargo del
+                        Prestador.
+                    </div>
                 </div>
+
 
                 <!--BOTON MODAL FIRMA-->
                 <div class="col-3">

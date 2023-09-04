@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { NuevoUsuarioDto } from 'src/app/models/nuevo-usuario.dto';
+import { NuevoUsuarioAdminDto } from 'src/app/models/nuevo-usuario-admin.dto';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -11,8 +11,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NuevoUsuarioAdminComponent implements OnInit {
 
-  usuario: NuevoUsuarioDto = null;
+  usuarioAdmin: NuevoUsuarioAdminDto = null;
 
+  usu_cedula: string;
   usu_nombre: string;
   usu_apellido: string;
   usu_email: string;
@@ -31,16 +32,16 @@ export class NuevoUsuarioAdminComponent implements OnInit {
 
   onRegister(): void {
     this.usu_firma = null
-    this.usuario = new NuevoUsuarioDto(
+    this.usuarioAdmin = new NuevoUsuarioAdminDto(
+      this.usu_cedula,
       this.usu_nombre,
       this.usu_apellido,
       this.usu_email,
       this.usu_nombreUsuario,
       this.usu_password,
-      this.usu_firma,
       this.usu_estado
     );
-    this.authService.registroAdmin(this.usuario).subscribe(
+    this.authService.registroAdmin(this.usuarioAdmin).subscribe(
       (data) => {
         this.toastrService.success(data.message, 'Ok', {
           timeOut: 3000,

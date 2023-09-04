@@ -207,6 +207,17 @@ table.table .avatar {
     grid-gap: 0 1rem;
 }
 
+.button-container{
+    display: flex;
+    align-items: flex-end;
+
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
 
 label {
@@ -217,16 +228,15 @@ span{
     font-size: xx-large;
 }
 
-/*ELIMINAR LOS SPIN SUBIR Y BAJAR NUMBER*/
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+.year-message {
+    position: absolute;
+    background-color: #f85448;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    top: -25px;
+    left: 0;
+    z-index: 1;
 }
 
-
-/*MARGIN DEL CONTENEDOR*/
-.size {
-    margin-right: 280px;
-    margin-left: 280px;
-}

@@ -16,7 +16,7 @@
 
 <div class="wrapper">
 
-    <div class="size">
+    <div class="container">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -55,8 +55,10 @@
                         <option hidden disabled selected>Acción...</option>
                         <option value="Inicio de Sesión">Inicio de Sesión</option>
                         <option value="Creación">Creación</option>
+                        <option value="Cumplimiento Sic">Cumplimiento Sic</option>
                         <option value="Eliminación">Eliminación</option>
                         <option value="Actualización">Actualización</option>
+                        <option value="Cierre">Cierre</option>
                     </select>
                 </div>
 
@@ -83,7 +85,7 @@
                     <tr *ngFor="let auditoria of this.auditoria | paginate: { itemsPerPage: 10, currentPage: page}; let i = index" >
                         <td style="text-align: center;">{{calcularIDGlobal(i, page, 10)}}</td>
                         <td style="text-align: center;">{{auditoria.usu_nombre + ' ' + auditoria.usu_apellido}}</td>
-                        <td style="text-align: center;">{{auditoria.creadoEn | date: 'dd/MM/yyyy'}}</td>
+                        <td style="text-align: center;">{{auditoria.creadoEn | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
                         <td style="text-align: center;">{{auditoria.accion}}</td>
                         <td>{{auditoria.detalles}}</td>
                     </tr>

@@ -14,6 +14,12 @@
 </div>
 
 <br>
+
+<ng-template #modalTemplate>
+    <app-modal-firma-acta-pamec [dataFromParent]="modalRef"></app-modal-firma-acta-pamec>
+</ng-template>
+
+
 <div class="container">
     <div class="card">
         <div class="card-body">
@@ -26,17 +32,20 @@
 
                 <div class="col-md-2">
                     <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
-                    <input type="number" min="0" class="form-control" id="acta" required>
+                    <input type="number" min="0" class="form-control" id="acta" readonly name="act_id"
+                        [(ngModel)]="act_id">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">FECHA DE LA VISITA</label>
-                    <input type="date" class="form-control" id="fecha-visita">
+                    <input type="date" class="form-control" id="fecha-visita" name="act_fecha_visita"
+                        [(ngModel)]="act_fecha_visita">
                 </div>
 
                 <div class="col-7">
-                    <label for="" class="form-label">TIPO DE VISITA</label>
-                    <select id="tip_visita" class="form-select form-control" (change)="tipoVisita()">
+                    <label for="inputAddress" class="form-label">TIPO DE VISITA:</label>
+                    <select id="tipoVisita" class="form-select form-control" [(ngModel)]="act_tipo_visitaId"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="ocultarMensajes(); tipoVisita()">
                         <option hidden selected>Tipo de Visita...</option>
                         <option value="1">PRIMERA VEZ</option>
                         <option value="2">SEGUIMIENTO A IPS CRITICA</option>
@@ -44,11 +53,13 @@
                         <option value="4">AÑO DE FORMULACION DEL PAMEC</option>
                         <option value="5">CICLO DE MEJORAMIENTO</option>
                     </select>
+                    <div *ngIf="showObjVisitaMessage" class="validation-message-ovpc">Seleccione el Tipo de Visita.</div>
                 </div>
+
                 <div class="col-3" *ngIf="formulacion">
                     <label for="" class="form-label text-center">AÑO DE FORMULACION:</label>
-                    <input type="number" class="form-control" ngModel="number"
-                        onkeypress="if(this.value.length==4) return false;" id="año_formulacion">
+                    <input type="number" class="form-control" onkeypress="if(this.value.length==4) return false;"
+                        id="año_formulacion" placeholder="Año de formulación...">
                 </div>
 
                 <div class="col-3" *ngIf="mejoramiento">
@@ -73,20 +84,28 @@
                 <div class="col-md-6">
                     <label for="habilitado" class="form-label">Municipio:</label>
                     <select id="mun_id" name="mun_id" class="form-select form-control"
-                        (change)="cargarPrestadoresByMun()">
-                        <option hidden selected>Selecciona un Municipio...</option>
-                        <option *ngFor="let municipio of municipio" value="{{municipio.mun_id}}">
-                            {{municipio.mun_nombre}}</option>
+                        (change)="cargarPrestadoresByMun(); ocultarMensajes()" [(ngModel)]="act_municipioId"
+                        ngDefaultControl>
+                        <option value="" disabled selected hidden>Selecciona un Municipio...</option>
+                        <option *ngFor="let municipio of municipio" [value]="municipio.mun_id">
+                            {{ municipio.mun_nombre }}
+                        </option>
                     </select>
+                    <div *ngIf="showMunicipioMessage" class="validation-message">Seleccione el Municipio.
+                    </div>
                 </div>
 
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Prestador:</label>
-                    <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()">
-                        <option hidden selected>Selecciona un Prestador...</option>
-                        <option *ngFor="let prestador of prestador" value="{{prestador.pre_cod_habilitacion}}">
-                            {{prestador.pre_nombre}}</option>
+                    <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()"
+                        [(ngModel)]="act_prestadorId" ngDefaultControl (change)="ocultarMensajes()">
+                        <option value="" disabled selected hidden>Selecciona un Prestador...</option>
+                        <option *ngFor="let prest of prestador" [value]="prest.pre_cod_habilitacion">
+                            {{ prest.pre_nombre }}
+                        </option>
                     </select>
+                    <div *ngIf="showPrestadorMessage" class="validation-message">Seleccione el Prestador.
+                    </div>
                 </div>
 
                 <div class="col-6">
@@ -101,8 +120,10 @@
                 </div>
 
                 <div class="col-6">
-                    <label for="inputAddress2" class="form-label">Barrio:</label>
-                    <input type="text" class="form-control" id="barrio" placeholder="Barrio" required>
+                    <label for="barrio" class="form-label">Barrio:</label>
+                    <input type="text" class="form-control" id="barrio" name="act_barrio" placeholder="Barrio Prestador"
+                        required [(ngModel)]="act_barrio" (input)="ocultarMensajes()">
+                    <div *ngIf="showBarrioMessage" class="validation-message-barrio">Ingresa el Barrio.</div>
                 </div>
 
                 <div class="col-6">
@@ -132,6 +153,28 @@
                     </div>
                 </div>
 
+                <div class="col-12">
+                    <label for="principal" class="form-label">Sede Principal:</label>
+
+                    <select id="sedep" class="form-select form-control" [(ngModel)]="act_sede_principal"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="ocultarMensajes()">
+                        <option disabled selected hidden>Sede Principal...</option>
+                        <option value="si">Si</option>
+                        <option value="no">No</option>
+                    </select>
+                    <div *ngIf="showSedeMessage" class="validation-message-sede ">Seleccione la Sede.</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="inputAddress2" class="form-label">Localidad:</label>
+                    <input type="text" class="form-control" id="localidad" name="act_sede_localidad"
+                        placeholder="Localidad" disabled [(ngModel)]="act_sede_localidad">
+                </div>
+                <div class="col-md-6">
+                    <label for="inputAddress2" class="form-label">Dirección:</label>
+                    <input type="text" class="form-control" id="dirubic" name="act_sede_direccion"
+                        placeholder="Dirección" disabled [(ngModel)]="act_sede_direccion">
+                </div>
 
                 <div class="col-12">
                     <hr class="medio">
@@ -147,23 +190,29 @@
 
                 <div class="container row" id="contenedor">
                     <div class="col-md-6" id="nom_secre">
-                        <label for="" class="form-label">Nombre:</label>
-                        <select id="usu_secretaria1" class="form-select form-control">
-                            <option hidden selected>Selecciona el Nombre...</option>
-                            <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
+                        <label for="" class="form-label">Verificador SOGCS:</label>
+                        <select id="usu_secretaria1" class="form-select form-control" [(ngModel)]="act_funcionarioId"
+                            [ngModelOptions]="{standalone: true}" ngDefaultControl
+                            (change)="cargoUsuario(); ocultarMensajes()">
+                            <option value="" disabled selected hidden>Selecciona el Verificador...</option>
+                            <option *ngFor="let usuario of usuario_uno" value="{{usuario.usu_id}}">
+                                {{usuario.usu_nombre}}
                                 {{usuario.usu_apellido}}</option>
                         </select>
+                        <div *ngIf="showVerificadorMessage" class="validation-message-ovpc">Seleccione el Verificador.
+                        </div>
                     </div>
 
                     <div class="col-md-6">
                         <label for="" class="form-label">Cargo:</label>
-                        <input type="text" class="form-control" id="cargosecre1" placeholder="Cargo...">
+                        <input type="text" class="form-control" id="cargoSecre1" name="act_cargo_funcionario1"
+                            placeholder="Cargo..." [(ngModel)]="act_cargo_funcionario1" readonly>
                     </div>
 
                 </div>
 
-                <div class="col-md-12" *ngIf="usuarioAgregado">
-                    <p>Clic en el boton para agregar un nuevo usuario si así lo requiere</p>
+                <div class="col-md-12" *ngIf="!agregarUsuario">
+                    <p>Clic en el boton para agregar un nuevo verificador si así lo requiere</p>
                     <button id="button-add" class="btn-dark plus sp" title="Agregar Usuario" (click)="nuevoUsuario()">
                         <span class="size_span_plus">
                             <i class='fas fa-plus-circle'></i>
@@ -175,21 +224,26 @@
 
                 <div class="container row" id="contenedor" *ngIf="agregarUsuario">
                     <div class="col-md-6" id="nom_secre">
-                        <label for="" class="form-label">Nombre:</label>
-                        <select id="usu_secretaria2" class="form-select form-control">
-                            <option hidden selected>Selecciona el Nombre Opcional...</option>
-                            <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
+                        <label for="" class="form-label">Segundo Verificador SOGCS:</label>
+                        <select id="usu_secretaria2" class="form-select form-control" [(ngModel)]="act_funcionarioId2"
+                            [ngModelOptions]="{standalone: true}" ngDefaultControl
+                            (change)="cargoUsuario(); ocultarMensajes()">
+                            <option value="" disabled selected hidden>Selecciona el Verificador...</option>
+                            <option *ngFor="let usuario of usuario_dos" value="{{usuario.usu_id}}">
+                                {{usuario.usu_nombre}}
                                 {{usuario.usu_apellido}}</option>
                         </select>
                     </div>
 
                     <div class="col-md-6">
                         <label for="" class="form-label">Cargo:</label>
-                        <input type="text" class="form-control" id="cargosecre2" placeholder="Cargo Opcional...">
+                        <input type="text" class="form-control" id="cargoSecre2" name="act_cargo_funcionario2"
+                            placeholder="Cargo..." [(ngModel)]="act_cargo_funcionario2" readonly>
                     </div>
 
                     <div class="col-md-6">
-                        <button id="button-add" class="btn-dark plus sp" title="Eliminar Usuario" (click)="eliminarUsuario()">
+                        <button id="button-add" class="btn-dark plus sp" title="Eliminar Usuario"
+                            (click)="eliminarUsuario()">
                             <span class="size_span_plus">
                                 <i class='fa fa-close'></i>
                             </span>
@@ -199,7 +253,7 @@
                         <hr>
                     </div>
                 </div>
-                
+
                 <div class="col-12 bg-h3 contenedor-form">
                     <h3 class="text-center sizeh3">PRESTADOR DE SERVICIOS DE SALUD</h3>
                 </div>
@@ -208,50 +262,22 @@
                 <div class="container row" id="contenedor">
                     <div class="col-md-6" id="nom_secre">
                         <label for="" class="form-label">Prestador:</label>
-                        <input type="text" class="form-control" id="nombrePrestador1" placeholder="Prestador...">
+                        <input type="text" class="form-control" id="nombrePrestador" name="act_nombre_prestador"
+                            placeholder="Prestador..." [(ngModel)]="act_nombre_prestador" (input)="ocultarMensajes()">
+                        <div *ngIf="showPresadorNombreMessage" class="validation-message-ovpc">Ingresa el Nombre
+                            Prestador a cargo.
+                        </div>
                     </div>
 
                     <div class="col-md-6">
                         <label for="" class="form-label">Cargo:</label>
-                        <input type="text" class="form-control" id="cargoPres1" placeholder="Cargo...">
+                        <input type="text" class="form-control" id="cargoPres" name="act_cargo_prestador"
+                            placeholder="Cargo..." [(ngModel)]="act_cargo_prestador" (input)="ocultarMensajes()">
+                        <div *ngIf="showPrestadorCargoMessage" class="validation-message-ovpc">Ingresa el Cargo del
+                            Prestador.
+                        </div>
                     </div>
                 </div>
-
-
-                <div class="col-md-12" *ngIf="prestadorAgregado">
-                    <p>Clic en el boton para agregar una nueva firma prestador si así lo requiere</p>
-                    <button id="button-add" class="btn-dark plus sp" title="Agregar Prestador" (click)="nuevoPrestador()">
-                        <span class="size_span_plus">
-                            <i class='fas fa-plus-circle'></i>
-                        </span>
-                    </button>
-                    <hr>
-                </div>
-
-
-                <div class="container row" id="contenedor" *ngIf="agregarPrestador">
-                    <div class="col-md-6" id="nom_secre">
-                        <label for="" class="form-label">Prestador:</label>
-                        <input type="text" class="form-control" id="nombrePrestador2" placeholder="Prestador Opcional...">
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="" class="form-label">Cargo:</label>
-                        <input type="text" class="form-control" id="cargoPres2" placeholder="Cargo Opcional...">
-                    </div>
-
-                    <div class="col-md-6">
-                        <button id="button-add" class="btn-dark plus sp" title="Eliminar Prestador" (click)="eliminarPrestador()">
-                            <span class="size_span_plus">
-                                <i class='fa fa-close'></i>
-                            </span>
-                        </button>
-                    </div>
-                    <div class="col-12">
-                        <hr>
-                    </div>
-                </div>
-
 
                 <div class="col-12">
                     <hr class="medio">
@@ -259,27 +285,26 @@
 
                 <div class="col-12">
                     <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
-                    <select id="inputState" class="form-select form-control" id="obj_visita">
+                    <select id="objVisita" class="form-select form-control" [(ngModel)]="act_obj_visita"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="ocultarMensajes()">
                         <option hidden selected>Objeto de visita...</option>
                         <option>REALIZAR SEGUIMIENTO A LA IMPLEMENTACION DE LA AUDITORIA PARA EL MEJORAMIENTO DE LA
                             CALIDAD Y LA APLICACIÓN DEL PAMEC</option>
                     </select>
+                    <div *ngIf="showObjVisitaMessage" class="validation-message-ovpc">Seleccione el Objeto.</div>
+                </div>
+
+
+                <!--BOTON MODAL FIRMA-->
+                <div class="col-3">
+                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma Prestador</span>
                 </div>
 
                 <div class="col-12">
-                    <textarea id="desc_obj_visita" disabled
-                        rows="5">EN EL S.O.G.C LA AUDITORÍA ES UN COMPONENTE DE MEJORAMIENTO CONTINUO, Y SE ENTIENDE COMO EL MECANISMO SISTEMÁTICO Y CONTINUO DE EVALUACIÓN DEL CUMPLIMIENTO DE ESTÁNDARES DE CALIDAD, CONCORDANTES CON LA INTENCIONALIDAD DE LOS ESTÁNDARES DE ACREDITACIÓN Y SUPERIORES A LOS QUE SE DETERMINAN COMO BÁSICOS EN EL SISTEMA ÚNICO DE HABILITACIÓN. EL PAMEC ES LA FORMA A TRAVÉS DE LA CUAL LA IPS IMPLEMENTA ESTE COMPONENTE.</textarea>
-                </div>
-
-                <div class="col-12">
-                    <label for="">Descripción del Acta</label>
-                    <textarea id="desc_acta" rows="8"></textarea>
-                </div>
-
-                <div class="col-12">
-                    <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
-                        [disabled]="!f.valid" >
-                        <i class='fa fa-save fa-lg'></i></button>
+                    <button id="boton-acta-pamec" class="btn btn-dark esp btn-circle btn-xl" title="Guardar"
+                        type="submit" (click)="obtenerNombres()">
+                        <i class='fa fa-save fa-lg'></i>
+                    </button>
                 </div>
 
             </form>

@@ -1,0 +1,86 @@
+<app-menu></app-menu>
+
+<div class="col">
+    <div class="row">
+        <div class="col-md-2">
+            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/prestadores">
+                <i class="fa fa-reply fa-lg"></i>
+            </button>
+        </div>
+        <div class="col-md-8">
+            <h1 class="text-center">SEDES</h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="size">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h2><b>SEDES - PRESTADORES</b></h2>
+                </div>
+
+                <div class="col-sm-3">
+                    <button class="btn btn-secondary centered-icon" routerLink="/prestadores/sede/nueva"
+                        title="Sede Prestador">
+                        <i class='fa fa-plus-circle'></i>
+                        <span>Agregar Nueva Sede</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="search-hero">
+            <input class="form-control" type="text" name="search" [(ngModel)]="sede_nombre" placeholder="Buscar Sede..."
+                (input)="cargarSedesNombre()">
+        </div>
+
+        <table class="table table-wrapper text-center table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">No. Sede</th>
+                    <th scope="col">Nombre Sede</th>
+                    <th scope="col">Gerente</th>
+                    <th scope="col">Sede Principal</th>
+                    <th scope="col">No. Sede Principal</th>
+                    <th scope="col">Dirección Sede</th>
+                    <th scope="col">Barrio Sede</th>
+                    <th scope="col" *ngIf="isAdmin">Editar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let sedes of this.sedesPrestador | paginate: { itemsPerPage: 10, currentPage: page}; let i = index">
+                    <td style="text-align: center;">{{calcularIDGlobal(i, page, 10)}}</td>
+                    <td>{{ sedes.sede_numero }}</td>
+                    <td>{{ sedes.sede_nombre }}</td>
+                    <td>{{ sedes.sede_gerente }}</td>
+                    <td>{{ sedes.sede_principal }}</td>
+                    <td>{{ sedes.sede_numero_principal }}</td>
+                    <td>{{ sedes.sede_direccion }}</td>
+                    <td>{{ sedes.sede_barrio }}</td>
+                    <!-- <td *ngFor="let municipio of this.prestadores.pre_municipio | keyvalue">{{municipio.value}}</td> -->
+                    <td *ngIf="isAdmin">
+                        <button class="btn btn-outline-warning" routerLink="/sedes/editar/{{sedes.pre_sede_id}}">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="container" *ngIf="listaVacia">
+            <div class="p-3 mb-2 bg-dark text-white text-center">
+                <h2>{{ listaVacia }}</h2>
+            </div>
+        </div>
+
+        <pagination-controls (pageChange)="page =$event" previousLabel="Anterior" nextLabel="Siguiente">
+        </pagination-controls>
+    </div>
+
+</div>
+
+
+<app-footer></app-footer>

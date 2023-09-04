@@ -15,6 +15,8 @@ export class PrestadorService {
   prestadorURL = environment.prestadorURL;
   prestadorMunicipioURL = environment.prestadorMunicipioURL
   prestadorPamecMunicipioURL = environment.prestadorPamecMunicipioURL
+  prestadorIpsMunicipioURL = environment.prestadorIpsMunicipioURL
+  prestadorIndMunicipioURL = environment.prestadorIndMunicipioURL
 
 
   constructor(private httpClient: HttpClient) { }
@@ -35,6 +37,16 @@ export class PrestadorService {
   public listMunPamec(mun: string): Observable<PrestadorDto[]>{
     return this.httpClient.get<PrestadorDto[]>(this.prestadorPamecMunicipioURL + mun)
   }
+
+  public listMunIps(mun: string): Observable<PrestadorDto[]>{
+    return this.httpClient.get<PrestadorDto[]>(this.prestadorIpsMunicipioURL + mun)
+  }
+
+  public listMunInd(mun: string): Observable<PrestadorDto[]>{
+    return this.httpClient.get<PrestadorDto[]>(this.prestadorIndMunicipioURL + mun)
+  }
+
+
 
   public registroPrestador(prestador: PrestadorDto): Observable<any> {
     return this.httpClient.post<any>(`${this.prestadorURL}`, prestador);

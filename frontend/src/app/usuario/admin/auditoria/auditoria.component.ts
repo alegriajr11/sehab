@@ -72,6 +72,7 @@ export class AuditoriaComponent {
     )
     this.page = 1;
   }
+  
   getAllAuditorias() {
     this.auditoria_services.listAllAuditorias().subscribe(
       data => {

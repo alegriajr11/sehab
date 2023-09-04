@@ -103,49 +103,29 @@ hr.medio {
     height: 0;
 }
 
-/* The slider */
-.slider {
-    position: absolute;
+/*Estilo Span Firma*/
+.button-like {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #343a40;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
 }
 
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
+.button-like:hover {
+    background-color: #3d4347;
 }
 
-input:checked+.slider {
-    background-color: #4e4e4e;
+.btn-span:hover {
+    transform: scale(1.1);
+    transition-duration: 0.2s;
 }
 
 
-
-input:checked+.slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
-
-/* Rounded sliders */
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-

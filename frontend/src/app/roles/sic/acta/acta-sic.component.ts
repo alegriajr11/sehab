@@ -16,6 +16,9 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import { TokenDto } from 'src/app/models/token.dto';
 import Swal from 'sweetalert2';
 import { GenerarPdfActaService } from 'src/app/services/Sic/generar-pdf-acta.service';
+import { SedesPrestadorService } from 'src/app/services/sedes-prestador.service';
+import { SedesDto } from 'src/app/models/sedes.dto';
+import { CumplimientoEstandarService } from 'src/app/services/Sic/cumplimiento-estandar.service';
 
 
 
@@ -29,6 +32,7 @@ export class ActaSicComponent implements OnInit {
   prestador: PrestadorDto[];
   usuario: Usuario[];
   municipio: Municipio[];
+  sede: SedesDto[];
 
   //DTO DEL PDF ACTA
   actaPdf: ActaSicPdfDto = null;
@@ -36,13 +40,16 @@ export class ActaSicComponent implements OnInit {
   //Habilitar la Fecha Final
   habilitarfechaFin = false;
 
-  //Boton habilitar la evaluacion
-  boton_acta_sic = false;
+  //Habilitar Select Sede Principal
+  habilitarSelectSede: boolean = false;
+
+
 
   listaVacia: any = undefined;
 
   //MODAL
   public modalRef: BsModalRef;
+
   id_acta: number
   //VARIABLES PARA TRANSPORTAR EL DTO
   act_id: number;
@@ -76,9 +83,26 @@ export class ActaSicComponent implements OnInit {
   act_municipioId: string
   act_prestadorId: string
   act_funcionarioId: string
+  act_sede_principalId: string
+
+  //ID DE EVALUACION
+  eva_id: number
 
 
   firma: string;
+
+  //ATRIBUTOS CONTROLAR MENSAJES VALIDACION
+  showTipoVisitaMessage: boolean = false;
+  showFechaInicialMessage: boolean = false;
+  showFechaFinalMessage: boolean = false;
+  showMunicipioMessage: boolean = false;
+  showPrestadorMessage: boolean = false;
+  showBarrioMessage: boolean = false;
+  showSedeMessage: boolean = false;
+  showObjVisitaMessage: boolean = false;
+  showVerificadorMessage: boolean = false;
+  showPresadorNombreMessage: boolean = false;
+  showPrestadorCargoMessage: boolean = false;
 
 
   constructor(
@@ -92,6 +116,8 @@ export class ActaSicComponent implements OnInit {
     private toastrService: ToastrService,
     private authService: AuthService,
     private generarPdfActaSic: GenerarPdfActaService,
+    private sedesServices: SedesPrestadorService,
+    private cumplimientoEstandarService: CumplimientoEstandarService,
     private router: Router
   ) { }
 
@@ -105,10 +131,15 @@ export class ActaSicComponent implements OnInit {
     this.unsoloCheckbox();
     this.obtenerNombres();
     this.ultimaActaId();
+
   }
 
   habilitarFechaFinal() {
     this.habilitarfechaFin = true;
+  }
+
+  habilitarSede() {
+    this.habilitarSelectSede = true;
   }
 
   //Metodo Abrir Modal
@@ -121,7 +152,6 @@ export class ActaSicComponent implements OnInit {
       }
 
     );
-
   }
 
   //LISTAR MUNICIPIOS
@@ -138,16 +168,33 @@ export class ActaSicComponent implements OnInit {
     this.act_municipioId = ''
   }
 
-  //LISTAR ÚLTIMA ACTA REGISTRADA
-  ultimaActaId(): void {
-    this.actaPdfService.obtenerUltimaActaSic().subscribe(
-      data => {
-        this.actaPdf = data
-        var acta = (document.getElementById('acta')) as HTMLSelectElement
-        acta.value = this.actaPdf.act_id.toString()
-      }
-    )
+  //INPUTS VACIO SI SE SELECCIONA OTRO MUNICIPIO
+  vaciarPorMunicipioSelect() {
+    var nit = (document.getElementById('nit')) as HTMLSelectElement
+    nit.value = ''
+    var direccion = (document.getElementById('direccion')) as HTMLSelectElement
+    direccion.value = ''
+    var barrio_prestador = (document.getElementById('barrio')) as HTMLSelectElement
+    barrio_prestador.value = ''
+    var telefono = (document.getElementById('telefono')) as HTMLSelectElement
+    telefono.value = ''
+    var email = (document.getElementById('email')) as HTMLSelectElement
+    email.value = ''
+    var rep_legal = (document.getElementById('repleg')) as HTMLSelectElement
+    rep_legal.value = ''
+    var cod_pres = (document.getElementById('codpres')) as HTMLSelectElement
+    cod_pres.value = ''
+    var nombrePrestador = (document.getElementById('nombrePrestador')) as HTMLSelectElement
+    nombrePrestador.value = ''
+    var codigo_sede = (document.getElementById('codsede')) as HTMLSelectElement
+    codigo_sede.value = ''
+    this.act_sede_principalId = ''
+    var sede_barrio = (document.getElementById('barrioSede')) as HTMLSelectElement
+    sede_barrio.value = ''
+    var sede_direccion = (document.getElementById('direccionSede')) as HTMLSelectElement
+    sede_direccion.value = ''
   }
+
 
   //LISTAR PRESTADORES POR MUNICIPIO
   cargarPrestadoresByMun(): void {
@@ -163,6 +210,76 @@ export class ActaSicComponent implements OnInit {
     this.act_prestadorId = ''
   }
 
+  //LISTAR SEDES POR SELECCION DE PRESTADOR
+  cargarSedesByPrestador() {
+    this.sedesServices.listaSedesNombre(this.act_prestadorId).subscribe(
+      async data => {
+        this.sede = data
+        for (const pres of this.prestador) {
+          if (pres.pre_cod_habilitacion === this.act_prestadorId) {
+            for (const pres_barrio of data) {
+              //ENCONTRAR EL PRESTADOR SELECCIONADO Y ASIGNAR EL BARRIO QUE SE ENCUENTRA EN LA ENTIDAD SEDE DE LA BD
+              const idPrestadorSeleccionado = this.act_prestadorId;
+              const pres = await this.prestadorService.listaOne(idPrestadorSeleccionado).toPromise();
+              this.act_prestador = pres.pre_nombre
+              if (this.act_prestador === pres_barrio.sede_nombre) {
+                var barrio_prestador_asignado = pres_barrio.sede_barrio
+                var barrio_prestador = (document.getElementById('barrio')) as HTMLSelectElement
+                barrio_prestador.value = barrio_prestador_asignado
+
+              }
+
+            }
+          }
+        }
+        this.listaVacia = undefined
+      },
+      err => {
+        this.listaVacia = err.error.message;
+      }
+    );
+    //ASIGANAR LOS INPUT BARRIO Y DIRECCION EN VACIO - SI SE SELECCIONA OTRO PRESTADOR
+    var sede_barrio = (document.getElementById('barrioSede')) as HTMLSelectElement
+    sede_barrio.value = ''
+    var sede_direccion = (document.getElementById('direccionSede')) as HTMLSelectElement
+    sede_direccion.value = ''
+
+    this.act_sede_principalId = ''
+
+  }
+
+  //OBTENER LOCALIDAD Y DIRECCION DE LA SEDE SELECCIONADA
+  sedeSeleccionada() {
+    this.sedesServices.listaOneSede(this.act_sede_principalId).subscribe(
+      data => {
+        const barrio = data.sede_barrio
+        const direccion = data.sede_direccion
+        const numero_sede = data.sede_numero
+
+        var sede_barrio = (document.getElementById('barrioSede')) as HTMLSelectElement
+        sede_barrio.value = barrio
+
+        var sede_direccion = (document.getElementById('direccionSede')) as HTMLSelectElement
+        sede_direccion.value = direccion
+
+        var codigo_sede = (document.getElementById('codsede')) as HTMLSelectElement
+        codigo_sede.value = this.act_prestadorId + '-0' + numero_sede
+      }
+    )
+  }
+
+
+  //LISTAR ÚLTIMA ACTA REGISTRADA
+  ultimaActaId(): void {
+    this.actaPdfService.obtenerUltimaActaSic().subscribe(
+      data => {
+        this.actaPdf = data
+        var acta = (document.getElementById('acta')) as HTMLSelectElement
+        acta.value = this.actaPdf.act_id.toString()
+      }
+    )
+  }
+
   //LISTAR USUARIOS
   cargarUsuario(): void {
     this.usuarioService.listaUserEstado().subscribe(
@@ -174,7 +291,28 @@ export class ActaSicComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     )
-    this.act_nombre_funcionario = ''
+    this.act_funcionarioId = ''
+  }
+
+  //COMPLETAR INPUT_CARGO POR USUARIO SELECCIONADO
+  cargoUsuario() {
+    var id = (document.getElementById('usu_secretaria')) as HTMLSelectElement
+    var sel = id.selectedIndex;
+    var opt = id.options[sel]
+    var Codigo = (<HTMLSelectElement><unknown>opt).value;
+
+    const idUsuarioComoNumero = parseInt(Codigo, 10);
+    this.usuarioService.oneUser(idUsuarioComoNumero).subscribe(
+      data => {
+        for (const usu of this.usuario) {
+          if (usu.usu_id === idUsuarioComoNumero) {
+            var cargo_usuario = (document.getElementById('cargoSecre')) as HTMLSelectElement
+            cargo_usuario.value = usu.usu_cargo
+            this.act_cargo_funcionario = cargo_usuario.value
+          }
+        }
+      }
+    )
   }
 
   //LLENAR LOS INPUTS UNA VES SE HAYA SELECCIONADO EL PRESTADOR
@@ -190,7 +328,6 @@ export class ActaSicComponent implements OnInit {
           if (pres.pre_cod_habilitacion === Codigo) {
             var nit = (document.getElementById('nit')) as HTMLSelectElement
             nit.value = pres.pre_nit;
-
             var direccion = (document.getElementById('direccion')) as HTMLSelectElement
             direccion.value = pres.pre_direccion;
             var telefono = (document.getElementById('telefono')) as HTMLSelectElement
@@ -210,8 +347,8 @@ export class ActaSicComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     );
-
   }
+
 
   //PERMITIR SOLO SELECCIONA UN SOLO CHECKBOX
   unsoloCheckbox(): void {
@@ -230,7 +367,6 @@ export class ActaSicComponent implements OnInit {
   }
 
   async obtenerNombreSelects(): Promise<void> {
-
     //SELECT MUNICIPIO
     if (this.act_municipioId) {
       const idMunicipioSeleccionado = this.act_municipioId;
@@ -251,11 +387,18 @@ export class ActaSicComponent implements OnInit {
       const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
       const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
       this.act_nombre_funcionario = func.usu_nombre + ' ' + func.usu_apellido
-      console.log(this.act_nombre_funcionario)
     }
 
+    if (this.act_sede_principalId) {
+      //SELECT SEDE
+      const idSedeSeleccionado = this.act_sede_principalId;
+      const sede = await this.sedesServices.listaOneSede(idSedeSeleccionado).toPromise();
+      this.act_sede_principal = sede.sede_nombre
+
+    }
   }
 
+  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
   async obtenerFirmaFuncionario(): Promise<void> {
     if (this.act_funcionarioId) {
       const idFuncionarioSeleccionado = this.act_funcionarioId
@@ -263,12 +406,58 @@ export class ActaSicComponent implements OnInit {
       const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
       this.act_firma_funcionario = func.usu_firma
     }
-
   }
+
+
+  //MENSAJES DE VALIDACION DIVS
+  ocultarMensajes() {
+    if (this.act_visita_inicial || this.act_visita_seguimiento) {
+      this.showTipoVisitaMessage = false
+    }
+
+    if (this.act_fecha_inicial) {
+      this.showFechaInicialMessage = false
+    }
+
+    if (this.act_fecha_final) {
+      this.showFechaFinalMessage = false
+    }
+
+    if (this.act_municipioId) {
+      this.showMunicipioMessage = false
+    }
+
+    if (this.act_prestadorId) {
+      this.showPrestadorMessage = false
+    }
+
+    if (this.act_barrio) {
+      this.showBarrioMessage = false
+    }
+
+    if (this.act_sede_principal) {
+      this.showSedeMessage = false
+    }
+    if (this.act_obj_visita) {
+      this.showObjVisitaMessage = false
+    }
+
+    if (this.act_funcionarioId) {
+      this.showVerificadorMessage = false
+    }
+
+    if (this.act_prestadorId && this.act_nombre_prestador) {
+      this.showPresadorNombreMessage = false
+    }
+
+    if (this.act_cargo_prestador) {
+      this.showPrestadorCargoMessage = false
+    }
+  }
+
 
   //OBTENER LOS NOMBRES DEL PRESTADOR Y FUNCIONARIO - GUARDA TEMPORALMENTE EN STORAGE
   obtenerNombres(): void {
-
     //OBTENER NOMBRE DEL PRESTADOR
     const idp = document.getElementById('prestador') as HTMLSelectElement;
     const selp = idp.selectedIndex;
@@ -302,7 +491,6 @@ export class ActaSicComponent implements OnInit {
 
   //REGISTRAR Y GENERAR ACTA PDF
   async onRegister(): Promise<void> {
-
     //VISITA INICIAL
     var visitaInicial = (document.getElementById('inicial')) as HTMLInputElement
     var valorVisitaInicial = visitaInicial.checked
@@ -320,7 +508,9 @@ export class ActaSicComponent implements OnInit {
       seguimiento = 'X';
     }
 
+
     //INPUTS BLOQUEADOS Y SE ASIGNA A LAS VARIABLES DEL DTO
+    //No ACTA
     var acta = (document.getElementById('acta')) as HTMLInputElement
     var valorActa = acta.value
 
@@ -329,9 +519,13 @@ export class ActaSicComponent implements OnInit {
     var nit = (document.getElementById('nit')) as HTMLInputElement
     var valorNit = nit.value
 
-    //DIRECCION
+    //DIRECCIÓN
     var direccion = (document.getElementById('direccion')) as HTMLInputElement
     var valorDireccion = direccion.value
+
+    //BARRIO
+    var barrioPres = (document.getElementById('barrio')) as HTMLInputElement
+    var valorBarrioPres = barrioPres.value
 
     //TELEFONO
     var telefono = (document.getElementById('telefono')) as HTMLInputElement
@@ -349,35 +543,51 @@ export class ActaSicComponent implements OnInit {
     var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
     var valorCodigoPres = codigoPres.value
 
-    //NOMBRE-FIRMA PRESTADOR
+    //CODIGO SEDE VISITADA
+    var codigoSedeVisitada = (document.getElementById('codsede')) as HTMLInputElement
+    var valorcodigoSedeVisitada = codigoSedeVisitada.value
+
+    //CODIGO SEDE LOCALIDAD O BARRIO
+    var barrioSede = (document.getElementById('barrioSede')) as HTMLInputElement
+    var valorBarrioSede = barrioSede.value
+
+    //CODIGO SEDE DIRECCION
+    var direccionSede = (document.getElementById('direccionSede')) as HTMLInputElement
+    var valorDireccionSede = direccionSede.value
+
+    //NOMBRE DEL PRESTADOR - FIRMA PRESTADOR
     var presNombre = (document.getElementById('nombrePrestador')) as HTMLInputElement
     var valorPresNombre = presNombre.value
 
+    //SE OBTIENE LA FIRMA DEL MODAL DEL SERVICIO SHARED Y SE ASIGNA EN LA VARIABLE firma
     this.firma = this.sharedService.getFirmaActaSic();
 
-    //OBTENER NOMBRES DE LOS SELECT
+    //OBTENER NOMBRES DE LOS SELECTS
     await this.obtenerNombreSelects();
 
     //OBTENER FIRMA FUNCIONARIO
     await this.obtenerFirmaFuncionario();
 
 
-
-    //ASIGNANDO LOS VALORES DEL ACTA PARA ENVIAR POR DTO
+    //ASIGNANDO LOS VALORES DEL ACTA PARA ASIGNARLAS EN EL DTO
     this.act_id = Number(valorActa);
     this.act_nit = valorNit
     this.act_visita_inicial = inicial
     this.act_visita_seguimiento = seguimiento
     this.act_direccion = valorDireccion
+    this.act_barrio = valorBarrioPres
     this.act_telefono = valorTelefono
     this.act_email = valorEmail
     this.act_representante = valorRepresentante
     this.act_cod_prestador = valorCodigoPres
+    this.act_cod_sede = valorcodigoSedeVisitada
+    this.act_sede_localidad = valorBarrioSede
+    this.act_sede_direccion = valorDireccionSede
     this.act_nombre_prestador = valorPresNombre
     this.act_firma_prestador = this.firma
 
 
-    //REGISTRO DEL FORMULARIO A TABLA BD
+    //REGISTRO DE LA INFORMACIÓN RECOPILADA A LA CLASE DTO - ACTASICDTO
     this.actaPdf = new ActaSicPdfDto(
       this.act_id,
       this.act_visita_inicial,
@@ -405,9 +615,13 @@ export class ActaSicComponent implements OnInit {
       this.act_firma_prestador,
       this.act_cargo_prestador
     );
+
+    //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
     const token = this.tokenService.getToken()
+    //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
     const tokenDto: TokenDto = new TokenDto(token);
 
+    //VALIDAR QUE LOS CAMPOS NO ESTÉN VACIOS
     if (
       !this.act_id ||
       (!this.act_visita_inicial && !this.act_visita_seguimiento) ||
@@ -421,7 +635,6 @@ export class ActaSicComponent implements OnInit {
       !this.act_telefono ||
       !this.act_email ||
       !this.act_sede_principal ||
-      !this.act_representante ||
       !this.act_cod_prestador ||
       !this.act_cod_sede ||
       !this.act_obj_visita ||
@@ -430,77 +643,99 @@ export class ActaSicComponent implements OnInit {
       !this.act_nombre_prestador ||
       !this.act_cargo_prestador
     ) {
+      console.log(this.act_cargo_funcionario)
+      //ASIGNANDO LOS RESPECTIVOS MENSAJES EN CASO DE ENTRAR AL IF DE VALIDACIÓN
       let mensajeError = 'Por favor, complete los siguientes campos:';
 
       if (!this.act_visita_inicial && !this.act_visita_seguimiento) {
         mensajeError += ' Tipo de Visita,';
+        this.showTipoVisitaMessage = true
       }
 
       if (!this.act_fecha_inicial) {
         mensajeError += ' Fecha Inicial,';
+        this.showFechaInicialMessage = true
       }
-
-      if (!this.act_fecha_final) {
+      if (this.act_fecha_inicial && !this.act_fecha_final) {
         mensajeError += ' Fecha Final,';
+        this.showFechaFinalMessage = true
       }
 
       if (!this.act_municipioId) {
         mensajeError += ' Municipio,';
+        this.showMunicipioMessage = true
       }
 
-      if (!this.act_prestador) {
+      if (!this.act_prestador && this.act_municipioId) {
         mensajeError += ' Prestador,';
+        this.showPrestadorMessage = true
       }
 
       if (!this.act_barrio) {
         mensajeError += ' Barrio,';
+        this.showBarrioMessage = true
       }
 
       if (!this.act_sede_principal) {
         mensajeError += ' Sede,';
+        this.showSedeMessage = true
       }
 
       if (!this.act_obj_visita) {
         mensajeError += ' Objeto de visita,';
+        this.showObjVisitaMessage = true
       }
 
       if (!this.act_nombre_funcionario) {
         mensajeError += ' Verificador SOGCS,';
+        this.showVerificadorMessage = true
       }
 
       if (!this.act_nombre_prestador) {
         mensajeError += ' Nombre del Prestador Firma,';
+        this.showPresadorNombreMessage = true
       }
 
       if (!this.act_cargo_prestador) {
         mensajeError += ' Cargo Prestador Firma,';
+        this.showPrestadorCargoMessage = true
       }
 
-      mensajeError = mensajeError.slice(0, -1); // Para eliminar la última coma
+      mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA
 
+      //MOSTRAR MENSAJE POR MEDIO DE TOASTR_SERVICE
       this.toastrService.error(mensajeError, 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       });
 
-    } else if (!this.act_firma_prestador) {
+    } else if (!this.act_firma_prestador) { //VERIFICAR QUE LA FIRMA DEL PRESTADOR SEA ASIGNADA
       this.toastrService.error('Por favor, agregue una firma', 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       })
-    } else {
 
+    } else {
+      //SOLICITUD DE REGISTRO DE ACTA ENVIANDO COMO PARAMETRO LA ACTA_DTO Y EL TOKEN_DTO
       this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
         data => {
           if (!data.error) {
-            this.boton_acta_sic = true;
-            localStorage.setItem('boton-acta-sic', 'true');
+            localStorage.setItem('boton-acta-sic', 'true'); //HABILITAR LA RUTA RESTRINGIDA - EVALUACIÓN_SIC
 
-            // Aquí, después de registrar el acta, se solicita la última acta
+            //DESPUÉS DE REGISTRAR EL ACTA, SE SOLICITA LA ÚLTIMA ACTA
             this.actaPdfService.ultimaActaSicPk().subscribe(
               ultimaActa => {
+                //VERIFICA QUE EXISTA EL ACTA REGISTRADA
                 if (ultimaActa && ultimaActa.id) {
                   this.id_acta = ultimaActa.id;
+                  //POR MEDIO DE ID EVALUACION SE ENCUENTRA EL EVA ID
+                  this.cumplimientoEstandarService.oneEvluacionSic(this.id_acta).subscribe(
+                    data => {
+                      this.eva_id = data.eva_id
+                      this.sharedService.setIdSic(this.eva_id)
+                      console.log(this.eva_id)
+                    }
+                  )
 
                   Swal.fire({
                     title: '¿Desea descargar el acta?',
@@ -508,11 +743,12 @@ export class ActaSicComponent implements OnInit {
                     confirmButtonText: 'Si',
                     cancelButtonText: 'No'
                   }).then((result) => {
+                    //SOLICITUD AL SERVICIO QUE GENERA EL ACTA_PDF PASANDO COMO PARAMETRO LA ULTIMA ACTA REGISTRADA
                     if (result.value) {
                       this.generarPdfActaSic.ActaPdf(this.id_acta);
                       //ASIGNAR NULL EL ATRIBUTO FIRMA PARA UNA NUEVA ACTA
                       this.act_firma_prestador = null
-                      this.sharedService.setFirmaActaSic(this.act_firma_prestador)
+                      this.sharedService.setFirmaActaSic(this.act_firma_prestador) //ENVIAMOS LA FIRMA NULL PARA UNA NUEVA ACTA
                       this.router.navigate(['/sic/evaluacion']);
                       window.scrollTo(0, 0);
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -527,21 +763,16 @@ export class ActaSicComponent implements OnInit {
                     text: 'No se pudo obtener el ID del acta.'
                   });
                 }
-              },
-              error => {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: 'Hubo un error al obtener el ID del acta.'
-                });
-              }
-            );
 
-            this.toastrService.success(data.message, 'Ok', {
+              },
+            );
+            //TOASTR PARA ENVIAR MENSAJE DE ÉXITO
+            this.toastrService.success(data.message, 'Éxito', {
               timeOut: 3000,
               positionClass: 'toast-top-center',
             });
           } else {
+            //TOASTR PARA ENVIAR MENSAJE DE ERROR
             Swal.fire({
               icon: 'error',
               title: 'Error',
@@ -550,6 +781,7 @@ export class ActaSicComponent implements OnInit {
           }
         },
         err => {
+          //MANEJAR EL ERROR DEL SUSCRIBE DATA - registroActaSicPdf
           Swal.fire({
             icon: 'error',
             title: 'Error',

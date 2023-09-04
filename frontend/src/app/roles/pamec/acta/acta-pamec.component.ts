@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { PrestadorDto } from 'src/app/models/prestador.dto';
 import { Municipio } from 'src/app/models/Prestador/municipio';
 import { Usuario } from 'src/app/models/usuario';
@@ -10,8 +10,15 @@ import autoTable from 'jspdf-autotable';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import {  } from 'src/app/models/actaSicpdf.dto';
+import { } from 'src/app/models/actaSicpdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
+import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
+import { TokenService } from 'src/app/services/token.service';
+import { GenerarPdfActaPamecService } from 'src/app/services/Pamec/generar-pdf-acta-pamec.service';
+import { ActaPamecDto } from 'src/app/models/actaPamePdf.dto';
+import { TokenDto } from 'src/app/models/token.dto';
 
 
 @Component({
@@ -21,47 +28,116 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ActaPamecComponent implements OnInit {
 
-  prestador: PrestadorDto[];
-  usuario: Usuario[];
-  municipio: Municipio[];
-
-
-
-
   //DIV USUARIO
   agregarUsuario = false
-  usuarioAgregado = true
+
 
   //DIV PRESTADOR
   agregarPrestador = false
   prestadorAgregado = true
 
-  listaVacia: any = undefined;
-
   formulacion = false;
   mejoramiento = false;
 
-  contador = 0
+  prestador: PrestadorDto[];
+  usuario_uno: Usuario[];
+  usuario_dos: Usuario[];
+  municipio: Municipio[];
 
-  pre_municipio: { mun_id: number }
+  //DTO DEL PDF ACTA
+  actaPdf: ActaPamecDto = null;
 
-  boton_acta_pamec = false;
 
+  //Habilitar la Fecha Final
+  habilitarfechaFin = false;
+
+  //Boton habilitar la evaluacion
+  boton_acta_sp_ind = false;
+
+  //MODAL
+  public modalRef: BsModalRef;
+
+  listaVacia: any = undefined;
+
+  id_acta: number
+
+  //VARIABLES PARA TRANSPORTAR EL DTO
+  act_id: number;
+  act_tipo_visita: string;
+  act_fecha_visita: string;
+  act_municipio: string
+  act_prestador: string
+  act_nit: string;
+  act_direccion: string
+  act_barrio: string
+  act_telefono: string
+  act_email: string
+  act_representante: string
+  act_cod_prestador: string
+  act_sede_principal: string
+  act_sede_localidad: string
+  act_sede_direccion: string
+  act_obj_visita: string
+  act_nombre_funcionario1: string
+  act_cargo_funcionario1: string
+  act_firma_funcionario1: string
+  act_nombre_funcionario2: string
+  act_cargo_funcionario2: string
+  act_firma_funcionario2: string
+  act_nombre_prestador: string
+  act_cargo_prestador: string
+  act_firma_prestador: string
+
+  //ATRIBUTOS ID DE SELECTS
+  act_municipioId: string
+  act_prestadorId: string
+  act_funcionarioId: string
+  act_funcionarioId2: string
+  act_tipo_visitaId: string
+  
+
+  firma: string;
+
+
+  //ATRIBUTOS CONTROLAR MENSAJES VALIDACION
+  showTipoVisitaMessage: boolean = false;
+  showFechaVisitaMessage: boolean = false;
+  showMunicipioMessage: boolean = false;
+  showPrestadorMessage: boolean = false;
+  showBarrioMessage: boolean = false;
+  showObjVisitaMessage: boolean = false;
+  showVerificadorMessage: boolean = false;
+  showPresadorNombreMessage: boolean = false;
+  showPrestadorCargoMessage: boolean = false;
+  showSedeMessage: boolean = false;
 
 
 
   constructor(
+    private modalService: BsModalService,
     private prestadorService: PrestadorService,
     private municipioService: MunicipioService,
     private usuarioService: UsuarioService,
     private toastrService: ToastrService,
     private authService: AuthService,
+    private actaPdfService: ActapdfService,
+    public sharedService: SharedServiceService,
+    private generarPdfActaPamec: GenerarPdfActaPamecService,
+    private tokenService: TokenService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.incializarDatos();
+  }
+
+  incializarDatos() {
     this.cargarMunicipio();
-    this.cargarUsuario();
+    this.cargarUsuariosUno();
+    this.obtenerNombres();
+    this.ultimaActaId();
+    this.act_funcionarioId = ''
+    this.act_funcionarioId2 = ''
   }
 
 
@@ -75,15 +151,23 @@ export class ActaPamecComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     )
+    this.act_municipioId = ''
   }
 
-  cargarPrestadoresByMun(): void {
-    var id = (document.getElementById('mun_id')) as HTMLSelectElement
-    var sel = id.selectedIndex;
-    var opt = id.options[sel]
-    var Value = (<HTMLSelectElement><unknown>opt).value;
+  //MOSTRAR NUEVA ACTA A REGISTRAR
+  mostrarActaId(): void {
+    this.actaPdfService.listaUltimaPamec().subscribe(
+      data => {
+        this.actaPdf = data
+        var acta = (document.getElementById('acta')) as HTMLSelectElement
+        acta.value = this.actaPdf.act_id.toString()
+      }
+    )
+  }
 
-    this.prestadorService.listMunPamec(Value).subscribe(
+  //LISTAR PRESTADORES POR MUNICIPIO
+  cargarPrestadoresByMun(): void {
+    this.prestadorService.listMunPamec(this.act_municipioId).subscribe(
       data => {
         this.prestador = data;
         this.listaVacia = undefined
@@ -92,18 +176,7 @@ export class ActaPamecComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     );
-    var nit = (document.getElementById('nit')) as HTMLSelectElement
-    nit.value = null
-    var direccion = (document.getElementById('direccion')) as HTMLSelectElement
-    direccion.value = null
-    var telefono = (document.getElementById('telefono')) as HTMLSelectElement
-    telefono.value = null
-    var email = (document.getElementById('email')) as HTMLSelectElement
-    email.value = null
-    var rep_legal = (document.getElementById('repleg')) as HTMLSelectElement
-    rep_legal.value = null
-    var cod_pres = (document.getElementById('codpres')) as HTMLSelectElement
-    cod_pres.value = null
+    this.act_prestadorId = ''
   }
 
 
@@ -113,7 +186,6 @@ export class ActaPamecComponent implements OnInit {
     var opt = id.options[sel]
     var Codigo = (<HTMLSelectElement><unknown>opt).value;
 
-    console.log(Codigo)
 
     this.prestadorService.listaOne(Codigo).subscribe(
       data => {
@@ -131,7 +203,9 @@ export class ActaPamecComponent implements OnInit {
             rep_legal.value = pres.pre_representante;
             var cod_pres = (document.getElementById('codpres')) as HTMLSelectElement
             cod_pres.value = pres.pre_cod_habilitacion;
-            
+
+            var nombre_prestador = (document.getElementById('nombrePrestador')) as HTMLSelectElement
+            nombre_prestador.value = pres.pre_representante
             
           }
         }
@@ -142,15 +216,136 @@ export class ActaPamecComponent implements OnInit {
     );
   }
 
+  //Metodo Abrir Modal
+  openModal(modalTemplate: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(modalTemplate,
+      {
+        class: 'modal-dialogue-centered modal-md',
+        backdrop: true,
+        keyboard: true
+      }
+
+    );
+  }
+
+  async obtenerNombreSelects(): Promise<void> {
+    //SELECT MUNICIPIO
+    if (this.act_municipioId) {
+      const idMunicipioSeleccionado = this.act_municipioId;
+      const mun = await this.municipioService.oneMunicipio(idMunicipioSeleccionado).toPromise();
+      this.act_municipio = mun.mun_nombre
+    }
+
+    if (this.act_prestadorId) {
+      //SELECT PRESTADOR
+      const idPrestadorSeleccionado = this.act_prestadorId;
+      const pres = await this.prestadorService.listaOne(idPrestadorSeleccionado).toPromise();
+      this.act_prestador = pres.pre_nombre
+    }
+
+    if (this.act_funcionarioId) {
+      //SELECT FUNCIONARIO VERIFICADOR
+      const idFuncionarioSeleccionado = this.act_funcionarioId;
+      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
+      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
+      this.act_nombre_funcionario1 = func.usu_nombre + ' ' + func.usu_apellido
+    }
+
+    if (this.act_funcionarioId2) {
+      //SELECT FUNCIONARIO VERIFICADOR
+      const idFuncionarioSeleccionado = this.act_funcionarioId2;
+      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
+      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
+      this.act_nombre_funcionario2 = func.usu_nombre + ' ' + func.usu_apellido
+    }
+
+    if (this.act_tipo_visitaId) {
+      //SELECT TIPO DE VISITA
+      var id = (document.getElementById('tipoVisita')) as HTMLSelectElement
+      var sel = id.selectedIndex;
+      var opt = id.options[sel]
+      var valorVisita = (<HTMLSelectElement><unknown>opt).textContent;
+      this.act_tipo_visita = valorVisita
+    }
+  }
+
+  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
+  async obtenerFirmaFuncionario1(): Promise<void> {
+    if (this.act_funcionarioId) {
+      const idFuncionarioSeleccionado = this.act_funcionarioId
+      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
+      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
+      this.act_firma_funcionario1 = func.usu_firma
+    }
+  }
+
+  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
+  async obtenerFirmaFuncionario2(): Promise<void> {
+    if (this.act_funcionarioId2) {
+      const idFuncionarioSeleccionado = this.act_funcionarioId2
+      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
+      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
+      this.act_firma_funcionario2 = func.usu_firma
+    }
+  }
+
+  //MENSAJES DE VALIDACION DIVS
+  ocultarMensajes() {
+    if (this.act_tipo_visita) {
+      this.showTipoVisitaMessage = false
+    }
+
+    if (this.act_fecha_visita) {
+      this.showFechaVisitaMessage = false
+    }
+
+    if (this.act_municipioId) {
+      this.showMunicipioMessage = false
+    }
+
+    if (this.act_prestadorId) {
+      this.showPrestadorMessage = false
+    }
+
+    if (this.act_barrio) {
+      this.showBarrioMessage = false
+    }
+
+    if (this.act_obj_visita) {
+      this.showObjVisitaMessage = false
+    }
+
+    if (this.act_funcionarioId) {
+      this.showVerificadorMessage = false
+    }
+
+    if (this.act_nombre_prestador) {
+      this.showPresadorNombreMessage = false
+    }
+
+    if (this.act_cargo_prestador) {
+      this.showPrestadorCargoMessage = false
+    }
+  }
 
   nuevoUsuario(): void {
     this.agregarUsuario = true
-    this.usuarioAgregado = false
+    //LISTAR USUARIOS
+    this.usuarioService.listaUserEstado().subscribe(
+      data => {
+        this.usuario_dos = data;
+        this.listaVacia = undefined;
+      },
+      err => {
+        this.listaVacia = err.error.message;
+      }
+    )
   }
 
   eliminarUsuario(): void {
     this.agregarUsuario = false
-    this.usuarioAgregado = true
+    this.act_funcionarioId2 = ''
+    this.act_cargo_funcionario2 = ''
   }
 
   nuevoPrestador(): void {
@@ -165,12 +360,10 @@ export class ActaPamecComponent implements OnInit {
 
 
   tipoVisita(): void {
-    var id = (document.getElementById('tip_visita')) as HTMLSelectElement
+    var id = (document.getElementById('tipoVisita')) as HTMLSelectElement
     var sel = id.selectedIndex;
     var opt = id.options[sel]
     var ValorVisita = (<HTMLSelectElement><unknown>opt).value;
-
-    console.log(ValorVisita)
 
     if (ValorVisita === '1') {
       this.mejoramiento = false
@@ -198,10 +391,11 @@ export class ActaPamecComponent implements OnInit {
     }
   }
 
-  cargarUsuario(): void {
+  //LISTAR USUARIOS
+  cargarUsuariosUno(): void {
     this.usuarioService.listaUserEstado().subscribe(
       data => {
-        this.usuario = data;
+        this.usuario_uno = data;
         this.listaVacia = undefined;
       },
       err => {
@@ -210,95 +404,114 @@ export class ActaPamecComponent implements OnInit {
     )
   }
 
+  //COMPLETAR INPUT_CARGO POR USUARIO SELECCIONADO
+  cargoUsuario() {
+    if (this.act_funcionarioId) {
+      var id = (document.getElementById('usu_secretaria1')) as HTMLSelectElement
+      var sel = id.selectedIndex;
+      var opt = id.options[sel]
+      var Codigo = (<HTMLSelectElement><unknown>opt).value;
+      const idUsuario1ComoNumero = parseInt(Codigo, 10);
+      this.usuarioService.oneUser(idUsuario1ComoNumero).subscribe(
+        data => {
+          for (const usu of this.usuario_uno) {
+            if (usu.usu_id === idUsuario1ComoNumero) {
+              var cargo_usuario = (document.getElementById('cargoSecre1')) as HTMLSelectElement
+              cargo_usuario.value = usu.usu_cargo
+              this.act_cargo_funcionario1 = cargo_usuario.value
+            }
+          }
+        }
+      )
+    }
+
+    if (this.agregarUsuario) {
+      var id2 = (document.getElementById('usu_secretaria2')) as HTMLSelectElement
+      var sel2 = id2.selectedIndex;
+      var opt2 = id2.options[sel2]
+      var Codigo2 = (<HTMLSelectElement><unknown>opt2).value;
+      const idUsuario2ComoNumero = parseInt(Codigo2, 10);
+      this.usuarioService.oneUser(idUsuario2ComoNumero).subscribe(
+        data => {
+          for (const usu of this.usuario_dos) {
+            if (usu.usu_id === idUsuario2ComoNumero) {
+              var cargo_usuario = (document.getElementById('cargoSecre2')) as HTMLSelectElement
+              cargo_usuario.value = usu.usu_cargo
+              this.act_cargo_funcionario2 = cargo_usuario.value
+            }
+          }
+        }
+      )
+    }
+  }
+
+  //LISTAR ÚLTIMA ACTA REGISTRADA
+  ultimaActaId(): void {
+    this.actaPdfService.listaUltimaPamec().subscribe(
+      data => {
+        this.actaPdf = data
+        var acta = (document.getElementById('acta')) as HTMLSelectElement
+        acta.value = this.actaPdf.act_id.toString()
+      }
+    )
+  }
+
 
 
   obtenerNombres(): void {
     //OBTENER NOMBRE DEL PRESTADOR
-    var idp = (document.getElementById('prestador')) as HTMLSelectElement
-    var selp = idp.selectedIndex;
-    var optp = idp.options[selp]
-    var valorPrestador = (<HTMLSelectElement><unknown>optp);
-    sessionStorage.setItem("nombre-pres-pamec", valorPrestador.textContent);
+    const idp = document.getElementById('prestador') as HTMLSelectElement;
+    const selp = idp.selectedIndex;
+    const optp = idp.options[selp] as HTMLOptionElement;
+    const valorPrestador = optp ? optp.textContent : '';
+    sessionStorage.setItem("nombre-pres-sp-ind", valorPrestador);
 
-    //USUARIO SECRETARIA
-    var idUsuSecre = (document.getElementById('usu_secretaria')) as HTMLSelectElement
-    var selUsuSecre = idUsuSecre.selectedIndex;
-    var optUsuSecre = idUsuSecre.options[selUsuSecre]
-    var valorUsuSecre = (<HTMLSelectElement><unknown>optUsuSecre);
-    sessionStorage.setItem("nombre-usuario-pamec", valorUsuSecre.textContent);
-
-    //CARGO USUARIO SECRETARIA
-    var cargoSecre = (document.getElementById('cargoSecre')) as HTMLInputElement
-    var valorCargoSecre = cargoSecre.value
-    sessionStorage.setItem("cargo-usuario-pamec", valorCargoSecre);
-
-    //CARGO PRESTADOR
-    var cargoPres = (document.getElementById('cargoPres')) as HTMLInputElement
-    var valorCargoPres = cargoPres.value
-    sessionStorage.setItem("cargo-prestador-pamec", valorCargoPres);
+    //CODIGO PRESTADOR
+    var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
+    var valorCodigoPres = codigoPres.value
+    sessionStorage.setItem("cod-pres-sp-ind", valorCodigoPres);
   }
 
-  onRegister(): void {
+  async onRegister(): Promise<void> {
     //FORMULARIO
-    //NÚMERO DE ACTA
-    var acta = (document.getElementById('acta')) as HTMLInputElement
-    var valorActa = acta.value
-
-    //FECHA VISITA
-    var fechaVisita = (document.getElementById('fecha-visita')) as HTMLInputElement
-    var valorfechaVisita = fechaVisita.value
-    //FORMATO A FECHA VISITA
-    let formVisita = new Date(valorfechaVisita);
-    let fechaFormVisita = formVisita.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
-
-
     //TIPO DE VISITA
-    var id = (document.getElementById('tip_visita')) as HTMLSelectElement
-    var sel = id.selectedIndex;
-    var opt = id.options[sel]
-    var valorVisita = (<HTMLSelectElement><unknown>opt).textContent;
+    // var id = (document.getElementById('tip_visita')) as HTMLSelectElement
+    // var sel = id.selectedIndex;
+    // var opt = id.options[sel]
+    // var valorVisita = (<HTMLSelectElement><unknown>opt).textContent;
 
-    var valorFormulacion = ""
+
     if (this.formulacion) {
+      var valorFormulacion = ""
       //AÑO FORMULACIÓN
       var formulacion = (document.getElementById('año_formulacion')) as HTMLInputElement
-      valorFormulacion = ": " + formulacion.value
+      valorFormulacion = formulacion.value
     }
 
-    var valorMejoramiento = ""
+
     if (this.mejoramiento) {
+      var valorMejoramiento = ""
       //CICLO DE MEJORAMIENTO
       var idmejo = (document.getElementById('id_mejoramiento')) as HTMLSelectElement
       var selmejo = idmejo.selectedIndex;
       var optmejo = idmejo.options[selmejo]
-      valorMejoramiento = ": " + (<HTMLSelectElement><unknown>optmejo).textContent;
+      valorMejoramiento = (<HTMLSelectElement><unknown>optmejo).textContent;
     }
 
+    //INPUTS BLOQUEADOS Y SE ASIGNA A LAS VARIABLES DEL DTO
+    //No ACTA
+    var acta = (document.getElementById('acta')) as HTMLInputElement
+    var valorActa = acta.value
 
-    //INFORMACIÓN PRESTADOR
-    //MUNICIPIO
-    var idm = (document.getElementById('mun_id')) as HTMLSelectElement
-    var selm = idm.selectedIndex;
-    var optm = idm.options[selm]
-    var valorMunicipio = (<HTMLSelectElement><unknown>optm).textContent;
 
-    //PRESTADOR SELECT
-    var idp = (document.getElementById('prestador')) as HTMLSelectElement
-    var selp = idp.selectedIndex;
-    var optp = idp.options[selp]
-    var valorPrestador = (<HTMLSelectElement><unknown>optp).textContent;
-
+    //INFORMACION PRESTADOR
     //NIT
     var nit = (document.getElementById('nit')) as HTMLInputElement
     var valorNit = nit.value
 
-    //DIRECCION
+    //DIRECCIÓN
     var direccion = (document.getElementById('direccion')) as HTMLInputElement
     var valorDireccion = direccion.value
-
-    //BARRIO
-    var barrio = (document.getElementById('barrio')) as HTMLInputElement
-    var valorBarrio = barrio.value
 
     //TELEFONO
     var telefono = (document.getElementById('telefono')) as HTMLInputElement
@@ -316,443 +529,70 @@ export class ActaPamecComponent implements OnInit {
     var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
     var valorCodigoPres = codigoPres.value
 
+    //NOMBRE DEL PRESTADOR - FIRMA PRESTADOR
+    var presNombre = (document.getElementById('nombrePrestador')) as HTMLInputElement
+    var valorPresNombre = presNombre.value
+
+    //SE OBTIENE LA FIRMA DEL MODAL DEL SERVICIO SHARED Y SE ASIGNA EN LA VARIABLE firma
+    this.firma = this.sharedService.getFirmaActaPamec();
+
+    //OBTENER NOMBRES DE LOS SELECTS
+    await this.obtenerNombreSelects();
+
+    //OBTENER FIRMA FUNCIONARIOS
+    await this.obtenerFirmaFuncionario1();
+    await this.obtenerFirmaFuncionario2();
 
 
-    //USUARIO SECRETARIA1
-    var idUsuSecre1 = (document.getElementById('usu_secretaria1')) as HTMLSelectElement
-    var selUsuSecre1 = idUsuSecre1.selectedIndex;
-    var optUsuSecre1 = idUsuSecre1.options[selUsuSecre1]
-    var valorUsuSecre1 = (<HTMLSelectElement><unknown>optUsuSecre1).textContent;
+    //ASIGNANDO LOS VALORES DEL ACTA PARA ASIGNARLAS EN EL DTO
+    this.act_id = Number(valorActa);
+    this.act_nit = valorNit
+    // this.act_tipo_visita = valorVisita
+    this.act_direccion = valorDireccion
+    this.act_telefono = valorTelefono
+    this.act_email = valorEmail
+    this.act_representante = valorRepresentante
+    this.act_cod_prestador = valorCodigoPres
+    this.act_nombre_prestador = valorPresNombre
+    this.act_firma_prestador = this.firma
 
-    //CARGO USUARIO SECRETARIA1
-    var cargoSecre1 = (document.getElementById('cargosecre1')) as HTMLInputElement
-    var valorCargoSecre1 = cargoSecre1.value
-
-    if (this.agregarUsuario) {
-      //USUARIO SECRETARIA2
-      var idUsuSecre2 = (document.getElementById('usu_secretaria2')) as HTMLSelectElement
-      var selUsuSecre2 = idUsuSecre2.selectedIndex;
-      var optUsuSecre2 = idUsuSecre2.options[selUsuSecre2]
-      var valorUsuSecre2 = (<HTMLSelectElement><unknown>optUsuSecre2).textContent;
-
-      //CARGO USUARIO SECRETARIA2
-      var cargoSecre2 = (document.getElementById('cargosecre2')) as HTMLInputElement
-      var valorCargoSecre2 = cargoSecre2.value
-    }
-
-
-    //FIRMAS PRESTADOR1
-    var nombrePrestador1 = (document.getElementById('nombrePrestador1')) as HTMLInputElement
-    var valorPrestador1 = nombrePrestador1.value
-
-    //CARGO USUARIO SECRETARIA1
-    var cargoPrestador1 = (document.getElementById('cargoPres1')) as HTMLInputElement
-    var valorCargoPrestador1 = cargoPrestador1.value
-
-    if (this.agregarPrestador) {
-      //FIRMAS PRESTADOR2
-      var nombrePrestador2 = (document.getElementById('nombrePrestador2')) as HTMLInputElement
-      var valorPrestador2 = nombrePrestador2.value
-
-      //CARGO USUARIO SECRETARIA1
-      var cargoPrestador2 = (document.getElementById('cargoPres2')) as HTMLInputElement
-      var valorCargoPrestador2 = cargoPrestador2.value
-    }
-
-
-
-    //OBJETO VISITA
-    var idObjvisita = (document.getElementById('obj_visita')) as HTMLSelectElement
-    var selObjvisita = idObjvisita.selectedIndex;
-    var optObjvisita = idObjvisita.options[selObjvisita]
-    var valorObjvisita = (<HTMLSelectElement><unknown>optObjvisita).textContent;
+    //REGISTRO DE LA INFORMACIÓN RECOPILADA A LA CLASE DTO - ACTASICDTO
+    this.actaPdf = new ActaPamecDto(
+      this.act_id,
+      this.act_tipo_visita,
+      this.act_fecha_visita,
+      this.act_municipio,
+      this.act_prestador,
+      this.act_nit,
+      this.act_direccion,
+      this.act_barrio,
+      this.act_telefono,
+      this.act_email,
+      this.act_representante,
+      this.act_cod_prestador,
+      this.act_sede_principal,
+      this.act_sede_localidad,
+      this.act_sede_direccion,
+      this.act_obj_visita,
+      this.act_nombre_funcionario1,
+      this.act_cargo_funcionario1,
+      this.act_firma_funcionario1,
+      this.act_nombre_funcionario2,
+      this.act_cargo_funcionario2,
+      this.act_firma_funcionario2,
+      this.act_nombre_prestador,
+      this.act_cargo_prestador,
+      this.act_firma_prestador
+    );
 
 
-    //DESCRIPCION OBJETO VISITA
-    var desc_obj_visita = (document.getElementById('desc_obj_visita')) as HTMLInputElement
-    var valordesc_obj_visita = desc_obj_visita.value
+    //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
+    const token = this.tokenService.getToken()
+    //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
+    const tokenDto: TokenDto = new TokenDto(token);
 
-    //DESCRIPCION DEL ACTA
-    var desc_acta = (document.getElementById('desc_acta')) as HTMLInputElement
-    var valordesc_acta = desc_acta.value
-
-
-    const fechaGenrada = new Date();
-    const formatoFecha = new Intl.DateTimeFormat('es-ES').format(fechaGenrada);
-
-
-    const doc = new jsPDF()
-    var imgEncabezado = 'assets/img/encabezadoPamec.png'
-    doc.addImage(imgEncabezado, 'PNG', 11.5, 4, 192, 25);
-
-    doc.setFontSize(9)
-    doc.setTextColor(128, 128, 128);
-    doc.setFont("helvetica", "normal")
-    doc.text(formatoFecha, 171, 27.5)
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.setFont("helvetica", "bold")
-    doc.text("ACTA DE VERIFICACIÓN AL PAMEC DE LAS INSTITUCIONES PRESTADORAS", 30, 40);
-    doc.text("DE SERVICIOS DE SALUD - IPS", 74, 45);
-
-    //INCIAL DEL ACTA
-    autoTable(doc, {
-      margin: { top: 52 },
-      columnStyles: { acta: { halign: 'left' }, inicial: { halign: 'center' }, segumiento: { halign: 'center' } },
-      body: [
-        { acta: valorActa, visita: fechaFormVisita, tipovisita: valorVisita + " " + valorFormulacion + valorMejoramiento },
-      ],
-      columns: [
-        { header: 'Número de acta', dataKey: 'acta' },
-        { header: 'Fecha de Visita', dataKey: 'visita' },
-        { header: 'Tipo de Visita', dataKey: 'tipovisita' },
-
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    //NOMBRE PRESTADOR
-    doc.text("INFORMACION DEL PRESTADOR DE SERVICIOS", 59, 79);
-    autoTable(doc, {
-      startY: 80,
-      columnStyles: { nombrePres: { halign: 'left' } },
-      body: [
-        { nombrePres: valorPrestador },
-      ],
-      columns: [
-        { header: 'Nombre:', dataKey: 'nombrePres' },
-      ],
-      tableWidth: 'auto',
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    //NIT, MUNICIPIO, DIRECCION PRESTADOR
-    autoTable(doc, {
-      startY: 98,
-      columnStyles: { nit: { halign: 'left' } },
-      body: [
-        { nit: valorNit, municipio: valorMunicipio, direccion: valorDireccion },
-      ],
-      columns: [
-        { header: 'Nit:', dataKey: 'nit' },
-        { header: 'Municipio:', dataKey: 'municipio' },
-        { header: 'Dirección:', dataKey: 'direccion' },
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    //BARRIO, TELEFONO, EMAIL
-    autoTable(doc, {
-      startY: 118,
-      columnStyles: { nit: { halign: 'left' } },
-      body: [
-        { barrio: valorBarrio, telefono: valorTelefono, email: valorEmail },
-      ],
-      columns: [
-        { header: 'Barrio:', dataKey: 'barrio' },
-        { header: 'Telefono:', dataKey: 'telefono' },
-        { header: 'Email:', dataKey: 'email' },
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    //REPRESENTANTE LEGAL, CODIGO PRESTADOR, CODIGO SEDE VISITADA
-    autoTable(doc, {
-      startY: 136,
-      columnStyles: { sede: { halign: 'left' } },
-      body: [
-        { representante: valorRepresentante, codpres: valorCodigoPres },
-      ],
-      columns: [
-        { header: 'Representante Legal:', dataKey: 'representante' },
-        { header: 'Código Prestador:', dataKey: 'codpres' },
-
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-
-    //OBJETO DE LA VISITA
-    autoTable(doc, {
-      startY: 154,
-      columnStyles: { objeto: { halign: 'left' } },
-      body: [
-        { objeto: valorObjvisita },
-      ],
-      columns: [
-        { header: 'Objeto de la Visita:', dataKey: 'objeto' },
-      ],
-      tableWidth: 'auto',
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    //VALOR DESCRIPCION DE LA VISITA
-    autoTable(doc, {
-      startY: 177,
-      columnStyles: { objeto: { halign: 'justify' } },
-      body: [
-        { objeto: valordesc_obj_visita },
-      ],
-      tableWidth: 'auto',
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    //DESCRIPCION DEL ACTA
-    autoTable(doc, {
-      startY: 212,
-      columnStyles: { desacta: { halign: 'justify' } },
-      body: [
-        { desacta: valordesc_acta },
-      ],
-      columns: [
-        { header: 'Descripción del Acta:', dataKey: 'desacta' },
-      ],
-      tableWidth: 'auto',
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    doc.addPage()
-    doc.addImage(imgEncabezado, 'PNG', 11.5, 4, 192, 25);
-    doc.setFontSize(9)
-    doc.setTextColor(128, 128, 128);
-    doc.setFont("helvetica", "normal")
-    doc.text(formatoFecha, 171, 27.5)
-
-    //MENSAJE FIRMAS POR SECRETARIA DE SALUD
-    autoTable(doc, {
-      margin: { top: 42 },
-      headStyles: {
-        fillColor: [220, 220, 220],
-        textColor: [0, 0, 0],
-        halign: 'center'
-      },
-      columns: [
-        { header: 'POR SECRETARIA DE SALUD DEPARTAMENTAL', dataKey: 'mensaje' },
-      ],
-      tableWidth: 'auto',
-    })
-
-    //NOMBRE USUARIO1 Y 2, CARGO USUARIO1 Y 2 Y FIRMA1 Y 2
-    autoTable(doc, {
-      startY: 50,
-      columnStyles: { sede: { halign: 'left' } },
-
-      body: [
-        { nombre: valorUsuSecre1, cargo: valorCargoSecre1, firma: '' },
-        { nombre: valorUsuSecre2, cargo: valorCargoSecre2, firma: '' },
-      ],
-      columns: [
-        { header: 'Nombre:', dataKey: 'nombre' },
-        { header: 'Cargo:', dataKey: 'cargo' },
-        { header: 'Firma:', dataKey: 'firma' },
-
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    //MENSAJE FIRMAS POR SECRETARIA DE SALUD
-    autoTable(doc, {
-      startY: 78,
-      headStyles: {
-        fillColor: [220, 220, 220],
-        textColor: [0, 0, 0],
-        halign: 'center'
-      },
-      columns: [
-        { header: 'POR PRESTADOR DE SERVICIO DE SALUD', dataKey: 'mensaje' },
-      ],
-      tableWidth: 'auto',
-    })
-
-    //NOMBRE PRESTADOR 1 Y 2, CARGO PRESTADOR 1 Y 2 Y FIRMA1 Y 2
-    autoTable(doc, {
-      startY: 86,
-      columnStyles: { sede: { halign: 'left' } },
-
-      body: [
-        { nombre: valorPrestador1, cargo: valorCargoPrestador1, firma: '' },
-        { nombre: valorPrestador2, cargo: valorCargoPrestador2, firma: '' },
-      ],
-      columns: [
-        { header: 'Nombre:', dataKey: 'nombre' },
-        { header: 'Cargo:', dataKey: 'cargo' },
-        { header: 'Firma:', dataKey: 'firma' },
-
-      ],
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0]
-      },
-      styles: {
-        fontSize: 10
-      }
-    })
-
-    //VALIDACIONES FORMULARIO
-    //VALIDAR ACTA
-    if (!valorActa.length) {
-      this.toastrService.error('El número de acta no puede estar vacia', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR FECHA DE VISITA
-    if (!valorfechaVisita) {
-      this.toastrService.error('La fecha de visita no puede estar vacia', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR SELECCION DE TIPO VISITA
-    if (!sel) {
-      this.toastrService.error('Debes seleccionar el tipo de visita', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR SELECCION DE MUCNICIPIO
-    if (!selm) {
-      this.toastrService.error('Debes seleccionar un Municipio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR SELECCION DE PRESTADOR
-    if (!selp) {
-      this.toastrService.error('Debes seleccionar un Prestador', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR BARRIO
-    if (!valorBarrio.length) {
-      this.toastrService.error('El Barrio no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR USUARIOS Y CARGO SECRETARIA
-    if (!selUsuSecre1) {
-      this.toastrService.error('Debes seleccionar un Usuario', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-    if (!valorCargoSecre1.length) {
-      this.toastrService.error('El cargo del Usuario no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-
-
-    //VALIDAR PRESTADORES Y CARGO
-    if (!valorPrestador1.length) {
-      this.toastrService.error('El prestador no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-    if (!valorCargoPrestador1.length) {
-      this.toastrService.error('El cargo del prestador no puede estar vacio', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR SELECCION DE OBJETO DE VISITA
-    if(!selObjvisita){
-      this.toastrService.error('Selecciona el Objeto de la visita', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-    //VALIDAR DESCRIPCION DEL ACTA
-    if (!valordesc_acta.length) {
-      this.toastrService.error('Debes Describir el Acta', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    } else if(valorActa.length < 300){
-      this.toastrService.error('El acta debe tener como minimo 300 caracteres', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-    }
-
-
-    
-
-
-    if (valorActa && valorfechaVisita && sel && selm && selp && valorBarrio && selUsuSecre1 && valorCargoSecre1 &&valorPrestador1
-      &&valorCargoPrestador1 && selObjvisita && valordesc_acta && valordesc_acta.length >= 300) {
-      doc.output('dataurlnewwindow', { filename: 'acta-pamec.pdf' });
-    }
-
-    // doc.save('acta-sic.pdf')
-
+    //VALIDAR QUE LOS CAMPOR NO ESTÉN VACIOS
+    console.log(this.actaPdf)
   }
 
 

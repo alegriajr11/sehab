@@ -22,6 +22,8 @@ export class MenuComponent implements OnInit {
   usu_nombreUsuario: string;
   usu_nombre: string;
 
+  reload: 'reload' | undefined = undefined;
+
 
 
   constructor(
@@ -45,7 +47,6 @@ export class MenuComponent implements OnInit {
     this.tokenService.logOut();
     this.router.navigate(['/login']);
   }
-
 
 
 }

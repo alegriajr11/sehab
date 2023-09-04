@@ -103,33 +103,31 @@
 
                 <div class="col-12">
                     <label for="principal" class="form-label">Sede:</label>
-                    <select id="sedep" class="form-select form-control" [(ngModel)]="act_sede"
+                    <select id="sede" class="form-select form-control" [(ngModel)]="act_sede"
                         [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option disabled selected hidden>Sede Principal...</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
+                        <option disabled selected hidden>Sede...</option>
+                        <option value="">...........</option>
+                        <option value="">...........</option>
                     </select>
                 </div>
 
                 <div class="col-12">
-                    <label for="principal" class="form-label">Clasificación:</label>
-                    <select id="sedep" class="form-select form-control" [(ngModel)]="act_clasificacion"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option disabled selected hidden>Clasificacion...</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
-                    </select>
+                    <label for="" class="form-label">Tipo de Prestador:</label>
+                    <input type="text" class="form-control" id="codclasificacion" placeholder="Tipo de Prestador"
+                        readonly>
+                    <input type="hidden" name="act_clasificacion" [(ngModel)]="act_clasificacion">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Código Habilitación:</label>
-                    <input type="text" class="form-control" id="codpres" placeholder="Código Prestador" readonly>
+                    <input type="text" class="form-control" id="codhabilitacion" placeholder="Código Prestador"
+                        readonly>
                     <input type="hidden" name="act_cod_prestador" [(ngModel)]="act_cod_habilitacion">
                 </div>
 
                 <div class="col-md-6">
                     <label for="codsede" class="form-label">Código Habilitación Sede:</label>
-                    <input type="text" class="form-control" id="codsede" placeholder="Código Sede" readonly>
+                    <input type="text" class="form-control" id="codhabsede" placeholder="Código Sede" readonly>
                     <input type="hidden" name="act_cod_sede" [(ngModel)]="act_cod_sede">
                 </div>
 
@@ -160,7 +158,7 @@
 
                 <div class="col-md-12">
                     <label for="" class="form-label">Gerente - Director:</label>
-                    <input type="text" class="form-control" id="repleg" placeholder="Gerente - Director" readonly>
+                    <input type="text" class="form-control" id="gerente" placeholder="Gerente - Director" readonly>
                     <input type="hidden" name="act_gerente" [(ngModel)]="act_gerente">
                 </div>
 
@@ -178,6 +176,65 @@
                     <h3>DATOS ENCONTRADOS EN LA VISITA</h3>
                 </div>
 
+                <div class="col-md-6">
+                    <label for="" class="form-label">Municipio:</label>
+                    <input type="text" class="form-control" name="dat_encontrado_municipio" placeholder="Municipio..." [(ngModel)]="dat_encontrado_municipio">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Nombre del Prestador:</label>
+                    <input type="text" class="form-control" name="dat_encontrado_prestador" placeholder="Prestador..." [(ngModel)]="dat_encontrado_prestador">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Sede:</label>
+                    <input type="text" class="form-control" name="dat_encontrado_sede" placeholder="Sede..." [(ngModel)]="dat_encontrado_sede">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Tipo de Prestador:</label>
+                    <input type="text" class="form-control" name="dato_encontrado_clasificacion" placeholder="Tipo de Prestador..." [(ngModel)]="dat_encontrado_clasificacion">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Código Habilitación:</label>
+                    <input type="text" class="form-control" name="dato_encontrado_cod_sede" placeholder="Código Habilitación..." [(ngModel)]="dat_encontrado_cod_sede">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Código Habilitación Sede:</label>
+                    <input type="text" class="form-control" name="dat_encontrado_nit" placeholder="Código Habilitación Sede..." [(ngModel)]="dat_encontrado_nit">
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="" class="form-label">Teléfono:</label>
+                    <input type="tel" class="form-control" name="dato_encontrado_telefono" placeholder="Teléfono..." [(ngModel)]="dat_encontrado_telefono">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Nit:</label>
+                    <input type="text" class="form-control" name="dat_encontrado_nit" placeholder="Nit..." [(ngModel)]="dat_encontrado_nit">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Dirección:</label>
+                    <input type="text" class="form-control" name="dato_encontrado_direccion" placeholder="Dirección..." [(ngModel)]="dat_encontrado_direccion">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Representante Legal:</label>
+                    <input type="text" class="form-control" name="dato_encontrado_representante" placeholder="Representante Legal..." [(ngModel)]="dat_encontrado_representante">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Gerente - Director:</label>
+                    <input type="text" class="form-control" name="dato_encontrado_gerente" placeholder="Gerente - Director..." [(ngModel)]="dat_encontrado_gerente">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Correo Electrónico:</label>
+                    <input type="text" class="form-control" name="dato_encontrado_correo" placeholder="E-mail..." [(ngModel)]="dat_encontrado_correo">
+                </div>
 
                 <div class="col-12">
                     <hr class="medio">
@@ -187,9 +244,10 @@
                     <h3>MIEMBROS DE LA COMISIÓN TÉCNICA DE VERIFICADORES</h3>
                 </div>
 
-                <div class="col-md-6">
-                    <label for="" class="form-label">Verificador Adicional:</label>
-                    <input type="text" class="form-control" id="repleg" placeholder="Verificador Adicional">
+                <div class="col-12">
+                    <label for="" class="form-label">Usuario Contabilidad :</label>
+                    <input type="text" class="form-control" id="usuAdicional"
+                        placeholder="Usuario Contabilidad Opcional...">
                     <input type="hidden" name="act_usu_adicional" [(ngModel)]="act_usu_adicional">
                 </div>
 
@@ -205,9 +263,16 @@
                         </select>
                     </div>
                     <!-- Agregar botón para eliminar este select duplicado -->
-                    <button (click)="removeSelect(i)">Eliminar Verificador SOGCS</button>
+                    <div class="col-12">
+                        <span class="button-like btn-span" (click)="removeSelect(i)">X</span>
+                    </div>
                 </div>
-                <button (click)="addSelect()">Agregar Verificador SOGCS</button>
+
+
+                <div class="col-md-12">
+                    <span class="button-like btn-span" (click)="addSelect()">Agregar Verificador SOGCS</span>
+                </div>
+
 
 
                 <div class="col-12">
@@ -220,7 +285,7 @@
 
                 <div class="col-12">
                     <label for="" class="form-label">Funcionario Recibe Visita:</label>
-                    <input type="text" class="form-control" id="nombrePrestador" name="act_nombre_prestador"
+                    <input type="text" class="form-control" id="nombreFuncionarioPrestador" name="act_nombre_prestador"
                         placeholder="Funcionario Visita..." [(ngModel)]="act_recibe_visita">
                 </div>
 
@@ -232,7 +297,7 @@
 
                 <div class="col-12">
                     <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
-                        (click)="obtenerNombres()">
+                    (click)="ruta()">
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>

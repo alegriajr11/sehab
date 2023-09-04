@@ -272,12 +272,6 @@ td {
     text-align: justify;
 }
 
-/*MARGIN DEL CONTENEDOR*/
-.size {
-    margin-right: 250px;
-    margin-left: 250px;
-}
-
 .funcionario-cell {
-    width: 20%;
+    width: 30%;
 }

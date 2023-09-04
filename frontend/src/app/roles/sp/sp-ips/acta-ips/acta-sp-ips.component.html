@@ -15,6 +15,11 @@
     </div>
 </div>
 
+<ng-template #modalTemplate>
+    <app-modal-firma-acta-sp-ips [dataFromParent]="modalRef"></app-modal-firma-acta-sp-ips>
+</ng-template>
+
+
 <br>
 <div class="container">
     <div class="card">
@@ -33,7 +38,7 @@
                     <label for="inicial" class="form-label">VISITA INICIAL</label>
                     <label class="switch">
                         <input type="checkbox" id="inicial" onclick="unsoloCheckbox()" name="act_visita_inicial"
-                            [(ngModel)]="act_visita_inicial">
+                            [(ngModel)]="act_visita_inicial" (change)="ocultarMensajes()">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -42,23 +47,30 @@
                     <label for="segumiento" class="form-label">VISITA DE SEGUIMIENTO</label>
                     <label class="switch">
                         <input type="checkbox" id="segumiento" onclick="unsoloCheckbox()" name="act_visita_seguimiento"
-                            [(ngModel)]="act_visita_seguimiento">
+                            [(ngModel)]="act_visita_seguimiento" (change)="ocultarMensajes()">
                         <span class="slider round"></span>
                     </label>
                 </div>
+
+                <div *ngIf="showTipoVisitaMessage" class="validation-message-visita">Seleccione un Tipo de
+                    Visita.</div>
 
                 <div class="col-md-3">
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
                         name="act_fecha_inicial" [(ngModel)]="act_fecha_inicial" [ngModelOptions]="{standalone: true}"
-                        ngDefaultControl (change)="habilitarFechaFinal()">
+                        ngDefaultControl (change)="habilitarFechaFinal(); ocultarMensajes()">
+                    <div *ngIf="showFechaInicialMessage" class="validation-message">Seleccione la Fecha
+                        Inicial.</div>
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
                         [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial">
+                        [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial" (change)="ocultarMensajes()">
+                    <div *ngIf="showFechaFinalMessage" class="validation-message">Seleccione la Fecha
+                        Final.</div>
                 </div>
 
                 <div class="col-12">
@@ -72,23 +84,28 @@
                 <div class="col-md-6">
                     <label for="habilitado" class="form-label">Municipio:</label>
                     <select id="mun_id" name="mun_id" class="form-select form-control"
-                        (change)="cargarPrestadoresByMun()" [(ngModel)]="act_municipio" ngDefaultControl>
+                        (change)="cargarPrestadoresByMun(); ocultarMensajes()" [(ngModel)]="act_municipioId"
+                        ngDefaultControl>
                         <option value="" disabled selected hidden>Selecciona un Municipio...</option>
                         <option *ngFor="let municipio of municipio" [value]="municipio.mun_id">
                             {{ municipio.mun_nombre }}
                         </option>
                     </select>
+                    <div *ngIf="showMunicipioMessage" class="validation-message">Seleccione el Municipio.
+                    </div>
                 </div>
 
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Prestador:</label>
                     <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()"
-                        [(ngModel)]="act_prestador" ngDefaultControl>
-                        <option hidden selected>Selecciona un Prestador...</option>
+                        [(ngModel)]="act_prestadorId" ngDefaultControl (change)="ocultarMensajes()">
+                        <option value="" disabled selected hidden>Selecciona un Prestador...</option>
                         <option *ngFor="let prest of prestador" [value]="prest.pre_cod_habilitacion">
                             {{ prest.pre_nombre }}
                         </option>
                     </select>
+                    <div *ngIf="showPrestadorMessage" class="validation-message">Seleccione el Prestador.
+                    </div>
                 </div>
 
                 <div class="col-6">
@@ -106,7 +123,8 @@
                 <div class="col-6">
                     <label for="barrio" class="form-label">Barrio:</label>
                     <input type="text" class="form-control" id="barrio" name="act_barrio" placeholder="Barrio Prestador"
-                        required [(ngModel)]="act_barrio">
+                        required [(ngModel)]="act_barrio" (input)="ocultarMensajes()">
+                    <div *ngIf="showBarrioMessage" class="validation-message-barrio">Ingresa el Barrio.</div>
                 </div>
 
                 <div class="col-6">
@@ -143,11 +161,12 @@
                 <div class="col-12">
                     <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
                     <select id="objVisita" class="form-select form-control" [(ngModel)]="act_obj_visita"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="ocultarMensajes()">
                         <option hidden selected>Objeto de visita...</option>
-                        <option>Realizar seguimiento a la implementación del programa de seguridad del paciente 
-                            para instituciones prestadoras de servicios de salud.</option>
+                        <option>Realizar seguimiento a la implementación del programa de seguridad del paciente para
+                            profesionales independientes.</option>
                     </select>
+                    <div *ngIf="showObjVisitaMessage" class="validation-message-ovpc">Seleccione el Objeto.</div>
                 </div>
 
                 <div class="col-12">
@@ -159,19 +178,22 @@
                 </div>
 
                 <div class="col-12">
-                    <label for="" class="form-label">Nombre:</label>
-                    <select id="usu_secretaria" class="form-select form-control" [(ngModel)]="act_nombre_funcionario"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option hidden>Selecciona el Nombre...</option>
+                    <label for="" class="form-label">Verificador SOGCS:</label>
+                    <select id="usu_secretaria" class="form-select form-control" [(ngModel)]="act_funcionarioId"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl
+                        (change)="cargoUsuario(); ocultarMensajes()">
+                        <option value="" disabled selected hidden>Selecciona el Verificador...</option>
                         <option *ngFor="let usuario of usuario" value="{{usuario.usu_id}}">{{usuario.usu_nombre}}
                             {{usuario.usu_apellido}}</option>
                     </select>
+                    <div *ngIf="showVerificadorMessage" class="validation-message-ovpc">Seleccione el Verificador.
+                    </div>
                 </div>
 
                 <div class="col-12">
                     <label for="" class="form-label">Cargo:</label>
                     <input type="text" class="form-control" id="cargoSecre" name="act_cargo_funcionario"
-                        placeholder="Cargo..." [(ngModel)]="act_cargo_funcionario">
+                        placeholder="Cargo..." [(ngModel)]="act_cargo_funcionario" readonly>
                 </div>
 
                 <div class="col-12 bg-h3 contenedor-form">
@@ -181,19 +203,29 @@
                 <div class="col-12">
                     <label for="" class="form-label">Prestador:</label>
                     <input type="text" class="form-control" id="nombrePrestador" name="act_nombre_prestador"
-                        placeholder="Prestador..." [(ngModel)]="act_nombre_prestador">
+                        placeholder="Prestador..." [(ngModel)]="act_nombre_prestador" (input)="ocultarMensajes()">
+                    <div *ngIf="showPresadorNombreMessage" class="validation-message-ovpc">Ingresa el Nombre Prestador a
+                        cargo.
+                    </div>
                 </div>
 
                 <div class="col-12">
                     <label for="" class="form-label">Cargo:</label>
                     <input type="text" class="form-control" id="cargoPres" name="act_cargo_prestador"
-                        placeholder="Cargo..." [(ngModel)]="act_cargo_prestador">
+                        placeholder="Cargo..." [(ngModel)]="act_cargo_prestador" (input)="ocultarMensajes()">
+                    <div *ngIf="showPrestadorCargoMessage" class="validation-message-ovpc">Ingresa el Cargo del
+                        Prestador.
+                    </div>
                 </div>
 
+                <!--BOTON MODAL FIRMA-->
+                <div class="col-3">
+                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma Prestador</span>
+                </div>
 
                 <div class="col-12">
-                    <button id="boton-acta-sp-ips" class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
-                        (click)="obtenerNombres()">
+                    <button id="boton-acta-sp-ind" class="btn btn-dark esp btn-circle btn-xl" title="Guardar"
+                        type="submit" (click)="obtenerNombres()">
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>

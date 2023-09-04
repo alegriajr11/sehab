@@ -19,7 +19,13 @@ export class EvaluacionesSicComponent implements OnInit {
 
   listaVacia: any = undefined;
 
-  searchText: any;
+  //Atributos de busqueda
+  year: number
+  act_id: number
+  //PRESTADOR O NIT
+  act_prestador: string = ''
+  act_nit: string = ''
+
 
   public modalRef: BsModalRef;
 
@@ -35,6 +41,10 @@ export class EvaluacionesSicComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.incializarMetodos();
+  }
+
+  incializarMetodos(){
     this.cargarActas();
     this.obtenerAnios();
   }
@@ -49,11 +59,12 @@ export class EvaluacionesSicComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     );
+    this.page = 1;
   }
 
 
   openModal(modalTemplate: TemplateRef<any>, id: number, name: string) {
-    this.sharedService.setId(id)
+    this.sharedService.setIdSic(id)
     this.sharedService.setNombrePrestador(name)
     this.modalRef = this.modalService.show(modalTemplate,
       {
@@ -61,29 +72,15 @@ export class EvaluacionesSicComponent implements OnInit {
         backdrop: true,
         keyboard: true
       }
-
-    );
-
-  }
-
-  obtenerActasFechas(date: string) {
-    this.actapdfService.actaSicDate(date).subscribe(
-      data => {
-        this.evaluaciones = data;
-        this.listaVacia = undefined;
-      },
-      err => {
-        this.listaVacia = err.error.message;
-        this.evaluaciones = []
-      }
     );
   }
+
 
   obtenerAnios(): void {
-    const selectAnio = document.getElementById("select-anio") as HTMLSelectElement;
+    const selectAnio = document.getElementById("select-year") as HTMLSelectElement;
     const fechaActual = new Date();
     const anioActual = fechaActual.getFullYear();
-    
+
     for (let i = anioActual; i >= 1900; i--) {
       const option = document.createElement("option");
       option.text = i.toString();
@@ -92,22 +89,23 @@ export class EvaluacionesSicComponent implements OnInit {
     }
   }
 
-    //CARGAR ACTAS POR NOMBRE DE PRESTADOR O NIT
-    // cargarAuditoriaUsuario() {
-    //   this.auditoria_services.listAuditoriaNombreUsuario(this.nombre_usuario).subscribe(
-    //     data => {
-    //       this.auditoria = data
-    //       this.listaVacia = undefined
-    //     },
-    //     err => {
-    //       this.listaVacia = err.error.message;
-    //       this.auditoria = []
-    //     }
-    //   )
-    //   if(!this.nombre_usuario){
-    //     this.getAllAuditorias();
-    //   }
-    // }
+  //CARGAR ACTAS POR ID_ACTA O AÑO O NOMBRE DE PRESTADOR O NIT
+  cargarActasFilter() {
+    console.log(this.year)
+    this.actapdfService.listaActasSicFilter(this.year, this.act_id, this.act_prestador, this.act_nit).subscribe(
+      data => {
+        this.evaluaciones = data
+        this.listaVacia = undefined
+      },
+      err => {
+        this.listaVacia = err.error.message;
+        this.evaluaciones = []
+      }
+    )
+    if (!this.year && !this.act_id && !this.act_prestador && !this.act_nit) {
+      this.cargarActas();
+    }
+  }
 
 
 }

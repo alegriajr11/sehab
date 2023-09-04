@@ -13,9 +13,15 @@ export const environment = {
   prestadorURL: 'http://localhost:8080/prestador/',
   prestadorMunicipioURL: 'http://localhost:8080/prestador/mun/',
   prestadorPamecMunicipioURL: 'http://localhost:8080/prestador/mun/pamec/',
+  
+  prestadorIpsMunicipioURL: 'http://localhost:8080/prestador/mun/sp/ips',
+  prestadorIndMunicipioURL: 'http://localhost:8080/prestador/mun/sp/pro/ips',
   rolURL: 'http://localhost:8080/rol/',
   claseURL: 'http://localhost:8080/clase/',
   generarPdfURL: 'http://localhost:8080/generarpdf/usuarios/',
+
+  //SEDES - PRESTAOR
+  sedeURL: 'http://localhost:8080/sede/',
 
 
   //SIC
@@ -23,8 +29,10 @@ export const environment = {
   indicadorURL: 'http://localhost:8080/indicador/',
   criterios_URL: 'http://localhost:8080/criterio/',
   criterioURL: 'http://localhost:8080/criteriosic/criterio/',
-  cumplimientoEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/estandar/',
-  cumpleEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/cumple/',
+  cumplimientoEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/',
+
+  //EVALUACION-SIC
+  evaluacionSicUrl: 'http://localhost:8080/evaluacion-sic/',
   
   //SIC-PDF
   actaSic_pdf_URL: 'http://localhost:8080/sic-acta/',
@@ -34,6 +42,9 @@ export const environment = {
   actividadURL: 'http://localhost:8080/actividad/',
   criteriopamURL: 'http://localhost:8080/criteriopam/',
   criteriopam1URL: 'http://localhost:8080/criteriopam/criterio/',
+
+  //PAMEC-PDF
+  actaPamec_pdf_url: 'http://localhost:8080/pamec-acta/',
 
   //SEGURIDAD DEL PACIENTE - PROFESIONALES INDEPENDIENTE
   etapaURL: 'http://localhost:8080/sp-ind/',

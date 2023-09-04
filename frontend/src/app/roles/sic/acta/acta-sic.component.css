@@ -39,6 +39,12 @@ input {
 
 }
 
+p{
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
 .col-6,
 .col-12,
 .col-3 {
@@ -184,6 +190,8 @@ select[aria-hidden="true"][hidden] {
     left: -9999px;
 }
 
+
+/*BOTON FIRMA*/
 .button-like {
     display: inline-block;
     padding: 8px 16px;
@@ -201,4 +209,70 @@ select[aria-hidden="true"][hidden] {
 .btn-span:hover {
     transform: scale(1.1);
     transition-duration: 0.2s;
+}
+
+
+/*CONTROLAR MENSAJE DE VALIDACIÓN*/
+.validation-message {
+    position: absolute;
+    background-color: #f85448;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 5px;
+    margin-left: 14px;
+    font-size: 14px;
+    top: -25px;
+    left: 0;
+    z-index: 1;
+}
+
+.validation-message-visita {
+    position: absolute;
+    background-color: #f85448;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    top: 107px;
+    left: 160px;
+    z-index: 1;
+}
+
+.validation-message-barrio {
+    position: absolute;
+    background-color: #f85448;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 5px;
+    margin-left: 14px;
+    font-size: 14px;
+    top: 12px;
+    left: 62px;
+    z-index: 1;
+}
+
+.validation-message-sede {
+    position: absolute;
+    background-color: #f85448;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 5px;
+    margin-left: 14px;
+    font-size: 14px;
+    top: 12px;
+    left: 122px;
+    z-index: 1;
+}
+
+.validation-message-ovpc {
+    position: absolute;
+    background-color: #f85448;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 5px;
+    margin-left: 14px;
+    font-size: 14px;
+    top: -10px;
+    left: 0;
+    z-index: 1;
 }

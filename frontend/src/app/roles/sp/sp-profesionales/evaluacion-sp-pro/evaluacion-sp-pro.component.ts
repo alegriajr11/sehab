@@ -27,6 +27,11 @@ export class EvaluacionSpProComponent {
   valorEtapa3: string = '3'
   valorEtapa4: string = '4'
 
+  captUsuario: string
+  captCargoUsuario: string
+  captCargoPres: string
+  captCodPres: string
+
   listaVacia: any = undefined;
 
   public modalRef: BsModalRef;
@@ -36,11 +41,15 @@ export class EvaluacionSpProComponent {
   ){}
 
   ngOnInit(): void {
+    this.inicializarMetodos();
+  }
+
+  inicializarMetodos(){ 
     this.cargarCriteriosIndEtapa1()
     this.cargarCriteriosIndEtapa2()
     this.cargarCriteriosIndEtapa3()
     this.cargarCriteriosIndEtapa4()
-    console.log()
+    this.capturarNombres()
   }
 
   cargarCriteriosIndEtapa1(): void {
@@ -53,6 +62,17 @@ export class EvaluacionSpProComponent {
         this.listaVacia = err.error.message;
       }
     )
+  }
+
+
+  capturarNombres(): void {
+    //CAPURAR NOMBRE DEL PRESTADOR
+    var copy = document.getElementById("nombre-prestador");
+    var captPrestador = sessionStorage.getItem("nombre-pres-sp-ind");
+    copy.textContent = " " + captPrestador + "."
+
+    //CAPTURAR ID DEL PRESTADOR
+    this.captCodPres = sessionStorage.getItem("cod-pres-sp-ind");
   }
 
   cargarCriteriosIndEtapa2(): void {

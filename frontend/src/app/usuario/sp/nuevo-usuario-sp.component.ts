@@ -16,12 +16,15 @@ export class NuevoUsuarioSpComponent implements OnInit {
 
   usuario: NuevoUsuarioDto = null;
 
+  usu_cedula: string;
   usu_nombre: string;
   usu_apellido: string;
   usu_email: string;
+  usu_cargo: string = 'P.A ASEGURAMIENTO Y PRESTACION DE SERVICIOS - SOGCS';
+  usu_area_profesional: string;
   usu_nombreUsuario: string;
   usu_password: string;
-  usu_firma: string
+  usu_firma: string;
   usu_estado: string;
 
   //MODAL
@@ -52,8 +55,11 @@ export class NuevoUsuarioSpComponent implements OnInit {
   onRegister(): void {
     this.usu_firma = this.sharedService.getFirmaUsuario()
     this.usuario = new NuevoUsuarioDto(
+      this.usu_cedula,
       this.usu_nombre,
       this.usu_apellido,
+      this.usu_cargo,
+      this.usu_area_profesional,
       this.usu_email,
       this.usu_nombreUsuario,
       this.usu_password,

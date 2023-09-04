@@ -17,9 +17,10 @@
     <app-modal-evaluaciones [dataFromParent]="modalRef"></app-modal-evaluaciones>
 </ng-template>
 
+
 <div class="wrapper">
 
-    <div class="size">
+    <div class="container">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
@@ -33,28 +34,33 @@
 
                 <div class="col-md-2">
                     <label for="">No Acta:</label>
-                    <input type="number" min="0" class="form-control" id="acta" name="act_id"
-                        placeholder="Número de Acta...">
+                    <input type="number" min="0" class="form-control" id="acta" name="act_id" [(ngModel)]="act_id"
+                        placeholder="Número de Acta..." (input)="cargarActasFilter()">
                 </div>
 
                 <div class="col-md-2">
                     <label for="">Año:</label>
-                    <select name="select-anio" id="select-anio" class="form-select form-control">
-                        <option hidden selected>Año...</option>
+                    <select name="select-anio" id="select-year" class="form-select form-control" [(ngModel)]="year" 
+                    [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="cargarActasFilter()">
+                        <option value="" disabled selected hidden>Año...</option>
                     </select>
                 </div>
 
 
 
-                <div class="col-md-8">
-                    <label for="">Nombre de Prestador o NIT:</label>
-                    <input class="form-control" type="text" name="search" [(ngModel)]="searchText"
-                        placeholder="Buscar Prestador">
+                <div class="col-md-4">
+                    <label for="">Nombre de Prestador:</label>
+                    <input class="form-control" type="text" name="search" [(ngModel)]="act_prestador"
+                        placeholder="Buscar Prestador" (input)="cargarActasFilter()">
+                </div>
+
+                <div class="col-md-4">
+                    <label for="">Nit de Prestador:</label>
+                    <input class="form-control" type="number" name="search" [(ngModel)]="act_nit"
+                        placeholder="Buscar Nit Prestador" (input)="cargarActasFilter()">
                 </div>
 
             </div>
-
-
 
             <table class="table table-wrapper table-hover">
                 <thead>
@@ -69,7 +75,7 @@
                 </thead>
                 <tbody>
                     <tr
-                        *ngFor="let evaluacion of evaluaciones | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page}">
+                        *ngFor="let evaluacion of evaluaciones | paginate: { itemsPerPage: 10, currentPage: page}">
                         <td style="text-align: center;">{{evaluacion.act_id}}</td>
                         <td style="text-align: justify;">{{evaluacion.act_prestador}}</td>
                         <td>{{evaluacion.act_nit}}</td>

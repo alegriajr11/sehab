@@ -5,24 +5,24 @@
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                     <h2><b>Prestadores</b></h2>
                 </div>
                 <div class="col-sm-2">
-                    <button class="btn btn-secondary" routerLink="" title="Nuevo Prestador">
+                    <button class="btn btn-secondary" routerLink="/prestadores/sede" title="Sedes">
                         <i class='fas fa-clinic-medical'></i>
                         <span>Sedes</span></button>
                 </div>
                 
-                <div class="col-sm-2">
-                    <button class="btn btn-secondary centered-icon" routerLink="/prestadores/nuevo" title="Sede Prestador">
+                <div class="col-sm-3">
+                    <button class="btn btn-secondary centered-icon" routerLink="/prestadores/nuevo" title="Nuevo Prestador">
                         <i class='fa fa-plus-circle'></i>
                         <span>Agregar Nuevo Prestador</span></button>
                 </div>
             </div>
         </div>
         <div class="search-hero">
-            <input class="form-control" type="text" name="search" [(ngModel)]="searchText" placeholder="Buscar Prestador">
+            <input class="form-control" type="text" name="search" [(ngModel)]="searchText" placeholder="Buscar Prestador...">
         </div>
         
         <table class="table table-wrapper text-center table-hover">

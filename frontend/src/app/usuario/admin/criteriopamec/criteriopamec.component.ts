@@ -12,12 +12,18 @@ import Swal from 'sweetalert2';
 })
 export class CriteriopamecComponent implements OnInit {
 
+  searchText: any;
+
   actividad: Actividad[];
   criteriopam: CriterioPam[];
+
+  titleActividad = false
 
   controlCriterio = false;
 
   listaVacia: any = undefined;
+
+  public page: number = 1;
 
   constructor(
     private actividadService: ActividadService,
@@ -26,6 +32,7 @@ export class CriteriopamecComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarActividad();
+    this.cargarCriteriosPam();
   }
 
   cargarActividad(): void{
@@ -40,7 +47,25 @@ export class CriteriopamecComponent implements OnInit {
     )
   }
 
-  cargarCriterios(): void{
+    // Método para calcular el ID global
+    calcularIDGlobal(index: number, currentPage: number, itemsPerPage: number): number {
+      return index + 1 + (currentPage - 1) * itemsPerPage;
+    }
+
+  cargarCriteriosPam() {
+    this.criteriopamService.lista().subscribe(
+      data => {
+        this.criteriopam = data;
+        this.listaVacia = undefined
+      },
+      err => {
+        this.listaVacia = err.error.message;
+      }
+    );
+  }
+
+  //CARGAR CRITERIOS POR ID ACTIVIDAD
+  cargarCriteriosIdActividad(): void{
     var id = (document.getElementById('act_id')) as HTMLSelectElement
     var sel = id.selectedIndex;
     var opt = id.options[sel]
@@ -56,6 +81,7 @@ export class CriteriopamecComponent implements OnInit {
       }
     )
     this.controlCriterio = true;
+    this.titleActividad = true;
   }
 
   llenarSpan(): void{
@@ -87,7 +113,7 @@ export class CriteriopamecComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.value) {
-        this.criteriopamService.delete(id).subscribe(res => this.cargarCriterios());
+        this.criteriopamService.delete(id).subscribe(res => this.cargarCriteriosIdActividad());
         Swal.fire(
           'OK',
           'Criterio Eliminado',

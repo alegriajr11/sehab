@@ -28,21 +28,19 @@
           <th scope="col">Cod</th>
           <th scope="col">Criterio</th>
           <th scope="col">Cumplimiento</th>
-
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let criterio of criterioEstandar; let i = index">
-          <td>{{i+1}} </td>
+          <td>{{criterio.crie_id}} </td>
           <td>{{criterio.crie_nombre}}</td>
           <td>
             <button class="btn btn-outline-dark"
               [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-              (click)="openModal(modalTemplate, criterio.crie_id)">
+              (click)="openModal(modalTemplate, criterio.crie_id, eva_id);">
               <i class='fa fa-check'></i>
             </button>
           </td>
-
         </tr>
       </tbody>
     </table>
@@ -50,8 +48,6 @@
     <ng-template #modalTemplate>
       <app-modalsic [dataFromParent]="modalRef"></app-modalsic>
     </ng-template>
-
-
 
 
 
@@ -86,11 +82,9 @@
                 <td>{{i+1}} </td>
                 <td>{{criterio.cri_nombre}}</td>
                 <td>
-                  <button class="btn btn-outline-dark"
-                  [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.cri_id)"
-                  (click)="openModal(modalTemplate2, criterio.cri_id)">
-                  <i class='fa fa-check'></i>
-                </button>
+                  <button class="btn btn-outline-dark" (click)="openModal(modalTemplate2, criterio.cri_id, eva_id)">
+                    <i class='fa fa-check'></i>
+                  </button>
               </tr>
             </tbody>
           </table>
@@ -132,11 +126,6 @@
         </button>
       </div>
     </div>
-
-
-
-
-
 
 
 

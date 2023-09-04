@@ -11,6 +11,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { CumplimientoEstandarService } from 'src/app/services/Sic/cumplimiento-estandar.service';
 import { ToastrService } from 'ngx-toastr';
+import { EvaluacionSicService } from 'src/app/services/Sic/evaluacionSic.service';
 
 
 
@@ -28,6 +29,8 @@ export class EvaluacionSicComponent implements OnInit {
   criterioEstandar: CriterioSicEstandarDto[];
   cumplimientoEstandar: CumplimientoSicEstandarDto[] = [];
 
+
+
   cumple: CumplimientoSicEstandarDto;
 
 
@@ -39,7 +42,9 @@ export class EvaluacionSicComponent implements OnInit {
 
   cumpl_cumple: string;
   cumpl_observaciones: string;
+  cumplimiento_asignado: string = '';
   crie_id: number;
+  eva_id: number;
 
 
 
@@ -53,6 +58,11 @@ export class EvaluacionSicComponent implements OnInit {
 
   listaVacia: any = undefined;
 
+  // En tu componente TypeScript
+  botonDeshabilitado: { [key: number]: boolean } = {};
+
+
+
   public modalRef: BsModalRef;
 
   constructor(private el: ElementRef,
@@ -62,156 +72,132 @@ export class EvaluacionSicComponent implements OnInit {
     private modalService: BsModalService,
     public sharedService: SharedServiceService,
     private cumplimientoEstandarService: CumplimientoEstandarService,
+    private evaluacionSicService: EvaluacionSicService,
     private toastrService: ToastrService
 
   ) { }
 
-  @ViewChild('nombreIndicador', {static: false}) nombreIndicador: ElementRef;
+  @ViewChild('nombreIndicador', { static: false }) nombreIndicador: ElementRef;
 
   ngOnInit(): void {
-    
-    console.log(sessionStorage.getItem("cod-pres-sic"))
+
     this.capturarNombres();
     this.cargarDominio();
     this.cargarCriteriosSic();
     this.cargarCriteriosEstandar();
-    
+    this.ultimaEvaluacionRegistrada();
+
+    //GUARDAR LOS CRITERIOS CON CUMPLIMIENTO ASIGNADO
+    const storedCriteriosGuardados = localStorage.getItem('criteriosGuardados');
+
+    if (storedCriteriosGuardados) {
+      this.sharedService.criteriosGuardados = JSON.parse(storedCriteriosGuardados);
+      // Configura botonDeshabilitado según los criterios con cumplimientos asignados
+      for (const crie_id of this.sharedService.criteriosGuardados) {
+        this.botonDeshabilitado[crie_id] = true;
+      }
+    }
   }
 
   ngAfterViewInit() {
     this.originalDiv = this.el.nativeElement.querySelector('.original-div');
-    
   }
 
 
-  // clonarDiv() {
-  //   var idDomino = (document.getElementById('dom_id')) as HTMLSelectElement
-  //   var selDominio = idDomino.selectedIndex;
-  //   var optDominio = idDomino.options[selDominio]
-  //   var valorDominio = (<HTMLSelectElement><unknown>optDominio).textContent;
+  ultimaEvaluacionRegistrada() {
+    this.evaluacionSicService.ultimoCumplimiento().subscribe(
+      (data) => {
+        this.eva_id = data.eva_id
+      }
+    )
+  }
 
-
-  //   var idIndicador = (document.getElementById('ind_id')) as HTMLSelectElement
-  //   var selIndicador = idIndicador.selectedIndex;
-  //   var optIndicador = idIndicador.options[selIndicador]
-  //   var valorIndicador = (<HTMLSelectElement><unknown>optIndicador).textContent;
-
-  //   if (selDominio && selIndicador) {
-
-  //     this.numeroDeClones++;
-  //     this.clondiv = true
-  //     this.habilitarDiv = false
-      
-  //     var nombreDominioElement = document.getElementById("nombre-dominio" + this.numeroDeClones);
-  //     var nombreIndicadorElement = document.getElementById("nombre-indicador" + this.numeroDeClones);
-  
-  //     if (nombreDominioElement) {
-  //       nombreDominioElement.innerText = valorDominio;
-  //     }
-  
-  //     if (nombreIndicadorElement) {
-  //       nombreIndicadorElement.innerText = valorIndicador;
-  //     }
-
-  //   } else if (!selDominio) {
-  //     this.toastrService.error('Selecciona un Dominio', 'Error', {
-  //       timeOut: 3000,
-  //       positionClass: 'toast-top-center',
-  //     })
-  //   } else if (!selIndicador) {
-  //     this.toastrService.error('Selecciona un Indicador', 'Error', {
-  //       timeOut: 3000,
-  //       positionClass: 'toast-top-center',
-  //     })
-  //   }
-
-  // }
   clonarDiv() {
-  const idDomino = document.getElementById('dom_id') as HTMLSelectElement;
-  const selDominio = idDomino.selectedIndex;
-  const optDominio = idDomino.options[selDominio];
-  const valorDominio = optDominio.textContent;
+    const idDomino = document.getElementById('dom_id') as HTMLSelectElement;
+    const selDominio = idDomino.selectedIndex;
+    const optDominio = idDomino.options[selDominio];
+    const valorDominio = optDominio.textContent;
 
-  const idIndicador = document.getElementById('ind_id') as HTMLSelectElement;
-  const selIndicador = idIndicador.selectedIndex;
-  const optIndicador = idIndicador.options[selIndicador];
-  const valorIndicador = optIndicador.textContent;
+    const idIndicador = document.getElementById('ind_id') as HTMLSelectElement;
+    const selIndicador = idIndicador.selectedIndex;
+    const optIndicador = idIndicador.options[selIndicador];
+    const valorIndicador = optIndicador.textContent;
 
-  if (selDominio && selIndicador) {
-    this.numeroDeClones++;
-    this.clondiv = true;
-    this.habilitarDiv = false;
+    if (selDominio && selIndicador) {
+      this.numeroDeClones++;
+      this.clondiv = true;
+      this.habilitarDiv = false;
 
-    const nuevoDiv = document.createElement('div');
-    nuevoDiv.id = 'divClonado' + this.numeroDeClones;
+      const nuevoDiv = document.createElement('div');
+      nuevoDiv.id = 'divClonado' + this.numeroDeClones;
 
-    const divTitulos = document.createElement('div');
-    divTitulos.id = 'div-titulos';
+      const divTitulos = document.createElement('div');
+      divTitulos.id = 'div-titulos';
 
-    const nombreDominio = document.createElement('h5');
-    nombreDominio.innerHTML = '<b>Dominio:</b>';
+      const nombreDominio = document.createElement('h5');
+      nombreDominio.innerHTML = '<b>Dominio:</b>';
 
-    const spanDominio = document.createElement('span');
-    spanDominio.id = 'nombre-dominio' + this.numeroDeClones;
-    spanDominio.textContent = valorDominio;
+      const spanDominio = document.createElement('span');
+      spanDominio.id = 'nombre-dominio' + this.numeroDeClones;
+      spanDominio.textContent = valorDominio;
 
-    const nombreIndicador = document.createElement('h5');
-    nombreIndicador.innerHTML = '<b>Indicador:</b>';
+      const nombreIndicador = document.createElement('h5');
+      nombreIndicador.innerHTML = '<b>Indicador:</b>';
 
-    const spanIndicador = document.createElement('span');
-    spanIndicador.id = 'nombre-indicador' + this.numeroDeClones;
-    spanIndicador.textContent = valorIndicador;
+      const spanIndicador = document.createElement('span');
+      spanIndicador.id = 'nombre-indicador' + this.numeroDeClones;
+      spanIndicador.textContent = valorIndicador;
 
-    const colSm6 = document.createElement('div');
-    colSm6.className = 'col-sm-6';
-    colSm6.appendChild(nombreDominio);
-    colSm6.appendChild(spanDominio);
+      const colSm6 = document.createElement('div');
+      colSm6.className = 'col-sm-6';
+      colSm6.appendChild(nombreDominio);
+      colSm6.appendChild(spanDominio);
 
-    const colSm6_2 = document.createElement('div');
-    colSm6_2.className = 'col-sm-6';
-    colSm6_2.appendChild(nombreIndicador);
-    colSm6_2.appendChild(spanIndicador);
+      const colSm6_2 = document.createElement('div');
+      colSm6_2.className = 'col-sm-6';
+      colSm6_2.appendChild(nombreIndicador);
+      colSm6_2.appendChild(spanIndicador);
 
-    const colSm7 = document.createElement('div');
-    colSm7.className = 'col-sm-7';
+      const colSm7 = document.createElement('div');
+      colSm7.className = 'col-sm-7';
 
-    const row = document.createElement('div');
-    row.className = 'row';
-    row.appendChild(colSm6);
-    row.appendChild(colSm6_2);
-    row.appendChild(colSm7);
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.appendChild(colSm6);
+      row.appendChild(colSm6_2);
+      row.appendChild(colSm7);
 
-    const tableTitle = document.createElement('div');
-    tableTitle.className = 'table-title';
-    tableTitle.appendChild(row);
+      const tableTitle = document.createElement('div');
+      tableTitle.className = 'table-title';
+      tableTitle.appendChild(row);
 
-    divTitulos.appendChild(tableTitle);
-    nuevoDiv.appendChild(divTitulos);
+      divTitulos.appendChild(tableTitle);
+      nuevoDiv.appendChild(divTitulos);
 
-  } else if (!selDominio) {
-    this.toastrService.error('Selecciona un Dominio', 'Error', {
-      timeOut: 3000,
-      positionClass: 'toast-top-center',
-    });
-  } else if (!selIndicador) {
-    this.toastrService.error('Selecciona un Indicador', 'Error', {
-      timeOut: 3000,
-      positionClass: 'toast-top-center',
-    });
+    } else if (!selDominio) {
+      this.toastrService.error('Selecciona un Dominio', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-top-center',
+      });
+    } else if (!selIndicador) {
+      this.toastrService.error('Selecciona un Indicador', 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-top-center',
+      });
+    }
   }
-}
 
-  
-  
-  
-  
+
 
   range(num: number): number[] {
     return Array.from({ length: num }, (_, i) => i + 1);
   }
-  
-  openModal(modalTemplate: TemplateRef<any>, id: number) {
-    this.sharedService.setId(id)
+
+  openModal(modalTemplate: TemplateRef<any>, id: number, eva_id: number) {
+    this.sharedService.setIdSic(eva_id)
+    this.eva_id = eva_id
+    this.sharedService.setIdCriterioSic(id)
+    this.crie_id = id
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',

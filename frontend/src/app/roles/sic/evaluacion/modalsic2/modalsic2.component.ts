@@ -18,7 +18,7 @@ export class Modalsic2Component {
   constructor(private sharedService: SharedServiceService,){}
 
   onRegister(){
-    this.cri_id = this.sharedService.id;
+    this.cri_id = this.sharedService.id_evaluacion_sic;
     this.pre_cod_habilitacion = sessionStorage.getItem("cod-pres-sic")
   }
 }

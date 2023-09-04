@@ -84,6 +84,10 @@ table.table td a {
     outline: none !important;
 }
 
+.table{
+    max-width: 100%;
+}
+
 /* ACTIVE : INACTIVE */
 span.active {
     background-color: #27c24c;
@@ -128,10 +132,8 @@ span.inactive {
     transition-duration: 0.2s;
 }
 
-/*MARGIN DEL CONTENEDOR*/
-.size {
-    margin-right: 310px;
-    margin-left: 310px;
+.container {
+    max-width: 80%;
 }
 
 

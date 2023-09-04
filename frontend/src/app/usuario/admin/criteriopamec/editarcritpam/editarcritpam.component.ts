@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { constrainedMemory } from 'process';
 import { Actividad } from 'src/app/models/Pamec/actividad.dto';
 import { CriterioPam } from 'src/app/models/Pamec/criteriopam.dto';
 import { CriteriopamService } from 'src/app/services/Pamec/criteriopam.service';
@@ -12,7 +13,7 @@ import { CriteriopamService } from 'src/app/services/Pamec/criteriopam.service';
 })
 export class EditarcritpamComponent implements OnInit {
 
-  actividad: Actividad = null
+  labelActividad: string = ""
   criterio: CriterioPam = null
 
   constructor(
@@ -37,6 +38,7 @@ export class EditarcritpamComponent implements OnInit {
     );
 
     this.capturarNombreActividad()
+
   }
 
   onUpdate(): void {
@@ -56,14 +58,16 @@ export class EditarcritpamComponent implements OnInit {
     );
   }
 
-  volver(): void {
-    this.router.navigate(['/criteriopam/agregar']);
-  }
 
   capturarNombreActividad(): void{
-    var copy = document.getElementById("actividad-nombre");
     var elementId = sessionStorage.getItem("elementId");
-    
-    copy.textContent = " " + elementId + "." 
+
+    if(elementId){
+      var copy = document.getElementById("actividad-nombre");
+      this.labelActividad = "ACTIVIDAD: "
+      copy.textContent = " " + elementId + "."
+    } else {
+      copy.textContent = " "
+    }
   }
 }

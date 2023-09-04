@@ -9,6 +9,7 @@ import { CambiarPasswordDto } from '../models/cambiar-password.dto';
 import { RestablecerPasswordDto } from '../models/reset-password.dto';
 import { ActaSicPdfDto } from '../models/actaSicpdf.dto';
 import { ActaSpPdfDto } from '../models/actaSpPdf.dto';
+import { NuevoUsuarioAdminDto } from '../models/nuevo-usuario-admin.dto';
 
 
 @Injectable({
@@ -33,7 +34,7 @@ export class AuthService {
     return this.httpClient.post<any>(this.authURL + 'login', dto);
   }
 
-  registroAdmin(dto: NuevoUsuarioDto): Observable<any> {
+  registroAdmin(dto: NuevoUsuarioAdminDto): Observable<any> {
     return this.httpClient.post<any>(this.usuarioAdmin, dto);
   }
 
@@ -54,8 +55,12 @@ export class AuthService {
   }
 
 
-  registroReso(dto: NuevoUsuarioDto): Observable<any> {
-    return this.httpClient.post<any>(this.usuarioNewURL + 'res', dto);
+  registroReso(dto: NuevoUsuarioDto, tokenDto: TokenDto): Observable<any> {
+    const body = {
+      dto: dto,
+      tokenDto: tokenDto
+    }
+    return this.httpClient.post<any>(this.usuarioNewURL + 'res', body);
   }
 
   refresh(dto: TokenDto): Observable<any> {
