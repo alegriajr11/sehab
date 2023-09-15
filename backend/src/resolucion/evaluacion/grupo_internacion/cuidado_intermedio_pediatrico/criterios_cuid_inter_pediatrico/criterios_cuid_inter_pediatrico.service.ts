@@ -6,6 +6,12 @@ import { CriterioCuidIntermPediatricoRepository } from '../criterio_cuid_inter_p
 import { CuidIntermPediatricoRepository } from '../cuid_inter_pediatrico.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { CriterioCuidIntermPediatricoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_intermedio_pediatrico_dto/criterio_cuid_inter_pediatrico.dto';
+import { JwtService } from '@nestjs/jwt';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { PayloadInterface } from 'src/auth/payload.interface';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { AuditoriaEliminacionService } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.service';
 
 
 
@@ -18,6 +24,10 @@ export class CriteriosCuidInterPediatricoService {
         private readonly criterioCuidIntermPediatricoRepository: CriterioCuidIntermPediatricoRepository,
         @InjectRepository(CuidIntermPediatricoEntity)
         private readonly cuidIntermPediatricoRepository: CuidIntermPediatricoRepository,
+        private readonly jwtService: JwtService,
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+        private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
+        private readonly auditoria_eliminacion_services: AuditoriaEliminacionService
     ) { }
 
 
@@ -33,16 +43,59 @@ export class CriteriosCuidInterPediatricoService {
     }
 
 
-    async create(cuid_inter_pedi_id: number, dto: CriterioCuidIntermPediatricoDto): Promise<any> {
-        const cuidinterpedi = await this.cuidIntermPediatricoRepository.findOne({ where: { cuid_inter_pedi_id: cuid_inter_pedi_id } });
-        if (!cuidinterpedi) throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'))
-        //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
-        const criterioscuidinterpedi = this.criterioCuidIntermPediatricoRepository.create(dto)
-        //ASIGNAMOS EL ESTANDAR AL CRITERIO
-        criterioscuidinterpedi.cuid_inter_pediatrico = cuidinterpedi
-        //GUARDAR LOS DATOS EN LA BD
-        await this.criterioCuidIntermPediatricoRepository.save(criterioscuidinterpedi)
-        return new MessageDto('El criterio ha sido Creado Correctamente');
+    //LISTAR TODOS CRITERIOS
+    async getall(): Promise<CriterioCuidIntermPediatricoEntity[]> {
+        const criterio = await this.criterioCuidIntermPediatricoRepository.createQueryBuilder('criterios')
+            .select(['criterios'])
+            .getMany()
+        if (criterio.length === 0) throw new NotFoundException(new MessageDto('No hay criterios  en la lista'))
+        return criterio;
+    }
+
+
+    //CREAR CRITERIO
+    async create(cuid_inter_pedi_id: number, payloads: { dto: CriterioCuidIntermPediatricoDto, tokenDto: TokenDto }): Promise<any> {
+        try {
+            const { dto, tokenDto } = payloads;
+            const cuidinterpedi = await this.cuidIntermPediatricoRepository.findOne({ where: { cuid_inter_pedi_id: cuid_inter_pedi_id } });
+            if (!cuidinterpedi) {
+                throw new InternalServerErrorException(new MessageDto('El Estandar no ha sido creado'));
+            }
+
+            //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
+            const criterioscuidinterpedi = this.criterioCuidIntermPediatricoRepository.create(dto)
+
+            //ASIGNAMOS EL ESTANDAR AL CRITERIO
+            criterioscuidinterpedi.cuid_inter_pediatrico = cuidinterpedi
+
+            //GUARDAR LOS DATOS EN LA BD
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
+            await this.criterioCuidIntermPediatricoRepository.save(criterioscuidinterpedi)
+            await this.auditoria_registro_services.logCreateInterPediatrico(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                year
+            );
+
+            return new MessageDto('El criterio ha sido Creado Correctamente');
+        } catch (error) {
+            // Aquí puedes manejar el error como desees, por ejemplo, registrarlo o lanzar una excepción personalizada.
+            throw error;
+        }
     }
 
     //ENCONTRAR POR ID - CRITERIO CUIDADO  INTERMEDIO PEDIATRICO
@@ -55,10 +108,37 @@ export class CriteriosCuidInterPediatricoService {
     }
 
     //ELIMINAR CRITERIO  CUIDADO  INTERMEDIO PEDIATRICO
-    async delete(id: number): Promise<any> {
-        const criterio_inter_pedia = await this.findById(id);
-        await this.criterioCuidIntermPediatricoRepository.delete(criterio_inter_pedia.cri_inter_pedia_id)
-        return new MessageDto(`Criterio Eliminado`);
+    async delete(id: number, tokenDto: TokenDto): Promise<any> {
+        try {
+            const criterio_inter_pedia = await this.findById(id);
+
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+            await this.criterioCuidIntermPediatricoRepository.delete(criterio_inter_pedia.cri_inter_pedia_id)
+            await this.auditoria_eliminacion_services.logDeleteInterPediatrico(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                year
+            );
+
+            return new MessageDto(`Criterio Eliminado`);
+        } catch (error) {
+            // Aquí puedes manejar el error como desees, por ejemplo, registrarlo o lanzar una excepción personalizada.
+            throw error;
+        }
+
     }
 
     //ACTUALIZAR CRITERIOS CUIDADO INTERMEDIO PEDIATRICO
@@ -78,6 +158,52 @@ export class CriteriosCuidInterPediatricoService {
 
         return new MessageDto(`El criterio ha sido Actualizado`);
 
+    }
+
+    async update(id: number, payloads: { dto: CriterioCuidIntermPediatricoDto, tokenDto: TokenDto }): Promise<any> {
+        try {
+            const { dto, tokenDto } = payloads;
+            const criterio_cuid_inter_pedi = await this.findById(id);
+            if (!criterio_cuid_inter_pedi) {
+                throw new NotFoundException(new MessageDto('El criterio no existe'));
+            }
+
+            dto.cri_inter_pedia_modalidad ? criterio_cuid_inter_pedi.cri_inter_pedia_modalidad = dto.cri_inter_pedia_modalidad : criterio_cuid_inter_pedi.cri_inter_pedia_modalidad = criterio_cuid_inter_pedi.cri_inter_pedia_modalidad;
+            dto.cri_inter_pedia_complejidad ? criterio_cuid_inter_pedi.cri_inter_pedia_complejidad = dto.cri_inter_pedia_complejidad : criterio_cuid_inter_pedi.cri_inter_pedia_complejidad = criterio_cuid_inter_pedi.cri_inter_pedia_complejidad;
+            criterio_cuid_inter_pedi.cri_inter_pedia_articulo = dto.cri_inter_pedia_articulo !== undefined ? dto.cri_inter_pedia_articulo : "";
+            criterio_cuid_inter_pedi.cri_inter_pedia_seccion = dto.cri_inter_pedia_seccion !== undefined ? dto.cri_inter_pedia_seccion : "";
+            criterio_cuid_inter_pedi.cri_inter_pedia_apartado = dto.cri_inter_pedia_apartado !== undefined ? dto.cri_inter_pedia_apartado : "";
+            dto.cri_inter_pedia_nombre_criterio ? criterio_cuid_inter_pedi.cri_inter_pedia_nombre_criterio = dto.cri_inter_pedia_nombre_criterio : criterio_cuid_inter_pedi.cri_inter_pedia_nombre_criterio = criterio_cuid_inter_pedi.cri_inter_pedia_nombre_criterio;
+
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
+            await this.criterioCuidIntermPediatricoRepository.save(criterio_cuid_inter_pedi);
+            await this.auditoria_actualizacion_services.logUpdateInterPediatrico(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                year
+            );
+
+
+
+            return new MessageDto(`El criterio ha sido Actualizado`);
+        } catch (error) {
+            // Aquí puedes manejar el error como desees, por ejemplo, registrarlo o lanzar una excepción personalizada.
+            throw error;
+        }
     }
 }
 

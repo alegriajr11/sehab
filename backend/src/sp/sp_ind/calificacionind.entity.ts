@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioIndEntity } from "./criterioind.entity";
+import { EvaluacionIndependientesEntity } from "./evaluacion-independientes.entity";
 
 
 @Entity({name: 'calificacion_ind'})
@@ -14,12 +15,14 @@ export class CalificacionIndEntity {
     @Column({type: 'varchar', length: 255, nullable: false, unique: false})
     cal_observaciones: string;
 
+    @Column({ type: 'varchar', length: 10, nullable: false,default:true })
+    cal_asignado: string;
 
-    @ManyToMany(type => CriterioIndEntity, criterioind => criterioind.calificacion_ind, { eager: true })
-    @JoinTable({
-        name: 'cal_criind',
-        joinColumn: { name: 'criind_cal_id' },
-        inverseJoinColumn: { name: 'cal_criind_id' }
-    })
-    criterios_ind: CriterioIndEntity[]
+
+    //Relacion Muchos a Uno  CALIFICACIONES  A CRITERIO
+    @ManyToOne(type => CriterioIndEntity, criterio => criterio.calificaciones_cri)
+    criterio_cal: CriterioIndEntity
+
+    @ManyToMany(type => EvaluacionIndependientesEntity, evaluacionIndependientes => evaluacionIndependientes.eval_cal_independientes)
+    cal_evaluacion_independientes: EvaluacionIndependientesEntity;
 }

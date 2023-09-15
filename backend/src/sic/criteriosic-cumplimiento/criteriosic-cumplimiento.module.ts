@@ -13,7 +13,7 @@ import { EvaluacionSicEntity } from '../evaluacionsic.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_registro.module';
+import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PrestadorEntity, DominioEntity, IndicadorEntity, CriteriosicEntity, CumplimientoSicEntity, CriterioEstandarSicEntity, CumplimientoEstandarSicEntity, EvaluacionSicEntity]),

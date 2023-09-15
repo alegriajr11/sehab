@@ -7,6 +7,8 @@ import { CriterioIndEntity } from '../criterioind.entity';
 import { CriterioIndRepository } from '../criterioind.repository';
 import { EtapaInd } from '../etapaind.entity';
 import { EtapaIndRepository } from '../etapaind.repository';
+import { CalificacionIndEntity } from '../calificacionind.entity';
+import { CalificacionIndRepository } from '../calificacionind.repository';
 
 @Injectable()
 export class CriterioindService {
@@ -15,7 +17,10 @@ export class CriterioindService {
         @InjectRepository(CriterioIndEntity)
         private criterioIndRepository: CriterioIndRepository,
         @InjectRepository(EtapaInd)
-        private etapaindRepository: EtapaIndRepository
+        private etapaindRepository: EtapaIndRepository,
+        @InjectRepository(CalificacionIndEntity)
+        private calificacionIndRepository: CalificacionIndRepository,
+
 
     ) { }
 
@@ -55,7 +60,7 @@ export class CriterioindService {
         return new MessageDto(`Criterio Eliminado`);
     }
 
-    async create(item_id: number, dto: CriterioIndDto): Promise<any> {
+    async create(item_id: number, dto: CriterioIndDto ): Promise<any> {
         const { cri_nombre } = dto;
         const exists = await this.criterioIndRepository.findOne({ where: [{ cri_nombre: cri_nombre }] });
         if (exists) throw new BadRequestException(new MessageDto('Ese Criterio ya existe'));
@@ -67,13 +72,15 @@ export class CriterioindService {
         return new MessageDto('El criterio ha sido Creado');
     }
 
+    //LISTAR LOS CRITERIOS SI TIENEN UNA EVALUACION ASIGNADA
     async getallcriterio(): Promise<CriterioIndEntity[]> {
         const criterio_ind = await this.criterioIndRepository.createQueryBuilder('criterio')
-            .select(['criterio', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoinAndSelect('criterio.calificacion_ind', 'calificacion_ind')
+            .select(['criterio', 'calificaciones_cri.cal_asignado', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre', 'cal_evaluacion_independientes.cal_id'])
+            .innerJoinAndSelect('criterio.calificaciones_cri', 'calificaciones_cri')
             .innerJoinAndSelect('criterio.eta_item', 'eta_item')
+            .innerJoinAndSelect('calificaciones_cri.cal_evaluacion_independientes', 'cal_evaluacion_independientes')
             .getMany()
-        if (!criterio_ind.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+        if (!criterio_ind.length) throw new NotFoundException(new MessageDto('No hay una evaluacion asignada en la lista'))
         return criterio_ind
     }
 
@@ -84,9 +91,9 @@ export class CriterioindService {
         titulo_uno = "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE"
 
         const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
-            .select(['etapa', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
+            .select(['etapa', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre'])
             .innerJoin('etapa.eta_item', 'eta_item')
-            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
+            .innerJoinAndSelect('etapa.calificaciones_cri', 'calificaciones_cri')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_uno })
             .getMany()
 
@@ -99,9 +106,9 @@ export class CriterioindService {
         titulo_dos = "CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE"
 
         const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
-            .select(['etapa', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
+            .select(['etapa', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre'])
             .innerJoin('etapa.eta_item', 'eta_item')
-            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
+            .innerJoinAndSelect('etapa.calificaciones_cri', 'calificaciones_cri')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_dos })
             .getMany()
 
@@ -114,12 +121,12 @@ export class CriterioindService {
         titulo_tres = "REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO"
 
         const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
-            .select(['etapa', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
+            .select(['etapa', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre'])
             .innerJoin('etapa.eta_item', 'eta_item')
-            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
+            .innerJoinAndSelect('etapa.calificaciones_cri', 'calificaciones_cri')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_tres })
             .getMany()
-        
+
         return criterio
     }
 
@@ -129,12 +136,16 @@ export class CriterioindService {
         titulo_cuatro = "DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO"
 
         const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
-            .select(['etapa', 'calificacion_ind.cal_nota', 'calificacion_ind.cal_observaciones', 'eta_item.eta_nombre'])
+            .select(['etapa', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre'])
             .innerJoin('etapa.eta_item', 'eta_item')
-            .innerJoinAndSelect('etapa.calificacion_ind', 'calificacion_ind')
+            .innerJoinAndSelect('etapa.calificaciones_cri', 'calificaciones_cri')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_cuatro })
             .getMany()
 
         return criterio
     }
+
+
+    
+    
 }

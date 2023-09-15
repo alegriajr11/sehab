@@ -5,7 +5,7 @@ import { ActaSicPdfEntity } from './sic-acta-pdf.entity';
 import { ActaSicPdfRepository } from './sic-acta-pdf.repository';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
 import { LessThan } from 'typeorm';
-import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
 import { TokenDto } from 'src/auth/dto/token.dto';
 import { JwtService } from '@nestjs/jwt';
 import { PayloadInterface } from 'src/auth/payload.interface';
@@ -16,6 +16,7 @@ import { EvaluacionSicEntity } from 'src/sic/evaluacionsic.entity';
 import { EvaluacionsicRepository } from 'src/sic/evaluacionsic.repository';
 import { DominioEntity } from 'src/sic/dominio.entity';
 import { DominioRepository } from 'src/sic/dominio.repository';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
 
 @Injectable()
 export class SicActaService {
@@ -30,7 +31,8 @@ export class SicActaService {
         private readonly evaluacionSicRepository: EvaluacionsicRepository,
         @InjectRepository(DominioEntity)
         private readonly dominioRepository: DominioRepository,
-        private readonly auditoria_registro_services: AuditoriaRegistroService
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService
     ) { }
 
     //LISTAR TODAS LAS ACTAS SIC
@@ -324,7 +326,7 @@ export class SicActaService {
         const year = new Date().getFullYear().toString();
 
         await this.acta_sic_pdfRepository.save(acta);
-        await this.auditoria_registro_services.logUpdateActaSic(
+        await this.auditoria_actualizacion_service.logUpdateActaSic(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',

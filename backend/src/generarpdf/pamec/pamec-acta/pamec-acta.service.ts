@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ActaPamecIpsRepository } from './pamec-acta.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { JwtService } from '@nestjs/jwt';
-import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
 import { TokenDto } from 'src/auth/dto/token.dto';
 import { PayloadInterface } from 'src/auth/payload.interface';
 import { PrestadorEntity } from 'src/prestador/prestador.entity';
@@ -15,6 +15,7 @@ import { EvaluacionPamecDto } from 'src/pamec/dto/evaluacionpamec.dto';
 import { ActividadEntity } from 'src/pamec/actividad.entity';
 import { ActividadRepository } from 'src/pamec/actividad.repository';
 import { ActaPamecDto } from '../dto/pamec-acta.dto';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
 
 @Injectable()
 export class PamecActaService {
@@ -29,6 +30,7 @@ export class PamecActaService {
         private readonly evaluacionPamecRepository: EvaluacionPamecRepository,
         @InjectRepository(ActividadEntity)
         private readonly actividadRepository: ActividadRepository,
+        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService
     ) { }
 
     //LISTAR TODAS PAMEC IPS ACTA PDF
@@ -248,7 +250,7 @@ export class PamecActaService {
         const year = new Date().getFullYear().toString();
 
         await this.actaPamecRepository.save(ips);
-        await this.auditoria_registro_services.logUpdateActaPamec(
+        await this.auditoria_actualizacion_service.logUpdateActaPamec(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',

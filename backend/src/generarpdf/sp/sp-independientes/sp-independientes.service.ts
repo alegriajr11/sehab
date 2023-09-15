@@ -6,7 +6,7 @@ import { MessageDto } from 'src/common/message.dto';
 import { IndActaDto } from 'src/generarpdf/sp/dto/sp-ind-acta.dto';
 import { TokenDto } from 'src/auth/dto/token.dto';
 import { JwtService } from '@nestjs/jwt';
-import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
 import { PayloadInterface } from 'src/auth/payload.interface';
 import { EvaluacionIndependientesRepository } from 'src/sp/sp_ind/evaluacion-independientes.repository';
 import { EvaluacionIndependientesEntity } from 'src/sp/sp_ind/evaluacion-independientes.entity';
@@ -15,6 +15,7 @@ import { PrestadorEntity } from 'src/prestador/prestador.entity';
 import { PrestadorRepository } from 'src/prestador/prestador.repository';
 import { EtapaInd } from 'src/sp/sp_ind/etapaind.entity';
 import { EtapaIndRepository } from 'src/sp/sp_ind/etapaind.repository';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
 
 @Injectable()
 export class SpIndependientesService {
@@ -28,7 +29,8 @@ export class SpIndependientesService {
         @InjectRepository(EtapaInd)
         private readonly etapaIndependientesRepository: EtapaIndRepository,
         private readonly jwtService: JwtService,
-        private readonly auditoria_registro_services: AuditoriaRegistroService
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+        private readonly auditoria_actualizacion_services: AuditoriaActualizacionService
     ) { }
 
     //LISTAR TODAS LAS ACTAS SP INDEPENDIENTE
@@ -160,7 +162,7 @@ export class SpIndependientesService {
                 .getOne();
 
             //CONSULTAR LAS ETAPAS EXISTENTES
-            const etapas = await this.etapaIndependientesRepository.find()
+           const etapas = await this.etapaIndependientesRepository.find()
 
             //ASIGNAR LA EVALUACIÓN A LAS ETAPAS
             evaluacion_ultima.eval_etapa_independientes = etapas
@@ -282,7 +284,7 @@ export class SpIndependientesService {
         const year = new Date().getFullYear().toString();
 
         await this.actaSpIndependientePdfRepository.save(ips);
-        await this.auditoria_registro_services.logUpdateActaSpIndep(
+        await this.auditoria_actualizacion_services.logUpdateActaSpIndep(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',

@@ -11,20 +11,20 @@ export class CriterioindController {
 
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    async getOne(@Param('id', ParseIntPipe) id: number){
+    async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.criterioIndService.findByEta(id);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/criterio/:id')
-    async getOneCriterio(@Param('id', ParseIntPipe) id: number){
+    async getOneCriterio(@Param('id', ParseIntPipe) id: number) {
         return await this.criterioIndService.findCri(id);
     }
 
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({whitelist: true, transformOptions: {enableImplicitConversion: true}}))
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioIndDto){
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioIndDto) {
         return await this.criterioIndService.update(id, dto);
     }
 
@@ -35,15 +35,20 @@ export class CriterioindController {
     }
 
 
-    @UsePipes(new ValidationPipe({whitelist: true}))
+    @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioIndDto){
-        return this.criterioIndService.create(id,dto);
+    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioIndDto) {
+        return this.criterioIndService.create(id, dto);
     }
 
+    //LISTAR TODOS LOS CRITERIOS CON EVALUACION 
     @Get('criid/independientes')
     async getAllcriterio() {
         return await this.criterioIndService.getallcriterio()
     }
 
+
+    
 }
+
+

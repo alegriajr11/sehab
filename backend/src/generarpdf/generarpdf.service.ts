@@ -164,7 +164,7 @@ export class GenerarpdfService {
     //GENERACIÓN DE REPORTE DE CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES
 
 
-    // La función para generar el PDF con las tablas ajustadas
+    //La función para generar el PDF con las tablas ajustadas
     async generarPdfEvaluacionInd(): Promise<Buffer> {
         const titulo_uno = await this.criterioindService.getallcriterioxtitulo();
         const titulo_dos = await this.criterioindService.getallcriterioxtitulodos();
@@ -239,16 +239,16 @@ export class GenerarpdfService {
                 let rows_elements = [];
 
                 titulo_uno.forEach(item => {
-                    let calif
+                    // let calif
 
-                    let obs
-                    item.calificacion_ind.forEach(cal => {
-                        calif = '            ' + cal.cal_nota
-                        totalCalificacionesEtapa1 += cal.cal_nota
-                        totalCalificacionesCountEtapa1++; // Incrementar el contador
-                        obs = cal.cal_observaciones
-                    })
-                    var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
+                    // let obs
+                    // item.calificaciones_cri. forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     totalCalificacionesEtapa1 += cal.cal_nota
+                    //     totalCalificacionesCountEtapa1++; // Incrementar el contador
+                    //     obs = cal.cal_observaciones
+                    // })
+                    var temp_list = [item.cri_id, item.cri_nombre, item.calificaciones_cri.cal_nota, item.cri_verificacion, item.calificaciones_cri.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
 
@@ -278,17 +278,18 @@ export class GenerarpdfService {
                 doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
 
+            doc.addPage();
 
             if (titulo_dos.length) {
                 let rows_elements = [];
                 titulo_dos.forEach(item => {
-                    let calif
-                    let obs
-                    item.calificacion_ind.forEach(cal => {
-                        calif = '            ' + cal.cal_nota
-                        obs = cal.cal_observaciones
-                    })
-                    var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
+                    // let calif
+                    // let obs
+                    // item.calificacion_ind.forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     obs = cal.cal_observaciones
+                    // })
+                    var temp_list = [item.cri_id, item.cri_nombre, item.calificaciones_cri.cal_nota, item.cri_verificacion, item.calificaciones_cri.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
 
@@ -318,13 +319,13 @@ export class GenerarpdfService {
             if (titulo_tres.length) {
                 let rows_elements = [];
                 titulo_tres.forEach(item => {
-                    let calif
-                    let obs
-                    item.calificacion_ind.forEach(cal => {
-                        calif = '            ' + cal.cal_nota
-                        obs = cal.cal_observaciones
-                    })
-                    var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
+                    // let calif
+                    // let obs
+                    // item.calificacion_ind.forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     obs = cal.cal_observaciones
+                    // })
+                    var temp_list = [item.cri_id, item.cri_nombre, item.calificaciones_cri.cal_nota, item.cri_verificacion, item.calificaciones_cri.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
 
@@ -354,13 +355,13 @@ export class GenerarpdfService {
             if (titulo_cuatro.length) {
                 let rows_elements = [];
                 titulo_cuatro.forEach(item => {
-                    let calif
-                    let obs
-                    item.calificacion_ind.forEach(cal => {
-                        calif = '            ' + cal.cal_nota
-                        obs = cal.cal_observaciones
-                    })
-                    var temp_list = [item.cri_id, item.cri_nombre, calif, item.cri_verificacion, obs];
+                    // let calif
+                    // let obs
+                    // item.calificacion_ind.forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     obs = cal.cal_observaciones
+                    // })
+                    var temp_list = [item.cri_id, item.cri_nombre, item.calificaciones_cri.cal_nota, item.cri_verificacion, item.calificaciones_cri.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
 

@@ -25,8 +25,8 @@ import { EvaluacionsicRepository } from '../evaluacionsic.repository';
 import { TokenDto } from 'src/auth/dto/token.dto';
 import { PayloadInterface } from 'src/auth/payload.interface';
 import { JwtService } from '@nestjs/jwt';
-import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
-import { EvaluacionSicService } from '../evaluacion-sic/evaluacion-sic.service';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+
 
 @Injectable()
 export class CriteriosicCumplimientoService {

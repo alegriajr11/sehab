@@ -13,11 +13,15 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { EncoderService } from './encoder.service';
 import { UsuarioService } from 'src/usuario/usuario.service';
-import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_registro.module';
-import { AuditoriaRegistroRepository } from 'src/auditoria_registro/auditoria_registro.repository';
+import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
+import { AuditoriaRegistroRepository } from 'src/auditoria/auditoria_registro.repository';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
+import { AuditoriaEliminacionModule } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsuarioEntity, RolEntity, AuthRepository, AuditoriaRegistroRepository]),
+  imports: [TypeOrmModule.forFeature([UsuarioEntity, RolEntity, AuthRepository, AuditoriaRegistroRepository,AuditoriaActualizacionService]),
+  AuditoriaRegistroModule,AuditoriaActualizacionModule,AuditoriaEliminacionModule,
   PassportModule.register({
     defaultStrategy: 'jwt'
   }),

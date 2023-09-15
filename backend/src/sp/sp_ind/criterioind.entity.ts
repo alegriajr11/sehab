@@ -20,8 +20,8 @@ export class CriterioIndEntity {
     @ManyToOne(type => EtapaInd, item => item.cri_criterio)
     eta_item: EtapaInd
 
-    //Relacion Muchos a Muchos CRITERIOIND - CALIFICACION_IND
-    @ManyToMany(type => CalificacionIndEntity, calificacionind => calificacionind.criterios_ind)
-    calificacion_ind: CalificacionIndEntity[];
+    //Relacion Uno a Muchos CRITERIO - CALIFICACION
+    @OneToMany(type => CalificacionIndEntity, calificacion => calificacion.criterio_cal)
+    calificaciones_cri: CalificacionIndEntity;
 
 }

@@ -3,6 +3,7 @@ import { CriterioDiagnostVascularService } from './criterio_diagnost_vascular.se
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioDiagnostVascularDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/diagnostico_vascular_dto/criterio_diagnostico_vascular.dto';
 import { RolesGuard } from 'src/guards/rol.guard';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 
 
@@ -17,27 +18,35 @@ export class CriterioDiagnostVascularController {
         return await this.criterio_Diagnostico_vascularService.getCriterioForEstandar(id)
     }
 
+    //OBTENER TODOS LOS  CRITERIOS
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    getAll() {
+        return this.criterio_Diagnostico_vascularService.getall();
+    }
 
     //CREAR CRITERIO DIAGNOSTICO VASCULAR POR ESTANDAR
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioDiagnostVascularDto) {
-        return this.criterio_Diagnostico_vascularService.create(id, dto);
+    async create(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: CriterioDiagnostVascularDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.criterio_Diagnostico_vascularService.createCriDiag(id, payload);
     }
 
     //ELIMINAR CRITERIO  DIAGNOSTICO VASCULAR
-    @UseGuards(JwtAuthGuard, RolesGuard)
+    //@UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
-    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
-        return await this.criterio_Diagnostico_vascularService.delete(id);
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number, tokenDto: TokenDto) {
+        return await this.criterio_Diagnostico_vascularService.delete(id, tokenDto);
     }
 
     //ACTUALIZAR UN CRITERIO DIAGNOSTICO VASCULAR
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioDiagnostVascularDto) {
-        return await this.criterio_Diagnostico_vascularService.updateVascular(id, dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: CriterioDiagnostVascularDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return await this.criterio_Diagnostico_vascularService.updateVascular(id, payload);
     }
 }

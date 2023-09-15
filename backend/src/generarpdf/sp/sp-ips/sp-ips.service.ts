@@ -7,7 +7,8 @@ import { IpsDto } from 'src/generarpdf/sp/dto/sp-ips.dto';
 import { TokenDto } from 'src/auth/dto/token.dto';
 import { PayloadInterface } from 'src/auth/payload.interface';
 import { JwtService } from '@nestjs/jwt';
-import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
 
 @Injectable()
 export class SpIpsService {
@@ -15,7 +16,8 @@ export class SpIpsService {
         @InjectRepository(ActaSpIpsEntity)
         private readonly actaSpIpsRepository: ActaSpIpsRepository,
         private readonly jwtService: JwtService,
-        private readonly auditoria_registro_services: AuditoriaRegistroService
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService
     ) { }
 
     //LISTAR TODAS LAS ACTAS SP IPS
@@ -185,7 +187,7 @@ export class SpIpsService {
         const year = new Date().getFullYear().toString();
 
         await this.actaSpIpsRepository.save(ips);
-        await this.auditoria_registro_services.logUpdateActaSpIps(
+        await this.auditoria_actualizacion_service.logUpdateActaSpIps(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',

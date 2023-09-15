@@ -3,6 +3,7 @@ import { CriterioImgRadIonizantesService } from './criterio_img_rad_ionizantes.s
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioImgRadIonizantesDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/imagenes_diagnosticas_rad_ionizantes_dto/criterio_img_rad_ionizantes.dto';
 import { RolesGuard } from 'src/guards/rol.guard';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('criterio-img-rad-ionizantes')
 export class CriterioImgRadIonizantesController {
@@ -16,26 +17,37 @@ export class CriterioImgRadIonizantesController {
         return await this.criterioImgRadIonizantesService.getCriterioForEstandar(id)
     }
 
+    //OBTENER TODOS LOS  CRITERIOS
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    getAll() {
+        return this.criterioImgRadIonizantesService.getall();
+    }
+
     //CREAR CRITERIO IMAGENES DIAGNOSTICAS RAD IONI POR ESTANDAR
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioImgRadIonizantesDto) {
-        return this.criterioImgRadIonizantesService.create(id, dto);
+    async create(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: CriterioImgRadIonizantesDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.criterioImgRadIonizantesService.create(id, payload);
     }
 
     //ELIMINAR CRITERIO  IMAGENES DIAGNOSTICAS RAD IONIZANTES
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
-    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
-        return await this.criterioImgRadIonizantesService.delete(id);
+    async delete(@Param('id', ParseIntPipe) id: number, tokenDto: TokenDto) {
+        return await this.criterioImgRadIonizantesService.delete(id, tokenDto);
     }
 
     //ACTUALIZAR UN CRITERIO  IMAGENES DIAGNOSTICAS RAD IONIZANTES
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioImgRadIonizantesDto) {
-        return await this.criterioImgRadIonizantesService.updateIma_Rad(id, dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: CriterioImgRadIonizantesDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return await this.criterioImgRadIonizantesService.updateIma_Rad(id, payload);
     }
 }
+
+

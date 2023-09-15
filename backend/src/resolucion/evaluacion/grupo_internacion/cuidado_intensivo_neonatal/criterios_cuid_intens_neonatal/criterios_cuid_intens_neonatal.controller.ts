@@ -3,6 +3,7 @@ import { CriteriosCuidIntensNeonatalService } from './criterios_cuid_intens_neon
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioCuidInteNeonatalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_intensivo_neonatal_dto/criterio_cuid_intens_neonatal.dto';
 import { RolesGuard } from 'src/guards/rol.guard';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('criterios-cuid-intens-neonatal')
 export class CriteriosCuidIntensNeonatalController {
@@ -18,27 +19,35 @@ export class CriteriosCuidIntensNeonatalController {
         return await this.criteriosCuidIntensNeonatalService.getCriterioForEstandar(id)
     }
 
+    //LISTAR TODOS CRITERIOS
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    getAll() {
+        return this.criteriosCuidIntensNeonatalService.getall();
+    }
+
 
     //CREAR CRITERIO CUIDADO INTENSIVO NEONATAL POR ESTANDAR
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioCuidInteNeonatalDto) {
-        return this.criteriosCuidIntensNeonatalService.create(id, dto);
+    async create(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: CriterioCuidInteNeonatalDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.criteriosCuidIntensNeonatalService.create(id, payload);
     }
 
     //ELIMINAR CRITERIO CUIDADO INTENSIVO NEONATAL
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
-    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
-        return await this.criteriosCuidIntensNeonatalService.delete(id);
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number, tokenDto: TokenDto) {
+        return await this.criteriosCuidIntensNeonatalService.delete(id, tokenDto);
     }
 
     //ACTUALIZAR UN CRITERIO CUIDADO INTENSIVO NEONATAL
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioCuidInteNeonatalDto) {
-        return await this.criteriosCuidIntensNeonatalService.updateintenneo(id, dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: CriterioCuidInteNeonatalDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return await this.criteriosCuidIntensNeonatalService.update(id, payload);
     }
 }

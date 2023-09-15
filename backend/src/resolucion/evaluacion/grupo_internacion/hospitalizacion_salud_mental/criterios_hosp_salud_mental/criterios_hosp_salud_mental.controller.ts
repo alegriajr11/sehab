@@ -4,6 +4,7 @@ import { CriterioHospitalizacionService } from '../../hospitalizacion/criterio_h
 import { CriteriosHospSaludMentalService } from './criterios_hosp_salud_mental.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { RolesGuard } from 'src/guards/rol.guard';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('criterios-hosp-salud-mental')
 export class CriteriosHospSaludMentalController {
@@ -18,27 +19,35 @@ export class CriteriosHospSaludMentalController {
         return await this.criteriosHospSaludMentalService.getCriterioForEstandar(id)
     }
 
+    //LISTAR TODOS CRITERIOS
+    @UseGuards(JwtAuthGuard)
+    @Get()
+    getAll() {
+        return this.criteriosHospSaludMentalService.getall();
+    }
+
     //CREAR CRITERIO HOSPITALIZACION MENTAL POR ESTANDAR
     @UseGuards(JwtAuthGuard)
-    @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioHospitalizacionMentalDto) {
-        return this.criteriosHospSaludMentalService.create(id, dto);
+    async create(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: CriterioHospitalizacionMentalDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return this.criteriosHospSaludMentalService.create(id, payload);
     }
 
     //ELIMINAR CRITERIO HOSPITALIZACION MENTAL
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
-    async deleteEstandar(@Param('id', ParseIntPipe) id: number) {
-        return await this.criteriosHospSaludMentalService.delete(id);
+    async deleteEstandar(@Param('id', ParseIntPipe) id: number, tokenDto: TokenDto) {
+        return await this.criteriosHospSaludMentalService.delete(id, tokenDto);
     }
 
     //ACTUALIZAR UN CRITERIO HOSPITALIZACION MENTAL
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioHospitalizacionMentalDto) {
-        return await this.criteriosHospSaludMentalService.updatehospiment(id, dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: CriterioHospitalizacionMentalDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return await this.criteriosHospSaludMentalService.update(id, payload);
     }
 }
 

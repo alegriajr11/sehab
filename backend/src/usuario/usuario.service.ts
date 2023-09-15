@@ -12,9 +12,11 @@ import { UsuarioEntity } from './usuario.entity';
 import { UsuarioRepository } from './usuario.repository';
 import { TokenDto } from 'src/auth/dto/token.dto';
 import { JwtService } from '@nestjs/jwt';
-import { AuditoriaRegistroService } from 'src/auditoria_registro/auditoria_registro.service';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
 import { PayloadInterface } from 'src/auth/payload.interface';
 import { isEmpty } from 'class-validator';
+import { AuditoriaEliminacionService } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.service';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
 
 @Injectable()
 export class UsuarioService {
@@ -26,7 +28,9 @@ export class UsuarioService {
     @InjectRepository(UsuarioEntity)
     private readonly usuarioRepository: UsuarioRepository,
     private readonly jwtService: JwtService,
-    private readonly auditoria_registro_services: AuditoriaRegistroService
+    private readonly auditoria_registro_services: AuditoriaRegistroService,
+    private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
+    private readonly auditoria_eliminacion_services: AuditoriaEliminacionService
   ) { }
 
   /*LISTANDO USUARIO POR ID*/
@@ -144,7 +148,7 @@ export class UsuarioService {
 
     switch (rol_usuario) {
       case 'ADMIN':
-        await this.auditoria_registro_services.logUpdateUserAdmin(
+        await this.auditoria_actualizacion_services.logUpdateUserAdmin(
           payloadInterface.usu_nombre,
           payloadInterface.usu_apellido,
           'ip',
@@ -154,7 +158,7 @@ export class UsuarioService {
         break;
 
       case 'PAMEC':
-        await this.auditoria_registro_services.logUpdateUserPamec(
+        await this.auditoria_actualizacion_services.logUpdateUserPamec(
           payloadInterface.usu_nombre,
           payloadInterface.usu_apellido,
           'ip',
@@ -164,7 +168,7 @@ export class UsuarioService {
         break;
 
       case 'SP':
-        await this.auditoria_registro_services.logUpdateUserSp(
+        await this.auditoria_actualizacion_services.logUpdateUserSp(
           payloadInterface.usu_nombre,
           payloadInterface.usu_apellido,
           'ip',
@@ -174,7 +178,7 @@ export class UsuarioService {
         break;
 
       case 'RES':
-        await this.auditoria_registro_services.logUpdateUserRes(
+        await this.auditoria_actualizacion_services.logUpdateUserRes(
           payloadInterface.usu_nombre,
           payloadInterface.usu_apellido,
           'ip',
@@ -184,7 +188,7 @@ export class UsuarioService {
         break;
 
       case 'SIC':
-        await this.auditoria_registro_services.logUpdateUserSic(
+        await this.auditoria_actualizacion_services.logUpdateUserSic(
           payloadInterface.usu_nombre,
           payloadInterface.usu_apellido,
           'ip',
@@ -227,7 +231,7 @@ export class UsuarioService {
   
       switch (rol_usuario) {
         case 'admin':
-          await this.auditoria_registro_services.logUpdateUserAdmin(
+          await this.auditoria_eliminacion_services.logDeleteUserAdmin(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',
@@ -237,7 +241,7 @@ export class UsuarioService {
           break;
   
         case 'pamec':
-          await this.auditoria_registro_services.logDeleteUserPamec(
+          await this.auditoria_eliminacion_services.logDeleteUserPamec(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',
@@ -247,7 +251,7 @@ export class UsuarioService {
           break;
   
         case 'sp':
-          await this.auditoria_registro_services.logDeleteUserSp(
+          await this.auditoria_eliminacion_services.logDeleteUserSp(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',
@@ -257,7 +261,7 @@ export class UsuarioService {
           break;
   
         case 'res':
-          await this.auditoria_registro_services.logDeleteUserRes(
+          await this.auditoria_eliminacion_services.logDeleteUserRes(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',
@@ -267,7 +271,7 @@ export class UsuarioService {
           break;
   
         case 'sic':
-          await this.auditoria_registro_services.logDeleteUserSic(
+          await this.auditoria_eliminacion_services.logDeleteUserSic(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
             'ip',

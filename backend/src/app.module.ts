@@ -105,10 +105,15 @@ import { CriteriosPartoModule } from './resolucion/evaluacion/grupo_atencion_inm
 import { CriterioHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/criterio_hospitalizacion/criterio_hospitalizacion.module';
 import { CapacidadInstaladaModule } from './resolucion/servicios_capacidad/capacidad_instalada/capacidad_instalada.module';
 import { ServiciosVerificadosModule } from './resolucion/servicios_capacidad/servicios_verificados/servicios_verificados.module';
-import { AuditoriaRegistroModule } from './auditoria_registro/auditoria_registro.module';
 import { CapacidadInstaladaController } from './resolucion/servicios_capacidad/capacidad_instalada/capacidad_instalada.controller';
 import { GenerarExcelModule } from './generar_excel/generar_excel.module';
 import { EvaluacionSicModule } from './sic/evaluacion-sic/evaluacion-sic.module';
+import { AuditoriaRegistroModule } from './auditoria/auditoria_registro/auditoria_registro.module';
+import { AuditoriaActualizacionModule } from './auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
+import { AuditoriaEliminacionModule } from './auditoria/auditoria_eliminacion/auditoria_eliminacion.module';
+import { AuditoriaRegistroController } from './auditoria/auditoria_registro/auditoria_registro.controller';
+import { GrupoEvaluacionModule } from './resolucion/grupo_evaluacion/grupo_evaluacion.module';
+import { ServicioModule } from './resolucion/servicio/servicio.module';
 
 
 
@@ -198,6 +203,10 @@ import { EvaluacionSicModule } from './sic/evaluacion-sic/evaluacion-sic.module'
     ServiciosVerificadosModule,
     GenerarExcelModule,
     EvaluacionSicModule,
+    AuditoriaActualizacionModule,
+    AuditoriaEliminacionModule,
+    GrupoEvaluacionModule,
+    ServicioModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 
@@ -208,7 +217,7 @@ import { EvaluacionSicModule } from './sic/evaluacion-sic/evaluacion-sic.module'
     CriteriosHospPacienteCronicoController, CriteriosCuidBasicNeonatalController, CriteriosCuidInterNeonatalController, CriteriosCuidIntensNeonatalController, 
     CriteriosCuidInterPediatricoController, CriteriosCuidIntensPediatricoController, CriteriosCuidInterAdultoController, CriteriosCuidIntensAdultoController, 
     CriteriosHospSaludMentalController, CriteriosHospParcialController, CriteriosConsPsicoactivasController, CriteriosCirugiaController, CriteriosUrgenciasController, 
-    CriteriosTransAsistencialController, CriteriosPrehospitalariaController, CriteriosPartoController, CapacidadInstaladaController],
+    CriteriosTransAsistencialController, CriteriosPrehospitalariaController, CriteriosPartoController, CapacidadInstaladaController, AuditoriaRegistroController],
   providers: [AppService],
 })
 export class AppModule {}

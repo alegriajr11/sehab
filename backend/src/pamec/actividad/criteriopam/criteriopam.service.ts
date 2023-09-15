@@ -34,6 +34,18 @@ export class CriteriopamService {
         return usuario
     }
 
+     //LISTAR LOS CRITERIOS SI TIENEN UNA EVALUACION ASIGNADA
+     async getallcriterio(): Promise<CriteriopamEntity[]> {
+        const criterio_ind = await this.criteriopamRepository.createQueryBuilder('criterio')
+            .select(['criterio', 'criterio_calificacionpam.cal_nota', 'criterio_calificacionpam.cal_aplica', 'criterio_calificacionpam.cal_observaciones', 'crip_actividad.act_nombre', 'act_evaluacion_pam.eva_id'])
+            .innerJoinAndSelect('criterio.criterio_calificacionpam', 'criterio_calificacionpam')
+            .innerJoinAndSelect('criterio.crip_actividad', 'crip_actividad')
+            .innerJoinAndSelect('crip_actividad.act_evaluacion_pam', 'act_evaluacion_pam')
+            .getMany()
+        if (!criterio_ind.length) throw new NotFoundException(new MessageDto('No hay una evaluacion asignada en la lista'))
+        return criterio_ind
+    }
+
     async findByCri(crip_id: number): Promise<CriteriopamEntity> {
         const criterio = await this.criteriopamRepository.findOne({ where: { crip_id } })
         if (!criterio) {

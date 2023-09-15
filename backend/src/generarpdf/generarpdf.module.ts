@@ -14,7 +14,7 @@ import { ActaSicPdfEntity } from './sic/sic-acta/sic-acta-pdf.entity';
 import { SpIndependientesModule } from './sp/sp-independientes/sp-independientes.module';
 import { SpIpsModule } from './sp/sp-ips/sp-ips.module';
 import { PamecActaModule } from './pamec/pamec-acta/pamec-acta.module';
-import { AuditoriaRegistroModule } from 'src/auditoria_registro/auditoria_registro.module';
+import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CriteriosicCumplimientoModule } from 'src/sic/criteriosic-cumplimiento/criteriosic-cumplimiento.module';
 import { CriterioindModule } from 'src/sp/sp_ind/criterioind/criterioind.module';
@@ -29,10 +29,16 @@ import { IvcModule } from './resolucion/ivc/ivc.module';
 import { VerificacionModule } from './resolucion/verificacion/verificacion.module';
 import { EvaluacionSicEntity } from 'src/sic/evaluacionsic.entity';
 import { DominioEntity } from 'src/sic/dominio.entity';
+import { CalificacionIndEntity } from 'src/sp/sp_ind/calificacionind.entity';
+import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
+import { AuditoriaEliminacionModule } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.module';
+
+
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd,ActividadEntity,CriteriopamEntity, EvaluacionSicEntity, DominioEntity]), SicActaModule, 
-  SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule, JwtModule, CriteriosicCumplimientoModule,CriterioindModule,CriteriopamModule, IvcModule, VerificacionModule],
+  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity,EvaluacionSicEntity,DominioEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd,ActividadEntity,CriteriopamEntity,CalificacionIndEntity]), SicActaModule, 
+  SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule,AuditoriaActualizacionModule,AuditoriaEliminacionModule, JwtModule, CriteriosicCumplimientoModule,CriterioindModule,CriteriopamModule, IvcModule, VerificacionModule],
 
   controllers: [GenerarpdfController, SicActaController],
   providers: [GenerarpdfService, UsuarioService, SicActaService,CriterioindService,CriteriopamService]

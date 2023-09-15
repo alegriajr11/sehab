@@ -18,8 +18,6 @@ export class EtapaInd {
     cri_criterio: CriterioIndEntity;
 
     //Relacion Muchos a Muchos ETAPA-INDEPENDIENTES - EVALUACION-INDEPENDIENTES
-    @ManyToMany(type => EvaluacionIndependientesEntity, evaluacionIndependientes => evaluacionIndependientes.eval_etapa_independientes)
-    eta_evaluacion_independientes: EvaluacionIndependientesEntity;
 
 
 }

@@ -55,4 +55,10 @@ export class CriteriopamController {
         return this.criteriopamService.create(id, dto);
     }
 
+    //LISTAR TODOS LOS CRITERIOS CON EVALUACION 
+    @Get('cripam/pamec')
+    async getAllcriterio() {
+        return await this.criteriopamService.getallcriterio()
+    }
+
 }

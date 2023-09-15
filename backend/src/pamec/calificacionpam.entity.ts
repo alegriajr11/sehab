@@ -20,6 +20,9 @@ export class CalificacionpamEntity {
     @Column({type: 'varchar', length: 255, nullable: false, unique: false})
     cal_observaciones: string;
 
+    @Column({ type: 'varchar', length: 10, nullable: false,default:true })
+    cal_asignado: string;
+
 
     @ManyToOne(type => CriteriopamEntity, calificacion_pam => calificacion_pam.criterio_calificacionpam)
     criteriopam_calificacion: CriteriopamEntity;
