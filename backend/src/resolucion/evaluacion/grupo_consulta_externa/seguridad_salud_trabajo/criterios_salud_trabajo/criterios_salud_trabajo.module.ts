@@ -7,9 +7,13 @@ import { SaludTrabajoEntity } from '../salud_trabajo.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
+import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
+import { AuditoriaEliminacionModule } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.module';
 
 @Module({
     imports: [TypeOrmModule.forFeature([CriterioSaludTrabajoEntity, SaludTrabajoEntity]),
+    AuditoriaRegistroModule, AuditoriaActualizacionModule, AuditoriaEliminacionModule,
     //MODULO JwtService
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
