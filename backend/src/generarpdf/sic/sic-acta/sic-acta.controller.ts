@@ -66,12 +66,12 @@ export class SicActaController {
 
 
     //ACTUALIZAR ACTA-SIC PDF
-    // @UseGuards(JwtAuthGuard)
-    // @Put(':id')
-    // async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }) {
-    //     const { dto, tokenDto } = payload;
-    //     return await this.sic_act_pdfService.updateActa(id, payload);
-    // }
+    @UseGuards(JwtAuthGuard)
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: ActaSicPdfDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return await this.sic_act_pdfService.updateActa(id, payload);
+    }
 
     //CERRAR ACTA SIC
     @Put('cerrar/:id')

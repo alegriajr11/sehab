@@ -90,8 +90,8 @@ export class ModalFirmaActaSpProComponent {
     const imagen = event.target.files[0];
 
     if (imagen) {
-      // Verificar el tamaño de la imagen (20KB = 500 * 1024 bytes)
-      if (imagen.size <= 20 * 1024) {
+      // Verificar el tamaño de la imagen (60KB = 500 * 1024 bytes)
+      if (imagen.size <= 60 * 1024) {
         const labelElement = document.querySelector('.custom-file-label');
         if (labelElement) {
           labelElement.textContent = imagen.name;
@@ -110,7 +110,7 @@ export class ModalFirmaActaSpProComponent {
       } else {
         // Mostrar mensaje de notificación
         this.imagenCargada = false;
-        this.toastrService.error('La imagen es demasiado grande. Debe ser menor o igual a 20KB.', 'Error', {
+        this.toastrService.error('La imagen es demasiado grande. Debe ser menor o igual a 60KB.', 'Error', {
           timeOut: 3000,
           positionClass: 'toast-top-center',
         });

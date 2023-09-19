@@ -33,6 +33,7 @@
     font-weight: bold;
     color: black;
 }
+
 /* Estilo para el contenedor del input personalizado */
 .custom-file-label {
     display: inline-block;

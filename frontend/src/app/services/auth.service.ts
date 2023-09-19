@@ -22,8 +22,7 @@ export class AuthService {
 
   authURL = environment.authURL;
   restablecerContraseña = environment.restablecerContraseña;
-  usuarioNewURL = environment.usuarioNewURL;
-  usuarioAdmin = environment.usuarioURL;
+  usuario = environment.usuarioURL;
   acta_sic_pdfUrl = environment.actaSic_pdf_URL;
   acta_SpIps_pdfUrl = environment.actaSpIps_pdf_URL;
   acta_SpInd_pdfUrl = environment.actaSpInd_pdf_URL;
@@ -34,34 +33,23 @@ export class AuthService {
     return this.httpClient.post<any>(this.authURL + 'login', dto);
   }
 
-  registroAdmin(dto: NuevoUsuarioAdminDto): Observable<any> {
-    return this.httpClient.post<any>(this.usuarioAdmin, dto);
-  }
-
-  registroSic(dto: NuevoUsuarioDto): Observable<any> {
-    return this.httpClient.post<any>(this.usuarioNewURL + 'sic', dto);
-  }
-
-  registroSp(dto: NuevoUsuarioDto): Observable<any> {
-    return this.httpClient.post<any>(this.usuarioNewURL + 'sp', dto);
-  }
-
-  registroPamec(dto: NuevoUsuarioDto, tokenDto: TokenDto): Observable<any> {
+  registroAdmin(dto: NuevoUsuarioAdminDto, tokenDto: TokenDto): Observable<any> {
     const body = {
       dto: dto,
       tokenDto: tokenDto
     }
-    return this.httpClient.post<any>(this.usuarioNewURL + 'pamec', body);
+    return this.httpClient.post<any>(this.usuario, body);
   }
 
-
-  registroReso(dto: NuevoUsuarioDto, tokenDto: TokenDto): Observable<any> {
+  registroUsuarioRol(dto: NuevoUsuarioDto, rolesIds: number[], tokenDto: TokenDto): Observable<any> {
     const body = {
       dto: dto,
+      rolesIds: rolesIds,
       tokenDto: tokenDto
     }
-    return this.httpClient.post<any>(this.usuarioNewURL + 'res', body);
+    return this.httpClient.post<any>(this.usuario + 'rol', body);
   }
+
 
   refresh(dto: TokenDto): Observable<any> {
     return this.httpClient.post<any>(this.authURL + 'refresh', dto);
@@ -93,11 +81,13 @@ export class AuthService {
   }
 
   //REGISTRO ACTA PDF SP_IPS
-  registroActaSpIpsPdf(dto: ActaSpPdfDto, tokenDto: TokenDto): Observable<any> {
+  registroActaSpIpsPdf(dto: ActaSpPdfDto, evaluacionesIds: number[], tokenDto: TokenDto): Observable<any> {
     const body = {
       dto: dto,
+      evaluacionesIds: evaluacionesIds,
       tokenDto: tokenDto
     }
+    console.log(body)
     return this.httpClient.post<any>(this.acta_SpIps_pdfUrl, body);
   }
 

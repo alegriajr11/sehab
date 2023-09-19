@@ -2,6 +2,7 @@
 import { Column, Entity, JoinColumn,  ManyToOne,  OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { PrestadorEntity } from "../prestador.entity";
 import { ActaVerificacionEntity } from "src/generarpdf/resolucion/verificacion/acta-verificacion.entity";
+import { SedeMunicipioEntity } from "./sede_municipio/sede-municipio.entity";
 
 @Entity({ name: 'sede' })
 export class SedeEntity {
@@ -29,14 +30,23 @@ export class SedeEntity {
     @Column({ type: 'varchar', length: 90, nullable: true })
     sede_barrio: string
 
+    @Column({ type: 'varchar', length: 100, nullable: false })
+    sede_telefono: string
+
+    @Column({ type: 'varchar', length: 120, nullable: false })
+    sede_email: string
+
+
     //Relacion Uno a Muchos SEDE - PRESTADOR
     @ManyToOne(type => PrestadorEntity, prestador => prestador.pre_sede)
     sede_prestador: PrestadorEntity;
 
      //Relacion Uno a uno SEDE - ACTA VERIFICACION 
     @OneToOne(() => ActaVerificacionEntity, actaVerificacion => actaVerificacion.act_sede_veri)
-    @JoinColumn()
     acta_verificacion_sede: ActaVerificacionEntity;
+
+    @ManyToOne(type => SedeMunicipioEntity, sede_municipio => sede_municipio.mun_sede_prestador)
+    sede_municipio: SedeMunicipioEntity
 
 
 }

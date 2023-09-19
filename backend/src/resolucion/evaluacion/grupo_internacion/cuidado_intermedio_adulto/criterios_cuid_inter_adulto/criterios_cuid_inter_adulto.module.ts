@@ -4,11 +4,26 @@ import { CriteriosCuidInterAdultoController } from './criterios_cuid_inter_adult
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioCuidIntermAdultoEntity } from '../criterio_cuid_inter_adulto.entity';
 import { CuidIntermAdultoEntity } from '../cuid_inter_adulto.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([CriterioCuidIntermAdultoEntity, CuidIntermAdultoEntity])],
+    imports: [TypeOrmModule.forFeature([CriterioCuidIntermAdultoEntity, CuidIntermAdultoEntity]),
+    //MODULO JwtService
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+        imports: [ConfigModule],
+        useFactory: async (configService: ConfigService) => ({
+            secret: configService.get('JWT_SECRET'),
+            signOptions: {
+                expiresIn: 7200,
+            },
+        }),
+        inject: [ConfigService],
+    }),],
     controllers: [CriteriosCuidInterAdultoController],
     providers: [CriteriosCuidInterAdultoService],
     exports: [CriteriosCuidInterAdultoService]
 })
-export class CriteriosCuidInterAdultoModule {}
+export class CriteriosCuidInterAdultoModule { }

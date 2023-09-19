@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Transform } from "class-transformer";
-import { IsBoolean, IsString, MaxLength } from "class-validator";
+import { IsArray, IsBoolean, IsString, MaxLength } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 
 
@@ -26,5 +26,11 @@ export class UsuarioDto {
 
     @IsString()
     usu_area_profesional: string;
+
+    @IsString()
+    usu_firma: string
+
+    @IsArray()
+    roles: number[]; // Supongo que los roles son representados por IDs
 
 }

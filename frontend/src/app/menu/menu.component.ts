@@ -18,13 +18,14 @@ export class MenuComponent implements OnInit {
   isSp: boolean;
   isPamec: boolean;
   isReso: boolean;
+  isCoordinador: boolean;
 
   usu_nombreUsuario: string;
   usu_nombre: string;
 
   reload: 'reload' | undefined = undefined;
 
-
+  numeroDeNotificaciones: number = 3
 
   constructor(
     private tokenService: TokenService,
@@ -48,5 +49,8 @@ export class MenuComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
+  mostrarNotificaciones(){
+
+  }
 
 }

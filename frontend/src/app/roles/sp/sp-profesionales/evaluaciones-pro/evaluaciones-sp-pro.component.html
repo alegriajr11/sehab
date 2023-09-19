@@ -71,6 +71,7 @@
                         <th scope="col">NIT</th>
                         <th scope="col">MUNICIPIO</th>
                         <th scope="col">FECHA DE CREACIÓN</th>
+                        <th scope="col">ESTADO</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -82,6 +83,8 @@
                         <td>{{evaluacion.act_nit}}</td>
                         <td class="text-center">{{evaluacion.act_municipio}}</td>
                         <td>{{evaluacion.act_creado | date: 'dd/MM/yyyy' }}</td>
+                        <td *ngIf="evaluacion.act_estado === '1'" style="text-align: center;"><span class="fas fa-door-open" style="color: rgb(0, 128, 0);"></span></td>
+                        <td *ngIf="evaluacion.act_estado === '0'" style="text-align: center;"><span class="fas fa-door-closed" style="color: rgb(204, 0, 0);"></span></td>
                         <td>
                             <button class="btn btn-outline-dark"
                                 (click)="openModal(modalTemplate, evaluacion.id, evaluacion.act_prestador)">

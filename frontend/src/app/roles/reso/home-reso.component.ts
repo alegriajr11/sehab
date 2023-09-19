@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-home-reso',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeResoComponent implements OnInit {
 
-  constructor() { }
+  isCoordinador: boolean
+  isAdmin: boolean
+  isContador: boolean
+
+  constructor(
+    private tokenService: TokenService,
+  ) { }
 
   ngOnInit(): void {
+    this.isCoordinador = this.tokenService.IsCoordinador();
+    this.isAdmin = this.tokenService.isAdmin();
+    this.isContador = this.tokenService.IsContador();
   }
+
 
 }

@@ -144,6 +144,38 @@ export class TokenService {
     return true;
   }
 
+  IsContador(): boolean {
+    if (!this.isLogged()) {
+      return null;
+    }
+    const token = this.getToken();
+    const payload = token.split('.')[1];
+    const values = atob(payload);
+    const valuesJson = JSON.parse(values);
+    const usu_nombreUsuario = valuesJson.usu_nombreUsuario;
+    const roles = valuesJson.usu_roles;
+    if (roles.indexOf('contador') < 0) {
+      return false;
+    }
+    return true;
+  }
+
+  IsCoordinador(): boolean {
+    if (!this.isLogged()) {
+      return null;
+    }
+    const token = this.getToken();
+    const payload = token.split('.')[1];
+    const values = atob(payload);
+    const valuesJson = JSON.parse(values);
+    const usu_nombreUsuario = valuesJson.usu_nombreUsuario;
+    const roles = valuesJson.usu_roles;
+    if (roles.indexOf('coordinador') < 0) {
+      return false;
+    }
+    return true;
+  }
+
   logOut(): void {
     localStorage.clear();
   }

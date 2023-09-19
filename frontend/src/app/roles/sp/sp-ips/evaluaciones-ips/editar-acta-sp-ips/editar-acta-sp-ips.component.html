@@ -54,13 +54,13 @@
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
                         name="act_fecha_inicial" [(ngModel)]="actaSp.act_fecha_inicial" [ngModelOptions]="{standalone: true}"
-                        ngDefaultControl (change)="habilitarFechaFinal()">
+                        ngDefaultControl>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
                         [(ngModel)]="actaSp.act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [disabled]="!habilitarfechaFin" [min]="actaSp.act_fecha_final">
+                        [min]="actaSp.act_fecha_final">
                 </div>
 
                 <div class="col-12">
@@ -162,6 +162,10 @@
 					name="act_cargo_funcionario" [(ngModel)]="actaSp.act_cargo_funcionario">
                 </div>
 
+                <div class="col-3" style="margin-bottom: 20px;" *ngIf="!actaSp.act_firma_funcionario">
+                    <span class="button-like btn-span" (click)="obtenerFirmaFuncionario()">FIRMAR</span>
+                </div>
+
                 <div class="col-12 bg-h3 contenedor-form">
                     <h3 class="text-center sizeh3">PRESTADOR DE SERVICIOS DE SALUD</h3>
                 </div>
@@ -179,10 +183,9 @@
                         placeholder="Cargo..." [(ngModel)]="actaSp.act_cargo_prestador">
                 </div>
 
-                
                 <!--BOTON MODAL FIRMA-->
                 <div class="col-3">
-                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Editar Firma Prestador</span>
+                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Firma Prestador</span>
                 </div>
 
 

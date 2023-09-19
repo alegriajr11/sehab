@@ -65,6 +65,9 @@ export class ActaSicPdfEntity {
     @Column({ type: 'varchar', length: 150, nullable: false })
     act_obj_visita
 
+    @Column({ type: 'integer', nullable: true })
+    act_id_funcionario
+
     @Column({ type: 'varchar', length: 70, nullable: false })
     act_nombre_funcionario
 
@@ -74,13 +77,14 @@ export class ActaSicPdfEntity {
     @Column({ type: 'varchar', length: 70, nullable: false })
     act_nombre_prestador
 
+
     @Column({ type: 'varchar', length: 70, nullable: false })
     act_cargo_prestador
 
-    @Column({ type: 'text', nullable: false })
+    @Column({ type: 'text', nullable: true })
     act_firma_funcionario: string; // Esta columna almacenará la firma en formato base64
 
-    @Column({ type: 'text', nullable: false })
+    @Column({ type: 'text', nullable: true })
     act_firma_prestador: string; // Esta columna almacenará la firma en formato base64
 
     @Column({ type: 'varchar', nullable: false,  default:true})

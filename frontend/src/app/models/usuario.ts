@@ -1,7 +1,7 @@
 export class Usuario {
 
-    usu_cedula: string;
     usu_id?: number;
+    usu_cedula: string;
     usu_nombre: string;
     usu_apellido: string;
     usu_cargo: string;
@@ -12,21 +12,21 @@ export class Usuario {
     usu_creado: Date;
     usu_firma: string
     resetPasswordToken: string
-    roles: string[];
+    roles: Rol[];
 
 
     constructor(usu_cedula: string,
-        usu_nombre: string, 
+        usu_nombre: string,
         usu_apellido: string,
         usu_cargo: string,
         usu_area_profesional: string,
-        usu_nombreUsuario: string, 
-        usu_password: string, 
+        usu_nombreUsuario: string,
+        usu_password: string,
         usu_estado: string,
-        usu_firma: string, 
+        usu_firma: string,
         usu_creado: Date,
-        resetPasswordToken: string, 
-        roles: string[]) {
+        resetPasswordToken: string,
+        roles: Rol[]) {
         this.usu_cedula = usu_cedula;
         this.usu_nombre = usu_nombre;
         this.usu_apellido = usu_apellido;
@@ -40,4 +40,10 @@ export class Usuario {
         this.resetPasswordToken = resetPasswordToken;
         this.roles = roles;
     }
+}
+
+// Definición de la interfaz Rol para representar la estructura de los objetos de rol
+interface Rol {
+    rol_id: number;
+    rol_nombre: string;
 }

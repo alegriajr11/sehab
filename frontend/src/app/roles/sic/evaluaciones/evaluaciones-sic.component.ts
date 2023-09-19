@@ -44,7 +44,7 @@ export class EvaluacionesSicComponent implements OnInit {
     this.incializarMetodos();
   }
 
-  incializarMetodos(){
+  incializarMetodos() {
     this.cargarActas();
     this.obtenerAnios();
   }
@@ -73,6 +73,11 @@ export class EvaluacionesSicComponent implements OnInit {
         keyboard: true
       }
     );
+
+    // Suscribirse al evento hide.bs.modal para cargar actas después de cerrar el modal y ver el icono cerrar acta
+    this.modalRef.onHide.subscribe(() => {
+      this.cargarActas();
+    });
   }
 
 

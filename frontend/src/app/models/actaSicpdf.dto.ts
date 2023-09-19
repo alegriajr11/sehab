@@ -19,6 +19,7 @@ export class ActaSicPdfDto {
     act_cod_prestador: string
     act_cod_sede: string
     act_obj_visita: string
+    act_id_funcionario: number
     act_nombre_funcionario: string
     act_cargo_funcionario: string
     act_firma_funcionario: string
@@ -48,6 +49,7 @@ export class ActaSicPdfDto {
         act_cod_prestador: string,
         act_cod_sede: string,
         act_obj_visita: string,
+        act_id_funcionario: number,
         act_nombre_funcionario: string,
         act_cargo_funcionario: string,
         act_firma_funcionario: string,
@@ -76,6 +78,7 @@ export class ActaSicPdfDto {
         this.act_cod_prestador = act_cod_prestador
         this.act_cod_sede = act_cod_sede
         this.act_obj_visita = act_obj_visita
+        this.act_id_funcionario = act_id_funcionario
         this.act_nombre_funcionario = act_nombre_funcionario
         this.act_cargo_funcionario = act_cargo_funcionario
         this.act_firma_funcionario = act_firma_funcionario

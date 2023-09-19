@@ -1,33 +1,37 @@
 <app-menu></app-menu>
 
-<div class="wrapper">
-    <div class="col">
-        <div class="row">
-            <div class="col-md-2">
-                <button class="btn btn-light esp btn-circle btn-xl" routerLink="/"><i
-                        class='fa fa-reply fa-lg'></i></button>
+    <div class="wrapper">
+        <div class="col">
+            <div class="row">
+                <div class="col-md-2">
+                    <button class="btn btn-light esp btn-circle btn-xl" routerLink="/reso">
+                        <i class="fa fa-reply fa-lg"></i>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="jumbotron">
-            <hr class="my-4">
-            <h1 class="display-4 text-center">Visita Resolución 3100 - 2019</h1>
-            <hr class="my-4">
-            <div class="abs-center">
-                <button class="btn btn-dark esp btn-circle btn-xl" title="Informes Realizados" routerLink="/reso/informes-realizados">
-                    <i class='fa fa-files-o'></i></button>
-                <button class="btn btn-dark esp btn-circle btn-xl" title="Informe" routerLink="/reso/informe">
-                    <i class='fa fa-file-text fa-lg'></i></button>
-                <button class="btn btn-dark esp btn-circle btn-xl" title="Visita IVC" routerLink="/reso/visita-ivc">
-                    <i class="bi bi-file-earmark-break-fill fa-lg"></i></button>
-                <button class="btn btn-dark esp btn-circle btn-xl" title="Visita Verificación" routerLink="/reso/visita-verificacion">
-                    <i class="bi bi-journal-check fa-lg"></i></button>
+        <div class="container">
+            <div class="jumbotron">
+                <hr class="my-4">
+                <h1 class="display-4 text-center">Visita Resolución 3100 - 2019</h1>
+                <hr class="my-4">
+                <div class="abs-center">
+                    <button class="btn btn-dark esp btn-circle btn-xl" title="Informes Realizados" routerLink="/reso/informes-realizados">
+                        <i class='fa fa-files-o'></i></button>
+                    <button class="btn btn-dark esp btn-circle btn-xl" title="Informe" routerLink="/reso/informe">
+                        <i class='fa fa-file-text fa-lg'></i></button>
+                    <button *ngIf="isAdmin || isCoordinador" class="btn btn-dark esp btn-circle btn-xl" title="Visita IVC" routerLink="/reso/visita-ivc">
+                        <i class="bi bi-file-earmark-break-fill fa-lg"></i></button>
+                    <button *ngIf="isAdmin || isCoordinador" class="btn btn-dark esp btn-circle btn-xl" title="Visita Verificación" routerLink="/reso/visita-verificacion">
+                        <i class="bi bi-journal-check fa-lg"></i></button>
+                    <button *ngIf="isAdmin || isContador" class="btn btn-dark esp btn-circle btn-xl" title="Contador" routerLink="/">
+                        <i class='fas fa-file-invoice-dollar fa-lg'></i></button>
+                </div>
             </div>
+
         </div>
     </div>
-</div>
-<!--Fin Div Container-->
+    <!--Fin Div Container-->
 
 <app-footer></app-footer>

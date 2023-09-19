@@ -287,8 +287,8 @@ export class SicActaService {
             throw new NotFoundException(new MessageDto('El Acta no existe'))
         }
         dto.act_id ? acta.act_id = dto.act_id : acta.act_id = acta.act_id;
-        dto.act_visita_inicial ? acta.act_visita_inicial = dto.act_visita_inicial : acta.act_visita_inicial = acta.act_visita_inicial;
-        dto.act_visita_seguimiento ? acta.act_visita_seguimiento = dto.act_visita_seguimiento : acta.act_visita_seguimiento = acta.act_visita_seguimiento;
+        acta.act_visita_inicial = dto.act_visita_inicial !== undefined ? dto.act_visita_inicial : "";
+        acta.act_visita_seguimiento = dto.act_visita_seguimiento !== undefined ? dto.act_visita_seguimiento : "";
         dto.act_fecha_inicial ? acta.act_fecha_inicial = dto.act_fecha_inicial : acta.act_fecha_inicial = acta.act_fecha_inicial;
         dto.act_fecha_final ? acta.act_fecha_final = dto.act_fecha_final : acta.act_fecha_final = acta.act_fecha_final;
         dto.act_municipio ? acta.act_municipio = dto.act_municipio : acta.act_municipio = acta.act_municipio;
@@ -310,6 +310,7 @@ export class SicActaService {
         dto.act_nombre_prestador ? acta.act_nombre_prestador = dto.act_nombre_prestador : acta.act_nombre_prestador = acta.act_nombre_prestador;
         dto.act_cargo_prestador ? acta.act_cargo_prestador = dto.act_cargo_prestador : acta.act_cargo_prestador = acta.act_cargo_prestador;
         dto.act_firma_prestador ? acta.act_firma_prestador = dto.act_firma_prestador : acta.act_firma_prestador = acta.act_firma_prestador;
+
 
         const usuario = await this.jwtService.decode(tokenDto.token);
 

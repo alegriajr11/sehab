@@ -13,7 +13,6 @@ import { TokenDto } from '../models/token.dto';
 export class UsuarioService {
   
   usuarioURL = environment.usuarioURL;
-  usuarioNewURL = environment.usuarioNewURL;
 
   generarPdfURL = environment.generarPdfURL;
 
@@ -34,12 +33,16 @@ export class UsuarioService {
   }
 
   public save(usuario: Usuario): Observable<any> {
-    return this.httpClient.post<any>(`${this.usuarioNewURL}`, usuario);
+    return this.httpClient.post<any>(`${this.usuarioURL}`, usuario);
   }
 
-  public update(id: number, usuario: Usuario): Observable<any> {
-    return this.httpClient.put<any>(`${this.usuarioURL}${id}`, usuario);
+  public update(id: number, usuario: Usuario, tokenDto: TokenDto): Observable<any> {
+    return this.httpClient.put<any>(`${this.usuarioURL}${id}`, {
+      dto: usuario,
+      tokenDto: tokenDto
+    });    
   }
+  
 
 
 

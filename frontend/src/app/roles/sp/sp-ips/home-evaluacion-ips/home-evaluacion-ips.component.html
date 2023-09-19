@@ -1,6 +1,18 @@
 <app-menu></app-menu>
 
 <div class="wrapper">
+
+    <div class="col">
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sp/evaluaciones-ips" (click)="limpiarNombrePrestador()">
+                    <i class="fa fa-reply fa-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="container">
         <div class="jumbotron">
             <hr class="my-4">
@@ -10,7 +22,7 @@
 
             <div class="grid-prestador">
                 <h5><b>Prestador:</b></h5>
-                <span id="nombre-prestador"></span>
+                <span>{{nombrePrestador}}</span>
             </div>
             <hr class="my-4">
 

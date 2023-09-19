@@ -29,17 +29,22 @@ export class SedeController {
     async getManySedePrestador(@Param('id') id: string) {
         return await this.sedeService.findBySedePrestador(id);
     }
+    @Get('nombre/sede/prestador/principal/:id')
+    async getSedePrincipal(@Param('id') id: string) {
+        return await this.sedeService.findBySedePrestadorNumero(id);
+    }
 
     @Get(':id')
-    async getManyMun(@Param('id') id: number) {
+    async getManySede(@Param('id') id: number) {
         return await this.sedeService.findByIdSede(id);
     }
 
+
     //CREAR SEDE
     @UsePipes(new ValidationPipe({ whitelist: true }))
-    @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: string, @Body() dto: SedeDto) {
-        return this.sedeService.create(id, dto);
+    @Post()
+    async create(@Body() dto: SedeDto) {
+        return this.sedeService.create(dto);
     }
 
     //ELIMINAR CRITERIO  PRETRANSFUNSIONAL

@@ -25,6 +25,7 @@ export class CriterioServiciosService {
         private readonly auditoria_registro_services: AuditoriaRegistroService,
         private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
         private readonly auditoria_eliminacion_services: AuditoriaEliminacionService
+
     ) { }
 
     //LISTANDO TODOS LOS ESTANDARES DEL GRUPO TODOS LOS SERVICIOS

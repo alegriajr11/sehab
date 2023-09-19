@@ -1,6 +1,6 @@
 import { SedeEntity } from "src/prestador/sede/sede.entity";
 import { UsuarioEntity } from "src/usuario/usuario.entity";
-import { BeforeInsert, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 import { ProfesionalApoyoEntity } from "../profesional/profesional.entity";
 import { DatosVisitVErificadoEntity } from "../visita-verificacion/datos-visit-verificado.entity";
 
@@ -76,6 +76,7 @@ export class ActaVerificacionEntity {
 
     // RELACION UNO A UNO ACTA VERIFICACION - SEDE
     @OneToOne(() => SedeEntity, sede => sede.acta_verificacion_sede)
+    @JoinColumn()
     act_sede_veri: SedeEntity;
     
     @OneToOne(() => DatosVisitVErificadoEntity, datosencontrados => datosencontrados.acta_verificacion_datos_encontrados)

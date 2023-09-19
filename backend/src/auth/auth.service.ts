@@ -20,6 +20,8 @@ import { v4 } from 'uuid';
 import { RessetPasswordDto } from './dto/reset-password.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { use } from 'passport';
+
 
 @Injectable()
 export class AuthService {
@@ -53,174 +55,55 @@ export class AuthService {
     }
 
 
-    // /*CREANDO USUARIO SIC*/
-    async createUserSic(payloads: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payloads;
-        const { usu_nombreUsuario, usu_email } = dto;
-        const exists = await this.authRepository.findOne({ where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_email }] });
-        if (exists) throw new BadRequestException(new MessageDto('Ese usuario ya existe'));
-        const rolSic = await this.rolRepository.findOne({ where: { rol_nombre: RolNombre.SIC } });
-        if (!rolSic) throw new InternalServerErrorException(new MessageDto('los roles aún no han sido creados'))
-        const user = this.authRepository.create(dto);
-        user.roles = [rolSic];
-        await this.authRepository.save(user)
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-        await this.authRepository.save(user);
-        await this.auditoria_registroService.logCreateUserSic(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.usu_nombre,
-            dto.usu_nombreUsuario
-        );
-        return new MessageDto('Usuario Creado');
-
-    }
-
-
-    /*CREANDO USUARIO SP*/
-    async createUserSP(payloads: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payloads;
-        const { usu_nombreUsuario, usu_email } = dto;
-        const exists = await this.authRepository.findOne({ where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_email }] });
-        if (exists) throw new BadRequestException(new MessageDto('Ese usuario ya existe'));
-        const rolSp = await this.rolRepository.findOne({ where: { rol_nombre: RolNombre.SP } });
-        if (!rolSp) throw new InternalServerErrorException(new MessageDto('los roles aún no han sido creados'))
-        const user = this.authRepository.create(dto);
-        user.roles = [rolSp];
-        await this.authRepository.save(user)
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-        await this.authRepository.save(user);
-        await this.auditoria_registroService.logCreateUserSp(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.usu_nombre,
-            dto.usu_nombreUsuario
-        );
-        return new MessageDto('Usuario Creado');
-
-    }
-
-
-    /*CREANDO USUARIO PAMEC*/
-    async createUserPamec(payloads: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payloads;
-        const { usu_nombreUsuario, usu_email } = dto;
-        const exists = await this.authRepository.findOne({ where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_email }] });
-        if (exists) throw new BadRequestException(new MessageDto('Ese usuario ya existe'));
-        const rolPamec = await this.rolRepository.findOne({ where: { rol_nombre: RolNombre.PAMEC } });
-        if (!rolPamec) throw new InternalServerErrorException(new MessageDto('los roles aún no han sido creados'))
-        const user = this.authRepository.create(dto);
-        user.roles = [rolPamec];
-        await this.authRepository.save(user)
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-        await this.authRepository.save(user);
-        await this.auditoria_registroService.logCreateUserPamec(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.usu_nombre,
-            dto.usu_nombreUsuario
-        );
-        return new MessageDto('Usuario Creado');
-
-    }
-
-    /*CREANDO USUARIO RES*/
-    async createUserRes(payloads: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payloads;
-        const { usu_nombreUsuario, usu_email } = dto;
-        const exists = await this.authRepository.findOne({ where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_email }] });
-        if (exists) throw new BadRequestException(new MessageDto('Ese usuario ya existe'));
-        const rolRes = await this.rolRepository.findOne({ where: { rol_nombre: RolNombre.RES } });
-        if (!rolRes) throw new InternalServerErrorException(new MessageDto('los roles aún no han sido creados'))
-        const user = this.authRepository.create(dto);
-        user.roles = [rolRes];
-        await this.authRepository.save(user)
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-        await this.authRepository.save(user);
-        await this.auditoria_registroService.logCreateUserRes(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.usu_nombre,
-            dto.usu_nombreUsuario
-        );
-        return new MessageDto('Usuario Creado');
-
-    }
-
+    //METODO LOGIN USUARIO
     async login(dto: LoginUsuarioDto): Promise<any> {
-        const { usu_nombreUsuario, } = dto;
-        //const direccionIp = requestIpMiddleware.getClientIp(req);
-        const direccionIp = '192.168.19.1'
-        const usuario = await this.authRepository.findOne({ where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_nombreUsuario }] });
-        if (!usuario) return new UnauthorizedException(new MessageDto('El usuario no existe'));
-        const passordOK = await compare(dto.usu_password, usuario.usu_password);
-        if (!passordOK) return new UnauthorizedException(new MessageDto('Contraseña Incorrecta'));
-        const payload: PayloadInterface = {
-            usu_id: usuario.usu_id,
-            usu_nombre: usuario.usu_nombre,
-            usu_apellido: usuario.usu_apellido,
-            usu_nombreUsuario: usuario.usu_nombreUsuario,
-            usu_email: usuario.usu_email,
-            usu_estado: usuario.usu_estado,
-            usu_roles: usuario.roles.map(rol => rol.rol_nombre as RolNombre)
+        try {
+            const { usu_nombreUsuario } = dto;
+            const direccionIp = '192.168.19.1';
+
+            const usuario = await this.authRepository.findOne({
+                where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_nombreUsuario }],
+            });
+
+            if (!usuario) {
+                throw new UnauthorizedException(new MessageDto('El usuario no existe'));
+            }
+
+            const passordOK = await compare(dto.usu_password, usuario.usu_password);
+
+            if (!passordOK) {
+                throw new UnauthorizedException(new MessageDto('Contraseña Incorrecta'));
+            }
+
+            const payload: PayloadInterface = {
+                usu_id: usuario.usu_id,
+                usu_nombre: usuario.usu_nombre,
+                usu_apellido: usuario.usu_apellido,
+                usu_nombreUsuario: usuario.usu_nombreUsuario,
+                usu_email: usuario.usu_email,
+                usu_estado: usuario.usu_estado,
+                usu_roles: usuario.roles.map((rol) => rol.rol_nombre as RolNombre),
+            };
+
+            const token = await this.jwtService.sign(payload);
+
+            if (payload.usu_estado == 'false') {
+                throw new UnauthorizedException(new MessageDto('Acceso Denegado Comunicarse con el Administrador'));
+            }
+
+            await this.auditoria_registroService.logLogin(payload.usu_nombre, payload.usu_apellido, direccionIp);
+
+            return { token };
+        } catch (error) {
+            // Capturamos y manejamos la excepción
+            console.error('Error en login:', error);
+            throw error;
         }
-        const token = await this.jwtService.sign(payload);
-        if (payload.usu_estado == 'false') {
-            return new UnauthorizedException(new MessageDto('Acceso Denegado Comunicarse con el Administrador'));
-        }
-        await this.auditoria_registroService.logLogin(payload.usu_nombre, payload.usu_apellido, direccionIp)
-        return { token };
     }
 
 
+
+    //METODO REFRESH TOKEN
     async refresh(dto: TokenDto): Promise<any> {
         const usuario = await this.jwtService.decode(dto.token);
         const payload: PayloadInterface = {
@@ -239,30 +122,75 @@ export class AuthService {
 
 
     async requestResetPassword(usu_id: number): Promise<void> {
-        const usuario: UsuarioEntity = await this.usuarioService.findById(usu_id)
-        usuario.resetPasswordToken = v4();
-        this.authRepository.save(usuario);
+        try {
+            const usuario: UsuarioEntity = await this.usuarioService.findById(usu_id);
+
+            if (!usuario) {
+                // Si el usuario no se encuentra, lanzamos una excepción NotFoundException
+                throw new NotFoundException('Usuario no encontrado');
+            }
+
+            // Generamos un token y lo asignamos al usuario
+            usuario.resetPasswordToken = v4();
+
+            // Guardamos los cambios en la base de datos
+            await this.authRepository.save(usuario);
+        } catch (error) {
+            // Capturamos y manejamos la excepción
+            console.error('Error en requestResetPassword:', error);
+            throw error;
+        }
     }
 
+    //METODO REESTABLECER CONTRASEÑA
     async resetPassword(resetPasswordDto: RessetPasswordDto): Promise<any> {
-        const { resetPasswordToken, password } = resetPasswordDto
-        const usuario: UsuarioEntity = await this.usuarioService.findOneByResetPasswordToken(resetPasswordToken);
+        try {
+            const { resetPasswordToken, password } = resetPasswordDto;
 
-        usuario.usu_password = await this.encoderService.encodePassword(password)
-        usuario.resetPasswordToken = null
-        this.authRepository.save(usuario)
-        return new MessageDto('Contraseña Restablecida');
+            // Intenta buscar el usuario por el token
+            const usuario: UsuarioEntity = await this.usuarioService.findOneByResetPasswordToken(resetPasswordToken);
+
+            if (!usuario) {
+                // El usuario no fue encontrado, puedes lanzar una excepción personalizada
+                throw new Error('El token de restablecimiento de contraseña no es válido');
+            }
+
+            // Cambia la contraseña y elimina el token de restablecimiento
+            usuario.usu_password = await this.encoderService.encodePassword(password);
+            usuario.resetPasswordToken = null;
+
+            // Guarda los cambios en la base de datos
+            await this.authRepository.save(usuario);
+
+            return new MessageDto('Contraseña Restablecida');
+        } catch (error) {
+            // Captura y maneja la excepción
+            console.error('Error en resetPassword:', error);
+            throw error;
+        }
     }
 
 
     async changePassword(changePasswordDto: ChangePasswordDto, usuario: UsuarioEntity): Promise<any> {
-        const { oldPassword, newPassword } = changePasswordDto;
-        if (await this.encoderService.checkPassword(oldPassword, usuario.usu_password)) {
-            usuario.usu_password = await this.encoderService.encodePassword(newPassword);
-            this.authRepository.save(usuario);
-            return new MessageDto('La contraseña ha sido cambiada exitosamente');
-        } else {
-            throw new BadRequestException('La contraseña antigua no es correcta');
+        try {
+            const { oldPassword, newPassword } = changePasswordDto;
+
+            // Verificamos si la contraseña antigua coincide
+            if (await this.encoderService.checkPassword(oldPassword, usuario.usu_password)) {
+                // Cambiamos la contraseña
+                usuario.usu_password = await this.encoderService.encodePassword(newPassword);
+
+                // Guardamos los cambios en la base de datos
+                await this.authRepository.save(usuario);
+
+                return new MessageDto('La contraseña ha sido cambiada exitosamente');
+            } else {
+                throw new BadRequestException('La contraseña antigua no es correcta');
+            }
+        } catch (error) {
+            // Capturamos y manejamos la excepción
+            console.error('Error en changePassword:', error);
+            throw error;
         }
     }
 

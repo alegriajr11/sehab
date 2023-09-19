@@ -7,7 +7,6 @@ export const environment = {
 
   //USUARIOS
   usuarioURL: 'http://localhost:8080/usuario/',
-  usuarioNewURL: 'http://localhost:8080/auth/nuevo/',
   authURL: 'http://localhost:8080/auth/',
   restablecerContraseña: 'http://localhost:8080/auth/request-reset-password/',
   prestadorURL: 'http://localhost:8080/prestador/',

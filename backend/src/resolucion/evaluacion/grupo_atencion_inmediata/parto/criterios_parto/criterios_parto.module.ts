@@ -4,13 +4,28 @@ import { CriteriosPartoController } from './criterios_parto.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioPartoEntity } from '../criterio_parto.entity';
 import { PartoEntity } from '../parto.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
 
-    imports: [TypeOrmModule.forFeature([CriterioPartoEntity, PartoEntity])],
+    imports: [TypeOrmModule.forFeature([CriterioPartoEntity, PartoEntity]),
+    //MODULO JwtService
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+        imports: [ConfigModule],
+        useFactory: async (configService: ConfigService) => ({
+            secret: configService.get('JWT_SECRET'),
+            signOptions: {
+                expiresIn: 7200,
+            },
+        }),
+        inject: [ConfigService],
+    }),],
     controllers: [CriteriosPartoController],
     providers: [CriteriosPartoService],
     exports: [CriteriosPartoService]
-  
+
 })
-export class CriteriosPartoModule {}
+export class CriteriosPartoModule { }

@@ -42,12 +42,8 @@ export class EvaluacionipsEntity {
     @OneToMany(type => CriterioPlaneacionEntity, evaluacionips => evaluacionips.cri_pla_eva)
     evaluacionipsPlane: CriterioPlaneacionEntity
 
-    @ManyToMany(type => EvaluacionipsCreadasEntity, evaluacion_creadas => evaluacion_creadas.eva_creada_evaips, { eager: true })
-    @JoinTable({
-        name: 'eva_creada_evaips',
-        joinColumn: { name: 'eva_creada_evaips' },
-        inverseJoinColumn: { name: 'evaips_eva_creada_id' }
-    })
-    evips_creadas: EvaluacionipsCreadasEntity[];
 
+    //Relacion Muchos a Muchos ROL - USUARIOS
+    @ManyToMany(type => ActaSpIpsEntity, acta_ips => acta_ips.evaluacionesips)
+    actas_ips: ActaSpIpsEntity[];
 }

@@ -6,12 +6,27 @@ import { CriterioRadioterapiaEntity } from '../../radioterapia/criterio_radioter
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioTerapiasController } from './criterio_terapias.controller';
 import { CriterioTerapiaEntity } from '../criterios_terapias.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([CriterioTerapiaEntity, TerapiasEntity])],
+    imports: [TypeOrmModule.forFeature([CriterioTerapiaEntity, TerapiasEntity]),
+    //MODULO JwtService
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+        imports: [ConfigModule],
+        useFactory: async (configService: ConfigService) => ({
+            secret: configService.get('JWT_SECRET'),
+            signOptions: {
+                expiresIn: 7200,
+            },
+        }),
+        inject: [ConfigService],
+    }),],
     controllers: [CriterioTerapiasController],
     providers: [CriterioTerapiasService],
     exports: [CriterioTerapiasService]
-    
+
 })
-export class CriterioTerapiasModule {}
+export class CriterioTerapiasModule { }

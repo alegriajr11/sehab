@@ -15,6 +15,7 @@ export class ActaSpPdfDto {
     act_representante: string
     act_cod_prestador: string
     act_obj_visita: string
+    act_id_funcionario: number
     act_nombre_funcionario: string
     act_cargo_funcionario: string
     act_firma_funcionario: string
@@ -22,6 +23,15 @@ export class ActaSpPdfDto {
     act_cargo_prestador: string
     act_firma_prestador: string
     act_estado: string
+
+    //VARIABLES ORDEN DEL DÍA
+    act_fecha_orden: string;
+    act_hora_orden: string;
+    act_num_oficio: string
+    act_fecha_oficio: string
+    act_fecha_envio_oficio: string
+
+    act_captura_imagen: string;
 
     constructor(
         act_id: number, 
@@ -39,13 +49,20 @@ export class ActaSpPdfDto {
         act_representante: string,
         act_cod_prestador: string,
         act_obj_visita: string,
+        act_id_funcionario: number,
         act_nombre_funcionario: string,
         act_cargo_funcionario: string,
         act_firma_funcionario: string,
         act_nombre_prestador: string,
         act_cargo_prestador: string,
         act_firma_prestador: string,
-
+        //VARIABLES ORDEN DEL DÍA
+        act_fecha_orden: string,
+        act_hora_orden: string,
+        act_num_oficio: string,
+        act_fecha_oficio: string,
+        act_fecha_envio_oficio: string,
+        act_captura_imagen: string
         ){
         this.act_id = act_id
         this.act_visita_inicial = act_visita_inicial
@@ -62,12 +79,20 @@ export class ActaSpPdfDto {
         this.act_representante = act_representante
         this.act_cod_prestador = act_cod_prestador
         this.act_obj_visita = act_obj_visita
+        this.act_id_funcionario = act_id_funcionario
         this.act_nombre_funcionario = act_nombre_funcionario
         this.act_cargo_funcionario = act_cargo_funcionario
         this.act_firma_funcionario = act_firma_funcionario
         this.act_nombre_prestador = act_nombre_prestador
         this.act_cargo_prestador = act_cargo_prestador
         this.act_firma_prestador = act_firma_prestador
+        //VARIABLES ORDEN DEL DÍA
+        this.act_fecha_orden = act_fecha_orden
+        this.act_hora_orden = act_hora_orden
+        this.act_num_oficio = act_num_oficio
+        this.act_fecha_oficio = act_fecha_oficio
+        this.act_fecha_envio_oficio = act_fecha_envio_oficio
+        this.act_captura_imagen = act_captura_imagen
 
     }
 }

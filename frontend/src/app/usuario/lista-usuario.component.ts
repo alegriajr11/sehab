@@ -9,6 +9,7 @@ import { Usuario } from '../models/usuario';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TokenDto } from '../models/token.dto';
+import { SharedServiceService } from '../services/shared-service.service';
 
 
 
@@ -41,6 +42,7 @@ export class ListaUsuarioComponent implements OnInit {
     private usuarioService: UsuarioService,
     private tokenService: TokenService,
     private authService: AuthService,
+    private sharedService: SharedServiceService,
     private toastrService: ToastrService,
     private router: Router
   ) { }
@@ -95,7 +97,9 @@ export class ListaUsuarioComponent implements OnInit {
     });
   }
 
-  restablecer(usu_id: number): void{
+  restablecer(usu_id: number, usu_nombre: string, usu_apellido: string): void{
+    const nombreUsuarioCompleto = usu_nombre + ' ' + usu_apellido
+    localStorage.setItem('nombreUsuario', nombreUsuarioCompleto);
     this.authService.requestPassword(usu_id).subscribe()
   }
 

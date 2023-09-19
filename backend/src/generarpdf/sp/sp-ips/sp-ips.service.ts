@@ -9,12 +9,17 @@ import { PayloadInterface } from 'src/auth/payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
 import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { EvaluacionIpsRepository } from 'src/sp/sp_ips/evaluacionips.repository';
+import { EvaluacionipsEntity } from 'src/sp/sp_ips/evaluacionips.entity';
+
 
 @Injectable()
 export class SpIpsService {
     constructor(
         @InjectRepository(ActaSpIpsEntity)
         private readonly actaSpIpsRepository: ActaSpIpsRepository,
+        @InjectRepository(EvaluacionipsEntity)
+        private readonly evaluacionesIps: EvaluacionIpsRepository,
         private readonly jwtService: JwtService,
         private readonly auditoria_registro_services: AuditoriaRegistroService,
         private readonly auditoria_actualizacion_service: AuditoriaActualizacionService
@@ -104,12 +109,22 @@ export class SpIpsService {
     }
 
     /*CREACIÓN SP IPS ACTA PDF */
-    async create(payloads: { dto: IpsDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payloads;
+    async create(payloads: { dto: IpsDto, evaluacionesIds: number[], tokenDto: TokenDto }): Promise<any> {
+        const { dto, tokenDto, evaluacionesIds } = payloads;
 
         try {
 
-            const acta_sicpdf = this.actaSpIpsRepository.create(dto);
+            //Crear el ACTA DTO
+            const acta_SpIpsPdf = this.actaSpIpsRepository.create(dto);
+
+            console.log(evaluacionesIds)
+            //ASIGNACIÓN DE LAS EVALUACIONES
+            const evaluaciones = await this.evaluacionesIps.findByIds(evaluacionesIds)
+            acta_SpIpsPdf.evaluacionesips = evaluaciones
+
+            //GUARDAR EL ACTA EN LA BASE DE DATOS
+            await this.actaSpIpsRepository.save(acta_SpIpsPdf);
+
             const usuario = await this.jwtService.decode(tokenDto.token);
 
             const payloadInterface: PayloadInterface = {
@@ -124,7 +139,6 @@ export class SpIpsService {
 
             const year = new Date().getFullYear().toString();
 
-            await this.actaSpIpsRepository.save(acta_sicpdf);
             await this.auditoria_registro_services.logCreateActaSpIps(
                 payloadInterface.usu_nombre,
                 payloadInterface.usu_apellido,
@@ -150,8 +164,8 @@ export class SpIpsService {
             throw new NotFoundException(new MessageDto('El Acta no existe'))
         }
         dto.act_id ? ips.act_id = dto.act_id : ips.act_id = ips.act_id;
-        dto.act_visita_inicial ? ips.act_visita_inicial = dto.act_visita_inicial : ips.act_visita_inicial = ips.act_visita_inicial;
-        dto.act_visita_seguimiento ? ips.act_visita_seguimiento = dto.act_visita_seguimiento : ips.act_visita_seguimiento = ips.act_visita_seguimiento;
+        ips.act_visita_inicial = dto.act_visita_inicial !== undefined ? dto.act_visita_inicial : "";
+        ips.act_visita_seguimiento = dto.act_visita_seguimiento !== undefined ? dto.act_visita_seguimiento : "";
         dto.act_fecha_inicial ? ips.act_fecha_inicial = dto.act_fecha_inicial : ips.act_fecha_inicial = ips.act_fecha_inicial;
         dto.act_fecha_final ? ips.act_fecha_final = dto.act_fecha_final : ips.act_fecha_final = ips.act_fecha_final;
         dto.act_municipio ? ips.act_municipio = dto.act_municipio : ips.act_municipio = ips.act_municipio;

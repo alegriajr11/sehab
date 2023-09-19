@@ -11,25 +11,25 @@ import { AuditoriaEliminacionModule } from 'src/auditoria/auditoria_eliminacion/
 import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
 import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
 
-  
+
 @Module({
   imports: [TypeOrmModule.forFeature([CriterioDiagnostVascularEntity, DiagnosticoVascularEntity]),
-  AuditoriaRegistroModule, AuditoriaActualizacionModule, AuditoriaEliminacionModule,
-//MODULO JwtService
-PassportModule.register({ defaultStrategy: 'jwt' }),
-JwtModule.registerAsync({
-  imports: [ConfigModule],
-  useFactory: async (configService: ConfigService) => ({
-    secret: configService.get('JWT_SECRET'),
-    signOptions: {
-      expiresIn: 7200,
-    },
-  }),
-  inject: [ConfigService],
-}), //FINAL DE MODULO JwtService
-],
+    AuditoriaRegistroModule, AuditoriaActualizacionModule, AuditoriaEliminacionModule,
+  //MODULO JwtService
+  PassportModule.register({ defaultStrategy: 'jwt' }),
+  JwtModule.registerAsync({
+    imports: [ConfigModule],
+    useFactory: async (configService: ConfigService) => ({
+      secret: configService.get('JWT_SECRET'),
+      signOptions: {
+        expiresIn: 7200,
+      },
+    }),
+    inject: [ConfigService],
+  }), //FINAL DE MODULO JwtService
+  ],
   controllers: [CriterioDiagnostVascularController],
   providers: [CriterioDiagnostVascularService],
   exports: [CriterioDiagnostVascularService]
 })
-export class CriterioDiagnostVascularModule {}
+export class CriterioDiagnostVascularModule { }

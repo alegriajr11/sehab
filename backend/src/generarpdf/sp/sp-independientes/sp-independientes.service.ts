@@ -161,12 +161,6 @@ export class SpIndependientesService {
                 .orderBy('evaluacion.eva_id', 'DESC')
                 .getOne();
 
-            //CONSULTAR LAS ETAPAS EXISTENTES
-           const etapas = await this.etapaIndependientesRepository.find()
-
-            //ASIGNAR LA EVALUACIÓN A LAS ETAPAS
-            evaluacion_ultima.eval_etapa_independientes = etapas
-
             //GUARDAR LA RELACIÓN ENTRE EVALUACIÓN Y ETAPAS
             await this.evaluacionIndependientesRepository.save(evaluacion_ultima);
 

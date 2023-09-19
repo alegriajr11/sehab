@@ -40,11 +40,11 @@ export class SpIpsController {
         return this.sp_IpsService.getLastestActa();
     }
 
-
+    //CREAR ACTA SPIPS
     @Post()
-    async create(@Body() payload: { dto: IpsDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return this.sp_IpsService.create(payload);
+    async create(@Body() payloads: { dto: IpsDto, evaluacionesIds: number[], tokenDto: TokenDto }) {
+        const { dto, evaluacionesIds, tokenDto } = payloads;
+        return this.sp_IpsService.create(payloads);
     }
 
     //ACTUALIZAR SP IPS ACTA PDF

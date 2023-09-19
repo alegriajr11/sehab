@@ -57,6 +57,7 @@ export class EvaluacionesSpIpsComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     );
+    this.page = 1;
   }
 
 
@@ -71,6 +72,10 @@ export class EvaluacionesSpIpsComponent implements OnInit {
       }
     );
 
+    // Suscribirse al evento hide.bs.modal para cargar actas después de cerrar el modal y ver el icono cerrar acta
+    this.modalRef.onHide.subscribe(() => {
+      this.cargarActas();
+    });
   }
 
 

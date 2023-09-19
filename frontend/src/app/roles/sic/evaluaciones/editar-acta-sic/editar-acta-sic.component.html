@@ -53,13 +53,13 @@
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
                         name="act_fecha_inicial" [(ngModel)]="actaSic.act_fecha_inicial" [ngModelOptions]="{standalone: true}"
-                        ngDefaultControl (change)="habilitarFechaFinal()">
+                        ngDefaultControl>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
                         [(ngModel)]="actaSic.act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [disabled]="!habilitarfechaFin" [min]="actaSic.act_fecha_final">
+                        [min]="actaSic.act_fecha_final">
                 </div>
 
                 <div class="col-12">
@@ -115,15 +115,11 @@
 
 
                 <div class="col-12">
-                    <label for="principal" class="form-label">Sede Principal:</label>
-
-                    <select id="sedep" class="form-select form-control" [(ngModel)]="actaSic.act_sede_principal"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option disabled selected hidden>Sede Principal...</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
-                    </select>
+                    <label for="sede_principal" class="form-label">Sede:</label>
+                    <input type="text" class="form-control" id="act_sede_principal" readonly
+					name="act_sede_principal" [(ngModel)]="actaSic.act_sede_principal">
                 </div>
+
 
                 <div class="col-md-6">
                     <label for="inputAddress2" class="form-label">Localidad:</label>
@@ -176,6 +172,12 @@
                 </div>
 
 
+				<div class="col-12" hidden>
+                    <label for="" class="form-label">ID Verificador SOGCS:</label>
+                    <input type="text" class="form-control" id="usu_id_secretaria" placeholder="Verificador SOGCS..." readonly
+					name="usu_id_secretaria" [(ngModel)]="actaSic.act_id_funcionario">
+                </div>
+
 				<div class="col-12">
                     <label for="" class="form-label">Verificador SOGCS:</label>
                     <input type="text" class="form-control" id="usu_secretaria" placeholder="Verificador SOGCS..." readonly
@@ -186,6 +188,10 @@
                     <label for="" class="form-label">Cargo:</label>
                     <input type="text" class="form-control" id="cargoSecre" placeholder="Cargo Verificador..." readonly
 					name="act_cargo_funcionario" [(ngModel)]="actaSic.act_cargo_funcionario">
+                </div>
+
+                <div class="col-3" style="margin-bottom: 20px;" *ngIf="!actaSic.act_firma_funcionario">
+                    <span class="button-like btn-span" (click)="obtenerFirmaFuncionario()">FIRMAR</span>
                 </div>
 
                 <div class="col-12 bg-h3 contenedor-form">
@@ -208,7 +214,7 @@
                 
                 <!--BOTON MODAL FIRMA-->
                 <div class="col-3">
-                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Editar Firma Prestador</span>
+                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Firma Prestador</span>
                 </div>
 
 

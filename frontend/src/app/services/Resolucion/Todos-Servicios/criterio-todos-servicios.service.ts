@@ -18,4 +18,6 @@ export class CriterioTodosServiciosService {
   public listForEstandar(est: string): Observable<CriterioTodosServiciosDto[]>{
     return this.httpClient.get<CriterioTodosServiciosDto[]>(this.todos_serviciosURL + est)
   }
+
+  
 }

@@ -24,7 +24,7 @@ export class EvaluacionUnoComponent {
 
 
   ngOnInit(): void {
-
+    this.nombrePrestador = localStorage.getItem('nombre-pres-sp-ips')
   }
 
   volver(){

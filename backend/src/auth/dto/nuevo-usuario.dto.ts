@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { IsEmail, IsString, MaxLength } from "class-validator";
+import { IsArray, IsEmail, IsNumber, IsObject, IsString, MaxLength } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
+import { RolEntity } from "src/rol/rol.entity";
 import { Column } from "typeorm";
 
 
@@ -44,12 +45,12 @@ export class NuevoUsuarioDto {
     @IsNotBlank({ message: 'La firma del usuario no puede estar vacia' })
     usu_firma: string
 
-    // @Column({type: 'uuid', unique: true, name:'activation_token'})
-    // activationToken: string;
 
     @IsNotBlank({ message: 'El estado del usuario no puede estar vacio' })
     @IsString()
     usu_estado: string;
+
+
 
 }
 

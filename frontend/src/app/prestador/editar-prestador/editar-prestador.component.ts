@@ -26,6 +26,7 @@ export class EditarPrestadorComponent {
     this.prestadorService.listaOne(id).subscribe(
       data => {
         this.prestador = data;
+        
       },
       err => {
         this.toastr.error(err.error.message, 'Fail', {

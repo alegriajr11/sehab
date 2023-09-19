@@ -3,9 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
+import { TokenDto } from 'src/app/models/token.dto';
 import { Usuario } from 'src/app/models/usuario';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
+import { TokenService } from 'src/app/services/token.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-acta-sp-ips',
@@ -19,8 +23,8 @@ export class EditarActaSpIpsComponent {
   usuario: Usuario[] = null;
   act_cargo_funcionario: string
 
-  //Habilitar la Fecha Final
-  habilitarfechaFin = false;
+  //ALMACENAR LA FIRMA DEL PRESTADOR DEL SERVICIO COMPARTIDO
+  firma: string;
 
   //MODAL
   public modalRef: BsModalRef;
@@ -35,6 +39,8 @@ export class EditarActaSpIpsComponent {
     private activatedRoute: ActivatedRoute,
     private usuarioService: UsuarioService,
     private modalService: BsModalService,
+    public sharedService: SharedServiceService,
+    private tokenService: TokenService,
     private toastr: ToastrService,
     private router: Router
   ) { }
@@ -53,7 +59,7 @@ export class EditarActaSpIpsComponent {
         this.router.navigate(['/']);
       }
     );
-    
+
     console.log(this.id_evaluacion)
     this.unsoloCheckbox();
     this.estadoActa();
@@ -69,10 +75,6 @@ export class EditarActaSpIpsComponent {
       }
 
     );
-  }
-
-  habilitarFechaFinal() {
-    this.habilitarfechaFin = true;
   }
 
   cargoUsuario() {
@@ -118,13 +120,151 @@ export class EditarActaSpIpsComponent {
     console.log(this.estado_acta)
     if (this.estado_acta === '0') {
       localStorage.setItem('boton-editar-acta-sp-ips', 'false')
-    } else if(this.estado_acta === '1'){
+    } else if (this.estado_acta === '1') {
       localStorage.setItem('boton-editar-acta-sp-ips', 'true')
     }
   }
 
 
-  onUpdate(): void {
 
+  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO FIRMA FUNCIONARIO DEL ACTASIC DTO
+  async obtenerFirmaFuncionario(): Promise<void> {
+    if (this.actaSp.act_id_funcionario) {
+      const result = await Swal.fire({
+        title: `${this.actaSp.act_nombre_funcionario}`,
+        text: 'Al firmar la presente acta usted acepta haber realizado y diligenciado todo lo correspondiente a su competencia',
+        showCancelButton: true,
+        confirmButtonText: 'FIRMAR',
+        cancelButtonText: 'CANCELAR'
+      });
+
+      if (result.value) {
+        const idFuncionarioSeleccionado = this.actaSp.act_id_funcionario;
+        try {
+          const func = await this.usuarioService.oneUser(idFuncionarioSeleccionado).toPromise();
+          this.actaSp.act_firma_funcionario = func.usu_firma;
+          this.toastr.success('Acta Firmada exitosamente por verificador', 'Éxito', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          });
+        } catch (error) {
+          // Manejar errores si es necesario
+          console.error('Error al obtener la firma del funcionario:', error);
+          this.toastr.error('Error al obtener la firma del funcionario', 'Error', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          });
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          `Acta sin firma del verificador:`,
+          `${this.actaSp.act_nombre_funcionario}`,
+          'error'
+        );
+      }
+    }
+  }
+
+
+  onUpdate(): void {
+    //Por medio de ActivateRoute se atrapa el id del Usuario
+    const id = this.activatedRoute.snapshot.params['id'];
+    //Construcción del DTO Token
+    const token = this.tokenService.getToken();
+    const tokenDto: TokenDto = new TokenDto(token);
+
+    //VISITA INICIAL
+    var visitaInicial = (document.getElementById('inicial')) as HTMLInputElement
+    var valorVisitaInicial = visitaInicial.checked
+    var inicial = '';
+    if (valorVisitaInicial) {
+      inicial = 'X';
+    }
+
+    //ASIGNACION VISITA INICIAL
+    this.actaSp.act_visita_inicial = inicial;
+
+    //VISITA SEGUIMIENTO
+    var visitaSeguim = (document.getElementById('segumiento')) as HTMLInputElement
+    var valorVisitaSeguim = visitaSeguim.checked
+    var seguimiento = '';
+    if (valorVisitaSeguim) {
+      seguimiento = 'X';
+    }
+    //ASIGNACIÓN VISITA SEGUIMIENTO
+    this.actaSp.act_visita_seguimiento = seguimiento;
+
+    //ASIGNACION DE LA FIRMA DEL PRESTADOR SOLO SI FUE INGRESADA EN EL SERVICIO COMPARTIDO
+    this.firma = this.sharedService.getFirmaActaSpIps();
+    if (this.firma) {
+      this.actaSp.act_firma_prestador = this.firma
+    }
+
+    if (
+      (!this.actaSp.act_visita_inicial && !this.actaSp.act_visita_seguimiento) ||
+      !this.actaSp.act_fecha_inicial ||
+      !this.actaSp.act_fecha_final ||
+      !this.actaSp.act_barrio ||
+      !this.actaSp.act_nombre_prestador ||
+      !this.actaSp.act_cargo_prestador
+    ) {
+      //ASIGNANDO LOS RESPECTIVOS MENSAJES EN CASO DE ENTRAR AL IF DE VALIDACIÓN
+      let mensajeError = 'Por favor, complete los siguientes campos:';
+      if (!this.actaSp.act_visita_inicial && !this.actaSp.act_visita_seguimiento) {
+        mensajeError += ' Tipo de Visita,';
+      }
+
+      if (!this.actaSp.act_fecha_inicial) {
+        mensajeError += ' Fecha Inicial,';
+      }
+
+      if (this.actaSp.act_fecha_inicial && !this.actaSp.act_fecha_final) {
+        mensajeError += ' Fecha Final,';
+      }
+
+      if (!this.actaSp.act_barrio) {
+        mensajeError += ' Barrio,';
+      }
+
+      if (!this.actaSp.act_nombre_prestador) {
+        mensajeError += ' Nombre del Prestador,';
+      }
+
+      if (!this.actaSp.act_cargo_prestador) {
+        mensajeError += ' Cargo Prestador,';
+      }
+
+      mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA
+
+      //MOSTRAR MENSAJE POR MEDIO DE TOASTR_SERVICE
+      this.toastr.error(mensajeError, 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-top-center',
+      });
+    } else {
+      this.actaPdfService.updateActaSpIps(id, this.actaSp, tokenDto).subscribe(
+        data => {
+          this.handleSuccess(data.message);
+        },
+        err => {
+          this.handleError(err.error.message);
+        }
+      )
+    }
+  }
+
+  //Toastr mensaje éxito de Acta actualizada desde la Api
+  private handleSuccess(message: string): void {
+    this.toastr.success(message, 'OK', {
+      timeOut: 3000, positionClass: 'toast-top-center'
+    });
+    this.router.navigate(['/sp/evaluaciones-ips']);
+  }
+
+  //Manejo de errores en toastr al actualizar un Acta Sic
+  private handleError(errorMessage: string): void {
+    this.toastr.error(errorMessage, 'Fail', {
+      timeOut: 3000, positionClass: 'toast-top-center',
+    });
   }
 }

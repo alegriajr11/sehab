@@ -116,13 +116,10 @@ export class GenerarpdfService {
                 } else if (item.usu_estado === 'false') {
                     item.usu_estado = 'Inactivo'
                 }
-                let r
-                item.roles.forEach(rol => {
-                    r = rol.rol_nombre
-                })
+                let roles = item.roles.map(rol => rol.rol_nombre).join(', '); // Concatena los nombres de los roles
 
 
-                var temp_list = [item.usu_nombre, item.usu_apellido, item.usu_email, item.usu_nombreUsuario, item.usu_estado, r];
+                var temp_list = [item.usu_nombre, item.usu_apellido, item.usu_email, item.usu_nombreUsuario, item.usu_estado, roles];
                 rows_elements.push(temp_list);
             });
 

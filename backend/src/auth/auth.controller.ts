@@ -28,38 +28,6 @@ export class AuthController {
         return this.authService.getall()
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Post('nuevo/sic')
-    createUserSic(@Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return this.authService.createUserSic(payload);
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @Post('nuevo/sp')
-    createUserSP(@Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return this.authService.createUserSP(payload);
-    }
-
-
-    @UseGuards(JwtAuthGuard)
-    @Post('nuevo/pamec')
-    createUserPamec(@Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        
-        return this.authService.createUserPamec(payload);
-    }
-
-
-
-    @UseGuards(JwtAuthGuard)
-    @Post('nuevo/res')
-    createUserRes(@Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return this.authService.createUserRes(payload);
-    }
-
 
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post('login')

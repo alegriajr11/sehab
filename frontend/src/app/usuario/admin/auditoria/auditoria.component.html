@@ -53,6 +53,7 @@
                     <select id="objVisita" class="form-select form-control" [(ngModel)]="accion" [ngModelOptions]="{standalone: true}" 
                     ngDefaultControl (change)="cargarAuditorias()">
                         <option hidden disabled selected>Acción...</option>
+                        <option value=""></option>
                         <option value="Inicio de Sesión">Inicio de Sesión</option>
                         <option value="Creación">Creación</option>
                         <option value="Cumplimiento Sic">Cumplimiento Sic</option>

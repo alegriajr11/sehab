@@ -7,7 +7,6 @@
             </button>
         </div>
         <div class="col-md-8">
-
             <h1 class="text-center">Visita Resolución 3100 - 2019</h1>
         </div>
     </div>
@@ -178,63 +177,88 @@
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Municipio:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_municipio" placeholder="Municipio..." [(ngModel)]="dat_encontrado_municipio">
+                    <input type="text" class="form-control" name="dat_encontrado_municipio" placeholder="Municipio..."
+                        [(ngModel)]="dat_encontrado_municipio">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Nombre del Prestador:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_prestador" placeholder="Prestador..." [(ngModel)]="dat_encontrado_prestador">
+                    <input type="text" class="form-control" name="dat_encontrado_prestador" placeholder="Prestador..."
+                        [(ngModel)]="dat_encontrado_prestador">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Sede:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_sede" placeholder="Sede..." [(ngModel)]="dat_encontrado_sede">
+                    <input type="text" class="form-control" name="dat_encontrado_sede" placeholder="Sede..."
+                        [(ngModel)]="dat_encontrado_sede">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Tipo de Prestador:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_clasificacion" placeholder="Tipo de Prestador..." [(ngModel)]="dat_encontrado_clasificacion">
+                    <input type="text" class="form-control" name="dato_encontrado_clasificacion"
+                        placeholder="Tipo de Prestador..." [(ngModel)]="dat_encontrado_clasificacion">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Código Habilitación:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_cod_sede" placeholder="Código Habilitación..." [(ngModel)]="dat_encontrado_cod_sede">
+                    <input type="text" class="form-control" name="dato_encontrado_cod_sede"
+                        placeholder="Código Habilitación..." [(ngModel)]="dat_encontrado_cod_sede">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Código Habilitación Sede:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_nit" placeholder="Código Habilitación Sede..." [(ngModel)]="dat_encontrado_nit">
+                    <input type="text" class="form-control" name="dat_encontrado_nit"
+                        placeholder="Código Habilitación Sede..." [(ngModel)]="dat_encontrado_nit">
                 </div>
-                
+
                 <div class="col-md-6">
                     <label for="" class="form-label">Teléfono:</label>
-                    <input type="tel" class="form-control" name="dato_encontrado_telefono" placeholder="Teléfono..." [(ngModel)]="dat_encontrado_telefono">
+                    <input type="tel" class="form-control" name="dato_encontrado_telefono" placeholder="Teléfono..."
+                        [(ngModel)]="dat_encontrado_telefono">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Nit:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_nit" placeholder="Nit..." [(ngModel)]="dat_encontrado_nit">
+                    <input type="text" class="form-control" name="dat_encontrado_nit" placeholder="Nit..."
+                        [(ngModel)]="dat_encontrado_nit">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Dirección:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_direccion" placeholder="Dirección..." [(ngModel)]="dat_encontrado_direccion">
+                    <input type="text" class="form-control" name="dato_encontrado_direccion" placeholder="Dirección..."
+                        [(ngModel)]="dat_encontrado_direccion">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Representante Legal:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_representante" placeholder="Representante Legal..." [(ngModel)]="dat_encontrado_representante">
+                    <input type="text" class="form-control" name="dato_encontrado_representante"
+                        placeholder="Representante Legal..." [(ngModel)]="dat_encontrado_representante">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Gerente - Director:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_gerente" placeholder="Gerente - Director..." [(ngModel)]="dat_encontrado_gerente">
+                    <input type="text" class="form-control" name="dato_encontrado_gerente"
+                        placeholder="Gerente - Director..." [(ngModel)]="dat_encontrado_gerente">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Correo Electrónico:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_correo" placeholder="E-mail..." [(ngModel)]="dat_encontrado_correo">
+                    <input type="text" class="form-control" name="dato_encontrado_correo" placeholder="E-mail..."
+                        [(ngModel)]="dat_encontrado_correo">
                 </div>
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <!-- <div class="col-12">
+                    <h3>LEVANTAMIENTO DE MEDIDA</h3>
+                </div>
+                
+                <div class="col-12">
+                    <span class="button-like btn-span" title="Si existe levantamiento de medida, agrégalo">Agregar Levantamiento de medida</span>
+                </div> -->
+                
 
                 <div class="col-12">
                     <hr class="medio">
@@ -251,7 +275,40 @@
                     <input type="hidden" name="act_usu_adicional" [(ngModel)]="act_usu_adicional">
                 </div>
 
-                <div *ngFor="let selectedUser of selectedUsers; let i = index">
+                <div *ngFor="let selectedUser of selectedUsersVerificadores; let i = index">
+                    <!-- Aquí va el select duplicado -->
+                    <div class="col-12">
+                        <label for="" class="form-label">Verificador SOGCS:</label>
+                        <select class="form-select form-control" [(ngModel)]="selectedUser.userId"
+                            [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                            <option hidden>Selecciona el Nombre...</option>
+                            <option *ngFor="let usuario of usuariosDisponibles" [value]="usuario.usu_id">
+                                {{ usuario.usu_nombre }} {{ usuario.usu_apellido }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Agregar botón para eliminar este select duplicado -->
+                    <div class="col-12">
+                        <span class="button-like btn-span" (click)="removeSelectVerificador(i)">X</span>
+                    </div>
+                </div>
+
+                <!--Habilitar Select User-->
+                <div class="col-md-12">
+                    <span class="button-like btn-span" (click)="addSelectVerificador()">Agregar Verificador SOGCS</span>
+                </div>
+
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <h3>PROFESIONALES DE APOYO DE LA SECRETARIA DE SALUD PUTUMAYO</h3>
+                </div>
+
+                <div *ngFor="let selectedUser of selectedUsersProfesionales; let i = index">
                     <!-- Aquí va el select duplicado -->
                     <div class="col-12">
                         <label for="" class="form-label">Verificador SOGCS:</label>
@@ -264,20 +321,15 @@
                     </div>
                     <!-- Agregar botón para eliminar este select duplicado -->
                     <div class="col-12">
-                        <span class="button-like btn-span" (click)="removeSelect(i)">X</span>
+                        <span class="button-like btn-span" (click)="removeSelectProfesional(i)">X</span>
                     </div>
                 </div>
 
-
                 <div class="col-md-12">
-                    <span class="button-like btn-span" (click)="addSelect()">Agregar Verificador SOGCS</span>
+                    <span class="button-like btn-span" (click)="addSelectProfesional()">Agregar Profesional</span>
                 </div>
 
-
-
-                <div class="col-12">
-                    <h3 class="text-center sizeh3">FIRMA</h3>
-                </div>
+                <div class="col-12 sizeh3"></div>
 
                 <div class="col-12 bg-h3 contenedor-form">
                     <h3 class="text-center sizeh3">PRESTADOR DE SERVICIOS DE SALUD</h3>
@@ -290,14 +342,14 @@
                 </div>
 
                 <!--BOTON MODAL FIRMA-->
-                <div class="col-3">
+                <div class="col-4">
                     <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma Prestador</span>
                 </div>
 
 
                 <div class="col-12">
                     <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
-                    (click)="ruta()">
+                        (click)="ruta()">
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>

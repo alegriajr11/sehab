@@ -240,3 +240,8 @@ span{
     z-index: 1;
 }
 
+
+/*COLOR SPAN ESTADO*/
+td span .cerrado{
+    color: rgb(189, 170, 4);
+}

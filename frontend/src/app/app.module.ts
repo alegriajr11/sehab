@@ -33,10 +33,6 @@ import { HomeSicComponent } from './roles/sic/home-sic.component';
 import { HomeSpComponent } from './roles/sp/home-sp.component';
 import { HomePamecComponent } from './roles/pamec/home-pamec.component';
 import { HomeResoComponent } from './roles/reso/home-reso.component';
-import { NuevoUsuarioSicComponent } from './usuario/sic/nuevo-usuario-sic.component';
-import { NuevoUsuarioSpComponent } from './usuario/sp/nuevo-usuario-sp.component';
-import { NuevoUsuarioPamecComponent } from './usuario/pamec/nuevo-usuario-pamec.component';
-import { NuevoUsuarioResoComponent } from './usuario/reso/nuevo-usuario-reso.component';
 import { EvaluacionesSicComponent } from './roles/sic/evaluaciones/evaluaciones-sic.component';
 import { EvaluacionSicComponent } from './roles/sic/evaluacion/evaluacion-sic.component';
 import { ActaPamecComponent } from './roles/pamec/acta/acta-pamec.component';
@@ -88,9 +84,6 @@ import { ActaSpProComponent } from './roles/sp/sp-profesionales/acta-pro/acta-sp
 import { EvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluacion-sp-pro/evaluacion-sp-pro.component';
 import { HomeEstandarComponent } from './roles/reso/lista-verificacion/home-estandar/home-estandar.component';
 import { ModalFirmaComponent } from './roles/sic/acta/modal-firma/modal-firma.component';
-import { ModalFirmaPamecComponent } from './usuario/pamec/modal-firma-pamec/modal-firma-pamec.component';
-import { ModalFirmaSicComponent } from './usuario/sic/modal-firma-sic/modal-firma-sic.component';
-import { ModalFirmaSpComponent } from './usuario/sp/modal-firma-sp/modal-firma-sp.component';
 import { ActaModule } from './roles/sic/acta/acta.module';
 import { EvaluacionUnoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-uno/evaluacion-uno.component';
 import { EvaluacionDosComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-dos/evaluacion-dos.component';
@@ -108,12 +101,10 @@ import { InformeResolucionComponent } from './roles/reso/informe-resolucion/info
 import { InformesRealizadosResolucionComponent } from './roles/reso/informes-realizados-resolucion/informes-realizados-resolucion.component';
 import { ModalInformeResolucionComponent } from './roles/reso/informe-resolucion/modal-informe-resolucion/modal-informe-resolucion.component';
 import { ModalInformesRealizadosResComponent } from './roles/reso/informes-realizados-resolucion/modal-informes-realizados-res/modal-informes-realizados-res.component';
-import { SedesPrestadorComponent } from './prestador/sedes-prestador/sedes-prestador.component';
-import { AgregarSedesPrestadorComponent } from './prestador/sedes-prestador/agregar-sedes-prestador/agregar-sedes-prestador.component';
+import { AgregarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/agregar-sedes-prestador/agregar-sedes-prestador.component';
 import { ModalFirmaActaSpIpsComponent } from './roles/sp/sp-ips/acta-ips/modal-firma-acta-sp-ips/modal-firma-acta-sp-ips.component';
 import { ModalFirmaActaSpProComponent } from './roles/sp/sp-profesionales/acta-pro/modal-firma-acta-sp-pro/modal-firma-acta-sp-pro.component';
 import { ModalFirmaActaPamecComponent } from './roles/pamec/acta/modal-firma-acta-pamec/modal-firma-acta-pamec.component';
-import { ModalFirmaResolucionComponent } from './usuario/reso/modal-firma-resolucion/modal-firma-resolucion.component';
 import { EditarEvaluacionSicComponent } from './roles/sic/evaluaciones/editar-evaluacion-sic/editar-evaluacion-sic.component';
 import { EditarActaSicComponent } from './roles/sic/evaluaciones/editar-acta-sic/editar-acta-sic.component';
 import { EditarEvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/editar-evaluacion-sp-pro/editar-evaluacion-sp-pro.component';
@@ -125,6 +116,13 @@ import { ModalEvaluacionesSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-
 import { ModalEvaluacionesPamecComponent } from './roles/pamec/evaluaciones/modal-evaluaciones-pamec/modal-evaluaciones-pamec.component';
 import { ModalEditarFirmaSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/editar-acta-sp-ips/modal-editar-firma-sp-ips/modal-editar-firma-sp-ips.component';
 import { ModalEditarFirmaSpIndComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/editar-acta-sp-pro/modal-editar-firma-sp-ind/modal-editar-firma-sp-ind.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NuevoUsuarioRolComponent } from './usuario/nuevo-usuario-rol/nuevo-usuario-rol.component';
+import { ModalFirmaRolComponent } from './usuario/nuevo-usuario-rol/modal-firma-rol/modal-firma-rol.component';
+import { ModalSedesPrestadorComponent } from './prestador/modal-sedes-prestador/modal-sedes-prestador.component';
+import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.component';
+import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/editar-sedes-prestador/editar-sedes-prestador.component';
 
 
 
@@ -150,10 +148,6 @@ import { ModalEditarFirmaSpIndComponent } from './roles/sp/sp-profesionales/eval
     HomeSpComponent,
     HomePamecComponent,
     HomeResoComponent,
-    NuevoUsuarioSicComponent,
-    NuevoUsuarioSpComponent,
-    NuevoUsuarioPamecComponent,
-    NuevoUsuarioResoComponent,
     EvaluacionesSicComponent,
     EvaluacionSicComponent,
     ActaSpIpsComponent,
@@ -204,9 +198,6 @@ import { ModalEditarFirmaSpIndComponent } from './roles/sp/sp-profesionales/eval
     AuditoriaComponent,
     HomeEvaluacionIpsComponent,
     ModalFirmaComponent,
-    ModalFirmaPamecComponent,
-    ModalFirmaSicComponent,
-    ModalFirmaSpComponent,
     EvaluacionUnoComponent,
     EvaluacionDosComponent,
     EvaluacionTresComponent,
@@ -223,12 +214,10 @@ import { ModalEditarFirmaSpIndComponent } from './roles/sp/sp-profesionales/eval
     InformesRealizadosResolucionComponent,
     ModalInformeResolucionComponent,
     ModalInformesRealizadosResComponent,
-    SedesPrestadorComponent,
     AgregarSedesPrestadorComponent,
     ModalFirmaActaSpIpsComponent,
     ModalFirmaActaSpProComponent,
     ModalFirmaActaPamecComponent,
-    ModalFirmaResolucionComponent,
     EditarEvaluacionSicComponent,
     EditarActaSicComponent,
     EditarEvaluacionSpProComponent,
@@ -239,7 +228,12 @@ import { ModalEditarFirmaSpIndComponent } from './roles/sp/sp-profesionales/eval
     ModalEvaluacionesSpIpsComponent,
     ModalEvaluacionesPamecComponent,
     ModalEditarFirmaSpIpsComponent,
-    ModalEditarFirmaSpIndComponent
+    ModalEditarFirmaSpIndComponent,
+    NuevoUsuarioRolComponent,
+    ModalFirmaRolComponent,
+    ModalSedesPrestadorComponent,
+    RichTextEditorComponent,
+    EditarSedesPrestadorComponent
 
   ],
   imports: [
@@ -255,7 +249,9 @@ import { ModalEditarFirmaSpIndComponent } from './roles/sp/sp-profesionales/eval
     Ng2SearchPipeModule,
     ModalModule,
     ActaModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatFormFieldModule
     
 
   ],

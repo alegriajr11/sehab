@@ -55,10 +55,6 @@ import { NuevoUsuarioAdminComponent } from './usuario/admin/nuevo-usuario-admin.
 import { EditarUsuarioComponent } from './usuario/editar-usuario.component';
 import { ListaUsuarioComponent } from './usuario/lista-usuario.component';
 import { NuevoUsuarioComponent } from './usuario/nuevo-usuario.component';
-import { NuevoUsuarioPamecComponent } from './usuario/pamec/nuevo-usuario-pamec.component';
-import { NuevoUsuarioResoComponent } from './usuario/reso/nuevo-usuario-reso.component';
-import { NuevoUsuarioSicComponent } from './usuario/sic/nuevo-usuario-sic.component';
-import { NuevoUsuarioSpComponent } from './usuario/sp/nuevo-usuario-sp.component';
 import { TodosServiciosComponent } from './roles/reso/home-estandar/todos-servicios/todos-servicios.component';
 import { AtencionInmediataComponent } from './roles/reso/lista-verificacion/home-estandar/atencion-inmediata/atencion-inmediata.component';
 import { ConsultaExternaComponent } from './roles/reso/lista-verificacion/home-estandar/consulta-externa/consulta-externa.component';
@@ -83,8 +79,7 @@ import { ActaVisitaVerificacionComponent } from './roles/reso/acta-visita-verifi
 import { ActaVisitaIvcComponent } from './roles/reso/acta-visita-ivc/acta-visita-ivc.component';
 import { InformeResolucionComponent } from './roles/reso/informe-resolucion/informe-resolucion.component';
 import { InformesRealizadosResolucionComponent } from './roles/reso/informes-realizados-resolucion/informes-realizados-resolucion.component';
-import { SedesPrestadorComponent } from './prestador/sedes-prestador/sedes-prestador.component';
-import { AgregarSedesPrestadorComponent } from './prestador/sedes-prestador/agregar-sedes-prestador/agregar-sedes-prestador.component';
+import { AgregarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/agregar-sedes-prestador/agregar-sedes-prestador.component';
 import { EditarActaSicComponent } from './roles/sic/evaluaciones/editar-acta-sic/editar-acta-sic.component';
 import { EditarEvaluacionSicComponent } from './roles/sic/evaluaciones/editar-evaluacion-sic/editar-evaluacion-sic.component';
 import { EditarActaSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/editar-acta-sp-ips/editar-acta-sp-ips.component';
@@ -92,6 +87,9 @@ import { EditarActaSpIpsGuard } from './guards/editar-acta-sp-ips.guard';
 import { EditarActaSicGuard } from './guards/editar-acta-sic.guard';
 import { EditarActaSpProComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/editar-acta-sp-pro/editar-acta-sp-pro.component';
 import { EditarActaSpIndGuard } from './guards/editar-acta-sp-ind.guard';
+import { NuevoUsuarioRolComponent } from './usuario/nuevo-usuario-rol/nuevo-usuario-rol.component';
+import { ModalSedesPrestadorComponent } from './prestador/modal-sedes-prestador/modal-sedes-prestador.component';
+import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/editar-sedes-prestador/editar-sedes-prestador.component';
 
 
 const routes: Routes = [
@@ -129,11 +127,8 @@ const routes: Routes = [
   //Rutas Usuario
   { path: 'usuarios', component: ListaUsuarioComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   { path: 'usuarios/nuevo', component: NuevoUsuarioComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
-  { path: 'usuarios/nuevo/sic', component: NuevoUsuarioSicComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
-  { path: 'usuarios/nuevo/sp', component: NuevoUsuarioSpComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
-  { path: 'usuarios/nuevo/pamec', component: NuevoUsuarioPamecComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
-  { path: 'usuarios/nuevo/reso', component: NuevoUsuarioResoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   { path: 'usuarios/nuevo/admin', component: NuevoUsuarioAdminComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
+  { path: 'usuarios/nuevo/rol', component: NuevoUsuarioRolComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   { path: 'usuarios/editar/:id', component: EditarUsuarioComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
 
   { path: 'usuarios/restablecer/:id', component: ResetpasswordComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
@@ -187,8 +182,8 @@ const routes: Routes = [
   { path: 'servicios-capacidad', component: CapacidadInstaladaComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
 
   //RUTAS ACTA - RESOLUCIÓN 3100
-  { path: 'reso/visita-verificacion', component: ActaVisitaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
-  { path: 'reso/visita-ivc', component: ActaVisitaIvcComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'reso/visita-verificacion', component: ActaVisitaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'coordinador'] } },
+  { path: 'reso/visita-ivc', component: ActaVisitaIvcComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'coordinador'] } },
 
   //ESTANDARES - RESOLUCION
   { path: 'home-estandar', component: HomeEstandarComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
@@ -222,8 +217,9 @@ const routes: Routes = [
   { path: 'prestadores/editar/:id', component: EditarPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   { path: 'prestadores/nuevo', component: NuevoPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   //SEDES - PRESTADORES
-  { path: 'prestadores/sede', component: SedesPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
+  { path: 'prestadores/sede', component: ModalSedesPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   { path: 'prestadores/sede/nueva', component: AgregarSedesPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
+  { path: 'prestadores/sede/editar/:id', component: EditarSedesPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
 
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

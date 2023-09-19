@@ -67,6 +67,14 @@ export class ActapdfService {
     return this.httpClient.get<ActaSicPdfDto[]>(this.actasic_pdfUrl + 'fecha/' + dateString)
   }
 
+  //SOLICITUD ACTUALIZAR ACTA - ROL SIC
+  public updateActaSic(id: number, acta_sic: ActaSicPdfDto, tokenDto: TokenDto): Observable<any> {
+    return this.httpClient.put<any>(`${this.actasic_pdfUrl}${id}`, {
+      dto: acta_sic,
+      tokenDto: tokenDto
+    });
+  }
+
   /*ROL SP*/
   /*ROL SP - IPS*/
   //SOLICITUD LISTAR ACTAS DEL ROL SP - IPS
@@ -83,6 +91,14 @@ export class ActapdfService {
   //SOLICITUD MOSTRAR UN ACTA DEL ROL SP_IPS
   public oneActaSpIps(id: number): Observable<ActaSpPdfDto> {
     return this.httpClient.get<ActaSpPdfDto>(`${this.actasp_ips_pdfurl}${id}`);
+  }
+
+  //SOLICITUD ACTUALIZAR ACTA - SP_IPS
+  public updateActaSpIps(id: number, acta_sp_ips: ActaSpPdfDto, tokenDto: TokenDto): Observable<any> {
+    return this.httpClient.put<any>(`${this.actasp_ips_pdfurl}${id}`, {
+      dto: acta_sp_ips,
+      tokenDto: tokenDto
+    });
   }
 
   //SOLICITUD ULTIMA ACTA DEL ROL SP_IND
@@ -102,10 +118,10 @@ export class ActapdfService {
     return this.httpClient.get<ActaSpPdfDto>(`${this.actaSp_ind_pdf_URL}${id}`);
   }
 
-    //SOLICITUD MOSTRAR UN ACTA DEL ROL PAMEC
-    public oneActaPamec(id: number): Observable<ActaPamecDto> {
-      return this.httpClient.get<ActaPamecDto>(`${this.actaPamec_pdf_url}${id}`);
-    }
+  //SOLICITUD MOSTRAR UN ACTA DEL ROL PAMEC
+  public oneActaPamec(id: number): Observable<ActaPamecDto> {
+    return this.httpClient.get<ActaPamecDto>(`${this.actaPamec_pdf_url}${id}`);
+  }
 
 
   //FILTRAR ACTA POR FECHA - No ACTA - PRESTADOR - NIT
@@ -209,11 +225,11 @@ export class ActapdfService {
     return this.httpClient.put<any>(this.actasp_ips_pdfurl + 'cerrar/' + id, body)
   }
 
-    //CERRAR EL ACTA PAMEC
-    public cerrarActaPamec(id: number, tokenDto: TokenDto): Observable<any> {
-      const body = {
-        tokenDto: tokenDto
-      }
-      return this.httpClient.put<any>(this.actaPamec_pdf_url + 'cerrar/' + id, body)
+  //CERRAR EL ACTA PAMEC
+  public cerrarActaPamec(id: number, tokenDto: TokenDto): Observable<any> {
+    const body = {
+      tokenDto: tokenDto
     }
+    return this.httpClient.put<any>(this.actaPamec_pdf_url + 'cerrar/' + id, body)
+  }
 }

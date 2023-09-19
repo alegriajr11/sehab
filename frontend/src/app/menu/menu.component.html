@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+<nav class="navbar navbar-dark bg-dark mb-3 navbar-expand-md">
   <div class="image-container">
     <div class="row">
       <div class="col-md-12">
@@ -13,6 +13,8 @@
     aria-expanded="true" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+
+
   <div class="margin navbar-collapse" id="navbarNav">
     <ul class="navbar-nav mr-auto">
       <div class="d-flex p-2" *ngIf="isLogged">
@@ -60,8 +62,8 @@
             <i class="fas fa-search-location color_icono"></i> AUDITORIA
           </a>
         </li>
-        
-        
+
+
 
       </div>
     </ul>
@@ -73,12 +75,17 @@
       <div class="container bg" *ngIf="isLogged">
 
         <h6 class="fw-semibold py-2 text-center" *ngIf="usu_nombreUsuario">{{usu_nombreUsuario}}</h6>
+        <!-- Icono de notificaciones y número de notificaciones pendientes -->
+        <div class="notifications-icon">
+          <a href="#" (click)="mostrarNotificaciones()">
+            <i class="fas fa-bell fa-lg" style="color: white; margin-left: 5px;"></i>
+            <span class="badge badge-danger">{{ numeroDeNotificaciones }}</span>
+          </a>
+        </div>
+
         <c-dropdown alignment="end" variant="nav-item" *ngIf="isLogged">
           <span [caret]="true" cDropdownToggle class="fa fa-user-circle white-color" style="font-size:30px;"></span>
           <ul cDropdownMenu class="pt-0 pr-0 w-auto">
-            <!-- <li>
-                  <h6 cDropdownHeader class="bg-light fw-semibold py-2 text-center" *ngIf="nombreUsuario">{{nombreUsuario}}</h6>
-                </li> -->
             <li>
               <a routerLink="/usuario/cambiar-contraseña" cDropdownItem><i class='fa fa-key'></i> Cambiar Contraseña</a>
             </li>

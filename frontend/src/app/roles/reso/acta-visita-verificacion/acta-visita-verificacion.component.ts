@@ -8,6 +8,8 @@ import { MunicipioService } from 'src/app/services/NuevoPrestador/municipio.serv
 import { PrestadorService } from 'src/app/services/prestador.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
+
+
 @Component({
   selector: 'app-acta-visita-verificacion',
   templateUrl: './acta-visita-verificacion.component.html',
@@ -63,7 +65,12 @@ export class ActaVisitaVerificacionComponent {
   dat_encontrado_correo: string
 
 
-  selectedUsers: any[] = []; // Arreglo para almacenar las selecciones de usuarios
+  selectedUsersVerificadores: any[] = [];
+  selectedUsersProfesionales: any[] = [];
+
+  usuariosDisponibles: any[] = [];
+  filteredUsuariosDisponibles: any[] = [];
+
 
   //Habilitar la Fecha Final
   habilitarfechaFin = false;
@@ -74,7 +81,9 @@ export class ActaVisitaVerificacionComponent {
     private municipioService: MunicipioService,
     private usuarioService: UsuarioService,
     private router: Router
-  ) { }
+  ) {
+    this.cargarUsuario();
+  }
 
   ngOnInit() {
     this.incializarDatos();
@@ -83,8 +92,6 @@ export class ActaVisitaVerificacionComponent {
   incializarDatos() {
     this.unsoloCheckbox();
     this.cargarMunicipio();
-    this.cargarUsuario();
-
   }
 
   onRegister() {
@@ -92,7 +99,7 @@ export class ActaVisitaVerificacionComponent {
   }
 
   obtenerNombres() {
-    
+
   }
 
   //PERMITIR SOLO SELECCIONA UN SOLO CHECKBOX
@@ -179,7 +186,7 @@ export class ActaVisitaVerificacionComponent {
   cargarUsuario(): void {
     this.usuarioService.lista().subscribe(
       data => {
-        this.usuarios = data;
+        this.usuariosDisponibles = data;
         this.listaVacia = undefined;
       },
       err => {
@@ -192,17 +199,37 @@ export class ActaVisitaVerificacionComponent {
 
   }
 
-  ruta(){
+  ruta() {
     this.router.navigate(['/reso/lista-verificacion']);
   }
 
-  addSelect() {
-    this.selectedUsers.push({ userId: null }); // Agregar un objeto vacío para una nueva selección
+
+
+  addSelectVerificador() {
+    this.selectedUsersVerificadores.push({ userId: null });
   }
 
-  removeSelect(index: number) {
-    this.selectedUsers.splice(index, 1); // Eliminar la selección en el índice proporcionado
+  removeSelectVerificador(index: number) {
+    this.selectedUsersVerificadores.splice(index, 1);
   }
 
+
+  addSelectProfesional() {
+    this.selectedUsersProfesionales.push({ userId: null }); // Agregar un objeto vacío para una nueva selección
+  }
+
+  removeSelectProfesional(index: number) {
+    this.selectedUsersProfesionales.splice(index, 1); // Eliminar la selección en el índice proporcionado
+  }
+
+
+  removeSelectedUser(selectedUserId: any) {
+    console.log(selectedUserId);
+    const index = this.usuariosDisponibles.findIndex(usuario => usuario.usu_id === selectedUserId);
+    if (index !== -1) {
+      this.usuariosDisponibles.splice(index, 1);
+    }
+  }
 
 }
+

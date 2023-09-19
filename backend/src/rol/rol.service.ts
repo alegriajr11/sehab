@@ -28,6 +28,7 @@ export class RolService {
             if(!roles.length) throw new NotFoundException(new MessageDto('No hay roles en la lista'))
             return roles;
         }
+        
 
         async create(dto: CreateRolDto): Promise<any> {
             const exists = await this.rolRepository.findOne({where: {rol_nombre: dto.rol_nombre }});

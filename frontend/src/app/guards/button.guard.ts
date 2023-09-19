@@ -12,7 +12,7 @@ export class ButtonGuard implements CanActivate {
     canActivate(): boolean {
         const nombrePrestadorInd = sessionStorage.getItem('nombre-pres-sp-ind')
         const nombrePrestadorSic = sessionStorage.getItem('nombre-pres-sic')
-        const nombrePrestadorIps = sessionStorage.getItem('nombre-pres-sp-ips')
+        const nombrePrestadorIps = localStorage.getItem('nombre-pres-sp-ips')
         const nombrePrestadorPamec = sessionStorage.getItem('nombre-pres-pamec')
         if (localStorage.getItem('boton-acta-sic') === 'true' && nombrePrestadorSic) {
             return true;

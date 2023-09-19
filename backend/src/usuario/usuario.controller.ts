@@ -8,6 +8,7 @@ import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UsuarioDto } from './dto/usuario.dto';
 import { UsuarioService } from './usuario.service';
 import { TokenDto } from 'src/auth/dto/token.dto';
+import { NuevoUsuarioDto } from 'src/auth/dto/nuevo-usuario.dto';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -29,8 +30,8 @@ export class UsuarioController {
     }
 
     //LISTAR USUARIO POR ID
-    @RolDecorator(RolNombre.ADMIN)
-    @UseGuards(JwtAuthGuard)
+    // @RolDecorator(RolNombre.ADMIN)
+    // @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.usuarioService.findById(id);
@@ -43,14 +44,20 @@ export class UsuarioController {
         return await this.usuarioService.delete(id, tokenDto);
     }
 
-    //CREAR USUARIO ADMINISTRADOR
-    @RolDecorator(RolNombre.ADMIN)
-    @UseGuards(JwtAuthGuard, RolesGuard)
+
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post()
-    async create(@Body() payload: { dto: CreateUsuarioDto, tokenDto: TokenDto }) {
+    async createAdmin(@Body() payload: { dto: NuevoUsuarioDto, tokenDto: TokenDto }) {
         const { dto, tokenDto } = payload;
         return this.usuarioService.create(payload);
+    }
+
+    //CREAR USUARIO POR ROLES
+    @UsePipes(new ValidationPipe({ whitelist: true }))
+    @Post('rol')
+    async createUserRol(@Body() payload: { dto: NuevoUsuarioDto, rolesIds: number[], tokenDto: TokenDto }) {
+        const { dto, rolesIds, tokenDto } = payload;
+        return this.usuarioService.createUserRol(payload);
     }
 
 

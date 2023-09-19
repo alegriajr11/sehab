@@ -45,9 +45,13 @@
             ],
             "styles": [
               "node_modules/ngx-toastr/toastr.css",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/tinymce/skins/ui/oxide/skin.css"
+
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/tinymce/tinymce.js"
+            ]
           },
           "configurations": {
             "production": {

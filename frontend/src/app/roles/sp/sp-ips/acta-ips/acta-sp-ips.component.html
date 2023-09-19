@@ -58,17 +58,17 @@
                 <div class="col-md-3">
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
-                        name="act_fecha_inicial" [(ngModel)]="act_fecha_inicial" [ngModelOptions]="{standalone: true}"
-                        ngDefaultControl (change)="habilitarFechaFinal(); ocultarMensajes()">
+                        name="fecha_inicial" [(ngModel)]="fecha_inicial" [ngModelOptions]="{standalone: true}"
+                        ngDefaultControl (change)="ocultarMensajes()">
                     <div *ngIf="showFechaInicialMessage" class="validation-message">Seleccione la Fecha
                         Inicial.</div>
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
-                    <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
-                        [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial" (change)="ocultarMensajes()">
+                    <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="fecha_final"
+                        [(ngModel)]="fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
+                        [min]="fecha_inicial" (change)="ocultarMensajes()">
                     <div *ngIf="showFechaFinalMessage" class="validation-message">Seleccione la Fecha
                         Final.</div>
                 </div>
@@ -155,18 +155,174 @@
 
 
                 <div class="col-12">
-                    <hr class="medio">
-                </div>
-
-                <div class="col-12">
                     <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
                     <select id="objVisita" class="form-select form-control" [(ngModel)]="act_obj_visita"
                         [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="ocultarMensajes()">
                         <option hidden selected>Objeto de visita...</option>
-                        <option>Realizar seguimiento a la implementación del programa de seguridad del paciente para
-                            profesionales independientes.</option>
+                        <option>Realizar seguimiento a la implementación del programa de seguridad del paciente para instituciones 
+                            prestadoras de servicios de salud. </option>
                     </select>
                     <div *ngIf="showObjVisitaMessage" class="validation-message-ovpc">Seleccione el Objeto.</div>
+                </div>
+
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+
+                <div class="col-12 bg-h3 contenedor-form">
+                    <h3 class="text-center sizeh3">ORDÉN DEL DÍA</h3>
+                </div>
+
+                <div class="col-12">
+                    <h3 class="text-center sizeh3">1. PRESENTACIÓN ANTE GERENTE Y/O SU DELEGADO:</h3>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="fecha" class="form-label">Fecha:</label>
+                    <input type="date" class="form-control" id="fecha_orden" name="fecha_orden" [(ngModel)]="fecha_orden">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="hora" class="form-label">Hora:</label>
+                    <input type="time" class="form-control" id="hora" name="act_hora" [(ngModel)]="act_hora_orden24">
+                </div>
+
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Número de Oficio:</label>
+                    <input type="text" class="form-control" id="numero_oficio" placeholder="Número de oficio"
+                        name="act_num_oficio" [(ngModel)]="act_num_oficio">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Fecha de Oficio:</label>
+                    <input type="date" class="form-control" id="fecha_oficio" placeholder="Fecha de oficio"
+                        name="fecha_oficio" [(ngModel)]="fecha_oficio">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Fecha Envío de Oficio:</label>
+                    <input type="date" class="form-control" id="fecha_envio_oficio" placeholder="Fecha Envío de oficio"
+                        name="fecha_envio_oficio" [(ngModel)]="fecha_envio_oficio">
+                </div>
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <h3 class="text-center sizeh3">2. OBJETO DE LA VISITA:</h3>
+                </div>
+
+                <div class="col-12">
+                    <h3 class="sizeh3">SELECCIONA LAS EVALUACIONES DE LA VISITA:</h3>
+                </div>
+
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva1" name="eva1" [(ngModel)]="evaluacionesSeleccionadas['eva1']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva1', 1)"></div>
+                    </div>
+                    <label for="eva1">1. EVALUACION DE HERRAMIENTAS PARA LA IDENTIFICACIÓN Y GESTIÓN DE EVENTOS
+                        ADVERSO</label>
+                </div>
+
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva2" name="eva2" [(ngModel)]="evaluacionesSeleccionadas['eva2']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva2', 2)"></div>
+                    </div>
+                    <label for="eva2">2. MONITORIZACIÓN DE ASPECTOS RELACIONADOS CON LA SEGURIDAD DEL PACIENTE</label>
+                </div>
+
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva3" name="eva3" [(ngModel)]="evaluacionesSeleccionadas['eva3']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva3', 3)"></div>
+                    </div>
+                    <label for="eva3">3. DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO</label>
+                </div>
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva4" name="eva4" [(ngModel)]="evaluacionesSeleccionadas['eva4']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva4', 4)"></div>
+                    </div>
+                    <label for="eva4">4. USO SEGURO DE MEDICAMENTOS</label>
+                </div>
+
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva5" name="eva5" [(ngModel)]="evaluacionesSeleccionadas['eva5']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva5', 5)"></div>
+                    </div>
+                    <label for="eva5">5. ASEGURAR LA CORRECTA IDENTIFICACIÓN DE PACIENTES</label>
+                </div>
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva6" name="eva6" [(ngModel)]="evaluacionesSeleccionadas['eva6']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva6', 6)"></div>
+                    </div>
+                    <label for="eva6">6. GARANTIZAR LA ATENCIÓN SEGURA DE LA MADRE Y EL RECIEN NACIDO</label>
+                </div>
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva7" name="eva7" [(ngModel)]="evaluacionesSeleccionadas['eva7']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva7', 7)"></div>
+                    </div>
+                    <label for="eva7">7. MEJORAR LA SEGURIDAD EN LOS PROCEDIMIENTOS QUIRURGICOS</label>
+                </div>
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva8" name="eva8" [(ngModel)]="evaluacionesSeleccionadas['eva8']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva8', 8)"></div>
+                    </div>
+                    <label for="eva8">8. PREVENCIÓN DE ULCERAS POR PRESIÓN</label>
+                </div>
+
+                <div class="col-md-6 with-divider-horizontal">
+                    <div class="switch">
+                        <input type="checkbox" id="eva9" name="eva9" [(ngModel)]="evaluacionesSeleccionadas['eva9']">
+                        <div class="slider round" (click)="toggleEvaluacion('eva9', 9)"></div>
+                    </div>
+                    <label for="eva9">9. PROCESOS PARA LA PREVENCIÓN Y REDUCCIÓN DE LA FRECUENCIA DE CAÍDA</label>
+                </div>
+
+                <div class="col-md-6 with-divider-horizontal">
+                </div>
+
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <h3 class="text-center sizeh3">3. CARACTERIZACIÓN DE LOS SERVICIOS OFERTADOS:</h3>
+                </div>
+
+                <div class="col-12">
+                    <h3 class="sizeh3">CARGAR CAPTURA DE LOS SERVICIOS - REPS:</h3>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="col-12 d-flex justify-content-center p-2">
+                        <label for="fileInput" class="custom-file-label">
+                            <i class="fas fa-upload"></i> Cargar imagen
+                        </label>
+                        <input type="file" id="fileInput" accept="image/*" (change)="cargarImagen($event)">
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="medio">
                 </div>
 
                 <div class="col-12">
@@ -200,28 +356,45 @@
                     <h3 class="text-center sizeh3">PRESTADOR DE SERVICIOS DE SALUD</h3>
                 </div>
 
-                <div class="col-12">
-                    <label for="" class="form-label">Prestador:</label>
+                <div class="col-md-6">
+                    <label for="" class="form-label">Representante:</label>
                     <input type="text" class="form-control" id="nombrePrestador" name="act_nombre_prestador"
                         placeholder="Prestador..." [(ngModel)]="act_nombre_prestador" (input)="ocultarMensajes()">
+                    <div *ngIf="showPresadorNombreMessage" class="validation-message-ovpc">Ingresa el Nombre
+                        Representante a
+                        cargo.
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Cargo:</label>
+                    <input type="text" class="form-control" id="cargoPres" name="act_cargo_prestador"
+                        placeholder="Cargo..." [(ngModel)]="act_cargo_prestador" (input)="ocultarMensajes()">
+                    <div *ngIf="showPrestadorCargoMessage" class="validation-message-ovpc">Ingresa el Cargo del
+                        Representante.
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="" class="form-label">Acompañante de visita:</label>
+                    <input type="text" class="form-control" id="nombrePrestadorAcompanante"
+                        name="act_nombre_prestador_acompanante" placeholder="Prestador..."
+                        [(ngModel)]="act_nombre_prestador_acompanante" (input)="ocultarMensajes()">
                     <div *ngIf="showPresadorNombreMessage" class="validation-message-ovpc">Ingresa el Nombre Prestador a
                         cargo.
                     </div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-md-6">
                     <label for="" class="form-label">Cargo:</label>
-                    <input type="text" class="form-control" id="cargoPres" name="act_cargo_prestador"
-                        placeholder="Cargo..." [(ngModel)]="act_cargo_prestador" (input)="ocultarMensajes()">
+                    <input type="text" class="form-control" id="cargoPresAcompanante"
+                        name="act_cargo_prestador_acompanante" placeholder="Cargo..."
+                        [(ngModel)]="act_cargo_prestador_acompanante" (input)="ocultarMensajes()">
                     <div *ngIf="showPrestadorCargoMessage" class="validation-message-ovpc">Ingresa el Cargo del
-                        Prestador.
+                        Acompañante.
                     </div>
                 </div>
 
-                <!--BOTON MODAL FIRMA-->
-                <div class="col-3">
-                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma Prestador</span>
-                </div>
 
                 <div class="col-12">
                     <button id="boton-acta-sp-ind" class="btn btn-dark esp btn-circle btn-xl" title="Guardar"

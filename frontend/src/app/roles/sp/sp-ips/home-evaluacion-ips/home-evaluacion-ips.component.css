@@ -24,7 +24,7 @@ button {
     justify-items: center;
 }
 
-span#nombre-prestador {
+span {
     font-weight: bold;
     font-size: 1.3rem;
     text-align: center;

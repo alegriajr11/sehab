@@ -52,6 +52,9 @@ export class ActaSpIndependientePdfEntity {
 
     @Column({type: 'varchar', length: 150, nullable: false})
     act_obj_visita
+
+    @Column({ type: 'integer', nullable: true })
+    act_id_funcionario
     
     @Column({type: 'varchar', length: 70, nullable: false})
     act_nombre_funcionario

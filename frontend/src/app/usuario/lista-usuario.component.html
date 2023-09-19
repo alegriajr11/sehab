@@ -42,9 +42,7 @@
           <td>{{ usuario.usu_apellido }}</td>
           <td class="usu" style="text-align: center;">{{ usuario.usu_nombreUsuario }}</td>
           <!-- <td>Rol</td> -->
-          <td *ngFor="let rol of this.usuario.roles" style="text-align: center;">{{rol.rol_nombre | uppercase}}</td>
-          <!-- <td *ngFor="let rol of this.usuario.roles;"><span>{{rol.rol_nombre | uppercase}}</span></td> -->
-          <!-- <td><span>{{rol.rol_nombre | uppercase}}</span></td> -->
+          <td *ngFor="let rol of this.usuario.roles"  style="display: block; text-align: center;">{{rol.rol_nombre | uppercase}}</td>
           <td *ngIf="usuario.usu_estado == 'true'" style="text-align: center;"><span class="active">ACTIVO</span></td>
           <td *ngIf="usuario.usu_estado == 'false'" style="text-align: center;"><span class="inactive">INACTIVO</span></td>
           <td style="text-align: center;">{{usuario.usu_creado | date: 'dd/MM/yyyy' }}</td>
@@ -59,7 +57,7 @@
             </button>
           </td>
           <td *ngIf="isAdmin" style="text-align: center;">
-            <button class="btn btn-outline-primary" routerLink="/usuarios/restablecer/{{usuario.usu_id}}" (click)="restablecer(usuario.usu_id)">
+            <button class="btn btn-outline-primary" routerLink="/usuarios/restablecer/{{usuario.usu_id}}" (click)="restablecer(usuario.usu_id, usuario.usu_nombre, usuario.usu_apellido)">
               <i class='fa fa-key'></i>
             </button>
           </td>

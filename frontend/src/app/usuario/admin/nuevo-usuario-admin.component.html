@@ -10,22 +10,41 @@
             </div>
 
             <form #f="ngForm" novalidate (ngSubmit)="onRegister()">
+
+                <div class="form-group">
+                    <label for="nombre">Cédula de Ciudadania:</label>
+                    <input type="number" class="form-control" name="usu_cedula" id="usu_cedula" autocomplete="off"
+                        [(ngModel)]="usu_cedula">
+                </div>
+
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
                     <input type="text" class="form-control" name="usu_nombre" id="usu_nombre" autocomplete="off"
-                        [(ngModel)]="usu_nombre">
+                        [(ngModel)]="usu_nombre" (input)="usu_nombre =  usu_nombre.toUpperCase()">
                 </div>
 
                 <div class="form-group">
                     <label for="nombre">Apellido:</label>
                     <input type="text" class="form-control" name="usu_apellido" id="usu_apellido" autocomplete="off"
-                        [(ngModel)]="usu_apellido">
+                        [(ngModel)]="usu_apellido" (input)="usu_apellido = usu_apellido.toUpperCase()">
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Cargo Área SOGCS:</label>
+                    <input type="text" class="form-control" name="usu_cargo" id="usu_cargo" autocomplete="off"
+                        [(ngModel)]="usu_cargo" (input)="usu_cargo = usu_cargo.toUpperCase()">
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Cargo Área Profesional:</label>
+                    <input type="text" class="form-control" name="usu_area_profesional" id="usu_area_profesional" autocomplete="off"
+                        [(ngModel)]="usu_area_profesional">
                 </div>
 
                 <div class="form-group">
                     <label for="nombreUsuario">Nombre de Usuario:</label>
-                    <input type="text" class="form-control" name="usu_nombreUsuario" id="usu_nombreUsuario" autocomplete="off"
-                        required [(ngModel)]="usu_nombreUsuario">
+                    <input type="text" class="form-control" name="usu_nombreUsuario" id="usu_nombreUsuario"
+                        autocomplete="off" required [(ngModel)]="usu_nombreUsuario">
                 </div>
 
                 <div class="form-group">
@@ -42,8 +61,9 @@
 
                 <div>
                     <label for="estado">Estado:</label>
-                    <Select class="form-select form-control" [(ngModel)]="usu_estado" [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option value="" disabled selected >Selecciona Estado..</option>
+                    <Select class="form-select form-control" [(ngModel)]="usu_estado"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                        <option value="" disabled selected>Selecciona Estado..</option>
                         <option value="true">Activo</option>
                         <option value="false">Inactivo</option>
                     </Select>

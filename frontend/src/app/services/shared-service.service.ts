@@ -20,6 +20,8 @@ export class SharedServiceService {
 
   criteriosGuardados: number[] = [];
 
+  nombreUsuario: string;
+
   private firmaActaSic: string;
   private firmaActaSpIps: string;
   private firmaActaSpInd: string;
@@ -27,6 +29,7 @@ export class SharedServiceService {
   private firmaActaVisitaVerificacion: string;
   private firmaActaVisitaIvc: string;
   private firmaUsuario: string;
+
 
   private cumplAsignadoSubject = new BehaviorSubject<string>(''); // Inicializado con un valor vacío
   cumplAsignado$: Observable<string> = this.cumplAsignadoSubject.asObservable();
@@ -66,6 +69,11 @@ export class SharedServiceService {
 
   setFirmaUsuario(firmaUsuario: string){
     this.firmaUsuario = firmaUsuario
+  }
+
+  //Capturar Nombre de Usuario
+  setNombreUsuario(usu_nombre: string){
+    this.nombreUsuario =  usu_nombre
   }
 
   

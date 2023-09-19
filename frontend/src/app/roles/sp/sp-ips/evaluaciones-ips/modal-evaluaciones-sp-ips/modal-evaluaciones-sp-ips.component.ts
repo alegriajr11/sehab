@@ -47,7 +47,6 @@ export class ModalEvaluacionesSpIpsComponent {
     this.nombre_prestador = this.sharedService.pres_nombre
     this.isAdmin = this.tokenService.isAdmin();
     this.estadoActa();
-    console.log(this.id_evaluacion)
   }
 
 
@@ -73,12 +72,12 @@ export class ModalEvaluacionesSpIpsComponent {
     // Obtener el estado actual del acta
     const data = await this.actaPdfService.oneActaSpIps(this.id_evaluacion).toPromise();
     this.estado_acta = data.act_estado;
-    if(this.estado_acta === '1'){
-      localStorage.setItem('boton-editar-acta-sp-ips','true')
+    if (this.estado_acta === '1') {
+      localStorage.setItem('boton-editar-acta-sp-ips', 'true')
     }
   }
 
-  
+
   async cerrarActa() {
     const token = this.tokenService.getToken();
     const tokenDto: TokenDto = new TokenDto(token);
@@ -95,22 +94,29 @@ export class ModalEvaluacionesSpIpsComponent {
 
       if (result.isConfirmed) {
         // Cerrar el acta
-        await this.actaPdfService.cerrarActaSpIps(this.id_evaluacion, tokenDto).toPromise();
-
-        // Obtener el estado actualizado del acta
         const data = await this.actaPdfService.oneActaSpIps(this.id_evaluacion).toPromise();
-        this.estado_acta = data.act_estado;
+        if (!data.act_firma_prestador || !data.act_firma_funcionario) {
+          Swal.fire(
+            'No se puede cerrar el acta porque no está firmada',
+            'Debes firmar el acta',
+            'error'
+          );
+        } else {
+          await this.actaPdfService.cerrarActaSpIps(this.id_evaluacion, tokenDto).toPromise();
 
-        // Mostrar notificación Acta cerrada
-        this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
-          timeOut: 3000,
-          positionClass: 'toast-top-center',
-        });
-        this.modalRef.hide();
+          // Obtener el estado actualizado del acta
+          this.estado_acta = data.act_estado;
+  
+          // Mostrar notificación Acta cerrada
+          this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          });
+          this.modalRef.hide();
+  
+          localStorage.setItem('boton-acta-sp-ips', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SIC
+        }
 
-        localStorage.setItem('boton-acta-sp-ips', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SIC
-
-        console.log(this.estado_acta);
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire(
           'Cancelado',
@@ -123,7 +129,6 @@ export class ModalEvaluacionesSpIpsComponent {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       });
-      console.log(error);
     }
   }
 }

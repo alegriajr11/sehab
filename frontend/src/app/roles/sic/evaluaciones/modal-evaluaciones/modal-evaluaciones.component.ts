@@ -29,6 +29,7 @@ export class ModalEvaluacionesComponent {
   estado_acta: string;
 
 
+
   iconClass = 'fas fa-door-open fa-lg'; // Icono inicial
 
   @Input('dataFromParent') public modalRef: BsModalRef;
@@ -47,7 +48,6 @@ export class ModalEvaluacionesComponent {
     this.nombre_prestador = this.sharedService.pres_nombre
     this.isAdmin = this.tokenService.isAdmin();
     this.estadoActa();
-    console.log(this.id_evaluacion)
   }
 
 
@@ -73,8 +73,8 @@ export class ModalEvaluacionesComponent {
     // Obtener el estado actual del acta
     const data = await this.actaSicPdfService.oneActaSic(this.id_evaluacion).toPromise();
     this.estado_acta = data.act_estado;
-    if(this.estado_acta === '1'){
-      localStorage.setItem('boton-editar-acta-sic','true')
+    if (this.estado_acta === '1') {
+      localStorage.setItem('boton-editar-acta-sic', 'true')
     }
   }
 
@@ -94,22 +94,28 @@ export class ModalEvaluacionesComponent {
 
       if (result.isConfirmed) {
         // Cerrar el acta
-        await this.actaSicPdfService.cerrarActaSic(this.id_evaluacion, tokenDto).toPromise();
-
-        // Obtener el estado actualizado del acta
         const data = await this.actaSicPdfService.oneActaSic(this.id_evaluacion).toPromise();
-        this.estado_acta = data.act_estado;
+        if (!data.act_firma_prestador || !data.act_firma_funcionario) {
+          Swal.fire(
+            'No se puede cerrar el acta porque no está firmada',
+            'Debes firmar el acta',
+            'error'
+          );
+        } else {
+          await this.actaSicPdfService.cerrarActaSic(this.id_evaluacion, tokenDto).toPromise();
 
-        // Mostrar notificación Acta cerrada
-        this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
-          timeOut: 3000,
-          positionClass: 'toast-top-center',
-        });
-        this.modalRef.hide();
+          // Obtener el estado actualizado del acta
+          this.estado_acta = data.act_estado;
 
-        localStorage.setItem('boton-acta-sic', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SIC
+          // Mostrar notificación Acta cerrada
+          this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          });
+          this.modalRef.hide();
 
-        console.log(this.estado_acta);
+          localStorage.setItem('boton-acta-sic', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SIC
+        }
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire(
           'Cancelado',
@@ -122,7 +128,6 @@ export class ModalEvaluacionesComponent {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       });
-      console.log(error);
     }
   }
 

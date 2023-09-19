@@ -48,6 +48,51 @@ input[type=number]::-webkit-outer-spin-button {
     margin-bottom: 1rem;
 }
 
+/* Personaliza el diseño para invertir la posición del input y el label */
+.col-md-6 {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: left;
+    margin-bottom: 20px;
+    /* Espacio entre los pares de columnas */
+}
+
+/*LINEA DIVISORA HORIZONTAL*/
+.with-divider-horizontal {
+    border-bottom: 1px solid #ccc; /* Línea divisoria horizontal debajo de cada par de columnas */
+}
+
+.switch {
+    margin-bottom: 10px;
+    /* Espacio entre el input y el label */
+}
+
+/*ESTILOS CARGAR IMAGEN REPS*/
+/* Cambiar el texto "Browse" */
+
+/* Estilo para el contenedor del input personalizado */
+.custom-file-label {
+    display: inline-block;
+    background-color: #3d4347;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+/* Cambiar el texto "Browse" */
+.custom-file-label::after {
+    content: "Seleccionar archivo";
+}
+
+.disabled-span {
+    pointer-events: none;
+    opacity: 0.6; /* Opcional: Cambiar la opacidad para indicar deshabilitado */
+    /* Otros estilos de deshabilitado que desees agregar */
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: minmax(0, auto) minmax(0, auto) minmax(0, auto);
@@ -176,6 +221,32 @@ input:checked+.slider:before {
     transform: scale(1.1);
     transition-duration: 0.2s;
 }
+
+/*LISTA ORDEN DEL DÍA*/
+.elemento-lista {
+    margin-bottom: 10px;
+    /* padding-bottom: 10px; */
+}
+
+/* Estilos para el textarea de descripción */
+.descripcion-textarea {
+    width: 100%;
+    /* Ancho del 100% para ocupar todo el contenedor */
+    height: 200px;
+    /* Altura deseada, ajusta según tus necesidades */
+    padding: 10px;
+    /* Relleno interno para espacio adicional dentro del textarea */
+    font-size: 16px;
+    /* Tamaño de fuente */
+    border: 1px solid #ccc;
+    /* Borde */
+    border-radius: 5px;
+    /* Borde redondeado */
+    resize: none;
+    /* Permitir redimensionar verticalmente */
+}
+
+
 
 /*CONTROLAR MENSAJE DE VALIDACIÓN*/
 .validation-message {

@@ -77,7 +77,7 @@ export class GenerarPdfActaService {
         this.act_email = this.actaPdf.act_email;
         this.act_representante = this.actaPdf.act_representante
         this.act_cod_prestador = this.actaPdf.act_cod_prestador
-        this.act_sede_principal =  this.actaPdf.act_sede_principal
+        this.act_sede_principal = this.actaPdf.act_sede_principal
         this.act_sede_localidad = this.actaPdf.act_sede_localidad
         this.act_sede_direccion = this.actaPdf.act_sede_direccion
         this.act_cod_sede = this.actaPdf.act_cod_sede
@@ -361,20 +361,24 @@ export class GenerarPdfActaService {
 
 
         // Convertir la firma usuario de base64 a Uint8Array
-        const firmaDataFuncionario = atob(this.act_firma_funcionario.split(',')[1]);
-        const firmaUint8ArrayFuncionario = new Uint8Array(firmaDataFuncionario.length);
-        for (let i = 0; i < firmaDataFuncionario.length; i++) {
-          firmaUint8ArrayFuncionario[i] = firmaDataFuncionario.charCodeAt(i);
+        if (this.act_firma_funcionario) {
+          const firmaDataFuncionario = atob(this.act_firma_funcionario.split(',')[1]);
+          const firmaUint8ArrayFuncionario = new Uint8Array(firmaDataFuncionario.length);
+          for (let i = 0; i < firmaDataFuncionario.length; i++) {
+            firmaUint8ArrayFuncionario[i] = firmaDataFuncionario.charCodeAt(i);
+          }
+          doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 175, 226, 25, 9.25)
         }
-        doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 175, 226, 25, 9.25)
 
-        // Convertir la firma prestador de base64 a Uint8Array
-        const firmaDataPrestador = atob(this.act_firma_prestador.split(',')[1]);
-        const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestador.length);
-        for (let i = 0; i < firmaDataPrestador.length; i++) {
-          firmaUint8ArrayPrestador[i] = firmaDataPrestador.charCodeAt(i);
+        if (this.act_firma_prestador) {
+          // Convertir la firma prestador de base64 a Uint8Array
+          const firmaDataPrestador = atob(this.act_firma_prestador.split(',')[1]);
+          const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestador.length);
+          for (let i = 0; i < firmaDataPrestador.length; i++) {
+            firmaUint8ArrayPrestador[i] = firmaDataPrestador.charCodeAt(i);
+          }
+          doc.addImage(firmaUint8ArrayPrestador, 'PNG', 175, 256, 25, 9.25)
         }
-        doc.addImage(firmaUint8ArrayPrestador, 'PNG', 175, 256, 25, 9.25)
 
         doc.save(this.act_cod_prestador + 'sic')
       },

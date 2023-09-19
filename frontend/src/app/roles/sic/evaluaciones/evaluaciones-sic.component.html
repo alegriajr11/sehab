@@ -43,6 +43,7 @@
                     <select name="select-anio" id="select-year" class="form-select form-control" [(ngModel)]="year" 
                     [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="cargarActasFilter()">
                         <option value="" disabled selected hidden>Año...</option>
+                        <option value=""></option>
                     </select>
                 </div>
 
@@ -70,6 +71,7 @@
                         <th scope="col" style="text-align: center;">NIT</th>
                         <th scope="col" style="text-align: center;">MUNICIPIO</th>
                         <th scope="col" style="text-align: center;">FECHA DE CREACIÓN</th>
+                        <th scope="col" style="text-align: center;">ESTADO</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -81,12 +83,13 @@
                         <td>{{evaluacion.act_nit}}</td>
                         <td style="text-align: center;">{{evaluacion.act_municipio}}</td>
                         <td style="text-align: center;">{{evaluacion.act_creado | date: 'dd/MM/yyyy' }}</td>
+                        <td *ngIf="evaluacion.act_estado === '1'" style="text-align: center;"><span class="fas fa-door-open" style="color: rgb(0, 128, 0);"></span></td>
+                        <td *ngIf="evaluacion.act_estado === '0'" style="text-align: center;"><span class="fas fa-door-closed" style="color: rgb(204, 0, 0);"></span></td>
                         <td>
                             <button class="btn btn-outline-dark"
                                 (click)="openModal(modalTemplate, evaluacion.id, evaluacion.act_prestador)">
                                 <span class="fas fa-clipboard-check"></span>
                             </button>
-
                         </td>
                     </tr>
 

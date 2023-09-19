@@ -23,8 +23,5 @@ export class EvaluacionipsCreadasEntity {
 	@JoinColumn()
 	eval_acta_spips: ActaSpIpsEntity;
 
-	//Relacion Muchos a Muchos ITEM - EVALUACIONIPS
-	@ManyToMany(type => EvaluacionipsEntity, evaluacionips => evaluacionips.evips_creadas)
-	eva_creada_evaips: EvaluacionipsEntity
 
 }

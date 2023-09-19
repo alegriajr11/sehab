@@ -27,25 +27,17 @@ export class HomeEvaluacionIpsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.nombrePrestador = localStorage.getItem('nombre-pres-sp-ips')
     this.id_evaluacion = this.sharedService.id_evaluacion_sic
     console.log(this.id_evaluacion)
     // this.capturarNombres()
   }
 
 
-  // inicializarMetodos() {
-  //   this.capturarNombres();
-  // }
+  limpiarNombrePrestador() {
+    // Limpiar el localStorage para DESHABILITAR LA RUTA
+    localStorage.removeItem('boton-acta-sp-ips');
+    localStorage.removeItem('nombre-pres-sp-ips');
 
-  // async capturarNombres(): Promise<void> {
-
-  //   //LISTAR LA ACTA PARA ENCONTRAR NOMBRE PRESTADOR
-  //   await this.actaPdfService.oneActaSpIps(this.id_evaluacion).subscribe(
-  //     async data => {
-  //       this.nombrePrestador = data.act_nombre_prestador
-  //       var copy = document.getElementById("nombre-prestador");
-  //       copy.textContent = this.nombrePrestador
-  //     }
-  //   )
-  // }
+  }
 }

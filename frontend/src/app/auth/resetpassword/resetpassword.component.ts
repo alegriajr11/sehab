@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { RestablecerPasswordDto } from 'src/app/models/reset-password.dto';
 import { Usuario } from 'src/app/models/usuario';
 import { AuthService } from 'src/app/services/auth.service';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class ResetpasswordComponent {
 
   password: string
 
-
+  nombreUsuario: string;
   
 
   constructor(
@@ -27,11 +28,13 @@ export class ResetpasswordComponent {
     private authService: AuthService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService,
+    private sharedService: SharedServiceService,
     private toastr: ToastrService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.nombreUsuario = localStorage.getItem('nombreUsuario');
     const id = this.activatedRoute.snapshot.params['id'];
     this.usuarioService.oneUser(id).subscribe(
       data => {
@@ -67,5 +70,7 @@ export class ResetpasswordComponent {
         });
       }
     );
+    this.nombreUsuario = ''
+    localStorage.setItem('nombreUsuario', this.nombreUsuario);
   }
 }

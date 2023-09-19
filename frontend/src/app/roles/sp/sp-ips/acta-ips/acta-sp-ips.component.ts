@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { PrestadorDto } from 'src/app/models/prestador.dto';
@@ -27,6 +27,9 @@ import { GenerarPdfActaIpsService } from 'src/app/services/SpIps/generar-pdf-act
 })
 export class ActaSpIpsComponent implements OnInit {
 
+
+  @ViewChild('richTextEditor', { static: true }) richTextEditor: ElementRef;
+
   prestador: PrestadorDto[];
   usuario: Usuario[];
   municipio: Municipio[];
@@ -48,6 +51,13 @@ export class ActaSpIpsComponent implements OnInit {
 
   id_acta: number
 
+  //ALMACENAR LAS FECHAS DEL FORMULARIO
+  fecha_inicial: string
+  fecha_final: string
+  fecha_orden: string
+  fecha_oficio: string
+  fecha_envio_oficio: string
+
   //VARIABLES PARA TRANSPORTAR EL DTO
   act_id: number;
   act_visita_inicial: string;
@@ -63,7 +73,8 @@ export class ActaSpIpsComponent implements OnInit {
   act_email: string
   act_representante: string
   act_cod_prestador: string
-  act_obj_visita: string
+  act_obj_visita: string = ''
+  act_id_funcionario: number
   act_nombre_funcionario: string
   act_cargo_funcionario: string
   act_firma_funcionario: string
@@ -71,12 +82,28 @@ export class ActaSpIpsComponent implements OnInit {
   act_cargo_prestador: string
   act_firma_prestador: string
 
+  act_nombre_prestador_acompanante: string
+  act_cargo_prestador_acompanante: string
+  act_firma_prestador_acompanante: string
+
   //ATRIBUTOS ID DE SELECTS
   act_municipioId: string
   act_prestadorId: string
   act_funcionarioId: string
 
+  //VARIABLES PARA ORDEN DEL DÍA
+  act_fecha_orden: string
+  act_hora_orden24: string //Variable almacenar hora 24H
+  act_hora_orden: string //Variable alamcenar hora en formato 12 horas
+  act_num_oficio: string = 'OFICIO-SOGC-SSD-N°'
+  act_fecha_oficio: string
+  act_fecha_envio_oficio: string
+
+  //VARIABLE PARA CAPTURA DE REPS
+  imagenCargada = false;
+  act_captura_imagen: string
   firma: string;
+
 
 
   //ATRIBUTOS CONTROLAR MENSAJES VALIDACION
@@ -90,6 +117,8 @@ export class ActaSpIpsComponent implements OnInit {
   showVerificadorMessage: boolean = false;
   showPresadorNombreMessage: boolean = false;
   showPrestadorCargoMessage: boolean = false;
+
+
 
   constructor(
     private modalService: BsModalService,
@@ -119,9 +148,60 @@ export class ActaSpIpsComponent implements OnInit {
   }
 
 
-  habilitarFechaFinal() {
-    this.habilitarfechaFin = true;
+  evaluacionesSeleccionadas: { [key: string]: number } = {}; // Usamos un objeto para almacenar los IDs de las evaluaciones
+
+  toggleEvaluacion(evaKey: string, evaId: number): void {
+    if (this.evaluacionesSeleccionadas[evaKey]) {
+      console.log(evaId)
+      // Si el checkbox se desmarca, eliminamos el ID del rol
+      delete this.evaluacionesSeleccionadas[evaKey];
+    } else {
+      // Si el checkbox se marca, almacenamos el ID del rol
+      this.evaluacionesSeleccionadas[evaKey] = evaId;
+    }
   }
+
+  //METODO PARA CAPTURAR SERVICIOS DEL REPS
+  cargarImagen(event: any) {
+    const imagen = event.target.files[0];
+
+    if (imagen) {
+      // Verificar el tamaño de la imagen (200KB = 500 * 1024 bytes)
+      if (imagen.size <= 200 * 1024) {
+        const labelElement = document.querySelector('.custom-file-label');
+        if (labelElement) {
+          labelElement.textContent = imagen.name;
+        }
+        // Leer la imagen como base64
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          // El resultado de la lectura es la imagen en base64
+          const imagenBase64 = e.target.result;
+          this.imagenCargada = true;
+          this.act_captura_imagen = imagenBase64
+        };
+        reader.readAsDataURL(imagen);
+      } else {
+        // Mostrar mensaje de notificación
+        this.imagenCargada = false;
+        this.toastrService.error('La imagen es demasiado grande. Debe ser menor o igual a 200KB.', 'Error', {
+          timeOut: 3000,
+          positionClass: 'toast-top-center',
+        });
+        event.target.value = '';
+      }
+    }
+  }
+
+
+  mostrarToastrImg() {
+    this.toastrService.success('Captura cargada exitosamente', 'Éxito', {
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+    });
+    this.modalRef?.hide();
+  }
+
 
 
   cargarMunicipio(): void {
@@ -173,7 +253,6 @@ export class ActaSpIpsComponent implements OnInit {
   }
 
   //LISTAR PRESTADORES POR MUNICIPIO
-  //LISTAR PRESTADORES POR MUNICIPIO
   cargarPrestadoresByMun(): void {
     this.prestadorService.listMun(this.act_municipioId).subscribe(
       data => {
@@ -219,6 +298,19 @@ export class ActaSpIpsComponent implements OnInit {
       }
     )
   }
+
+  convertirFecha(fecha: string) {
+    // Convierte la cadena de fecha en un objeto Date, ajustando la zona horaria a UTC
+    const fechaObj = new Date(fecha + "T00:00:00Z");
+    // Obtiene el día, mes y año de la fecha
+    const dia = fechaObj.getUTCDate();
+    const mes = fechaObj.getUTCMonth() + 1; // Los meses son 0-indexados, por lo que sumamos 1
+    const año = fechaObj.getUTCFullYear();
+    // Formatea la fecha en DD/MM/AAAA
+    const fechaEnFormatoDeseado = `${dia.toString().padStart(2, "0")}/${mes.toString().padStart(2, "0")}/${año}`;
+    return fechaEnFormatoDeseado;
+  }
+
 
   //VERIFICAR QUE SOLO SE SELECCIONE UN CHECKBOX
   unsoloCheckbox(): void {
@@ -296,15 +388,6 @@ export class ActaSpIpsComponent implements OnInit {
     }
   }
 
-  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
-  async obtenerFirmaFuncionario(): Promise<void> {
-    if (this.act_funcionarioId) {
-      const idFuncionarioSeleccionado = this.act_funcionarioId
-      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
-      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
-      this.act_firma_funcionario = func.usu_firma
-    }
-  }
 
   //MENSAJES DE VALIDACION DIVS
   ocultarMensajes() {
@@ -382,6 +465,23 @@ export class ActaSpIpsComponent implements OnInit {
     sessionStorage.setItem("cargo-prestador-sp-ips", valorCargoPres);
   }
 
+  convertirHora12(act_hora_orden24: string): void {
+    if (this.act_hora_orden24) {
+      const [hora, minutos] = this.act_hora_orden24.split(":");
+      let ampm = "AM";
+
+      let horaNum = parseInt(hora, 10);
+
+      if (horaNum >= 12) {
+        ampm = "PM";
+        if (horaNum > 12) {
+          horaNum -= 12;
+        }
+      }
+
+      this.act_hora_orden = `${horaNum}:${minutos} ${ampm}`;
+    }//FIN FORMATO DE LA HORA A 12H
+  }
 
 
   //REGISTRAR Y GENERAR ACTA PDF
@@ -441,14 +541,22 @@ export class ActaSpIpsComponent implements OnInit {
     var presNombre = (document.getElementById('nombrePrestador')) as HTMLInputElement
     var valorPresNombre = presNombre.value
 
-    //SE OBTIENE LA FIRMA DEL MODAL DEL SERVICIO SHARED Y SE ASIGNA EN LA VARIABLE firma
-    this.firma = this.sharedService.getFirmaActaSpIps();
 
     //OBTENER NOMBRES DE LOS SELECTS
     await this.obtenerNombreSelects();
 
-    //OBTENER FIRMA FUNCIONARIO
-    await this.obtenerFirmaFuncionario();
+
+    //CONVERTIR FECHAS A FORMATO DD/MM/AAAA
+    const fechaInicial = this.convertirFecha(this.fecha_inicial)
+    const fechaFinal = this.convertirFecha(this.fecha_final)
+    const fechaOrden = this.convertirFecha(this.fecha_orden)
+    const fechaOficio = this.convertirFecha(this.fecha_oficio)
+    const fechaEnvioOficio = this.convertirFecha(this.fecha_envio_oficio)
+
+
+    //CONVERTIR EL FORMATO DE LA HORA A 12H
+    this.convertirHora12(this.act_hora_orden24)
+
 
     //ASIGNANDO LOS VALORES DEL ACTA PARA ASIGNARLAS EN EL DTO
     this.act_id = Number(valorActa);
@@ -462,6 +570,14 @@ export class ActaSpIpsComponent implements OnInit {
     this.act_cod_prestador = valorCodigoPres
     this.act_nombre_prestador = valorPresNombre
     this.act_firma_prestador = this.firma
+    //ID DEL FUNCIONARIO PARA CONTROLAR LA FIRMA
+    this.act_id_funcionario = parseInt(this.act_funcionarioId, 10);
+    //ASIIGNAR LAS FECHAS FORMATEADAS
+    this.act_fecha_inicial = fechaInicial
+    this.act_fecha_final = fechaFinal
+    this.act_fecha_orden = fechaOrden
+    this.act_fecha_oficio = fechaOficio
+    this.act_fecha_envio_oficio = fechaEnvioOficio
 
     //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
     this.actaPdf = new ActaSpPdfDto(
@@ -480,12 +596,20 @@ export class ActaSpIpsComponent implements OnInit {
       this.act_representante,
       this.act_cod_prestador,
       this.act_obj_visita,
+      this.act_id_funcionario,
       this.act_nombre_funcionario,
       this.act_cargo_funcionario,
       this.act_firma_funcionario,
       this.act_nombre_prestador,
       this.act_cargo_prestador,
-      this.act_firma_prestador
+      this.act_firma_prestador,
+      //ORDEN DEL DÍA
+      this.act_fecha_orden,
+      this.act_hora_orden,
+      this.act_num_oficio,
+      this.act_fecha_oficio,
+      this.act_fecha_envio_oficio,
+      this.act_captura_imagen
     );
 
     //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
@@ -493,6 +617,10 @@ export class ActaSpIpsComponent implements OnInit {
     //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
     const tokenDto: TokenDto = new TokenDto(token);
 
+    //Obtener los IDS de las evaluaciones Seleccionados
+    const evaluacionesIds = Object.values(this.evaluacionesSeleccionadas);
+
+    console.log(evaluacionesIds)
     if (
       !this.act_id ||
       (!this.act_visita_inicial && !this.act_visita_seguimiento) ||
@@ -575,16 +703,10 @@ export class ActaSpIpsComponent implements OnInit {
         positionClass: 'toast-top-center',
       });
 
-    } else if (!this.act_firma_prestador) { //VERIFICAR QUE LA FIRMA DEL PRESTADOR SEA ASIGNADA
-      this.toastrService.error('Por favor, agregue una firma', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
-
     } else {
       console.log(this.actaPdf)
       //SOLICITUD DE REGISTRO DE ACTA ENVIANDO COMO PARAMETRO LA ACTA_DTO Y EL TOKEN_DTO
-      this.authService.registroActaSpIpsPdf(this.actaPdf, tokenDto).subscribe(
+      this.authService.registroActaSpIpsPdf(this.actaPdf, evaluacionesIds, tokenDto).subscribe(
         data => {
           if (!data.error) {
             localStorage.setItem('boton-acta-sp-ips', 'true'); //HABILITAR LA RUTA RESTRINGIDA - EVALUACIÓN_IND
@@ -594,7 +716,7 @@ export class ActaSpIpsComponent implements OnInit {
                 //VERIFICA QUE EXISTA EL ACTA REGISTRADA
                 if (ultimaActa && ultimaActa.id) {
                   this.id_acta = ultimaActa.id;
-                  
+
                   Swal.fire({
                     title: '¿Desea descargar el acta?',
                     showCancelButton: true,

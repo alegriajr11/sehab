@@ -64,6 +64,9 @@ export class ActaSicPdfDto {
     act_obj_visita: string
 
     @IsNotBlank()
+    act_id_funcionario: number
+
+    @IsNotBlank()
     act_nombre_funcionario: string
 
     @IsNotBlank()

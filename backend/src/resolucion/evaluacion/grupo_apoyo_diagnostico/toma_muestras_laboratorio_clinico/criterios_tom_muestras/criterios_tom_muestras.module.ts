@@ -4,12 +4,27 @@ import { CriteriosTomMuestrasController } from './criterios_tom_muestras.control
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioMuestraLabClinicoEntity } from '../criterio_tom_muestras.entity';
 import { MuestrasLabClinicoEntity } from '../tom_muestras.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioMuestraLabClinicoEntity, MuestrasLabClinicoEntity])],
-    controllers: [CriteriosTomMuestrasController],
-    providers: [CriteriosTomMuestrasService],
-    exports: [CriteriosTomMuestrasService]
-  
+  imports: [TypeOrmModule.forFeature([CriterioMuestraLabClinicoEntity, MuestrasLabClinicoEntity]),
+  //MODULO JwtService
+  PassportModule.register({ defaultStrategy: 'jwt' }),
+  JwtModule.registerAsync({
+    imports: [ConfigModule],
+    useFactory: async (configService: ConfigService) => ({
+      secret: configService.get('JWT_SECRET'),
+      signOptions: {
+        expiresIn: 7200,
+      },
+    }),
+    inject: [ConfigService],
+  }),],
+  controllers: [CriteriosTomMuestrasController],
+  providers: [CriteriosTomMuestrasService],
+  exports: [CriteriosTomMuestrasService]
+
 })
-export class CriteriosTomMuestrasModule {}
+export class CriteriosTomMuestrasModule { }

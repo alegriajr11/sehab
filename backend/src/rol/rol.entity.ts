@@ -10,10 +10,9 @@ export class RolEntity {
     @PrimaryGeneratedColumn('increment')
     rol_id: number;
 
-    @Column({type: 'varchar', length: 10, nullable: false, unique: false})
+    @Column({type: 'varchar', length: 20, nullable: false, unique: false})
     rol_nombre: RolNombre;
     
-    //Relacion Muchos a Muchos ROL - USUARIOS
     //Relacion Muchos a Muchos ROL - USUARIOS
     @ManyToMany(type => UsuarioEntity, usuario => usuario.roles)
     usuarios: UsuarioEntity[];

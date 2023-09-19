@@ -44,7 +44,6 @@ export class ActaSicComponent implements OnInit {
   habilitarSelectSede: boolean = false;
 
 
-
   listaVacia: any = undefined;
 
   //MODAL
@@ -71,6 +70,7 @@ export class ActaSicComponent implements OnInit {
   act_cod_prestador: string
   act_cod_sede: string
   act_obj_visita: string = ''
+  act_id_funcionario: number
   act_nombre_funcionario: string
   act_cargo_funcionario: string
   act_firma_funcionario: string
@@ -226,7 +226,6 @@ export class ActaSicComponent implements OnInit {
                 var barrio_prestador_asignado = pres_barrio.sede_barrio
                 var barrio_prestador = (document.getElementById('barrio')) as HTMLSelectElement
                 barrio_prestador.value = barrio_prestador_asignado
-
               }
 
             }
@@ -398,15 +397,6 @@ export class ActaSicComponent implements OnInit {
     }
   }
 
-  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
-  async obtenerFirmaFuncionario(): Promise<void> {
-    if (this.act_funcionarioId) {
-      const idFuncionarioSeleccionado = this.act_funcionarioId
-      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
-      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
-      this.act_firma_funcionario = func.usu_firma
-    }
-  }
 
 
   //MENSAJES DE VALIDACION DIVS
@@ -559,14 +549,14 @@ export class ActaSicComponent implements OnInit {
     var presNombre = (document.getElementById('nombrePrestador')) as HTMLInputElement
     var valorPresNombre = presNombre.value
 
-    //SE OBTIENE LA FIRMA DEL MODAL DEL SERVICIO SHARED Y SE ASIGNA EN LA VARIABLE firma
-    this.firma = this.sharedService.getFirmaActaSic();
+    //SE OBTIENE LA FIRMA DEL MODAL DEL SERVICIO SHARED Y SE ASIGNA EN LA VARIABLE firma ES LA FIRMA DEL PRESTADOR
+    // this.firma = this.sharedService.getFirmaActaSic();
 
     //OBTENER NOMBRES DE LOS SELECTS
     await this.obtenerNombreSelects();
 
     //OBTENER FIRMA FUNCIONARIO
-    await this.obtenerFirmaFuncionario();
+    // await this.obtenerFirmaFuncionario();
 
 
     //ASIGNANDO LOS VALORES DEL ACTA PARA ASIGNARLAS EN EL DTO
@@ -585,6 +575,8 @@ export class ActaSicComponent implements OnInit {
     this.act_sede_direccion = valorDireccionSede
     this.act_nombre_prestador = valorPresNombre
     this.act_firma_prestador = this.firma
+    //ID DEL FUNCIONARIO PARA CONTROLAR LA FIRMA
+    this.act_id_funcionario = parseInt(this.act_funcionarioId, 10);
 
 
     //REGISTRO DE LA INFORMACIÓN RECOPILADA A LA CLASE DTO - ACTASICDTO
@@ -608,6 +600,7 @@ export class ActaSicComponent implements OnInit {
       this.act_cod_prestador,
       this.act_cod_sede,
       this.act_obj_visita,
+      this.act_id_funcionario,
       this.act_nombre_funcionario,
       this.act_cargo_funcionario,
       this.act_firma_funcionario,
@@ -620,6 +613,7 @@ export class ActaSicComponent implements OnInit {
     const token = this.tokenService.getToken()
     //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
     const tokenDto: TokenDto = new TokenDto(token);
+    
 
     //VALIDAR QUE LOS CAMPOS NO ESTÉN VACIOS
     if (
@@ -643,7 +637,6 @@ export class ActaSicComponent implements OnInit {
       !this.act_nombre_prestador ||
       !this.act_cargo_prestador
     ) {
-      console.log(this.act_cargo_funcionario)
       //ASIGNANDO LOS RESPECTIVOS MENSAJES EN CASO DE ENTRAR AL IF DE VALIDACIÓN
       let mensajeError = 'Por favor, complete los siguientes campos:';
 
@@ -709,13 +702,15 @@ export class ActaSicComponent implements OnInit {
         positionClass: 'toast-top-center',
       });
 
-    } else if (!this.act_firma_prestador) { //VERIFICAR QUE LA FIRMA DEL PRESTADOR SEA ASIGNADA
-      this.toastrService.error('Por favor, agregue una firma', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      })
+    } 
+    // else if (!this.act_firma_prestador) { //VERIFICAR QUE LA FIRMA DEL PRESTADOR SEA ASIGNADA
+    //   this.toastrService.error('Por favor, agregue una firma', 'Error', {
+    //     timeOut: 3000,
+    //     positionClass: 'toast-top-center',
+    //   })
 
-    } else {
+    // } 
+    else {
       //SOLICITUD DE REGISTRO DE ACTA ENVIANDO COMO PARAMETRO LA ACTA_DTO Y EL TOKEN_DTO
       this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
         data => {
