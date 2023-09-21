@@ -204,7 +204,7 @@ export class SicActaService {
             //CONSULTAR LOS DOMINIOS EXISTENTES
             const dominios = await this.dominioRepository.find()
 
-            evaluacion_ultima.eva_sic_dom = dominios
+            //evaluacion_ultima.eva_sic_dom = dominios
 
             //GUARDAR LA RELACIÓN ENTRE EVALUACIÓN Y ETAPAS
             await this.evaluacionSicRepository.save(evaluacion_ultima);

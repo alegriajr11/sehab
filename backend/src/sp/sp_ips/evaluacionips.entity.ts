@@ -43,7 +43,7 @@ export class EvaluacionipsEntity {
     evaluacionipsPlane: CriterioPlaneacionEntity
 
 
-    //Relacion Muchos a Muchos ROL - USUARIOS
+    //Relacion Muchos a Muchos evaluacion - acta
     @ManyToMany(type => ActaSpIpsEntity, acta_ips => acta_ips.evaluacionesips)
     actas_ips: ActaSpIpsEntity[];
 }

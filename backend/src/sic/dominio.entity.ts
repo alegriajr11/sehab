@@ -16,9 +16,8 @@ export class DominioEntity {
     @OneToMany(type => IndicadorEntity, indicador => indicador.ind_dominio)
     dom_indicador: IndicadorEntity;
 
-    //Relacion MUCHOS a UNO DOMINIO - EVALUACION SIC
-    @ManyToMany(type => EvaluacionSicEntity, evasic => evasic.eva_sic_dom)
-    dom_eva_sic: EvaluacionSicEntity;
+    
+   
 
 
 }

@@ -3,6 +3,7 @@ import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "t
 import { CriterioEstandarSicEntity } from "./criteriosEstandar.entity";
 import { CriteriosicEntity } from "./criteriosic.entity";
 import { IndicadorEntity } from "./indicador.entity";
+import { EvaluacionSicEntity } from "./evaluacionsic.entity";
 
 
 @Entity({ name: 'cumplimientosic' })
@@ -26,4 +27,8 @@ export class CumplimientoSicEntity {
     //Relacion MUCHOS a UNO CUMPLIMIENTO - CRITERIOS SIC
     @ManyToOne(type => IndicadorEntity, criterio_sic => criterio_sic.cumplimiento_sic)
     indicadorsic: IndicadorEntity
+
+    //Relacion MUCHOS a UNO EVALUACION - EVALUACION SIC
+    @ManyToMany(type => EvaluacionSicEntity, evasic => evasic.eva_sic_cump)
+    cump_eva_sic: EvaluacionSicEntity;
 }

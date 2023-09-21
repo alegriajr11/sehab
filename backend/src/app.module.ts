@@ -135,8 +135,8 @@ import { ServicioModule } from './resolucion/servicio/servicio.module';
         password: configService.get<string>(DB_PASSWORD),
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
-        logging: false 
+        synchronize: true,
+        logging: true 
         
       }),
       inject: [ConfigService],
