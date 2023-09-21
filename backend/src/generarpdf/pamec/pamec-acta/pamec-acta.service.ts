@@ -177,7 +177,7 @@ export class PamecActaService {
             const actividad = await this.actividadRepository.find()
 
             //ASIGNAR LA EVALUACIÓN A LAS ETAPAS
-            evaluacion_ultima.eval_actividadpam = actividad
+            //evaluacion_ultima.eval_actividadpam = actividad
 
             //GUARDAR LA RELACIÓN ENTRE EVALUACIÓN Y ETAPAS
             await this.evaluacionPamecRepository.save(evaluacion_ultima);

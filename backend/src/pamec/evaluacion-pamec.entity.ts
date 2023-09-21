@@ -3,6 +3,7 @@ import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ActividadEntity } from "./actividad.entity";
 import { ActaPamecEntity } from "src/generarpdf/pamec/pamec-acta/pamec-acta.entity";
+import { CalificacionpamEntity } from "./calificacionpam.entity";
 
 
 @Entity({ name: 'evaluacion-pamec' })
@@ -20,13 +21,13 @@ export class EvaluacionPamecEntity {
 
 
     //Relacion Muchos a Muchos  EVALUACION-PAMEC - ACTIVIDAD-PAMEC
-    @ManyToMany(type => ActividadEntity, actividadPamec => actividadPamec.act_evaluacion_pam, { eager: true })
+    @ManyToMany(type => CalificacionpamEntity, actividadPamec => actividadPamec.cal_evaluacion_pam, { eager: true })
     @JoinTable({
-        name: 'act_eva_pam',
-        joinColumn: { name: 'act_eva_id' },
-        inverseJoinColumn: { name: 'eva_act_id' }
+        name: 'cal_eva_pam',
+        joinColumn: { name: 'cal_eva_id' },
+        inverseJoinColumn: { name: 'eva_cal_id' }
     })
-    eval_actividadpam: ActividadEntity[];
+    eval_calpam: CalificacionpamEntity[];
 
     //Relacion UNO a UNO EVALUACION PAMEC - ACTAS PAMEC
     @OneToOne(() => ActaPamecEntity, actaPamec => actaPamec.act_eval_pamec)

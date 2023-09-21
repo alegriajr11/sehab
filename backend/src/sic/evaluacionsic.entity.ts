@@ -6,6 +6,7 @@ import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { ActaSicPdfEntity } from "src/generarpdf/sic/sic-acta/sic-acta-pdf.entity";
 import { DominioEntity } from "./dominio.entity";
 import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
+import { CumplimientoSicEntity } from "./cumplimientosic.entity";
 
 
 @Entity({ name: 'evaluacionsic' })
@@ -26,14 +27,14 @@ export class EvaluacionSicEntity {
     @JoinColumn()
     eval_acta_sic: ActaSicPdfEntity;
 
-    //Relacion Uno a Muchos EVALUACION SIC - DOMINIO 
-    @ManyToMany(type => DominioEntity, dominio => dominio.dom_eva_sic, { eager: true })
+    //Relacion Uno a Muchos EVALUACION SIC - CUMPLIMIENTO 
+    @ManyToMany(type => CumplimientoSicEntity, cumplimiento => cumplimiento.cump_eva_sic, { eager: true })
     @JoinTable({
-        name: 'dom_eva_sic',
-        joinColumn: { name: 'eva_dom_id' },
-        inverseJoinColumn: { name: 'dom_eva_id' }
+        name: 'cump_eva_sic',
+        joinColumn: { name: 'eva_cump_id' },
+        inverseJoinColumn: { name: 'cump_eva_id' }
     })
-    eva_sic_dom: DominioEntity[];
+    eva_sic_cump: CumplimientoSicEntity[];
 
     //Relacion Uno a Muchos EVALUACION SIC - CUMPLIMIENTO_ESTANDAR_SIC 
     @OneToMany(type => CumplimientoEstandarSicEntity, cumplimineto_estandar => cumplimineto_estandar.cumplimiento_eva_sic)

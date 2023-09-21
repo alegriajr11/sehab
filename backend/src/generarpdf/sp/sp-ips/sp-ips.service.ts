@@ -34,6 +34,8 @@ export class SpIpsService {
         return ips;
     }
 
+   
+
     //ENCONTRAR POR ACTA
     async findByActa(id: number): Promise<ActaSpIpsEntity> {
         const ips = await this.actaSpIpsRepository.findOne({ where: { id } });

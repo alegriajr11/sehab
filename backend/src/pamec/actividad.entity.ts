@@ -16,7 +16,5 @@ export class ActividadEntity {
     @OneToMany(type => CriteriopamEntity, criteriopam => criteriopam.crip_actividad)
     act_criteriopam: CriteriopamEntity;
 
-    //Relacion Muchos a Muchos ACTIVIDAD-PAMEC - EVALUACION-PAMEC
-    @ManyToMany(type => EvaluacionPamecEntity, evaluacionPamec => evaluacionPamec.eval_actividadpam)
-    act_evaluacion_pam: EvaluacionPamecEntity[];
+   
 }
