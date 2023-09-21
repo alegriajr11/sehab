@@ -19,4 +19,6 @@ export class EvaluacionipsController {
     getAll(){
         return this.evaluacionipsService.getall();
     }
+
+    
 }

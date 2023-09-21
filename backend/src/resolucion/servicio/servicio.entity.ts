@@ -13,6 +13,7 @@ export class ServicioEntity {
     // @ManyToOne(() => GrupoEvaluacionEntity, evaluacion => evaluacion.servicios_evaluacion)
     // @JoinColumn()
     // evaluacion_servicios: GrupoEvaluacionEntity;
+    
     @ManyToOne(type => GrupoEvaluacionEntity,  evaluacion=>  evaluacion.servicios_evaluacion)
     evaluacion_servicios: GrupoEvaluacionEntity;
 

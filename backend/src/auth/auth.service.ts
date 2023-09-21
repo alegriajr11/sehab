@@ -85,7 +85,8 @@ export class AuthService {
                 usu_roles: usuario.roles.map((rol) => rol.rol_nombre as RolNombre),
             };
 
-            const token = await this.jwtService.sign(payload);
+            const token = await this.jwtService.sign(payload); // Esto establece la duración del token en 1 hora
+
 
             if (payload.usu_estado == 'false') {
                 throw new UnauthorizedException(new MessageDto('Acceso Denegado Comunicarse con el Administrador'));

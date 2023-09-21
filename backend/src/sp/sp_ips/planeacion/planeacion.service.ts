@@ -27,12 +27,6 @@ export class PlaneacionService {
         return criteriosp;
     }
 
-    async findCri(cri_pla_id: number): Promise<CriterioPlaneacionEntity>{
-        const criterio = await this.criterioPlaneacionRepository.findOne({where: {cri_pla_id}})
-        if(!criterio) throw new NotFoundException(new MessageDto('No Existe el criterio'))
-        return criterio
-    }
-
     async findByCri(cri_pla_id: number): Promise<CriterioPlaneacionEntity> {
         const criterio = await this.criterioPlaneacionRepository.findOne({ where: { cri_pla_id } })
         if (!criterio) {
@@ -43,7 +37,7 @@ export class PlaneacionService {
 
     async update(id: number, dto: CriterioPlaneacionDto): Promise<any> {
 
-        const criterio = await this.findCri(id);
+        const criterio = await this.findByCri(id);
         if (!criterio)
             throw new NotFoundException(new MessageDto('El Criterio No Existe'));
 

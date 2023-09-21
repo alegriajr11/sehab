@@ -25,4 +25,6 @@ export class EvaluacionipsService {
         if(!dom) throw new NotFoundException(new MessageDto('No hay Evaluaciones en la lista'))
         return dom;
     }
+
+    
 }

@@ -72,7 +72,7 @@ export class CriterioindService {
         return new MessageDto('El criterio ha sido Creado');
     }
 
-    //LISTAR LOS CRITERIOS SI TIENEN UNA EVALUACION ASIGNADA
+    //LISTAR TODOS LOS CRITERIOS.
     async getallcriterio(): Promise<CriterioIndEntity[]> {
         const criterio_ind = await this.criterioIndRepository.createQueryBuilder('criterio')
             .select(['criterio', 'calificaciones_cri.cal_asignado', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre', 'cal_evaluacion_independientes.cal_id'])

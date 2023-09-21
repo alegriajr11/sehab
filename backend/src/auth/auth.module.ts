@@ -20,7 +20,7 @@ import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizac
 import { AuditoriaEliminacionModule } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsuarioEntity, RolEntity, AuthRepository, AuditoriaRegistroRepository,AuditoriaActualizacionService]),
+  imports: [TypeOrmModule.forFeature([UsuarioEntity, RolEntity, AuthRepository, AuditoriaRegistroRepository]),
   AuditoriaRegistroModule,AuditoriaActualizacionModule,AuditoriaEliminacionModule,
   PassportModule.register({
     defaultStrategy: 'jwt'
