@@ -18,13 +18,5 @@ export class CalificacionPamDto {
     @MaxLength(255, {message: 'La observacion: longitud máxima de 255 caracteres'})
     cal_observaciones
 
-    @Column({ nullable: true })
-    cal_asignado?: string;
-
-    @IsNumber()
-    crip_id: number
-
-    @IsNumber()
-    eva_id: number
 
 }

@@ -8,15 +8,6 @@ export class calificacionindDto {
     cal_nota: number;
     
     @Column({ nullable: true })
-    cal_observaciones?: string;
-
-    @Column({ nullable: true })
-    cal_asignado?: string;
-
-    @IsNumber()
-    cri_id: number
-
-    @IsNumber()
-    eva_id: number
+    cal_observaciones: string;
 
 }

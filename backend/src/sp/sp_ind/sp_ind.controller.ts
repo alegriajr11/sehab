@@ -16,12 +16,6 @@ export class SpIndController {
         return this.etapaIndService.getall();
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Get(':id')
-    async getOne(@Param('id', ParseIntPipe) id: number){
-        return await this.etapaIndService.findById(id);
-    }
-
     //BUSCAR  CALIFICACION POR ID
     @UseGuards(JwtAuthGuard)
     @Get('/calificaciones/:id')
@@ -29,13 +23,6 @@ export class SpIndController {
         return await this.etapaIndService.findByIdcalificacion(id);
     }
     
-    //ACTUALIZAR  SP INDEPENDIENTE ACTA PDF
-    
-    @Post()
-    async create(@Body() payload: { dto: calificacionindDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payload;
-        return this.etapaIndService.createCalificacionSpInd(payload);
-    }
 
     //ACTUALIZAR CALIFICACION
     @Put(':id')

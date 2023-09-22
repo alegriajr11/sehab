@@ -24,11 +24,11 @@ export class CumplimientoSicEntity {
     @ManyToOne(type => CriteriosicEntity, criterio_sic => criterio_sic.cumplimiento_sic)
     criterio_sic: CriteriosicEntity;
 
-    //Relacion MUCHOS a UNO CUMPLIMIENTO - CRITERIOS SIC
+    //Relacion MUCHOS a UNO CUMPLIMIENTO - INDICADOR SIC
     @ManyToOne(type => IndicadorEntity, criterio_sic => criterio_sic.cumplimiento_sic)
     indicadorsic: IndicadorEntity
 
-    //Relacion MUCHOS a UNO EVALUACION - EVALUACION SIC
-    @ManyToMany(type => EvaluacionSicEntity, evasic => evasic.eva_sic_cump)
-    cump_eva_sic: EvaluacionSicEntity;
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
+    @ManyToOne(type => EvaluacionSicEntity, evasic => evasic.eva_sic_cump)
+    cump_eva_sic: EvaluacionSicEntity
 }

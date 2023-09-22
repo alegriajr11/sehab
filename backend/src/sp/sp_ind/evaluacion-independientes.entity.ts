@@ -20,14 +20,9 @@ export class EvaluacionIndependientesEntity {
     @ManyToOne(type => PrestadorEntity, prestadorIndependientes => prestadorIndependientes.prestador_eval_independientes)
     eval_prestador: PrestadorEntity;
 
-    //Relacion Muchos a Muchos  EVALUACION-INDEPENDIENTES - ETAPA-INDEPENDIENTES
-    @ManyToMany(type => CalificacionIndEntity, calificacionIndependientes => calificacionIndependientes.cal_evaluacion_independientes, { eager: true })
-    @JoinTable({
-        name: 'cal_eva_ind',
-        joinColumn: { name: 'eva_cal_id' },
-        inverseJoinColumn: { name: 'cal_eva_id' }
-    })
-    eval_cal_independientes: CalificacionIndEntity[];
+    //Relacion Uno a Muchos EVALUACION-INDEPENDIENTES - CALIFICACION-INDEPENDEINTE
+    @OneToMany(type => CalificacionIndEntity, evaluacionips => evaluacionips.cal_evaluacion_independientes)
+    eval_cal_independientes: CalificacionIndEntity
 
     @OneToOne(() => ActaSpIndependientePdfEntity, actaIndependientes => actaIndependientes.act_eval_ind)
     @JoinColumn()
