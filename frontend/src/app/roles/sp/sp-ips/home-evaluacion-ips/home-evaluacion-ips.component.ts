@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Evaluacion } from 'src/app/models/SpIps/evaluacion.dto';
 import { ActaSicPdfDto } from 'src/app/models/actaSicpdf.dto';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
+import { EvaluacionipsService } from 'src/app/services/SpIps/evaluacionips.service';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
 
 @Component({
@@ -16,7 +18,12 @@ export class HomeEvaluacionIpsComponent implements OnInit {
   captCodPres: string
 
   id_evaluacion: number
+  listaVacia: any = undefined;
 
+  acta_id: number
+
+  //DTO EVALUACION
+  evaluacionDto: any[] = []
 
   nombrePrestador: string;
 
@@ -24,13 +31,28 @@ export class HomeEvaluacionIpsComponent implements OnInit {
   constructor(
     private sharedService: SharedServiceService,
     private actaPdfService: ActapdfService,
+    private evaluacionesService: EvaluacionipsService
+
   ) { }
 
   ngOnInit(): void {
     this.nombrePrestador = localStorage.getItem('nombre-pres-sp-ips')
+    this.acta_id = parseInt(localStorage.getItem('acta_id'), 10);
     this.id_evaluacion = this.sharedService.id_evaluacion_sic
-    console.log(this.id_evaluacion)
-    // this.capturarNombres()
+    this.cargarEvaluaciones();
+  }
+
+
+  cargarEvaluaciones(): void {
+    this.evaluacionesService.listaEvaActId(this.acta_id).subscribe(
+      data => {
+        this.evaluacionDto = data;
+        this.listaVacia = undefined;
+      },
+      err => {
+        this.listaVacia = err.error.message;
+      }
+    );
   }
 
 
@@ -38,6 +60,5 @@ export class HomeEvaluacionIpsComponent implements OnInit {
     // Limpiar el localStorage para DESHABILITAR LA RUTA
     localStorage.removeItem('boton-acta-sp-ips');
     localStorage.removeItem('nombre-pres-sp-ips');
-
   }
 }

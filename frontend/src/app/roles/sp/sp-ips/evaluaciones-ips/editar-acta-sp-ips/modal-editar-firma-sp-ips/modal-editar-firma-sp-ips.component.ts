@@ -74,7 +74,7 @@ export class ModalEditarFirmaSpIpsComponent {
     } else {
       const firmaDataURL = this.signatureCanvas.nativeElement.toDataURL();
       this.firma = firmaDataURL;
-      this.sharedService.setFirmaActaSpIps(this.firma);
+      this.sharedService.setFirmaActaSpIpsPrestador(this.firma);
 
       this.toastrService.success('Firma Agregada Exitosamente', 'Éxito', {
         timeOut: 3000,
@@ -102,7 +102,7 @@ export class ModalEditarFirmaSpIpsComponent {
           const imagenBase64 = e.target.result;
           this.imagenCargada = true;
           this.firma = imagenBase64
-          this.sharedService.setFirmaActaSpIps(this.firma);
+          this.sharedService.setFirmaActaSpIpsPrestador(this.firma);
         };
         reader.readAsDataURL(imagen);
       } else {

@@ -24,4 +24,8 @@ export class EvaluacionipsService {
     return this.httpClient.get<Evaluacion[]>(this.evaluacionipsURL)
   }
 
+  //LISTAR EVALUACIONES POR ID_ACTA LLAVE PRIMARIA
+  public listaEvaActId(id_acta: number): Observable<Evaluacion[]>{
+    return this.httpClient.get<Evaluacion[]>(this.evaluacionipsURL + 'acta/evaluaciones/' + id_acta)
+  }
 }

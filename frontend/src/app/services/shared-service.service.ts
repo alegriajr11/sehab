@@ -23,7 +23,8 @@ export class SharedServiceService {
   nombreUsuario: string;
 
   private firmaActaSic: string;
-  private firmaActaSpIps: string;
+  private firmaActaSpIpsPrestador: string;
+  private firmaActaSpIpsAcompanante: string;
   private firmaActaSpInd: string;
   private firmaActaPamec: string;
   private firmaActaVisitaVerificacion: string;
@@ -46,8 +47,12 @@ export class SharedServiceService {
     this.firmaActaSic = firmaActaSic
   }
 
-  setFirmaActaSpIps(firmaActaSpIps: string){
-    this.firmaActaSpIps = firmaActaSpIps
+  setFirmaActaSpIpsPrestador(firmaActaSpIpsPrestador: string){
+    this.firmaActaSpIpsPrestador = firmaActaSpIpsPrestador
+  }
+
+  setFirmaActaSpIpsAcompanante(firmaActaSpIpsAcompanante: string){
+    this.firmaActaSpIpsAcompanante = firmaActaSpIpsAcompanante
   }
 
   setFirmaActaSpInd(firmaActaSpInd: string){
@@ -82,8 +87,12 @@ export class SharedServiceService {
     return this.firmaActaSic
   }
 
-  getFirmaActaSpIps(): string{
-    return this.firmaActaSpIps
+  getFirmaActaSpIpsPrestador(): string{
+    return this.firmaActaSpIpsPrestador
+  }
+
+  getFirmaActaSpIpsAcompanante(): string{
+    return this.firmaActaSpIpsAcompanante
   }
 
   getFirmaActaSpInd(): string{

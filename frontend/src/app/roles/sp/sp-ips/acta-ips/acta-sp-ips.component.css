@@ -187,6 +187,9 @@ input:checked+.slider:before {
     transform: translateX(26px);
 }
 
+textarea {
+    resize: none;
+}
 /* Rounded sliders */
 .slider.round {
     border-radius: 34px;

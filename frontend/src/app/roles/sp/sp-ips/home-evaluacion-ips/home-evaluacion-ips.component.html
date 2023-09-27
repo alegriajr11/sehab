@@ -5,7 +5,8 @@
     <div class="col">
         <div class="row">
             <div class="col-md-2">
-                <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sp/evaluaciones-ips" (click)="limpiarNombrePrestador()">
+                <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sp/evaluaciones-ips"
+                    (click)="limpiarNombrePrestador()">
                     <i class="fa fa-reply fa-lg"></i>
                 </button>
             </div>
@@ -26,26 +27,26 @@
             </div>
             <hr class="my-4">
 
-            <div class="botones-grid">
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-uno">
-                    1. EVALUACION DE HERRAMIENTAS PARA LA IDENTIFICACIÓN Y GESTIÓN DE EVENTOS ADVERSO</button>
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-dos">
-                    2. MONITORIZACIÓN DE ASPECTOS RELACIONADOS CON LA SEGURIDAD DEL PACIENTE</button>
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-tres">
-                    3. DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO</button>
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-cuatro">
-                    4. USO SEGURO DE MEDICAMENTOS</button>
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-cinco">
-                    5. ASEGURAR LA CORRECTA IDENTIFICACIÓN DE PACIENTES</button>
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-seis">
-                    6. GARANTIZAR LA ATENCIÓN SEGURA DE LA MADRE Y EL RECIEN NACIDO</button>
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-siete">
-                    7. MEJORAR LA SEGURIDAD EN LOS PROCEDIMIENTOS QUIRURGICOS</button>
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-ocho">
-                    8. PREVENCIÓN DE ULCERAS POR PRESIÓN</button>
-                <button class="btn btn-dark esp btn-xl" routerLink="/sp/evaluacion-nueve">
-                    9. PROCESOS PARA LA PREVENCIÓN Y REDUCCIÓN DE LA FRECUENCIA DE CAÍDA</button>
-            </div>
+            <table class="table table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Cod</th>
+                        <th scope="col">Evaluaciones</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let evaluacion of this.evaluacionDto; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ evaluacion.evips_nombre }}</td>
+                        <td>
+                            <button class="btn btn-outline-dark" routerLink="/sp/evaluacion-uno">
+                                <span class="fas fa-clipboard"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

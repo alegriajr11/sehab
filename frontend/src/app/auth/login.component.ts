@@ -73,8 +73,5 @@ mostrarPassword() {
   }
 }
 
-recargar(){
-  window.location.reload()
-}
 
 }

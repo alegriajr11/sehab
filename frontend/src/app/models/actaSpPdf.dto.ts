@@ -22,6 +22,13 @@ export class ActaSpPdfDto {
     act_nombre_prestador: string
     act_cargo_prestador: string
     act_firma_prestador: string
+    act_nombre_prestador_acompanante: string
+    act_cargo_prestador_acompanante: string
+    act_firma_prestador_acompanante: string
+    //ATRIBUTOS COMPROMISOS
+    act_compromiso_actividad: string
+    act_compromiso_fecha: string
+    act_compromiso_responsable: string
     act_estado: string
 
     //VARIABLES ORDEN DEL DÍA
@@ -34,8 +41,8 @@ export class ActaSpPdfDto {
     act_captura_imagen: string;
 
     constructor(
-        act_id: number, 
-        act_visita_inicial: string, 
+        act_id: number,
+        act_visita_inicial: string,
         act_visita_seguimiento: string,
         act_fecha_inicial: string,
         act_fecha_final: string,
@@ -56,14 +63,21 @@ export class ActaSpPdfDto {
         act_nombre_prestador: string,
         act_cargo_prestador: string,
         act_firma_prestador: string,
+        act_nombre_prestador_acompanante: string,
+        act_cargo_prestador_acompanante: string,
+        act_firma_prestador_acompanante: string,
         //VARIABLES ORDEN DEL DÍA
         act_fecha_orden: string,
         act_hora_orden: string,
         act_num_oficio: string,
         act_fecha_oficio: string,
         act_fecha_envio_oficio: string,
-        act_captura_imagen: string
-        ){
+        act_captura_imagen: string,
+        //VARIABLES COMPROMISOS
+        act_compromiso_actividad: string,
+        act_compromiso_fecha: string,
+        act_compromiso_responsable: string
+    ) {
         this.act_id = act_id
         this.act_visita_inicial = act_visita_inicial
         this.act_visita_seguimiento = act_visita_seguimiento
@@ -86,6 +100,9 @@ export class ActaSpPdfDto {
         this.act_nombre_prestador = act_nombre_prestador
         this.act_cargo_prestador = act_cargo_prestador
         this.act_firma_prestador = act_firma_prestador
+        this.act_nombre_prestador_acompanante = act_nombre_prestador_acompanante
+        this.act_cargo_prestador_acompanante = act_cargo_prestador_acompanante
+        this.act_firma_prestador_acompanante = act_firma_prestador_acompanante
         //VARIABLES ORDEN DEL DÍA
         this.act_fecha_orden = act_fecha_orden
         this.act_hora_orden = act_hora_orden
@@ -93,6 +110,9 @@ export class ActaSpPdfDto {
         this.act_fecha_oficio = act_fecha_oficio
         this.act_fecha_envio_oficio = act_fecha_envio_oficio
         this.act_captura_imagen = act_captura_imagen
-
+        //VARIABLES COMPROMISOS
+        this.act_compromiso_actividad = act_compromiso_actividad
+        this.act_compromiso_fecha = act_compromiso_fecha
+        this.act_compromiso_responsable = act_compromiso_responsable
     }
 }

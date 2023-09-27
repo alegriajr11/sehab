@@ -102,7 +102,6 @@ import { InformesRealizadosResolucionComponent } from './roles/reso/informes-rea
 import { ModalInformeResolucionComponent } from './roles/reso/informe-resolucion/modal-informe-resolucion/modal-informe-resolucion.component';
 import { ModalInformesRealizadosResComponent } from './roles/reso/informes-realizados-resolucion/modal-informes-realizados-res/modal-informes-realizados-res.component';
 import { AgregarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/agregar-sedes-prestador/agregar-sedes-prestador.component';
-import { ModalFirmaActaSpIpsComponent } from './roles/sp/sp-ips/acta-ips/modal-firma-acta-sp-ips/modal-firma-acta-sp-ips.component';
 import { ModalFirmaActaSpProComponent } from './roles/sp/sp-profesionales/acta-pro/modal-firma-acta-sp-pro/modal-firma-acta-sp-pro.component';
 import { ModalFirmaActaPamecComponent } from './roles/pamec/acta/modal-firma-acta-pamec/modal-firma-acta-pamec.component';
 import { EditarEvaluacionSicComponent } from './roles/sic/evaluaciones/editar-evaluacion-sic/editar-evaluacion-sic.component';
@@ -123,6 +122,7 @@ import { ModalFirmaRolComponent } from './usuario/nuevo-usuario-rol/modal-firma-
 import { ModalSedesPrestadorComponent } from './prestador/modal-sedes-prestador/modal-sedes-prestador.component';
 import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.component';
 import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/editar-sedes-prestador/editar-sedes-prestador.component';
+import { ModalEditarFirmaAcompananteSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/editar-acta-sp-ips/modal-editar-firma-acompanante-sp-ips/modal-editar-firma-acompanante-sp-ips.component';
 
 
 
@@ -215,7 +215,6 @@ import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador
     ModalInformeResolucionComponent,
     ModalInformesRealizadosResComponent,
     AgregarSedesPrestadorComponent,
-    ModalFirmaActaSpIpsComponent,
     ModalFirmaActaSpProComponent,
     ModalFirmaActaPamecComponent,
     EditarEvaluacionSicComponent,
@@ -233,7 +232,8 @@ import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador
     ModalFirmaRolComponent,
     ModalSedesPrestadorComponent,
     RichTextEditorComponent,
-    EditarSedesPrestadorComponent
+    EditarSedesPrestadorComponent,
+    ModalEditarFirmaAcompananteSpIpsComponent
 
   ],
   imports: [
