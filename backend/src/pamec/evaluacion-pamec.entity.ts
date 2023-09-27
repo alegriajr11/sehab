@@ -21,7 +21,7 @@ export class EvaluacionPamecEntity {
 
 
     //Relacion Muchos a Muchos  EVALUACION-PAMEC - ACTIVIDAD-PAMEC
-    @ManyToMany(type => CalificacionpamEntity, actividadPamec => actividadPamec.cal_evaluacion_pam, { eager: true })
+    @ManyToMany(type => CalificacionpamEntity, calificacionPamec => calificacionPamec.cal_evaluacion_pam, { eager: true })
     @JoinTable({
         name: 'cal_eva_pam',
         joinColumn: { name: 'cal_eva_id' },

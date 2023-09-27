@@ -34,7 +34,7 @@ export class SpIpsService {
         return ips;
     }
 
-   
+
 
     //ENCONTRAR POR ACTA
     async findByActa(id: number): Promise<ActaSpIpsEntity> {
@@ -119,7 +119,6 @@ export class SpIpsService {
             //Crear el ACTA DTO
             const acta_SpIpsPdf = this.actaSpIpsRepository.create(dto);
 
-            console.log(evaluacionesIds)
             //ASIGNACIÓN DE LAS EVALUACIONES
             const evaluaciones = await this.evaluacionesIps.findByIds(evaluacionesIds)
             acta_SpIpsPdf.evaluacionesips = evaluaciones
@@ -152,7 +151,6 @@ export class SpIpsService {
             );
             return { error: false, message: 'El acta ha sido creada' };
         } catch (error) {
-            console.log(error)
             // Devuelve un mensaje de error apropiado
             return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
         }
@@ -182,10 +180,14 @@ export class SpIpsService {
         dto.act_obj_visita ? ips.act_obj_visita = dto.act_obj_visita : ips.act_obj_visita = ips.act_obj_visita;
         dto.act_nombre_funcionario ? ips.act_nombre_funcionario = dto.act_nombre_funcionario : ips.act_nombre_funcionario = ips.act_nombre_funcionario;
         dto.act_cargo_funcionario ? ips.act_cargo_funcionario = dto.act_cargo_funcionario : ips.act_cargo_funcionario = ips.act_cargo_funcionario;
+        dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
         dto.act_nombre_prestador ? ips.act_nombre_prestador = dto.act_nombre_prestador : ips.act_nombre_prestador = ips.act_nombre_prestador;
         dto.act_cargo_prestador ? ips.act_cargo_prestador = dto.act_cargo_prestador : ips.act_cargo_prestador = ips.act_cargo_prestador;
         dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
-        dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
+        dto.act_nombre_prestador_acompanante ? ips.act_nombre_prestador_acompanante = dto.act_nombre_prestador_acompanante : ips.act_nombre_prestador_acompanante = ips.act_nombre_prestador_acompanante;
+        dto.act_cargo_prestador_acompanante ? ips.act_cargo_prestador_acompanante = dto.act_cargo_prestador_acompanante : ips.act_cargo_prestador_acompanante = ips.act_cargo_prestador_acompanante;
+        dto.act_firma_prestador_acompanante ? ips.act_firma_prestador_acompanante = dto.act_firma_prestador_acompanante : ips.act_firma_prestador_acompanante = ips.act_firma_prestador_acompanante;
+
 
 
         const usuario = await this.jwtService.decode(tokenDto.token);

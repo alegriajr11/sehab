@@ -14,34 +14,31 @@ export class EvaluacionipsService {
         private readonly evaluacionipsRepository: EvaluacionIpsRepository,
         @InjectRepository(ActaSpIpsEntity)
         private readonly actaSpIpsRepository: ActaSpIpsRepository,
-    ){}
+    ) { }
 
     async findById(evips_id: number): Promise<EvaluacionipsEntity> {
-        const evaluacionips = await this.evaluacionipsRepository.findOne({where: {evips_id}});
-        if(!evaluacionips){
+        const evaluacionips = await this.evaluacionipsRepository.findOne({ where: { evips_id } });
+        if (!evaluacionips) {
             throw new NotFoundException(new MessageDto('No Existe'));
         }
         return evaluacionips;
     }
 
-    async getall(): Promise<EvaluacionipsEntity[]>{
+    async getall(): Promise<EvaluacionipsEntity[]> {
         const dom = await this.evaluacionipsRepository.find()
-        if(!dom) throw new NotFoundException(new MessageDto('No hay Evaluaciones en la lista'))
+        if (!dom) throw new NotFoundException(new MessageDto('No hay Evaluaciones en la lista'))
         return dom;
     }
 
-<<<<<<< HEAD
-    
-=======
-     //LISTAR ACTAS POR EVALUACION
-     async getallactaseva(id: number): Promise<EvaluacionipsEntity[]> {
+
+    //LISTAR ACTAS POR EVALUACION
+    async getallactaseva(id_acta: number): Promise<EvaluacionipsEntity[]> {
         const evalucion = await this.evaluacionipsRepository.createQueryBuilder('evaluacion')
-            .select(['evaluacion','actas_ips.id'])
+            .select(['evaluacion', 'actas_ips.id'])
             .innerJoin('evaluacion.actas_ips', 'actas_ips')
-            .where('actas_ips.id = :acta_id', { acta_id: id })
+            .where('actas_ips.id = :acta_id', { acta_id: id_acta })
             .getMany()
         if (evalucion.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas IPS en la lista'))
         return evalucion;
     }
->>>>>>> cf15b7ebfcefc1e3e045b2a68677e51346e0ef80
 }
