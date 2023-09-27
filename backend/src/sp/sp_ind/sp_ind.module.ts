@@ -12,6 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
 import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
 import { EvaluacionIndependientesEntity } from './evaluacion-independientes.entity';
+import { CalificacionindModule } from './calificacionind/calificacionind.module';
 
 @Module({
   imports:[TypeOrmModule.forFeature([EtapaInd,CriterioIndEntity,CalificacionIndEntity,EvaluacionIndependientesEntity]), TypeOrmModule.forFeature([CriterioIndEntity]), 
@@ -26,7 +27,8 @@ import { EvaluacionIndependientesEntity } from './evaluacion-independientes.enti
       },
     }),
     inject: [ConfigService],
-  }), //FINAL DE MODULO JwtService
+  }),
+  CalificacionindModule, //FINAL DE MODULO JwtService
   ],
   providers: [SpIndService],
   controllers: [SpIndController]

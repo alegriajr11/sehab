@@ -27,14 +27,11 @@ export class EvaluacionSicEntity {
     @JoinColumn()
     eval_acta_sic: ActaSicPdfEntity;
 
-    //Relacion Uno a Muchos EVALUACION SIC - CUMPLIMIENTO 
-    @ManyToMany(type => CumplimientoSicEntity, cumplimiento => cumplimiento.cump_eva_sic, { eager: true })
-    @JoinTable({
-        name: 'cump_eva_sic',
-        joinColumn: { name: 'eva_cump_id' },
-        inverseJoinColumn: { name: 'cump_eva_id' }
-    })
-    eva_sic_cump: CumplimientoSicEntity[];
+    // //Relacion Uno a Muchos EVALUACION SIC - CUMPLIMIENTO 
+
+    //Relacion Uno a Muchos EVALUACION SIC  - CUMPLIMIENTO
+    @OneToMany(type => CumplimientoSicEntity, cumplimiento => cumplimiento.cump_eva_sic)
+    eva_sic_cump: CumplimientoSicEntity
 
     //Relacion Uno a Muchos EVALUACION SIC - CUMPLIMIENTO_ESTANDAR_SIC 
     @OneToMany(type => CumplimientoEstandarSicEntity, cumplimineto_estandar => cumplimineto_estandar.cumplimiento_eva_sic)

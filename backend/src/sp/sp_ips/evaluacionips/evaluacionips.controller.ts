@@ -20,10 +20,14 @@ export class EvaluacionipsController {
         return this.evaluacionipsService.getall();
     }
 
-    //OBTENER UNA EVALUACION-IPS POR ACTA_ID
+<<<<<<< HEAD
+    
+=======
+    //OBTENER UN SP IPS ACTA PDF POR ID
     //@UseGuards(JwtAuthGuard)
     @Get('/acta/evaluaciones/:id')
     async getevaluciones(@Param('id', ParseIntPipe) id_acta: number) {
         return await this.evaluacionipsService.getallactaseva(id_acta);
     }
+>>>>>>> cf15b7ebfcefc1e3e045b2a68677e51346e0ef80
 }

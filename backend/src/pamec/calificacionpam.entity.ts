@@ -28,7 +28,7 @@ export class CalificacionpamEntity {
     @ManyToOne(type => CriteriopamEntity, calificacion_pam => calificacion_pam.criterio_calificacionpam)
     criteriopam_calificacion: CriteriopamEntity;
 
-    //Relacion Muchos a Muchos ACTIVIDAD-PAMEC - EVALUACION-PAMEC
-    @ManyToMany(type => EvaluacionPamecEntity, evaluacionPamec => evaluacionPamec.eval_calpam)
-    cal_evaluacion_pam: EvaluacionPamecEntity[];
+    //Relacion Muchos a CALIFICACIONES - EVALUACION-PAMEC
+    @ManyToOne(type => EvaluacionPamecEntity, evaluacionPamec => evaluacionPamec.eval_calpam)
+    cal_evaluacion_pam: EvaluacionPamecEntity
 }

@@ -114,6 +114,7 @@ import { AuditoriaEliminacionModule } from './auditoria/auditoria_eliminacion/au
 import { AuditoriaRegistroController } from './auditoria/auditoria_registro/auditoria_registro.controller';
 import { GrupoEvaluacionModule } from './resolucion/grupo_evaluacion/grupo_evaluacion.module';
 import { ServicioModule } from './resolucion/servicio/servicio.module';
+import { CumplimientosicModule } from './sic/cumplimientosic/cumplimientosic.module';
 
 
 
@@ -207,6 +208,7 @@ import { ServicioModule } from './resolucion/servicio/servicio.module';
     AuditoriaEliminacionModule,
     GrupoEvaluacionModule,
     ServicioModule,
+    CumplimientosicModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 

@@ -4,18 +4,18 @@ import { CriterioIndEntity } from "./criterioind.entity";
 import { EvaluacionIndependientesEntity } from "./evaluacion-independientes.entity";
 
 
-@Entity({name: 'calificacion_ind'})
+@Entity({ name: 'calificacion_ind' })
 export class CalificacionIndEntity {
     @PrimaryGeneratedColumn('increment')
     cal_id: number;
 
-    @Column({type: 'int'})
+    @Column({ type: 'int' })
     cal_nota: number;
 
-    @Column({type: 'varchar', length: 255, nullable: false, unique: false})
+    @Column({ type: 'varchar', length: 255, nullable: false, unique: false })
     cal_observaciones: string;
 
-    @Column({ type: 'varchar', length: 10, nullable: false,default:true })
+    @Column({ type: 'varchar', length: 10, nullable: false, default: true })
     cal_asignado: string;
 
 
@@ -23,6 +23,7 @@ export class CalificacionIndEntity {
     @ManyToOne(type => CriterioIndEntity, criterio => criterio.calificaciones_cri)
     criterio_cal: CriterioIndEntity
 
-    @ManyToMany(type => EvaluacionIndependientesEntity, evaluacionIndependientes => evaluacionIndependientes.eval_cal_independientes)
-    cal_evaluacion_independientes: EvaluacionIndependientesEntity;
+    //Relacion Muchos a CALIFICACIONES - EVALUACIONINDEPENDIENTES
+    @ManyToOne(type => EvaluacionIndependientesEntity, evaluacionIndependientes => evaluacionIndependientes.eval_cal_independientes)
+    cal_evaluacion_independientes: EvaluacionIndependientesEntity
 }
