@@ -29,3 +29,14 @@ span {
     font-size: 1.3rem;
     text-align: center;
 }
+
+
+/*ESTILOS DE LA TABLA EVALUACIONES*/
+td {
+    font-weight: bold;
+}
+
+span{
+    font-size: xx-large;
+}
+

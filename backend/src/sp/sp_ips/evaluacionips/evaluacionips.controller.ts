@@ -20,12 +20,11 @@ export class EvaluacionipsController {
         return this.evaluacionipsService.getall();
     }
 
-
     //OBTENER UN SP IPS ACTA PDF POR ID
     //@UseGuards(JwtAuthGuard)
     @Get('/acta/evaluaciones/:id')
-    async getevaluciones(@Param('id', ParseIntPipe) id: number) {
-        return await this.evaluacionipsService.getallactaseva(id);
+    async getevaluciones(@Param('id', ParseIntPipe) id_acta: number) {
+        return await this.evaluacionipsService.getallactaseva(id_acta);
     }
 
 }

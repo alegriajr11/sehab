@@ -69,16 +69,25 @@ export class ActaSpIpsEntity {
     @Column({ type: 'varchar', length: 70, nullable: false })
     act_cargo_prestador
 
+    @Column({ type: 'varchar', length: 70, nullable: false })
+    act_nombre_prestador_acompanante
+
+    @Column({ type: 'varchar', length: 70, nullable: false })
+    act_cargo_prestador_acompanante
+
     @Column({ type: 'date' })
     act_creado: Date;
 
     @Column({ type: 'text', nullable: true })
-    act_firma_funcionario: string; // Esta columna almacenará la firma en formato base64
+    act_firma_funcionario: string; // Esta columna almacenará la firma en formato base64 del funcionario
 
     @Column({ type: 'text', nullable: true })
-    act_firma_prestador: string; // Esta columna almacenará la firma en formato base64
+    act_firma_prestador: string; // Esta columna almacenará la firma en formato base64 del representante
 
-    @Column({ type: 'varchar', nullable: false, default: true })
+    @Column({ type: 'text', nullable: true })
+    act_firma_prestador_acompanante: string; // Esta columna almacenará la firma en formato base64 del acompañante
+
+    @Column({ type: 'varchar', length: 2, nullable: false, default: true })
     act_estado: string;
 
     //ATRIBUTOS PARA EL ORDÉN DEL DÍA
@@ -99,8 +108,21 @@ export class ActaSpIpsEntity {
     act_fecha_envio_oficio: string
 
     //3. Caracterización de los servicios ofertados. 
-    @Column({ type: 'mediumtext', nullable: true }) // Columna para guardar captura de imagen
+    @Column({ type: 'varchar', length: 255, nullable: true }) // Columna para guardar captura de imagen
     act_captura_imagen: string;
+
+
+    //ATRIBUTOS COMPROMISOS
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    act_compromiso_actividad: string;
+    //ATRIBUTOS COMPROMISOS
+
+    @Column({ type: 'varchar', length: 12, nullable: true })
+    act_compromiso_fecha: string;
+    //ATRIBUTOS COMPROMISOS
+
+    @Column({ type: 'varchar', length: 60, nullable: true })
+    act_compromiso_responsable: string;
 
 
     @BeforeInsert()

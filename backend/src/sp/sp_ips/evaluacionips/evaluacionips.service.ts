@@ -31,7 +31,7 @@ export class EvaluacionipsService {
     }
 
 
-    //LISTAR ACTAS POR EVALUACION
+     //LISTAR ACTAS POR EVALUACION
     async getallactaseva(id: number): Promise<EvaluacionipsEntity[]> {
         const evalucion = await this.evaluacionipsRepository.createQueryBuilder('evaluacion')
             .select(['evaluacion', 'actas_ips.id'])
@@ -41,5 +41,4 @@ export class EvaluacionipsService {
         if (evalucion.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas IPS en la lista'))
         return evalucion;
     }
-
 }

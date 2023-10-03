@@ -24,7 +24,8 @@ export class EditarActaSpIpsComponent {
   act_cargo_funcionario: string
 
   //ALMACENAR LA FIRMA DEL PRESTADOR DEL SERVICIO COMPARTIDO
-  firma: string;
+  firma_prestador: string;
+  firma_acompanante: string;
 
   //MODAL
   public modalRef: BsModalRef;
@@ -60,13 +61,24 @@ export class EditarActaSpIpsComponent {
       }
     );
 
-    console.log(this.id_evaluacion)
     this.unsoloCheckbox();
     this.estadoActa();
   }
 
   //Metodo Abrir Modal
-  openModal(modalTemplate: TemplateRef<any>) {
+  openModalFirmPrestador(modalTemplate: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(modalTemplate,
+      {
+        class: 'modal-dialogue-centered modal-md',
+        backdrop: true,
+        keyboard: true
+      }
+
+    );
+  }
+
+  //Metodo Abrir Modal
+  openModalAcompanante(modalTemplate: TemplateRef<any>) {
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',
@@ -117,7 +129,6 @@ export class EditarActaSpIpsComponent {
     // Obtener el estado actual del acta
     const data = await this.actaPdfService.oneActaSpIps(this.id_evaluacion).toPromise();
     this.estado_acta = data.act_estado;
-    console.log(this.estado_acta)
     if (this.estado_acta === '0') {
       localStorage.setItem('boton-editar-acta-sp-ips', 'false')
     } else if (this.estado_acta === '1') {
@@ -195,9 +206,16 @@ export class EditarActaSpIpsComponent {
     this.actaSp.act_visita_seguimiento = seguimiento;
 
     //ASIGNACION DE LA FIRMA DEL PRESTADOR SOLO SI FUE INGRESADA EN EL SERVICIO COMPARTIDO
-    this.firma = this.sharedService.getFirmaActaSpIps();
-    if (this.firma) {
-      this.actaSp.act_firma_prestador = this.firma
+    this.firma_prestador = this.sharedService.getFirmaActaSpIpsPrestador();
+    //ASIGNAR FIRMA PRESTADOR
+    if (this.firma_prestador) {
+      this.actaSp.act_firma_prestador = this.firma_prestador
+    }
+    this.firma_acompanante = this.sharedService.getFirmaActaSpIpsAcompanante();
+    
+    //ASIGNAR FIRMA ACOMPAÑANTE
+    if (this.firma_acompanante) {
+      this.actaSp.act_firma_prestador_acompanante = this.firma_acompanante
     }
 
     if (

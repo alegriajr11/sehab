@@ -104,6 +104,11 @@ export class ActaSpIpsComponent implements OnInit {
   act_captura_imagen: string
   firma: string;
 
+  //VARIABLES COMPROMISOS
+  act_compromiso_actividad: string
+  act_compromiso_fecha: string
+  act_compromiso_responsable: string
+
 
 
   //ATRIBUTOS CONTROLAR MENSAJES VALIDACION
@@ -164,27 +169,17 @@ export class ActaSpIpsComponent implements OnInit {
   //METODO PARA CAPTURAR SERVICIOS DEL REPS
   cargarImagen(event: any) {
     const imagen = event.target.files[0];
-
     if (imagen) {
-      // Verificar el tamaño de la imagen (200KB = 500 * 1024 bytes)
-      if (imagen.size <= 200 * 1024) {
+      // Verificar el tamaño de la imagen (2MB = 2 * 1024 * 1024 bytes)
+      if (imagen.size <= 2 * 1024 * 1024) {
         const labelElement = document.querySelector('.custom-file-label');
         if (labelElement) {
           labelElement.textContent = imagen.name;
         }
-        // Leer la imagen como base64
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-          // El resultado de la lectura es la imagen en base64
-          const imagenBase64 = e.target.result;
-          this.imagenCargada = true;
-          this.act_captura_imagen = imagenBase64
-        };
-        reader.readAsDataURL(imagen);
       } else {
         // Mostrar mensaje de notificación
         this.imagenCargada = false;
-        this.toastrService.error('La imagen es demasiado grande. Debe ser menor o igual a 200KB.', 'Error', {
+        this.toastrService.error('La imagen es demasiado grande. Debe ser menor o igual a 2MB.', 'Error', {
           timeOut: 3000,
           positionClass: 'toast-top-center',
         });
@@ -192,6 +187,7 @@ export class ActaSpIpsComponent implements OnInit {
       }
     }
   }
+
 
 
   mostrarToastrImg() {
@@ -603,13 +599,20 @@ export class ActaSpIpsComponent implements OnInit {
       this.act_nombre_prestador,
       this.act_cargo_prestador,
       this.act_firma_prestador,
+      this.act_nombre_prestador_acompanante,
+      this.act_cargo_prestador_acompanante,
+      this.act_firma_prestador_acompanante,
       //ORDEN DEL DÍA
       this.act_fecha_orden,
       this.act_hora_orden,
       this.act_num_oficio,
       this.act_fecha_oficio,
       this.act_fecha_envio_oficio,
-      this.act_captura_imagen
+      this.act_captura_imagen,
+      //COMPROMISOS
+      this.act_compromiso_actividad,
+      this.act_compromiso_fecha,
+      this.act_compromiso_responsable
     );
 
     //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
@@ -717,6 +720,8 @@ export class ActaSpIpsComponent implements OnInit {
                 if (ultimaActa && ultimaActa.id) {
                   this.id_acta = ultimaActa.id;
 
+                  localStorage.setItem('acta_id', this.id_acta.toString())//ENVIAR ID DEL ACTA EN EL LOCALSTORAGE
+                  
                   Swal.fire({
                     title: '¿Desea descargar el acta?',
                     showCancelButton: true,
@@ -726,9 +731,6 @@ export class ActaSpIpsComponent implements OnInit {
                     //SOLICITUD AL SERVICIO QUE GENERA EL ACTA_PDF PASANDO COMO PARAMETRO LA ULTIMA ACTA REGISTRADA
                     if (result.value) {
                       this.generarPdfActaSpIps.ActaPdf(this.id_acta);
-                      //ASIGNAR NULL EL ATRIBUTO FIRMA PARA UNA NUEVA ACTA
-                      this.act_firma_prestador = null
-                      this.sharedService.setFirmaActaSpIps(this.act_firma_prestador) //ENVIAMOS LA FIRMA NULL PARA UNA NUEVA ACTA
                       this.router.navigate(['/sp/home-evaluacion-ips']);
                       window.scrollTo(0, 0);
                     } else if (result.dismiss === Swal.DismissReason.cancel) {

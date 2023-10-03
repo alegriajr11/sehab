@@ -67,10 +67,21 @@ export class IpsDto {
     act_cargo_prestador: string
 
     @IsNotBlank()
+    act_nombre_prestador_acompanante: string
+
+    @IsNotBlank()
+    act_cargo_prestador_acompanante: string
+
+    @IsNotBlank()
     act_firma_funcionario: string
     
     @IsNotBlank()
     act_firma_prestador: string
+
+    @IsNotBlank()
+    act_firma_prestador_acompanante: string
+
+    //ATRIBUTOS COMPROMISOS
 
     @IsString()
     act_estado: string;

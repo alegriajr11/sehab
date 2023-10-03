@@ -3,16 +3,16 @@
 <div class="container">
     <div class="text-center">
         <h1>CRITERIOS SEGURIDAD DEL PACIENTE - PROFESIONALES INDEPENDIENTES</h1>
-        <h5>Selecciona el Item</h5>
+        <h5>Selecciona la Etapa</h5>
     </div>
     <hr>
 </div>
 
 <div class="container_head">
     <div class="col-md-6">
-        <label for="">Item:</label>
+        <label for="">Etapa:</label>
         <select class="form-control" name="eta_id" id="eta_id" (change)="llenarSpan()" (change)="cargarCriterios()">
-            <option hidden selected value="">Selecciona el Item...</option>
+            <option hidden selected value="">Selecciona la Etapa...</option>
             <option *ngFor="let etapa of etapas" value="{{etapa.eta_id}}">{{etapa.eta_nombre}}</option>
         </select>
     </div>
@@ -25,7 +25,7 @@
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-9">
-                    <h5><b>Item:</b></h5>
+                    <h5><b>Etapa:</b></h5>
                     <span id="ite_nombre"></span>
                 </div>
                 <div class="col-sm-3">
@@ -63,13 +63,13 @@
                 </tr>
             </tbody>
         </table>
+        <div class="container" *ngIf="listaVacia">
+            <div class="p-3 mb-2 bg-dark text-white text-center">
+                <h2>{{ listaVacia }}</h2>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="container" *ngIf="listaVacia">
-    <div class="p-3 mb-2 bg-dark text-white text-center">
-        <h2>{{ listaVacia }}</h2>
-    </div>
-</div>
 
 <app-footer></app-footer>

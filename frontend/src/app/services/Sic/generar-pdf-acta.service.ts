@@ -291,7 +291,7 @@ export class GenerarPdfActaService {
           tableWidth: 'auto',
         })
 
-        //NOMBRE USUARIO1 Y 2, CARGO USUARIO1 Y 2 Y FIRMA1 Y 2
+        //NOMBRE USUARIO1, CARGO USUARIO1 Y FIRMA1
         autoTable(doc, {
           startY: 217,
           columnStyles: { sede: { halign: 'left' } },

@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import autoTable, { Cell } from 'jspdf-autotable';
 import { SharedServiceService } from '../shared-service.service';
 import { UsuarioService } from '../usuario.service';
+import { EvaluacionipsService } from './evaluacionips.service';
 
 @Injectable({
   providedIn: 'root',
@@ -51,12 +52,37 @@ export class GenerarPdfActaIpsService {
   act_fecha_oficio: string
   act_fecha_envio_oficio: string
 
+  act_estado: string
+
   constructor(
     private actapdfService: ActapdfService,
     private usuarioService: UsuarioService,
-    private sharedService: SharedServiceService
+    private sharedService: SharedServiceService,
+    private evaluacionipsService: EvaluacionipsService
   ) { }
 
+
+  addHeader(doc: jsPDF) {
+    // Agregar imagen como encabezado
+    const imgEncabezado = 'assets/img/encabezadoSp.png';
+    doc.addImage(imgEncabezado, 'PNG', 23.5, 4, 160, 25);
+  }
+
+  addFooter(doc: jsPDF) {
+    // Agregar imagen como pie de página
+    const imgPiePagina = 'assets/img/piePaginaSpIps.png';
+    doc.addImage(imgPiePagina, 'PNG', -2, 278, 220, 20);
+  }
+
+  addMarcaAgua(doc: jsPDF) {
+    var marca_agua = 'assets/img/marcaAguaSsd.png'
+    doc.addImage(marca_agua, 'PNG', -10, 10, 140, 115);
+    doc.addImage(marca_agua, 'PNG', -10, 100, 140, 115);
+    doc.addImage(marca_agua, 'PNG', 5, 168, 140, 115);
+    doc.addImage(marca_agua, 'PNG', 80, -14, 140, 115);
+    doc.addImage(marca_agua, 'PNG', 100, 49, 140, 115);
+    doc.addImage(marca_agua, 'PNG', 80, 168, 140, 115);
+  }
 
   async InformacionPrestador(doc: jsPDF): Promise<void> {
     doc.setFontSize(9);
@@ -283,8 +309,8 @@ export class GenerarPdfActaIpsService {
     });
   }
 
-  //DESARROLLO DE LA REUNIÓN
-  async generarDesarrolloReunion(doc: jsPDF): Promise<void> {
+  //DESARROLLO DE LA REUNIÓN - ORDEN DEL DIA UNO Y DOS
+  async generarDesarrolloOrden(doc: jsPDF, actaSpIps: ActaSpPdfDto): Promise<void> {
 
     //INFORMACIÓN DEL USUARIO ASIGNADO EN EL ACTA:
     const usuario = await this.usuarioService.oneUser(this.actaPdf.act_id_funcionario).toPromise()
@@ -345,7 +371,7 @@ export class GenerarPdfActaIpsService {
       body: [
         {
           objeto:
-            `Siendo las ${this.act_hora_orden} del día ${this.act_fecha_orden}, en las instalaciones ubicadas en la ${this.act_direccion} se realiza ` +
+            `Siendo las ${this.act_hora_orden} del día ${this.act_fecha_orden}, en las instalaciones ubicadas en ${this.act_direccion} se realiza ` +
             `visita ${tipo_visita} al programa de seguridad del paciente a ${this.act_prestador} con Código de habilitación ${this.act_cod_prestador} ` +
             `acorde al oficio Número. ${this.act_num_oficio} emitido el ${this.act_fecha_oficio} y enviado vía correo electrónico el ${this.act_fecha_envio_oficio}. ` +
             `Se procede con la presentación por parte del Profesional de Apoyo ${usuarioAsignado} de la oficina de Aseguramiento y Prestación de Servicios - Sistema Obligatorio de Garantía de la Calidad en Salud - ` +
@@ -375,7 +401,7 @@ export class GenerarPdfActaIpsService {
       body: [
         {
           objeto:
-            `Dando continuidad a la agenda, se da a conocer el objeto de la visita, el cual es realizar el seguimiento a la implementación del programa de seguridad del paciente` +
+            `Dando continuidad a la agenda, se da a conocer el objeto de la visita, el cual es realizar el seguimiento a la implementación del programa de seguridad del paciente ` +
             `acorde a los lineamientos y buenas prácticas estipuladas por el Ministerio de salud. Para lo cual se evaluará lo siguiente: `
 
         },
@@ -400,36 +426,16 @@ export class GenerarPdfActaIpsService {
       })
     });
 
-    //LISTAR LAS EVALUACIONES ASIGNADAS POR EL VERIFICADOR
-    const tableData: string[][] = [];
+    const evaluaciones = await this.evaluacionipsService.listaEvaActId(actaSpIps.id).toPromise();
 
-    // Función para crear una lista enumerada
-    function crearListaNumerada(items: string[]) {
-      let number = 1; // Inicializa el contador
+    let idIncremental = 1; // Inicializar un contador
 
-      items.forEach(item => {
-        // Agrega el número de lista y el elemento de la lista en una fila de la tabla
-        tableData.push([`${number}. ${item}`]);
-        number++; // Incrementa el contador
-      });
-    }
+    const lista_evaluacions = evaluaciones.map(eva => ['    ' + idIncremental++ + '.', eva.evips_nombre])
 
-    // Listar las evaluaciones
-    const lista_orden: string[] = [
-      "REALIZAR PETICION AL BACKEND PARA TRAER LAS EVALUACIONES ASIGNADAS",
-      "EVAS",
-      ".......... ",
-      "R...n. ",
-      "........... ",
-      "......... ",
-    ];
-    // Llamar a la función para crear la lista numerada en la tabla
-    crearListaNumerada(lista_orden);
-
-    // Crear una tabla para el contenido
+    // LISTAR LAS EVALUACIONES ASIGNADAS POR EL USUARIO
     autoTable(doc, {
       startY: 155,
-      body: tableData, // Los datos de la tabla que generaste
+      body: lista_evaluacions,
       tableWidth: 'auto',
       headStyles: {
         fillColor: [248, 248, 248],
@@ -443,6 +449,333 @@ export class GenerarPdfActaIpsService {
         fontSize: 10,
       },
     });
+
+    // MANEJO DE INSERCIÓN DE LA ORDEN TRES CON BASE A LAS EVALUACIONES SELECCIONADAS
+    if (idIncremental <= 8) {
+      let startY = 175;
+      await this.ordenTres(doc, startY);
+      //CAPTURA DE LA IMAGEN EN NUEVA PAGINA
+      //NUEVA PAGINA
+      doc.addPage();
+      // Aplicar las mismas configuraciones necesarias Header
+      this.addHeader(doc);
+      const capturaReps = 'assets/img/captura.png';
+      doc.addImage(capturaReps, 'PNG', 25.5, 32, 159, 98);
+      //VARIABLE PARA INCICIO DE ORDENES POSTERIORES
+      let top_orden_pos = 135
+      await this.ordenPoseterior(doc, top_orden_pos)
+    } else {
+      // Agregar una nueva página para la "orden tres"
+      doc.addPage();
+      // Aplicar las mismas configuraciones necesarias Header
+      this.addHeader(doc);
+      let top_table = 35;
+      await this.ordenTres(doc, top_table);
+      // Agregar Captura
+      const capturaReps = 'assets/img/captura.png';
+      doc.addImage(capturaReps, 'PNG', 25.5, 58, 159, 98);
+      //VARIABLE PARA INCICIO DE ORDENES POSTERIORES
+      let top_orden_pos = 160
+      await this.ordenPoseterior(doc, top_orden_pos)
+    }
+
+
+  }
+
+  //ORDEN DE LA REUNIÓN - DOS
+  async ordenTres(doc: jsPDF, top: number) {
+    autoTable(doc, {
+      margin: { top },
+      columnStyles: {
+        caracterizacion: { halign: 'justify' },
+      },
+      body: [
+        {
+          caracterizacion: `Revisada la plataforma del REPS se puede evidenciar los servicios registrados y ofertados por ` +
+            `parte de ${this.act_prestador} a la fecha.`
+        },
+      ],
+      columns: [{ header: '3. Caracterización de los servicios ofertados: ', dataKey: 'caracterizacion' }],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      styles: {
+        fontSize: 10,
+      },
+    });
+  }
+
+  async ordenPoseterior(doc: jsPDF, top: number) {
+    //ORDEN CUATRO DEL ACTA
+    autoTable(doc, {
+      startY: top,
+      columnStyles: { objeto: { halign: 'justify' } },
+      body: [
+        {
+          objeto:
+            `Se procede a solicitar información y/o documentos pertinentes al caso y según aplique, ` +
+            `acorde a los servicios ofertadas y reportados en el REPS. Para lo cual se aplican las listas de chequeo respectivas. `
+
+        },
+      ],
+      columns: [{ header: '4. Revisión de información y/o documentos:  ', dataKey: 'objeto' }],
+      tableWidth: 'auto',
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      styles: {
+        fontSize: 10,
+      },
+      didDrawCell: (data => {
+        if (data.section === 'body') {
+          data.cell.styles.fillColor = [255, 255, 255]; // Establecer el color de fondo de cada celda en el cuerpo de la tabla como blanco
+        }
+      })
+    });
+
+    //ORDEN CINCO DEL ACTA
+    autoTable(doc, {
+      startY: top + 20,
+      columnStyles: { objeto: { halign: 'justify' } },
+      body: [
+        {
+          objeto:
+            `una vez realizada la respectiva revisión de la documentación y demás evidencias que soportan la ejecución e implementación del programa ` +
+            `de seguridad del paciente, se procede a socializar los hallazgos (estos pueden indicar conformidad o no conformidad) u observaciones respectivas.`
+
+        },
+      ],
+      columns: [{ header: '5. Socialización de Hallazgos y/u Observaciones: ', dataKey: 'objeto' }],
+      tableWidth: 'auto',
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      styles: {
+        fontSize: 10,
+      },
+      didDrawCell: (data => {
+        if (data.section === 'body') {
+          data.cell.styles.fillColor = [255, 255, 255]; // Establecer el color de fondo de cada celda en el cuerpo de la tabla como blanco
+        }
+      })
+    });
+
+
+    //ORDEN SEIS DEL ACTA
+    autoTable(doc, {
+      startY: top + 43,
+      columnStyles: { objeto: { halign: 'justify' } },
+      body: [
+        {
+          objeto:
+            `una vez socializado los hallazgos  u observaciones a que haya lugar a la IPS auditada y frente a la herramienta de evaluación  ` +
+            `establecida por la secretaria de salud departamental, se procede hacer el cierre respectivo de la visita, recordando que aquello ` +
+            `que se encuentre con calificación de 3 y/o 1 son objeto de acciones de mejoramiento (entiéndase como acciones de mejoramiento,` +
+            `toda actividad implementada en la menor medida posible y que tiendan a corregir las desviaciones que se pudieren estar presentando) y los compromisos adquiridos. `
+
+        },
+      ],
+      columns: [{ header: '6. Cierre de la visita y compromisos: ', dataKey: 'objeto' }],
+      tableWidth: 'auto',
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      styles: {
+        fontSize: 10,
+      },
+      didDrawCell: (data => {
+        if (data.section === 'body') {
+          data.cell.styles.fillColor = [255, 255, 255]; // Establecer el color de fondo de cada celda en el cuerpo de la tabla como blanco
+        }
+      })
+    });
+
+    //COMPROMISOS
+    // LISTAR LAS EVALUACIONES ASIGNADAS POR EL USUARIO
+    const compromisos = 'Por lo anterior se pactan los siguientes compromisos. '
+    autoTable(doc, {
+      startY: top + 72,
+      body: [{ compromisos }],
+      tableWidth: 'auto',
+      headStyles: {
+        fillColor: [248, 248, 248],
+        textColor: [0, 0, 0],
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      styles: {
+        fontSize: 10,
+      },
+    });
+
+    doc.text('COMPROMISOS', 93, 219.5)
+    autoTable(doc, {
+      margin: { top: 52 },
+      columnStyles: {
+        acta: { halign: 'left' },
+        fecha: { halign: 'center' },
+        responsable: { halign: 'center' },
+      },
+      body: [
+        {
+
+        },
+      ],
+      columns: [
+        { header: 'Actividad', dataKey: 'actividad' },
+        { header: 'Fecha', dataKey: 'fecha' },
+        { header: 'Responsables', dataKey: 'responsable' },
+      ],
+      headStyles: {
+        fillColor: [200, 200, 200],
+        textColor: [0, 0, 0],
+      },
+      bodyStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+      },
+      styles: {
+        fontSize: 10,
+      },
+    });
+  }
+
+  firmasActa(doc: jsPDF) {
+    //MENSAJE FIRMAS POR PRESTADOR
+    autoTable(doc, {
+      margin: { top: 35 },
+      headStyles: {
+        fillColor: [220, 220, 220],
+        textColor: [0, 0, 0],
+        halign: 'center'
+      },
+      columns: [
+        { header: 'En constancia de lo anterior firman por el prestador:', dataKey: 'mensaje' },
+      ],
+      tableWidth: 'auto',
+    })
+
+    //NOMBRE USUARIO1, CARGO USUARIO1 Y FIRMA1
+    autoTable(doc, {
+      margin: { top: 35 },
+      columnStyles: { sede: { halign: 'left' } },
+
+      body: [
+        { nombre: this.act_nombre_prestador, cargo: this.act_cargo_prestador, firma: '' },
+        { nombre: '', cargo: '', firma: '' },
+        { nombre: this.act_nombre_prestador_acompanante, cargo: this.act_cargo_prestador_acompanante, firma: '' },
+      ],
+      columns: [
+        { header: 'Nombre:', dataKey: 'nombre' },
+        { header: 'Cargo:', dataKey: 'cargo' },
+        { header: 'Firma:', dataKey: 'firma' },
+
+      ],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0]
+      },
+      bodyStyles: {
+        fillColor: [248, 248, 248],
+        textColor: [0, 0, 0],
+      },
+      styles: {
+        fontSize: 10
+      }
+    })
+
+
+    //MENSAJE FIRMAS POR SECRETARIA DE SALUD
+    autoTable(doc, {
+      margin: { top: 35 },
+      headStyles: {
+        fillColor: [220, 220, 220],
+        textColor: [0, 0, 0],
+        halign: 'center'
+      },
+      columns: [
+        { header: 'En constancia de lo anterior firman por la secretaria de Salud Departamental:', dataKey: 'mensaje' },
+      ],
+      tableWidth: 'auto',
+    })
+
+    //NOMBRE USUARIO1, CARGO USUARIO1 Y FIRMA1
+    autoTable(doc, {
+      margin: { top: 35 },
+      columnStyles: { sede: { halign: 'left' } },
+
+      body: [
+        { nombre: this.act_nombre_funcionario, cargo: this.act_cargo_funcionario, firma: '' },
+      ],
+      columns: [
+        { header: 'Nombre:', dataKey: 'nombre' },
+        { header: 'Cargo:', dataKey: 'cargo' },
+        { header: 'Firma:', dataKey: 'firma' },
+
+      ],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0]
+      },
+      styles: {
+        fontSize: 10
+      }
+    })
+
+    //FIRMA PRESTADOR
+    if (this.act_firma_prestador) {
+      // Convertir la firma prestador de base64 a Uint8Array
+      const firmaDataPrestador = atob(this.act_firma_prestador.split(',')[1]);
+      const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestador.length);
+      for (let i = 0; i < firmaDataPrestador.length; i++) {
+        firmaUint8ArrayPrestador[i] = firmaDataPrestador.charCodeAt(i);
+      }
+      doc.addImage(firmaUint8ArrayPrestador, 'PNG', 175, 57, 25, 9.25)
+    }
+
+    //FIRMA PRESTADOR ACOMPAÑANTE
+    if (this.act_firma_prestador_acompanante) {
+      // Convertir la firma prestador de base64 a Uint8Array
+      const firmaDataPrestadorAcompanante = atob(this.act_firma_prestador_acompanante.split(',')[1]);
+      const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestadorAcompanante.length);
+      for (let i = 0; i < firmaDataPrestadorAcompanante.length; i++) {
+        firmaUint8ArrayPrestador[i] = firmaDataPrestadorAcompanante.charCodeAt(i);
+      }
+      doc.addImage(firmaUint8ArrayPrestador, 'PNG', 175, 72, 25, 9.25)
+    }
+
+    //FIRMA FUNCIONARIO SSD
+    // Convertir la firma usuario de base64 a Uint8Array
+    if (this.act_firma_funcionario) {
+      const firmaDataFuncionario = atob(this.act_firma_funcionario.split(',')[1]);
+      const firmaUint8ArrayFuncionario = new Uint8Array(firmaDataFuncionario.length);
+      for (let i = 0; i < firmaDataFuncionario.length; i++) {
+        firmaUint8ArrayFuncionario[i] = firmaDataFuncionario.charCodeAt(i);
+      }
+      doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 175, 110, 25, 9.25)
+    }
   }
 
   //GENERAR PDF ULTIMA ACTA CREADA
@@ -473,6 +806,9 @@ export class GenerarPdfActaIpsService {
       this.act_nombre_prestador = this.actaPdf.act_nombre_prestador;
       this.act_cargo_prestador = this.actaPdf.act_cargo_prestador;
       this.act_firma_prestador = this.actaPdf.act_firma_prestador;
+      this.act_nombre_prestador_acompanante = this.actaPdf.act_nombre_prestador_acompanante
+      this.act_cargo_prestador_acompanante = this.actaPdf.act_cargo_prestador_acompanante
+      this.act_firma_prestador_acompanante = this.actaPdf.act_firma_prestador_acompanante
       //VARIABLES DE ORDEN
       this.act_hora_orden = this.actaPdf.act_hora_orden;
       this.act_fecha_orden = this.actaPdf.act_fecha_orden;
@@ -480,46 +816,37 @@ export class GenerarPdfActaIpsService {
       this.act_fecha_oficio = this.actaPdf.act_fecha_oficio;
       this.act_fecha_envio_oficio = this.actaPdf.act_fecha_envio_oficio
 
+      //ESTADO DEL ACTA
+      this.act_estado = this.actaPdf.act_estado
+
       // Crear un nuevo documento PDF
       const doc = new jsPDF();
 
-      // Función para agregar un encabezado en todas las páginas
-      function addHeader() {
-        // Agregar imagen como encabezado
-        const imgEncabezado = 'assets/img/encabezadoSp.png';
-        doc.addImage(imgEncabezado, 'PNG', 23.5, 4, 160, 25);
-      }
-
-      // Función para agregar un pie de página en todas las páginas
-      function addFooter() {
-        // Agregar imagen como pie de página
-        const imgPiePagina = 'assets/img/piePaginaSpIps.png';
-        doc.addImage(imgPiePagina, 'PNG', -2, 278, 220, 20);
-      }
 
       // Agregar la primera página
-      addHeader();
+      this.addHeader(doc);
       await this.InformacionPrestador(doc)
       await this.generarOrdenDia(doc)
 
       // Agregar la segunda página DESARROLLO DE LA REUNION
       doc.addPage();
-      addHeader();
-      // Crear una informacion desarrollo de la reunion
-      await this.generarDesarrolloReunion(doc)
+      this.addHeader(doc);
+      // Generar la informacion desarrollo de la reunion
+      await this.generarDesarrolloOrden(doc, this.actaPdf)
 
-      // Agregar la tercera página
+      //Agregar pagina necesario despues del desarrollo orden
       doc.addPage();
-      addHeader();
-
-      // Crear una tabla en la tercera página
-
-
+      this.addHeader(doc);
+      //FIRMAS
+      await this.firmasActa(doc)
       // Agregar el pie de página en todas las páginas
       const totalPages = doc.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
-        addFooter();
+        this.addFooter(doc);
+        if (this.act_estado === '1') {
+          this.addMarcaAgua(doc)
+        }
       }
 
       doc.save(this.act_cod_prestador + 'Sp_Ips')
