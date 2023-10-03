@@ -32,15 +32,17 @@ import { DominioEntity } from 'src/sic/dominio.entity';
 import { CalificacionIndEntity } from 'src/sp/sp_ind/calificacionind.entity';
 import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
 import { AuditoriaEliminacionModule } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.module';
+import { SpIndService } from 'src/sp/sp_ind/sp_ind.service';
+import { EvaluacionIndependientesEntity } from 'src/sp/sp_ind/evaluacion-independientes.entity';
 
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity,EvaluacionSicEntity,DominioEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd,ActividadEntity,CriteriopamEntity,CalificacionIndEntity]), SicActaModule, 
+  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity,EvaluacionSicEntity,DominioEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd,ActividadEntity,CriteriopamEntity,CalificacionIndEntity,EvaluacionIndependientesEntity]), SicActaModule, 
   SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule,AuditoriaActualizacionModule,AuditoriaEliminacionModule, JwtModule, CriteriosicCumplimientoModule,CriterioindModule,CriteriopamModule, IvcModule, VerificacionModule],
 
   controllers: [GenerarpdfController, SicActaController],
-  providers: [GenerarpdfService, UsuarioService, SicActaService,CriterioindService,CriteriopamService]
+  providers: [GenerarpdfService, UsuarioService, SicActaService,CriterioindService,CriteriopamService,SpIndService]
 })
 export class GenerarpdfModule {}

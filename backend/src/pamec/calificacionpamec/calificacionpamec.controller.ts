@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { CalificacionpamecService } from './calificacionpamec.service';
 import { CalificacionPamDto } from 'src/usuario/dto/Pamec/calificacionpam.dto';
 import { TokenDto } from 'src/auth/dto/token.dto';
@@ -9,9 +9,18 @@ export class CalificacionpamecController {
         private readonly calificacionpamecService: CalificacionpamecService
     ) { }
 
+    //listar todas las calificaciones
     @Get('estan')
     async getAllestandar() {
         return await this.calificacionpamecService.getall()
+    }
+
+    
+    //OBTENER CRITERIO Y CALIFICACION POR EVALUACION
+    //@UseGuards(JwtAuthGuard)
+    @Get('/evaluacion/:id')
+    async getevaluacion(@Param('id', ParseIntPipe) id: number) {
+        return await this.calificacionpamecService.getCriCalIdeva(id)
     }
 
     // CREAR CALIFICACION

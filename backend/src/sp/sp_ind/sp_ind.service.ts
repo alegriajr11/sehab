@@ -49,6 +49,33 @@ export class SpIndService {
         return calificacion;
     }
     
+    //LISTANDO CRITERIOS Y CALIFICACION POR EVALUACION
+    async getCriCalIdeva(id: number): Promise<CalificacionIndEntity[]> {
+        const calificacion = await this.calificacionIndRepository.createQueryBuilder('listado')
+            .select(['listado','criterio_cal.cri_id', 'criterio_cal.cri_nombre','criterio_cal.cri_verificacion', 'cal_evaluacion_independientes.eva_id'])
+            .innerJoin('listado.criterio_cal', 'criterio_cal')
+            .innerJoin('listado.cal_evaluacion_independientes', 'cal_evaluacion_independientes')
+            .where('cal_evaluacion_independientes.eva_id = :eva_id', { eva_id: id })
+            .getMany()
+        if (!calificacion) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return calificacion
+    }
+
+    // //criterio por titulo
+    // async getallcriterioxtitulo2(): Promise<CalificacionIndEntity[]> {
+
+    //     let titulo_uno
+    //     titulo_uno = "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE"
+
+    //     const criterio = await this.calificacionIndRepository.createQueryBuilder('etapa')
+    //         .select(['etapa',, 'criterio_cal.cri_id', 'criterio_cal.cri_nombre', 'criterio_cal.cri_verificacion', 'eta_item.eta_nombre'])
+    //         .innerJoin('etapa.criterio_cal', 'criterio_cal')
+    //         .innerJoinAndSelect('criterio_cal.eta_item', 'eta_item')
+    //         .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_uno })
+    //         .getMany()
+
+    //     return criterio
+    // }
 
     // 
 
