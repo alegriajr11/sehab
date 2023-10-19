@@ -10,9 +10,9 @@ export class SpIpsController {
 
     //OBTENER TODOS LOS  SP IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
-    @Get()
-    getAll() {
-        return this.sp_IpsService.getallActas();
+    @Get('lista/acta/funcionario/login/spips/acta')
+    getAll(@Query('tokenDto') tokenDto: string) {
+        return this.sp_IpsService.getallActas(tokenDto);
     }
 
     //OBTENER UN SP IPS ACTA PDF POR ID
@@ -22,7 +22,12 @@ export class SpIpsController {
         return await this.sp_IpsService.findByActa(id);
     }
 
-
+    //Obtener ultima acta
+    @UseGuards(JwtAuthGuard)
+    @Get('ultima/acta/spips')
+    getLastActa() {
+        return this.sp_IpsService.getLastestActa();
+    }
 
     //OBTENER ACTAS POR AÑO Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
     @Get('/busqueda/fecha/acta/prestador/nit')
@@ -33,12 +38,7 @@ export class SpIpsController {
         return this.sp_IpsService.findAllBusqueda(year, act_id, act_prestador, act_nit);
     }
 
-    //Obtener ultima acta
-    @UseGuards(JwtAuthGuard)
-    @Get('ultima/acta/spips')
-    getLastActa() {
-        return this.sp_IpsService.getLastestActa();
-    }
+
 
     //CREAR ACTA SPIPS
     @Post()

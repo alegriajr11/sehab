@@ -239,7 +239,7 @@ export class GenerarpdfService {
                     // let calif
 
                     // let obs
-                    // item.calificaciones_cri. forEach(cal => {
+                    // item.calificaciones_cri.forEach(cal => {
                     //     calif = '            ' + cal.cal_nota
                     //     totalCalificacionesEtapa1 += cal.cal_nota
                     //     totalCalificacionesCountEtapa1++; // Incrementar el contador

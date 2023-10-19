@@ -12,10 +12,6 @@ async function bootstrap() {
   // Configuración del middleware de request-ip
   app.use(requestIp.mw());
 
-  // Use the desired route for your application
-  //app.setGlobalPrefix('/sehab');
-
-
   // Server Port
   const port = +configService.get<number>(SERVER_PORT) || 3000;
   await app.listen(port);

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { RolDecorator } from 'src/decorators/rol.decorator';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { RolesGuard } from 'src/guards/rol.guard';
@@ -23,12 +23,6 @@ export class UsuarioController {
         return await this.usuarioService.getall()
     }
 
-    /*LISTANDO USUARIOS SIN ADMIN Y SOLO ACTIVOS*/
-    @Get('estado/limitado')
-    async getAllUserEstado() {
-        return await this.usuarioService.getallUser()
-    }
-
     //LISTAR USUARIO POR ID
     // @RolDecorator(RolNombre.ADMIN)
     // @UseGuards(JwtAuthGuard)
@@ -36,6 +30,26 @@ export class UsuarioController {
     async getOne(@Param('id', ParseIntPipe) id: number) {
         return await this.usuarioService.findById(id);
     }
+
+    /*LISTANDO USUARIOS SIN ADMIN, SIN CONTADOR Y SOLO ACTIVOS*/
+    // @Get('estado/limitado')
+    // async getAllUserEstado() {
+    //     return await this.usuarioService.getallUser()
+    // }
+
+    /*LISTANDO USUARIOS POR ROL*/
+    @Get('lista/rol')
+    async getAllUserRol(@Query('rol_nombre') rol_nombre: string) {
+        return await this.usuarioService.getallUsersRol(rol_nombre)
+    }
+
+    /*LISTANDO USUARIOS CONTADOR Y SOLO ACTIVOS*/
+    @Get('estado/limitado/contador')
+    async getAllUserContador() {
+        return await this.usuarioService.getallUserContador()
+    }
+
+
 
     //ELIMINAR USUARIO
     //@UseGuards(JwtAuthGuard, RolesGuard)

@@ -56,12 +56,59 @@ export class UsuarioService {
     return usuario
   }
 
-  /*LISTANDO USUARIOS SIN ADMIN Y SOLO ACTIVOS*/
-  async getallUser(): Promise<UsuarioEntity[]> {
+  /*LISTANDO USUARIOS SIN ADMIN, SIN CONTADOR Y SOLO ACTIVOS*/
+  async getallUsersRol(rol_nombre: string): Promise<UsuarioEntity[]> {
+    if (rol_nombre === 'sic') {
+      const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
+        .select(['usuario', 'roles.rol_nombre'])
+        .innerJoin('usuario.roles', 'roles')
+        .where('roles.rol_nombre IN (:rol)', { rol: ['sic'] })
+        .andWhere('usuario.usu_estado LIKE :estado', { estado: '%true%' })
+        .getMany()
+      if (!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+      return usuario
+
+    } else if (rol_nombre === 'sp') {
+      const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
+        .select(['usuario', 'roles.rol_nombre'])
+        .innerJoin('usuario.roles', 'roles')
+        .where('roles.rol_nombre IN (:rol)', { rol: ['sp'] })
+        .andWhere('usuario.usu_estado LIKE :estado', { estado: '%true%' })
+        .getMany()
+      if (!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+      return usuario
+
+    } else if (rol_nombre === 'pamec') {
+      const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
+        .select(['usuario', 'roles.rol_nombre'])
+        .innerJoin('usuario.roles', 'roles')
+        .where('roles.rol_nombre IN (:rol)', { rol: ['pamec'] })
+        .andWhere('usuario.usu_estado LIKE :estado', { estado: '%true%' })
+        .getMany()
+      if (!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+      return usuario
+
+    } else if (rol_nombre === 'res') {
+      const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
+        .select(['usuario', 'roles.rol_nombre'])
+        .innerJoin('usuario.roles', 'roles')
+        .where('roles.rol_nombre IN (:rol)', { rol: ['res'] })
+        .andWhere('usuario.usu_estado LIKE :estado', { estado: '%true%' })
+        .getMany()
+      if (!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
+      return usuario
+    }
+
+  }
+
+
+
+  /*LISTANDO USUARIOS SOLO CON ROL CONTADOR Y QUE ESTEN ACTIVOS*/
+  async getallUserContador(): Promise<UsuarioEntity[]> {
     const usuario = await this.usuarioRepository.createQueryBuilder('usuario')
       .select(['usuario', 'roles.rol_nombre'])
       .innerJoin('usuario.roles', 'roles')
-      .where('roles.rol_id IN (:rol)', { rol: ['2', '3', '4', '5'] })
+      .where('roles.rol_id IN (:rol)', { rol: ['6'] })
       .andWhere('usuario.usu_estado LIKE :estado', { estado: '%true%' })
       .getMany()
     if (!usuario.length) throw new NotFoundException(new MessageDto('No hay Usuarios en la lista'))
@@ -71,7 +118,6 @@ export class UsuarioService {
   /*CREACIÓN USUARIO ADMINISTRADOR */
   async create(payloads: { dto: NuevoUsuarioDto, tokenDto: TokenDto }): Promise<any> {
     const { dto, tokenDto } = payloads;
-    console.log('Mi Dto: ' + dto.usu_nombre)
     const { usu_nombreUsuario, usu_email, usu_cedula } = dto;
     const exists = await this.usuarioRepository.findOne({ where: [{ usu_nombreUsuario: usu_nombreUsuario }, { usu_email: usu_email }, { usu_cedula: usu_cedula }] });
     if (exists) throw new BadRequestException(new MessageDto('Ese usuario ya existe'));
@@ -278,7 +324,7 @@ export class UsuarioService {
               usuario_eliminar.usu_nombreUsuario
             );
             break;
-    
+
           case 'pamec':
             await this.auditoria_eliminacion_services.logDeleteUserPamec(
               payloadInterface.usu_nombre,
@@ -288,7 +334,7 @@ export class UsuarioService {
               usuario_eliminar.usu_nombreUsuario
             );
             break;
-    
+
           case 'sp':
             await this.auditoria_eliminacion_services.logDeleteUserSp(
               payloadInterface.usu_nombre,
@@ -298,7 +344,7 @@ export class UsuarioService {
               usuario_eliminar.usu_nombreUsuario
             );
             break;
-    
+
           case 'res':
             await this.auditoria_eliminacion_services.logDeleteUserRes(
               payloadInterface.usu_nombre,
@@ -308,7 +354,7 @@ export class UsuarioService {
               usuario_eliminar.usu_nombreUsuario
             );
             break;
-    
+
           case 'sic':
             await this.auditoria_eliminacion_services.logDeleteUserSic(
               payloadInterface.usu_nombre,
@@ -318,13 +364,13 @@ export class UsuarioService {
               usuario_eliminar.usu_nombreUsuario
             );
             break;
-    
-    
+
+
           default:
             throw new Error(`Rol no encontrado`);
-      }
-    });
-      
+        }
+      });
+
       return new MessageDto(`Usuario eliminado`);
     } catch (error) {
       throw new Error(`Error al eliminar el usuario: ${error.message}`);

@@ -31,9 +31,15 @@ export class PrestadorService {
     ) { }
 
     async findById(pre_cod_habilitacion: string): Promise<PrestadorEntity> {
-        const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion } });
+
+        const prestador = await this.prestadorRepository.createQueryBuilder('prestador')
+        .select(['prestador', 'pre_clasificacion.cla_nombre'])
+        .innerJoin('prestador.pre_clasificacion', 'pre_clasificacion')
+        .where('prestador.pre_cod_habilitacion = :cod_habilitacion', {cod_habilitacion: pre_cod_habilitacion})
+        .getOne()        
+        // const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion } });
         if (!prestador) {
-            throw new NotFoundException(new MessageDto('No Existe'));
+            throw new NotFoundException(new MessageDto('No Existe el Prestador'));
         }
         return prestador;
     }
@@ -71,8 +77,9 @@ export class PrestadorService {
 
     async getall(): Promise<PrestadorEntity[]> {
         const prestadores = await this.prestadorRepository.createQueryBuilder('prestador')
-            .select(['prestador', 'pre_municipio.mun_nombre'])
+            .select(['prestador', 'pre_municipio.mun_nombre', 'pre_clasificacion.cla_id'])
             .innerJoin('prestador.pre_municipio', 'pre_municipio')
+            .innerJoinAndSelect('prestador.pre_clasificacion', 'pre_clasificacion')
             .getMany()
         if (!prestadores.length) throw new NotFoundException(new MessageDto('No hay Prestadores en la lista'))
         return prestadores;
