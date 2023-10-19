@@ -41,13 +41,35 @@ export class SicActaService {
         private readonly cumplimientosicService: CumplimientosicService,
     ) { }
 
-    //LISTAR TODAS LAS ACTAS SIC
-    async getallActas(): Promise<ActaSicPdfEntity[]> {
-        const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
-            .select(['acta'])
-            .getMany()
-        if (acta.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas SIC en la lista'))
-        return acta;
+    //LISTAR TODAS LAS ACTAS SIC POR USUARIO ASIGNADO
+    async getallActas(tokenDto: string): Promise<ActaSicPdfEntity[]> {
+        const usuario = await this.jwtService.decode(tokenDto);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        if (!payloadInterface.usu_roles.includes('admin')) {
+            const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
+                .select(['acta'])
+                .where('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                .getMany()
+            if (acta.length === 0) throw new NotFoundException(new MessageDto('No tienes evaluaciones asignadas'))
+            return acta;
+        } else {
+            const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
+                .select(['acta'])
+                .getMany()
+            if (acta.length === 0) throw new NotFoundException(new MessageDto('No hay evaluaciones asignadas'))
+            return acta;
+        }
+
     }
 
     //ENCONTRAR POR ACTA
@@ -229,7 +251,6 @@ export class SicActaService {
 
             return { error: false, message: 'El acta ha sido creada' };
         } catch (error) {
-            console.log(error)
             // Devuelve un mensaje de error apropiado
             return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
         }

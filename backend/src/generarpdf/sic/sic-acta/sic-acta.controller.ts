@@ -13,10 +13,10 @@ export class SicActaController {
     constructor(private readonly sic_act_pdfService: SicActaService) { }
 
     //OBTENER TODOS LOS CRITERIOS SIC
-    @UseGuards(JwtAuthGuard)
-    @Get()
-    getAll() {
-        return this.sic_act_pdfService.getallActas();
+    //@UseGuards(JwtAuthGuard)
+    @Get('lista/acta/funcionario/login/sic/acta')
+    getAll(@Query('tokenDto') tokenDto: string ) {
+        return this.sic_act_pdfService.getallActas(tokenDto);
     }
 
     //OBTENER ACTA POR ID

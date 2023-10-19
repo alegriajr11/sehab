@@ -26,12 +26,33 @@ export class SpIpsService {
     ) { }
 
     //LISTAR TODAS LAS ACTAS SP IPS
-    async getallActas(): Promise<ActaSpIpsEntity[]> {
-        const ips = await this.actaSpIpsRepository.createQueryBuilder('acta')
-            .select(['acta'])
-            .getMany()
-        if (ips.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas IPS en la lista'))
-        return ips;
+    async getallActas(tokenDto: string): Promise<ActaSpIpsEntity[]> {
+
+        const usuario = await this.jwtService.decode(tokenDto);
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+        if (!payloadInterface.usu_roles.includes('admin')) {
+            const acta_ips = await this.actaSpIpsRepository.createQueryBuilder('acta_ips')
+                .select(['acta_ips'])
+                .where('acta_ips.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                .getMany()
+            if (acta_ips.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Asignadas'))
+            return acta_ips;
+        } else {
+            const acta_ips = await this.actaSpIpsRepository.createQueryBuilder('acta_ips')
+                .select(['acta_ips'])
+                .getMany()
+            if (acta_ips.length === 0) throw new NotFoundException(new MessageDto('No hay evaluaciones asignadas'))
+            return acta_ips;
+        }
+
     }
 
 
@@ -227,7 +248,6 @@ export class SpIpsService {
 
         try {
             const acta = await this.findByActa(id);
-            console.log(acta)
 
             if (!acta) {
                 throw new NotFoundException(new MessageDto('El Acta no existe'));

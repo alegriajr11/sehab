@@ -13,15 +13,15 @@ import { PrestadorDto } from './dto/prestador.dto';
 export class PrestadorController {
     constructor(private readonly prestadorService: PrestadorService) { }
 
-    @RolDecorator(RolNombre.ADMIN)
-    @UseGuards(JwtAuthGuard)
+    // @RolDecorator(RolNombre.ADMIN)
+    // @UseGuards(JwtAuthGuard)
     @Get()
     async getAll() {
         return await this.prestadorService.getall()
     }
 
-    @RolDecorator(RolNombre.ADMIN)
-    @UseGuards(JwtAuthGuard)
+    // @RolDecorator(RolNombre.ADMIN)
+    // @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOne(@Param('id') id: string) {
         return await this.prestadorService.findById(id);

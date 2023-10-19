@@ -97,7 +97,6 @@ export class AuthService {
             return { token };
         } catch (error) {
             // Capturamos y manejamos la excepción
-            console.error('Error en login:', error);
             throw error;
         }
     }
