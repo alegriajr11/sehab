@@ -5,9 +5,9 @@ import Swal from 'sweetalert2';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ActapdfService } from './actapdf.service';
-import { ActaSicPdfDto } from 'src/app/models/actaSicpdf.dto';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ActaSicPdfDto } from 'src/app/models/Actas/actaSicpdf.dto';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 

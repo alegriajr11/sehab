@@ -9,7 +9,7 @@
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     <h2><b>Prestadores</b></h2>
                 </div>
 
@@ -18,7 +18,7 @@
                         <i class='fas fa-clinic-medical'></i> Agregar Sede</button>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <button class="btn btn-secondary centered-icon" routerLink="/prestadores/nuevo" title="Nuevo Prestador">
                         <i class='fa fa-plus-circle'></i>
                         <span>Agregar Nuevo Prestador</span></button>
@@ -35,9 +35,7 @@
                     <th scope="col">Cod Habilitación</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Nit</th>
-                    <th scope="col">Dirección</th>
                     <th scope="col">Habilitado</th>
-                    <th scope="col">Representante</th>
                     <th scope="col">Municipio</th>
                     <th scope="col" *ngIf="isAdmin">Editar</th>
                     <th scope="col" *ngIf="isAdmin">Sedes</th>
@@ -48,9 +46,7 @@
                     <td>{{ prestadores.pre_cod_habilitacion }}</td>
                     <td>{{ prestadores.pre_nombre }}</td>
                     <td>{{ prestadores.pre_nit }}</td>
-                    <td>{{ prestadores.pre_direccion }}</td>
                     <td>{{ prestadores.pre_habilitado }}</td>
-                    <td>{{ prestadores.pre_representante }}</td>
                     <td *ngFor="let municipio of this.prestadores.pre_municipio | keyvalue">{{municipio.value}}</td>
                     <td *ngIf="isAdmin">
                         <button class="btn btn-outline-warning" routerLink="/prestadores/editar/{{prestadores.pre_cod_habilitacion}}">

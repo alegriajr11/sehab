@@ -10,6 +10,7 @@ export class NuevoUsuarioComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

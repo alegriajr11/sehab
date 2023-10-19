@@ -7,9 +7,9 @@ import { NuevoUsuarioDto } from '../models/nuevo-usuario.dto';
 import { TokenDto } from '../models/token.dto';
 import { CambiarPasswordDto } from '../models/cambiar-password.dto';
 import { RestablecerPasswordDto } from '../models/reset-password.dto';
-import { ActaSicPdfDto } from '../models/actaSicpdf.dto';
-import { ActaSpPdfDto } from '../models/actaSpPdf.dto';
 import { NuevoUsuarioAdminDto } from '../models/nuevo-usuario-admin.dto';
+import { ActaSicPdfDto } from '../models/Actas/actaSicpdf.dto';
+import { ActaSpPdfDto } from '../models/Actas/actaSpPdf.dto';
 
 
 @Injectable({

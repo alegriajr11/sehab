@@ -15,3 +15,18 @@
     transition-duration: 0.2s;
 }
 
+/* Estilos para pantallas menores a 1050px */
+@media (max-width: 1050px) {
+    .container {
+        max-width: 865px;
+    }
+}
+
+/* Estilos para pantallas menores a 974px */
+@media (max-width: 974px) {
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        /* Apila los elementos uno encima del otro */
+    }
+}

@@ -36,13 +36,13 @@
                         [(ngModel)]="act_id">
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">FECHA DE LA VISITA</label>
                     <input type="date" class="form-control" id="fecha-visita" name="act_fecha_visita"
                         [(ngModel)]="act_fecha_visita">
                 </div>
 
-                <div class="col-7">
+                <div class="col-md-6">
                     <label for="inputAddress" class="form-label">TIPO DE VISITA:</label>
                     <select id="tipoVisita" class="form-select form-control" [(ngModel)]="act_tipo_visitaId"
                         [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="ocultarMensajes(); tipoVisita()">

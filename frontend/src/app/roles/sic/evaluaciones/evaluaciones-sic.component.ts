@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { TokenDto } from 'src/app/models/token.dto';
 import { Usuario } from 'src/app/models/usuario';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
@@ -50,7 +51,8 @@ export class EvaluacionesSicComponent implements OnInit {
   }
 
   cargarActas(): void {
-    this.actapdfService.listaSic().subscribe(
+    const token = this.tokenService.getToken()
+    this.actapdfService.listaSic(token).subscribe(
       data => {
         this.evaluaciones = data;
         this.listaVacia = undefined;

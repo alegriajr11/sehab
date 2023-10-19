@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
 import { ActapdfService } from '../Sic/actapdf.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 
 @Injectable({
   providedIn: 'root'

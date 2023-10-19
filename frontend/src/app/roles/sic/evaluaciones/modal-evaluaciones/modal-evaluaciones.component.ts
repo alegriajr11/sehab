@@ -6,9 +6,9 @@ import { GenerarPdfActaService } from 'src/app/services/Sic/generar-pdf-acta.ser
 import { Router } from '@angular/router';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { TokenDto } from 'src/app/models/token.dto';
-import { ActaSicPdfDto } from 'src/app/models/actaSicpdf.dto';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { ActaSicPdfDto } from 'src/app/models/Actas/actaSicpdf.dto';
 
 @Component({
   selector: 'app-modal-evaluaciones',

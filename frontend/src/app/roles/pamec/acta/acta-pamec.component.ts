@@ -10,15 +10,14 @@ import autoTable from 'jspdf-autotable';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { } from 'src/app/models/actaSicpdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { TokenService } from 'src/app/services/token.service';
 import { GenerarPdfActaPamecService } from 'src/app/services/Pamec/generar-pdf-acta-pamec.service';
-import { ActaPamecDto } from 'src/app/models/actaPamePdf.dto';
 import { TokenDto } from 'src/app/models/token.dto';
+import { ActaPamecDto } from 'src/app/models/Actas/actaPamePdf.dto';
 
 
 @Component({
@@ -330,8 +329,9 @@ export class ActaPamecComponent implements OnInit {
 
   nuevoUsuario(): void {
     this.agregarUsuario = true
+    const rol_pamec = 'pamec'
     //LISTAR USUARIOS
-    this.usuarioService.listaUserEstado().subscribe(
+    this.usuarioService.listaUserRol(rol_pamec).subscribe(
       data => {
         this.usuario_dos = data;
         this.listaVacia = undefined;
@@ -393,7 +393,8 @@ export class ActaPamecComponent implements OnInit {
 
   //LISTAR USUARIOS
   cargarUsuariosUno(): void {
-    this.usuarioService.listaUserEstado().subscribe(
+    const rol_pamec = 'pamec'
+    this.usuarioService.listaUserRol(rol_pamec).subscribe(
       data => {
         this.usuario_uno = data;
         this.listaVacia = undefined;

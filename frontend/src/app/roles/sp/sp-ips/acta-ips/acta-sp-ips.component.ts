@@ -10,15 +10,14 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { } from 'src/app/models/actaSicpdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { TokenService } from 'src/app/services/token.service';
-import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
 import { TokenDto } from 'src/app/models/token.dto';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { GenerarPdfActaIpsService } from 'src/app/services/SpIps/generar-pdf-acta-ips.service';
+import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 
 @Component({
   selector: 'app-acta-sp',
@@ -225,7 +224,8 @@ export class ActaSpIpsComponent implements OnInit {
 
   //LISTAR USUARIOS
   cargarUsuario(): void {
-    this.usuarioService.listaUserEstado().subscribe(
+    const rol_sp = 'sp'
+    this.usuarioService.listaUserRol(rol_sp).subscribe(
       data => {
         this.usuario = data;
         this.listaVacia = undefined;

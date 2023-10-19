@@ -25,8 +25,8 @@ export class PrestadorService {
     return this.httpClient.get<PrestadorDto[]>(`${this.prestadorURL}`)
   }
 
-  public listaOne(id: string): Observable<PrestadorDto>{
-    return this.httpClient.get<PrestadorDto>(`${this.prestadorURL}` + id)
+  public listaOne(id: string): Observable<any>{
+    return this.httpClient.get<any>(`${this.prestadorURL}` + id)
   }
 
 
@@ -45,7 +45,6 @@ export class PrestadorService {
   public listMunInd(mun: string): Observable<PrestadorDto[]>{
     return this.httpClient.get<PrestadorDto[]>(this.prestadorIndMunicipioURL + mun)
   }
-
 
 
   public registroPrestador(prestador: PrestadorDto): Observable<any> {

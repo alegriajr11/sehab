@@ -1,5 +1,4 @@
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
-import { ActaSicPdfDto } from 'src/app/models/actaSicpdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, OnInit, TemplateRef } from '@angular/core';
@@ -19,6 +18,7 @@ import { GenerarPdfActaService } from 'src/app/services/Sic/generar-pdf-acta.ser
 import { SedesPrestadorService } from 'src/app/services/sedes-prestador.service';
 import { SedesDto } from 'src/app/models/sedes.dto';
 import { CumplimientoEstandarService } from 'src/app/services/Sic/cumplimiento-estandar.service';
+import { ActaSicPdfDto } from 'src/app/models/Actas/actaSicpdf.dto';
 
 
 
@@ -267,6 +267,32 @@ export class ActaSicComponent implements OnInit {
     )
   }
 
+  recibeVisita(): void {
+    Swal.fire({
+      title: '¿Estás seguro que el prestador no recibe la visita?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        const token = this.tokenService.getToken()
+        const tokenDto: TokenDto = new TokenDto(token);
+        Swal.fire(
+          'Prestador No Recibe Visita',
+          '',
+          'success'
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    });
+  }
 
   //LISTAR ÚLTIMA ACTA REGISTRADA
   ultimaActaId(): void {
@@ -281,7 +307,8 @@ export class ActaSicComponent implements OnInit {
 
   //LISTAR USUARIOS
   cargarUsuario(): void {
-    this.usuarioService.listaUserEstado().subscribe(
+    const rol_sic = 'sic'
+    this.usuarioService.listaUserRol(rol_sic).subscribe(
       data => {
         this.usuario = data;
         this.listaVacia = undefined;

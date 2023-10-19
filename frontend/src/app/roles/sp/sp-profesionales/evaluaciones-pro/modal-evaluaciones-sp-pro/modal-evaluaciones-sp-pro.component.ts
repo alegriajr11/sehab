@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
-import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
+import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 import { TokenDto } from 'src/app/models/token.dto';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { GenerarPdfActaIndService } from 'src/app/services/SpInd/generar-pdf-acta-ind.service';

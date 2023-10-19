@@ -9,6 +9,7 @@
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
 
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 
 html {

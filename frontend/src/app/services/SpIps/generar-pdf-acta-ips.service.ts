@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
 import { ActapdfService } from '../Sic/actapdf.service';
 import jsPDF from 'jspdf';
 import autoTable, { Cell } from 'jspdf-autotable';
 import { SharedServiceService } from '../shared-service.service';
 import { UsuarioService } from '../usuario.service';
 import { EvaluacionipsService } from './evaluacionips.service';
+import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -837,6 +837,7 @@ export class GenerarPdfActaIpsService {
       //Agregar pagina necesario despues del desarrollo orden
       doc.addPage();
       this.addHeader(doc);
+      
       //FIRMAS
       await this.firmasActa(doc)
       // Agregar el pie de página en todas las páginas

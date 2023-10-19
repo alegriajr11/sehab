@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
-  API_URL: 'http://sehab.site/sehab',
-  
-   //USUARIOS
+  API_URL: 'http://localhost:8080',
+
+  //USUARIOS
   usuarioURL: 'http://localhost:8080/usuario/',
   usuarioNewURL: 'http://localhost:8080/auth/nuevo/',
   authURL: 'http://localhost:8080/auth/',
+  //authURL: 'http://192.168.1.6:8080/auth/',
   restablecerContraseña: 'http://localhost:8080/auth/request-reset-password/',
   prestadorURL: 'http://localhost:8080/prestador/',
   prestadorMunicipioURL: 'http://localhost:8080/prestador/mun/',
@@ -22,7 +23,10 @@ export const environment = {
   criterioURL: 'http://localhost:8080/criteriosic/criterio/',
   cumplimientoEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/estandar/',
   cumpleEstandarURL: 'http://localhost:8080/criteriosic-cumplimiento/cumple/',
-  
+
+  //EVALUACION-SIC
+  evaluacionSicUrl: 'http://localhost:8080/evaluacion-sic/',
+
   //SIC-PDF
   actaSic_pdf_URL: 'http://localhost:8080/sic-acta/',
 
@@ -31,6 +35,8 @@ export const environment = {
   actividadURL: 'http://localhost:8080/actividad/',
   criteriopamURL: 'http://localhost:8080/criteriopam/',
   criteriopam1URL: 'http://localhost:8080/criteriopam/criterio/',
+  //ACTA PAMEC
+  actaPamec_pdf_url: 'http://localhost:8080/pamec-acta/',
 
   //SEGURIDAD DEL PACIENTE - PROFESIONALES INDEPENDIENTE
   etapaURL: 'http://localhost:8080/sp-ind/',
@@ -58,12 +64,17 @@ export const environment = {
 
   //RESOLUCIÓN 3100/2019
   todos_serviciosURL: 'http://localhost:8080/criterio-servicios/',
+  //ACTA-VERIFICACION
+  actaVerificacion: 'http://localhost:8080/verificacion/',
 
   //PRESTADOR
   municipioURL: 'http://localhost:8080/municipio/',
   clasificacionURL: 'http://localhost:8080/clasificacion/',
   tipoURL: 'http://localhost:8080/tipo/',
-
+  prestadorIpsMunicipioURL: 'http://localhost:8080/prestador/mun/sp/ips',
+  prestadorIndMunicipioURL: 'http://localhost:8080/prestador/mun/sp/pro/ips',
+  //SEDES - PRESTAOR
+  sedeURL: 'http://localhost:8080/sede/',
 
   //AUDITORIA
   auditoriaUrl: 'http://localhost:8080/auditoria-registro/'
