@@ -9,6 +9,7 @@ import { UsuarioService } from 'src/usuario/usuario.service';
 import { CriteriosicCumplimientoService } from 'src/sic/criteriosic-cumplimiento/criteriosic-cumplimiento.service';
 import { CriterioindService } from 'src/sp/sp_ind/criterioind/criterioind.service';
 import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.service';
+import { SpIndService } from 'src/sp/sp_ind/sp_ind.service';
 
 
 
@@ -35,7 +36,9 @@ export class GenerarpdfService {
         @Inject(CriterioindService)
         private readonly criterioindService: CriterioindService,
         @Inject(CriteriopamService)
-        private readonly criteriopamService: CriteriopamService
+        private readonly criteriopamService: CriteriopamService,
+        @Inject(SpIndService)
+        private readonly spIndService: SpIndService
 
     ) { }
 
@@ -43,7 +46,7 @@ export class GenerarpdfService {
     async generarPdfUsuarios(): Promise<Buffer> {
         const usuario = await this.usuarioService.getall()
 
-        const pdfBuffer: Buffer = await new Promise(resolve => {
+        const pdfBuffer: Buffer = await new Promise(resolve => {    
 
             const doc = new PDFDocument(
                 {
@@ -163,6 +166,7 @@ export class GenerarpdfService {
 
     //La función para generar el PDF con las tablas ajustadas
     async generarPdfEvaluacionInd(): Promise<Buffer> {
+        
         const titulo_uno = await this.criterioindService.getallcriterioxtitulo();
         const titulo_dos = await this.criterioindService.getallcriterioxtitulodos();
         const titulo_tres = await this.criterioindService.getallcriterioxtitulotres();
@@ -239,12 +243,13 @@ export class GenerarpdfService {
                     // let calif
 
                     // let obs
-                    // item.calificaciones_cri.forEach(cal => {
+                    // item.calificaciones_cri. forEach(cal => {
                     //     calif = '            ' + cal.cal_nota
                     //     totalCalificacionesEtapa1 += cal.cal_nota
                     //     totalCalificacionesCountEtapa1++; // Incrementar el contador
                     //     obs = cal.cal_observaciones
                     // })
+                    console.log(item.calificaciones_cri.cal_nota)
                     var temp_list = [item.cri_id, item.cri_nombre, item.calificaciones_cri.cal_nota, item.cri_verificacion, item.calificaciones_cri.cal_observaciones];
                     rows_elements.push(temp_list)
                 })

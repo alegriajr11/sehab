@@ -8,7 +8,7 @@ export class CalificacionindController {
     constructor(private readonly calificacionindService: CalificacionindService) {
     }
 
-    //CREAR CALIFIUCACION
+    //CREAR CALIFICACION
     @Post()
     async create(@Query('eva_id') eva_id: number,
     @Query('cri_id') cri_id: number, @Body() dto: calificacionindDto) {

@@ -53,6 +53,19 @@ export class CalificacionpamecService {
         return calificacionPamec;
     }
 
+    //LISTANDO CRITERIOS Y CALIFICACION POR EVALUACION
+    async getCriCalIdeva(id: number): Promise<CalificacionpamEntity[]> {
+        const calificacion = await this.calificacionPamRepository.createQueryBuilder('listado')
+            .select(['listado', 'criteriopam_calificacion.crip_nombre','criteriopam_calificacion.crip_desarrollo_etapas'])
+            .innerJoin('listado.criteriopam_calificacion', 'criteriopam_calificacion')
+            .innerJoin('listado.cal_evaluacion_pam', 'cal_evaluacion_pam')
+            .where('cal_evaluacion_pam.eva_id = :eva_id', { eva_id: id })
+            .getMany()
+        if (!calificacion) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return calificacion
+    }
+
+    // listar todas las calificaciones
     async getall(): Promise<CalificacionpamEntity[]> {
         const cumplimiento_estandar = await this.calificacionPamRepository.createQueryBuilder('calificaciones')
             .select(['calificaciones', 'criteriopam.crip_desarrollo_etapas', 'criteriopam.crip_nombre', 'crip_actividad.act_nombre'])
