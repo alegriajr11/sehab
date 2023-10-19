@@ -10,6 +10,8 @@ import { CumplimientoSicDto } from 'src/usuario/dto/Sic/cumplimientosic.dto';
 import { MessageDto } from 'src/common/message.dto';
 import { IndicadorEntity } from '../indicador.entity';
 import { IndicadorRepository } from '../indicador.repository';
+import { CumplimientoEstandarSicEntity } from '../cumplimientoestandar.entity';
+import { CumplimientoEstandarSicRepository } from '../cumplimientoEstandar.repository';
 
 @Injectable()
 export class CumplimientosicService {
@@ -21,12 +23,14 @@ export class CumplimientosicService {
         private evaluacionsicRepository: EvaluacionsicRepository,
         @InjectRepository(CumplimientoSicEntity)
         private cumplimientoSicRepository: CumplimientoSicRepository,
+        @InjectRepository(CumplimientoEstandarSicEntity)
+        private cumplimientoEstandarSicRepository: CumplimientoEstandarSicRepository,
         @InjectRepository(IndicadorEntity)
         private indicadorRepository: IndicadorRepository,
     ) { }
 
     //CREAR CUMPLIMIENTO
-    async create(eva_id: number,cri_id: number,ind_id:string, dto: CumplimientoSicDto ): Promise<any> {
+    async create(eva_id: number, cri_id: number, ind_id: string, dto: CumplimientoSicDto): Promise<any> {
         const evaluacion = await this.evaluacionsicRepository.findOne({ where: { eva_id: eva_id } });
         if (!evaluacion) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
         const criterio = await this.criterioSicRepository.findOne({ where: { cri_id: cri_id } });
@@ -40,20 +44,37 @@ export class CumplimientosicService {
         cumplimiento.criterio_sic = criterio
         //asigna el indicador
         cumplimiento.indicadorsic = indicador
-       
+
         await this.cumplimientoSicRepository.save(cumplimiento)
         return new MessageDto('El cumplimiento ha sido Creado');
     }
 
     //LISTANDO CRITERIOS Y CUMPLIMIENTO POR EVALUACION
     async getCriCalIdeva(id: number): Promise<CumplimientoSicEntity[]> {
-        const cumplimiento = await this.cumplimientoSicRepository.createQueryBuilder('listado')
-            .select(['listado', 'criterio_sic.cri_nombre'])
-            .innerJoin('listado.criterio_sic', 'criterio_sic')
-            .innerJoin('listado.cump_eva_sic', 'cump_eva_sic')
+        const cumplimiento = await this.cumplimientoSicRepository.createQueryBuilder('cumplimiento')
+            .select(['cumplimiento', 'criterio_sic.cri_id', 'criterio_sic.cri_nombre','eval_acta_sic.act_nombre_prestador',
+            'eval_acta_sic.act_nombre_funcionario','eval_acta_sic.act_cargo_funcionario','eval_acta_sic.act_nombre_prestador',
+            'indicadorsic.ind_id', 'indicadorsic.ind_nombre'])
+            .innerJoin('cumplimiento.criterio_sic', 'criterio_sic')
+            //.innerJoin('calificacion.cump_eva_sic', 'cump_eva_sic')
+            .innerJoinAndSelect('cumplimiento.cump_eva_sic', 'cump_eva_sic')
+            .innerJoinAndSelect('cump_eva_sic.eval_acta_sic', 'eval_acta_sic')
+            .innerJoinAndSelect('cumplimiento.indicadorsic', 'indicadorsic')
             .where('cump_eva_sic.eva_id = :eva_id', { eva_id: id })
             .getMany()
         if (!cumplimiento) throw new NotFoundException(new MessageDto('No Existe en la lista'))
         return cumplimiento
+    }
+
+    //LISTANDO CRITERIOS Y CUMPLIMIENTO POR EVALUACION
+    async getcumpliestandar(id: number): Promise<CumplimientoEstandarSicEntity[]> {
+        const cumplimientoestandar = await this.cumplimientoEstandarSicRepository.createQueryBuilder('listado')
+            .select(['listado', 'criterioestandar_sic.crie_id', 'criterioestandar_sic.crie_nombre'])
+            .innerJoin('listado.criterioestandar_sic', 'criterioestandar_sic')
+            .innerJoin('listado.cumplimiento_eva_sic', 'cumplimiento_eva_sic')
+            .where('cumplimiento_eva_sic.eva_id = :eva_id', { eva_id: id })
+            .getMany()
+        if (!cumplimientoestandar) throw new NotFoundException(new MessageDto('No Existe en la lista'))
+        return cumplimientoestandar
     }
 }

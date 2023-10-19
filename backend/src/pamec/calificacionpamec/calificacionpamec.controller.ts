@@ -37,4 +37,10 @@ export class CalificacionpamecController {
         return await this.calificacionpamecService.update(id, dto);
     }
 
+    //LISTAR TODOS LAS CALIFICACIONES CON EVALUACION 
+    @Get('cal/evaluacion/:id')
+    async getAllevaluacion(@Param('id') id: number) {
+        return await this.calificacionpamecService.getallcriterioxtitulouno(id)
+    }
+
 }

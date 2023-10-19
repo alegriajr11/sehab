@@ -11,11 +11,16 @@ import { PrestadorEntity } from 'src/prestador/prestador.entity';
 import { EvaluacionSicEntity } from 'src/sic/evaluacionsic.entity';
 import { DominioEntity } from 'src/sic/dominio.entity';
 import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
+import { CumplimientosicService } from 'src/sic/cumplimientosic/cumplimientosic.service';
+import { CumplimientoSicEntity } from 'src/sic/cumplimientosic.entity';
+import { CriteriosicEntity } from 'src/sic/criteriosic.entity';
+import { IndicadorEntity } from 'src/sic/indicador.entity';
+import { CumplimientoEstandarSicEntity } from 'src/sic/cumplimientoestandar.entity';
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ActaSicPdfEntity, EvaluacionSicEntity, PrestadorEntity, DominioEntity]),
+  imports: [TypeOrmModule.forFeature([ActaSicPdfEntity, EvaluacionSicEntity, PrestadorEntity, DominioEntity,CumplimientoSicEntity,CumplimientoEstandarSicEntity,CriteriosicEntity,IndicadorEntity]),
   AuditoriaRegistroModule,AuditoriaActualizacionModule,
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -31,6 +36,6 @@ import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizac
   }), //FINAL DE MODULO JwtService
 ], 
   controllers: [SicActaController],
-  providers: [SicActaService]
+  providers: [SicActaService,CumplimientosicService]
 })
 export class SicActaModule {}

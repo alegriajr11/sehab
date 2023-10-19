@@ -47,12 +47,6 @@ export class CriterioindController {
         return await this.criterioIndService.getallcriterio()
     }
 
-    //LISTAR TODOS LOS CRITERIOS CON EVALUACION 
-    @Get('criid/titulo')
-    async getAlltitulo() {
-        return await this.criterioIndService.getallcriterioxtitulo()
-    }
-
     
 }
 

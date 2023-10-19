@@ -23,13 +23,6 @@ export class SpIndController {
         return await this.etapaIndService.findByIdcalificacion(id);
     }
 
-    //OBTENER CRITERIO Y CALIFICACION POR EVALUACION
-    //@UseGuards(JwtAuthGuard)
-    @Get(':id')
-    async getevaluacion(@Param('id', ParseIntPipe) id: number) {
-        return await this.etapaIndService.getCriCalIdeva(id)
-    }
-
 
     //ACTUALIZAR CALIFICACION
     @Put(':id')

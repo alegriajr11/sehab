@@ -11,10 +11,13 @@ import { EvaluacionIndependientesEntity } from 'src/sp/sp_ind/evaluacion-indepen
 import { PrestadorEntity } from 'src/prestador/prestador.entity';
 import { EtapaInd } from 'src/sp/sp_ind/etapaind.entity';
 import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
+import { CalificacionindService } from 'src/sp/sp_ind/calificacionind/calificacionind.service';
+import { CriterioIndEntity } from 'src/sp/sp_ind/criterioind.entity';
+import { CalificacionIndEntity } from 'src/sp/sp_ind/calificacionind.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ActaSpIndependientePdfEntity, EvaluacionIndependientesEntity, PrestadorEntity, EtapaInd]),
-  AuditoriaRegistroModule,AuditoriaActualizacionModule,
+  imports: [TypeOrmModule.forFeature([ActaSpIndependientePdfEntity, EvaluacionIndependientesEntity,CriterioIndEntity,CalificacionIndEntity,  PrestadorEntity, EtapaInd]),
+  AuditoriaRegistroModule,AuditoriaActualizacionModule,JwtModule,
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),
   JwtModule.registerAsync({
@@ -28,7 +31,7 @@ import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizac
     inject: [ConfigService],
   }),
 ],
-  providers: [SpIndependientesService],
+  providers: [SpIndependientesService,CalificacionindService],
   controllers: [SpIndependientesController]
 })
 export class SpIndependientesModule {}

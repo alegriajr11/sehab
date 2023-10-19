@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ActaSpIndependientePdfEntity } from './sp-ind-acta.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActaSpIndependientePdfRepository } from './sp-ind-acta.repository';
@@ -16,6 +16,10 @@ import { PrestadorRepository } from 'src/prestador/prestador.repository';
 import { EtapaInd } from 'src/sp/sp_ind/etapaind.entity';
 import { EtapaIndRepository } from 'src/sp/sp_ind/etapaind.repository';
 import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { CalificacionindService } from 'src/sp/sp_ind/calificacionind/calificacionind.service';
+import { join } from 'path';
+
+const PDFDocument = require('pdfkit-table')
 
 @Injectable()
 export class SpIndependientesService {
@@ -30,7 +34,9 @@ export class SpIndependientesService {
         private readonly etapaIndependientesRepository: EtapaIndRepository,
         private readonly jwtService: JwtService,
         private readonly auditoria_registro_services: AuditoriaRegistroService,
-        private readonly auditoria_actualizacion_services: AuditoriaActualizacionService
+        private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
+        @Inject(CalificacionindService)
+        private readonly calificacionindService: CalificacionindService,
     ) { }
 
     //LISTAR TODAS LAS ACTAS SP INDEPENDIENTE
@@ -317,5 +323,308 @@ export class SpIndependientesService {
 
 
         return acta;
+    }
+
+    //GENERACIÓN DE REPORTE DE CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES
+    //La función para generar el PDF con las tablas ajustadas
+    async generarPdfEvaluacionInd(id: number): Promise<Buffer> {
+
+        const titulo_uno = await this.calificacionindService.getallcriterioetapa(id);
+        const titulo_dos = await this.calificacionindService.getallcriterioxtitulodos(id);
+        const titulo_tres = await this.calificacionindService.getallcriterioxtitulotres(id);
+        const titulo_cuatro = await this.calificacionindService.getallcriterioxtitulocuatro(id);
+
+        let nombreprestador="";
+        let cargoprestador="";
+        let nombrefuncionario="";
+        let cargofuncionario="";
+
+        let totalCalificacionesEtapa1 = 0
+        let totalCalificacionesCountEtapa1 = 0; // Contador para la cantidad total de calificaciones
+        let totalCalificacionesEtapa2 = 0
+        let totalCalificacionesCountEtapa2 = 0; // Contador para la cantidad total de calificaciones
+        let totalCalificacionesEtapa3 = 0
+        let totalCalificacionesCountEtapa3 = 0; // Contador para la cantidad total de calificaciones
+        let totalCalificacionesEtapa4 = 0
+        let totalCalificacionesCountEtapa4 = 0; // Contador para la cantidad total de calificaciones
+
+        let promedio=0;
+        let promedio2=0;
+        let promedio3=0;
+        let promedio4=0;
+
+        let total=0;
+
+        const pdfBuffer: Buffer = await new Promise(resolve => {
+            const doc = new PDFDocument({
+                size: 'LETTER',
+                bufferPages: true,
+                autoFirstPage: false,
+            });
+
+            let pageNumber = 0;
+
+            doc.on('pageAdded', () => {
+                pageNumber++;
+                let bottom = doc.page.margins.bottom;
+
+                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                doc.moveDown()
+
+                doc.page.margins.top = 115;
+                doc.page.margins.bottom = 0;
+                doc.font("Helvetica").fontSize(14);
+                doc.text(
+                    'Pág. ' + pageNumber,
+                    0.5 * (doc.page.width - 100),
+                    doc.page.height - 50,
+                    {
+                        width: 100,
+                        align: 'center',
+                        lineBreak: false,
+                    }
+                );
+                doc.page.margins.bottom = bottom;
+
+            });
+
+            doc.addPage();
+            doc.text('', 90, 110);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
+            doc.text('', 185, 130);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('PROFESIONALES INDEPENDIENTES');
+            // doc.moveDown();
+            // doc.font('Helvetica').fontSize(14);
+
+            doc.text('', 50, 110);
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            // doc.moveDown();
+            // doc.moveDown();
+            // doc.moveDown();
+
+            // doc.fontSize(24);
+            function hayEspacioSuficiente(alturaContenido: number) {
+                const margenInferior = doc.page.margins.bottom;
+                const alturaPagina = doc.page.height;
+                const espacioRestante = alturaPagina - margenInferior - alturaContenido;
+                return espacioRestante >= 0;
+            }
+
+            titulo_uno.forEach(prestador=>{
+                nombreprestador= prestador.cal_evaluacion_independientes.eval_acta_ind.act_nombre_prestador;
+                nombrefuncionario= prestador.cal_evaluacion_independientes.eval_acta_ind.act_nombre_funcionario;
+                cargoprestador= prestador.cal_evaluacion_independientes.eval_acta_ind.act_cargo_prestador;
+                cargofuncionario= prestador.cal_evaluacion_independientes.eval_acta_ind.act_cargo_funcionario;
+            })
+            doc.text(nombreprestador)
+
+            // Agregar las tablas a las páginas
+            if (titulo_uno.length) {
+                let rows_elements = [];
+
+                titulo_uno.forEach(item => {
+
+                    totalCalificacionesEtapa1 += item.cal_nota
+                    totalCalificacionesCountEtapa1++; // Incrementar el contador
+
+                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+
+                };
+                const table = {
+                    title: "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",
+                    headers: ["", "CRITERIOS", "CALIFICACIÓN", "VERIFICACIÓN", "OBSERVACIONES"],
+                    rows: rows_elements
+
+                };
+
+
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table, tableOptions);
+                // Calcular el promedio
+                promedio = totalCalificacionesEtapa1 / totalCalificacionesCountEtapa1;
+                
+            }
+           
+
+            if (titulo_dos.length) {
+                let rows_elements = [];
+                titulo_dos.forEach(item => {
+                    totalCalificacionesEtapa2 += item.cal_nota
+                    totalCalificacionesCountEtapa2++; // Incrementar el contador
+                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table2 = {
+                    title: "CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table2, tableOptions);
+                // Calcular el promedio
+                promedio2 = totalCalificacionesEtapa2/ totalCalificacionesCountEtapa2;
+                
+            }
+
+            // doc.moveDown();
+            // doc.moveDown();
+
+            if (titulo_tres.length) {
+                let rows_elements = [];
+                titulo_tres.forEach(item => {
+                    totalCalificacionesEtapa3 += item.cal_nota
+                    totalCalificacionesCountEtapa3++; // Incrementar el contador
+                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table3 = {
+                    title: "REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+                doc.table(table3, tableOptions);
+                // Calcular el promedio
+                promedio3 = totalCalificacionesEtapa3 / totalCalificacionesCountEtapa3;
+            
+            }
+
+            // doc.moveDown();
+            // doc.moveDown();
+
+            if (titulo_cuatro.length) {
+                let rows_elements = [];
+                titulo_cuatro.forEach(item => {
+                    totalCalificacionesEtapa4 += item.cal_nota
+                    totalCalificacionesCountEtapa4++; // Incrementar el contador
+                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table4 = {
+                    title: "DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+                doc.table(table4, tableOptions);
+                // Calcular el promedio
+                promedio4 = totalCalificacionesEtapa4 / totalCalificacionesCountEtapa4;
+               
+
+                
+            }
+
+            const tableOptions = {
+                columnsSize: [ 400, 50],
+                headerAlign: 'center',
+                align: 'center',
+                rowHeight: 15,
+            };
+            total=((promedio+promedio2+promedio3+promedio4)/4)
+            const tablecount = {
+                    title: "RANGO DE IMPLEMENTACION",
+                    headers: [ "CRITERIOS", "TOTAL"],
+                    rows:[["COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",'    '+promedio.toFixed(2)],
+                        ["CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",'    '+promedio2.toFixed(2)],
+                        ["REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",'    '+promedio3.toFixed(2)],
+                        ["DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",'    '+promedio4.toFixed(2)],
+                        ["RESULTADOS",'    '+total.toFixed(2)]]
+
+                };
+
+
+                doc.moveDown();
+
+                doc.table(tablecount, tableOptions);
+
+                doc.moveDown();
+
+                const tableOptions2 = {
+                    columnsSize: [ 225, 225],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+
+                const tablefirmas = {
+                        headers: [ "PROFESIONAL INDEPENDIENTE", "POR SECRETARIA DE SALUD DEPARTAMENTAL"],
+                        rows:[[`NOMBRE: ${nombreprestador}`,`NOMBRE: ${nombrefuncionario}`],
+                            [`CARGO: ${cargoprestador}`,`CARGO: ${cargofuncionario}`],
+                            ["FIRMA","FIRMA  :"]]
+                    };
+    
+    
+                    doc.moveDown();
+    
+                    doc.table(tablefirmas, tableOptions2);
+
+            const buffer = [];
+            doc.on('data', buffer.push.bind(buffer));
+            doc.on('end', () => {
+                const data = Buffer.concat(buffer);
+                resolve(data);
+            });
+
+            doc.end();
+        });
+
+        return pdfBuffer;
     }
 }

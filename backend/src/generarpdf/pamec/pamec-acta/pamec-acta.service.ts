@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ActaPamecEntity } from './pamec-acta.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ActaPamecIpsRepository } from './pamec-acta.repository';
@@ -16,7 +16,11 @@ import { ActividadEntity } from 'src/pamec/actividad.entity';
 import { ActividadRepository } from 'src/pamec/actividad.repository';
 import { ActaPamecDto } from '../dto/pamec-acta.dto';
 import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.service';
+import { join } from 'path';
+import { CalificacionpamecService } from 'src/pamec/calificacionpamec/calificacionpamec.service';
 
+const PDFDocument = require('pdfkit-table')
 @Injectable()
 export class PamecActaService {
     constructor(
@@ -30,7 +34,9 @@ export class PamecActaService {
         private readonly evaluacionPamecRepository: EvaluacionPamecRepository,
         @InjectRepository(ActividadEntity)
         private readonly actividadRepository: ActividadRepository,
-        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService
+        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService,
+        @Inject(CalificacionpamecService)
+        private readonly calificacionpamecService: CalificacionpamecService,
     ) { }
 
     //LISTAR TODAS PAMEC IPS ACTA PDF
@@ -52,32 +58,32 @@ export class PamecActaService {
     }
 
 
-        //ÚLTIMA ACTA REGISTRADA
-        async getLastestActa(): Promise<ActaPamecDto> {
-            const anioActual: number = new Date().getFullYear();
-    
-            const acta = await this.actaPamecRepository.createQueryBuilder('acta')
-                .addSelect('acta.act_id')
-                .orderBy('acta.act_id', 'DESC')
-                .getOne();
-    
-            if (!acta) {
-                const newActa: ActaPamecEntity = new ActaPamecEntity();
-                newActa.act_id = 1;
-                return newActa;
-            }
-    
-            acta.act_creado = new Date(acta.act_creado);
-    
-            if (acta.act_creado.getFullYear() === anioActual) {
-                acta.act_id++;
-            } else {
-                acta.act_id = 1;
-            }
-    
-    
-            return acta;
+    //ÚLTIMA ACTA REGISTRADA
+    async getLastestActa(): Promise<ActaPamecDto> {
+        const anioActual: number = new Date().getFullYear();
+
+        const acta = await this.actaPamecRepository.createQueryBuilder('acta')
+            .addSelect('acta.act_id')
+            .orderBy('acta.act_id', 'DESC')
+            .getOne();
+
+        if (!acta) {
+            const newActa: ActaPamecEntity = new ActaPamecEntity();
+            newActa.act_id = 1;
+            return newActa;
         }
+
+        acta.act_creado = new Date(acta.act_creado);
+
+        if (acta.act_creado.getFullYear() === anioActual) {
+            acta.act_id++;
+        } else {
+            acta.act_id = 1;
+        }
+
+
+        return acta;
+    }
 
 
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
@@ -195,7 +201,7 @@ export class PamecActaService {
 
 
             return { error: false, message: 'El acta ha sido creada' };
-            
+
         } catch (error) {
             console.log(error)
             // Devuelve un mensaje de error apropiado
@@ -206,8 +212,8 @@ export class PamecActaService {
 
 
     //ACTUALIZAR PAMEC IPS ACTA PDF
-    
-    async updateActaipspam(id: number, payload:{ dto: ActaPamecDto, tokenDto: TokenDto}): Promise<any> {
+
+    async updateActaipspam(id: number, payload: { dto: ActaPamecDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payload;
         const ips = await this.findByActa(id);
         if (!ips) {
@@ -234,7 +240,7 @@ export class PamecActaService {
         dto.act_obj_visita ? ips.act_obj_visita = dto.act_obj_visita : ips.act_obj_visita = ips.act_obj_visita;
         dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
         dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
-        
+
         const usuario = await this.jwtService.decode(tokenDto.token);
 
         const payloadInterface: PayloadInterface = {
@@ -263,4 +269,736 @@ export class PamecActaService {
         return new MessageDto(`El acta ha sido Actualizada`);
 
     }
+
+    //GENERACIÓN DE REPORTE DE CUMPLIMIENTO DEL PROGRAMA DE PAMEC
+
+
+    // La función para generar el PDF con las tablas ajustadas
+    async generarPdfEvaluacionPamec(id: number): Promise<Buffer> {
+        const titulo_uno = await this.calificacionpamecService.getallcriterioxtitulouno(id);
+        const titulo_dos = await this.calificacionpamecService.getallcriterioxtitulodos(id);
+        const titulo_tres = await this.calificacionpamecService.getallcriterioxtitulotres(id);
+        const titulo_cuatro = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+        const titulo_cinco = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+        const titulo_seis = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+        const titulo_siete = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+        const titulo_ocho = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+        const titulo_nueve = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+        const titulo_diez = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+
+        let totalCalificacionesActividad1 = 0
+        let totalCalificacionesCountActividad1 = 0; // Contador para la cantidad total de calificaciones
+
+        const pdfBuffer: Buffer = await new Promise(resolve => {
+            const doc = new PDFDocument({
+                size: 'LETTER',
+                bufferPages: true,
+                autoFirstPage: false,
+            });
+
+            let pageNumber = 0;
+
+            doc.on('pageAdded', () => {
+                pageNumber++;
+                let bottom = doc.page.margins.bottom;
+
+                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                doc.moveDown()
+
+                doc.page.margins.top = 115;
+                doc.page.margins.bottom = 0;
+                doc.font("Helvetica").fontSize(14);
+                doc.text(
+                    'Pág. ' + pageNumber,
+                    0.5 * (doc.page.width - 100),
+                    doc.page.height - 50,
+                    {
+                        width: 100,
+                        align: 'center',
+                        lineBreak: false,
+                    }
+                );
+                doc.page.margins.bottom = bottom;
+
+            });
+
+            doc.addPage();
+            doc.text('', 90, 110);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
+            doc.text('', 185, 130);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('PAMEC');
+            // doc.moveDown();
+            // doc.font('Helvetica').fontSize(14);
+
+            doc.text('', 50, 110);
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+
+
+            // doc.fontSize(24);
+            function hayEspacioSuficiente(alturaContenido: number) {
+                const margenInferior = doc.page.margins.bottom;
+                const alturaPagina = doc.page.height;
+                const espacioRestante = alturaPagina - margenInferior - alturaContenido;
+                return espacioRestante >= 0;
+            }
+
+            // Agregar las tablas a las páginas
+            if (titulo_uno.length) {
+                let rows_elements = [];
+                titulo_uno.forEach(item => {
+                
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table = {
+                    title: "ACTIVIDADES PREVIAS",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+                doc.table(table, tableOptions);
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
+            }
+            
+            doc.moveDown();
+            if (titulo_dos.length) {
+                let rows_elements = [];
+                titulo_dos.forEach(item => {
+                    // let calif
+                    // let obs
+                    // let apli
+                    // item.criterio_calificacionpam.forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     totalCalificacionesActividad1 += cal.cal_nota
+                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
+                    //     obs = cal.cal_observaciones
+                    //     apli = cal.cal_aplica
+                    // })
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table2 = {
+                    title: "AUTOEVALUACION",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table2, tableOptions);
+            }
+            
+            if (titulo_tres.length) {
+                let rows_elements = [];
+                titulo_tres.forEach(item => {
+                    // let calif
+                    // let obs
+                    // let apli
+                    // item.criterio_calificacionpam.forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     totalCalificacionesActividad1 += cal.cal_nota
+                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
+                    //     obs = cal.cal_observaciones
+                    //     apli = cal.cal_aplica
+                    // })
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table3 = {
+                    title: "SELECCIÓN DE LOS PROCESOS A MEJORAR",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table3, tableOptions);
+            }
+
+
+            if (titulo_cuatro.length) {
+                let rows_elements = [];
+                titulo_cuatro.forEach(item => {
+                    // let calif
+                    // let obs
+                    // let apli
+                    // item.criterio_calificacionpam.forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     totalCalificacionesActividad1 += cal.cal_nota
+                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
+                    //     obs = cal.cal_observaciones
+                    //     apli = cal.cal_aplica
+                    // })
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table4 = {
+                    title: "PRIORIZACION",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table4, tableOptions);
+            }
+
+            if (titulo_cinco.length) {
+                let rows_elements = [];
+                titulo_cinco.forEach(item => {
+                    // let calif
+                    // let obs
+                    // let apli
+                    // item.criterio_calificacionpam.forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     totalCalificacionesActividad1 += cal.cal_nota
+                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
+                    //     obs = cal.cal_observaciones
+                    //     apli = cal.cal_aplica
+                    // })
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table5 = {
+                    title: "DEFINICIÓN DE LA CALIDAD ESPERADA",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table5, tableOptions);
+            }
+
+            if (titulo_seis.length) {
+                let rows_elements = [];
+                titulo_seis.forEach(item => {
+                    // let calif
+                    // let obs
+                    // let apli
+                    // item.criterio_calificacionpam.forEach(cal => {
+                    //     calif = '            ' + cal.cal_nota
+                    //     totalCalificacionesActividad1 += cal.cal_nota
+                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
+                    //     obs = cal.cal_observaciones
+                    //     apli = cal.cal_aplica
+                    // })
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table6 = {
+                    title: "DEFINICIÓN DE LA CALIDAD OBSERVADA",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table6, tableOptions);
+            }
+
+            if (titulo_siete.length) {
+                let rows_elements = [];
+                titulo_siete.forEach(item => {
+                
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table7 = {
+                    title: "PLAN DE MEJORAMIENTO PARA EL CIERRE DE BRECHAS",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table7, tableOptions);
+            }
+
+            if (titulo_ocho.length) {
+                let rows_elements = [];
+                titulo_ocho.forEach(item => {
+                 
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table8 = {
+                    title: "EJECUCION Y SEGUIMIENTO AL PLAN DE MEJORAMIENTO",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table8, tableOptions);
+            }
+
+            if (titulo_nueve.length) {
+                let rows_elements = [];
+                titulo_nueve.forEach(item => {
+                   
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table9 = {
+                    title: "EVALUACION PLAN DE MEJORAMIENTO",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table9, tableOptions);
+            }
+
+            if (titulo_diez.length) {
+                let rows_elements = [];
+                titulo_diez.forEach(item => {
+                
+                    var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [120, 210, 32, 35, 135],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table10 = {
+                    title: "APRENDIZAJE ORGANIZACIONAL",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table10, tableOptions);
+            }
+
+            const buffer = [];
+            doc.on('data', buffer.push.bind(buffer));
+            doc.on('end', () => {
+                const data = Buffer.concat(buffer);
+                resolve(data);
+            });
+
+            doc.end();
+        });
+
+        return pdfBuffer;
+    }
+
+     //GENERACIÓN DE REPORTE DE CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES
+    //La función para generar el PDF con las tablas ajustadas
+    // async generarPdfEvaluacionPamec(id: number): Promise<Buffer> {
+
+    //     const titulo_uno = await this.calificacionpamecService.getallcriterioxtitulouno(id);
+    //     const titulo_dos = await this.calificacionpamecService.getallcriterioxtitulodos(id);
+    //     const titulo_tres = await this.calificacionpamecService.getallcriterioxtitulotres(id);
+    //     const titulo_cuatro = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+    //     const titulo_once = await this.calificacionpamecService.getallcriterioxtituloonce(id);
+
+    //     // let nombreprestador="";
+    //     let currentHeight = 0;
+    //     // let cargoprestador="";
+    //     // let nombrefuncionario="";
+    //     // let cargofuncionario="";
+
+    //     // let totalCalificacionesEtapa1 = 0
+    //     // let totalCalificacionesCountEtapa1 = 0; // Contador para la cantidad total de calificaciones
+    //     // let totalCalificacionesEtapa2 = 0
+    //     // let totalCalificacionesCountEtapa2 = 0; // Contador para la cantidad total de calificaciones
+    //     // let totalCalificacionesEtapa3 = 0
+    //     // let totalCalificacionesCountEtapa3 = 0; // Contador para la cantidad total de calificaciones
+    //     // let totalCalificacionesEtapa4 = 0
+    //     // let totalCalificacionesCountEtapa4 = 0; // Contador para la cantidad total de calificaciones
+
+    //     // let promedio=0;
+    //     // let promedio2=0;
+    //     // let promedio3=0;
+    //     // let promedio4=0;
+
+    //     // let total=0;
+
+    //     const pdfBuffer: Buffer = await new Promise(resolve => {
+    //         const doc = new PDFDocument({
+    //             size: 'LETTER',
+    //             bufferPages: true,
+    //             autoFirstPage: false,
+    //         });
+
+    //         let pageNumber = 0;
+
+    //         doc.on('pageAdded', () => {
+    //             pageNumber++;
+    //             let bottom = doc.page.margins.bottom;
+
+    //             doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+    //             doc.moveDown()
+
+    //             doc.page.margins.top = 115;
+    //             doc.page.margins.bottom = 0;
+    //             doc.font("Helvetica").fontSize(14);
+    //             doc.text(
+    //                 'Pág. ' + pageNumber,
+    //                 0.5 * (doc.page.width - 100),
+    //                 doc.page.height - 50,
+    //                 {
+    //                     width: 100,
+    //                     align: 'center',
+    //                     lineBreak: false,
+    //                 }
+    //             );
+    //             doc.page.margins.bottom = bottom;
+
+    //         });
+
+    //         doc.addPage();
+    //         doc.text('', 90, 110);
+    //         doc.font('Helvetica-Bold').fontSize(14);
+    //         doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
+    //         doc.text('', 185, 130);
+    //         doc.font('Helvetica-Bold').fontSize(14);
+    //         doc.text('PROFESIONALES INDEPENDIENTES');
+    //         // doc.moveDown();
+    //         // doc.font('Helvetica').fontSize(14);
+
+    //         doc.text('', 50, 110);
+    //         doc.moveDown();
+    //         doc.moveDown();
+    //         doc.moveDown();
+    //         doc.moveDown();
+    //         // doc.moveDown();
+    //         // doc.moveDown();
+    //         // doc.moveDown();
+
+    //         // doc.fontSize(24);
+    //         function hayEspacioSuficiente(alturaContenido: number) {
+    //             const margenInferior = doc.page.margins.bottom;
+    //             const alturaPagina = doc.page.height;
+    //             const espacioRestante = alturaPagina - margenInferior - alturaContenido;
+    //             return espacioRestante >= 0;
+    //         }
+
+            
+
+    //         //Agregar las tablas a las páginas
+
+    //         if (titulo_uno.length) {
+    //             let rows_elements = [];
+
+    //             titulo_uno.forEach(item => {
+
+                    
+
+    //                 var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+    //                 rows_elements.push(temp_list)
+    //             })
+
+    //             const tableOptions = {
+    //                 columnsSize: [120, 210, 32, 35, 135],
+    //                 headerAlign: 'center',
+    //                 align: 'center',
+    //                 rowHeight: 15,
+
+    //             };
+    //             const table = {
+    //                 title: "ACTIVIDADES PREVIAS",
+    //                 headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+    //                 rows: rows_elements
+    //             };
+
+
+    //             doc.moveDown();
+    //             // Verificar si hay suficiente espacio en la página actual para la tabla
+    //             if (!hayEspacioSuficiente(currentHeight + tableOptions.rowHeight * rows_elements.length)) {
+    //                 doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+    //                 pageNumber++; // Incrementar el número de página
+                    
+    //             }
+
+    //             doc.table(table, tableOptions);
+    //             currentHeight += tableOptions.rowHeight * rows_elements.length;
+                
+    //         }
+
+    //         if (titulo_dos.length) {
+    //             let rows_elements = [];
+    //             titulo_dos.forEach(item => {
+                   
+    //                 var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+    //                 rows_elements.push(temp_list)
+    //             })
+
+    //             const tableOptions = {
+    //                 columnsSize: [120, 210, 32, 35, 135],
+    //                 headerAlign: 'center',
+    //                 align: 'center',
+    //                 rowHeight: 15,
+    //             };
+    //             const table2 = {
+    //                 title: "AUTOEVALUACIÓN",
+    //                 headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
+    //                 rows: rows_elements
+    //             };
+
+    //             doc.moveDown();
+    //             // Verificar si hay suficiente espacio en la página actual para la tabla
+    //             if (!hayEspacioSuficiente(currentHeight + tableOptions.rowHeight * rows_elements.length)) {
+    //                 doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+    //                 pageNumber++; // Incrementar el número de página
+                    
+    //             }
+
+    //             doc.table(table2, tableOptions);
+    //             currentHeight += tableOptions.rowHeight * rows_elements.length;
+                
+    //         }
+
+    //         // doc.moveDown();
+    //         // doc.moveDown();
+
+    //         if (titulo_tres.length) {
+    //             let rows_elements = [];
+    //             titulo_tres.forEach(item => {
+                   
+    //                 var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+    //                 rows_elements.push(temp_list)
+    //             })
+
+    //             const tableOptions = {
+    //                 columnsSize: [120, 210, 32, 35, 135],
+    //                 headerAlign: 'center',
+    //                 align: 'center',
+    //                 rowHeight: 15,
+    //             };
+    //             const table3 = {
+    //                 title: "SELECCIÓN DE LOS PROCESOS A MEJORAR",
+    //                 headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+    //                 rows: rows_elements
+    //             };
+    //             doc.moveDown();
+    //             // Verificar si hay suficiente espacio en la página actual para la tabla
+    //             if (!hayEspacioSuficiente(currentHeight + tableOptions.rowHeight * rows_elements.length)) {
+    //                 doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+    //                 pageNumber++; // Incrementar el número de página
+                    
+    //             }
+
+    //             doc.table(table3, tableOptions);
+    //             currentHeight += tableOptions.rowHeight * rows_elements.length;
+            
+            
+    //         }
+
+    //         // doc.moveDown();
+    //         // doc.moveDown();
+
+    //         if (titulo_cuatro.length) {
+    //             let rows_elements = [];
+    //             titulo_cuatro.forEach(item => {
+                    
+    //                 var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
+    //                 rows_elements.push(temp_list)
+    //             })
+
+    //             const tableOptions = {
+    //                 columnsSize: [120, 210, 32, 35, 135],
+    //                 headerAlign: 'center',
+    //                 align: 'center',
+    //                 rowHeight: 15,
+    //             };
+    //             const table4 = {
+    //                 title: "PRIORIZACION",
+    //                 headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+    //                 rows: rows_elements
+    //             };
+    //             doc.moveDown();
+    //             // Verificar si hay suficiente espacio en la página actual para la tabla
+    //             if (!hayEspacioSuficiente(currentHeight + tableOptions.rowHeight * rows_elements.length)) {
+    //                 doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+    //                 pageNumber++; // Incrementar el número de página
+                    
+    //             }
+
+    //             doc.table(table4, tableOptions);
+    //             currentHeight += tableOptions.rowHeight * rows_elements.length;
+                
+
+                
+    //         }
+
+            
+
+    //         // const tableOptions = {
+    //         //     columnsSize: [ 400, 50],
+    //         //     headerAlign: 'center',
+    //         //     align: 'center',
+    //         //     rowHeight: 15,
+    //         // };
+    //         // total=((promedio+promedio2+promedio3+promedio4)/4)
+    //         // const tablecount = {
+    //         //         title: "RANGO DE IMPLEMENTACION",
+    //         //         headers: [ "CRITERIOS", "TOTAL"],
+    //         //         rows:[["COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",'    '+promedio.toFixed(2)],
+    //         //             ["CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",'    '+promedio2.toFixed(2)],
+    //         //             ["REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",'    '+promedio3.toFixed(2)],
+    //         //             ["DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",'    '+promedio4.toFixed(2)],
+    //         //             ["RESULTADOS",'    '+total.toFixed(2)]]
+
+    //         //     };
+
+
+    //         //     doc.moveDown();
+
+    //         //     doc.table(tablecount, tableOptions);
+
+    //         //     doc.moveDown();
+
+    //         //     const tableOptions2 = {
+    //         //         columnsSize: [ 225, 225],
+    //         //         headerAlign: 'center',
+    //         //         align: 'center',
+    //         //         rowHeight: 15,
+    //         //     };
+
+    //             // const tablefirmas = {
+    //             //         headers: [ "PROFESIONAL INDEPENDIENTE", "POR SECRETARIA DE SALUD DEPARTAMENTAL"],
+    //             //         rows:[[`NOMBRE: ${nombreprestador}`,`NOMBRE: ${nombrefuncionario}`],
+    //             //             [`CARGO: ${cargoprestador}`,`CARGO: ${cargofuncionario}`],
+    //             //             ["FIRMA","FIRMA  :"]]
+    //             //     };
+    
+    
+    //             //     doc.moveDown();
+    
+    //             //     doc.table(tablefirmas, tableOptions2);
+
+    //         const buffer = [];
+    //         doc.on('data', buffer.push.bind(buffer));
+    //         doc.on('end', () => {
+    //             const data = Buffer.concat(buffer);
+    //             resolve(data);
+    //         });
+
+    //         doc.end();
+    //     });
+
+    //     return pdfBuffer;
+    // }
 }

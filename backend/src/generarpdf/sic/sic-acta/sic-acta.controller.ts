@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SicActaService } from './sic-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaSicPdfDto } from '../dto/sic-acta-pdf.dto';
@@ -78,5 +78,16 @@ export class SicActaController {
     async cerrarActa(
         @Param('id', ParseIntPipe) id: number, @Body() payload: { tokenDto: TokenDto }) {
         return this.sic_act_pdfService.cerrarActa(id, payload);
+    }
+
+    @Get('evaluacion/:id')
+    async descargarPdfCriterioInd(@Param('id') id: number, @Res() res): Promise<void> {
+        const buffer = await this.sic_act_pdfService.generarPdfEvaluacionSic(id)
+
+        res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ind_sogcs.pdf"');
+        res.set({
+            'Content-Length': buffer.length,
+        })
+        res.end(buffer)
     }
 }

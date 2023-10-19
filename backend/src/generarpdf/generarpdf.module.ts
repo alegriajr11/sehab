@@ -34,15 +34,21 @@ import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizac
 import { AuditoriaEliminacionModule } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.module';
 import { SpIndService } from 'src/sp/sp_ind/sp_ind.service';
 import { EvaluacionIndependientesEntity } from 'src/sp/sp_ind/evaluacion-independientes.entity';
+import { CalificacionindService } from 'src/sp/sp_ind/calificacionind/calificacionind.service';
+import { CumplimientosicService } from 'src/sic/cumplimientosic/cumplimientosic.service';
+import { CriteriosicEntity } from 'src/sic/criteriosic.entity';
+import { CumplimientoSicEntity } from 'src/sic/cumplimientosic.entity';
+import { IndicadorEntity } from 'src/sic/indicador.entity';
+import { CumplimientoEstandarSicEntity } from 'src/sic/cumplimientoestandar.entity';
 
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity,EvaluacionSicEntity,DominioEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity,CriterioIndEntity,EtapaInd,ActividadEntity,CriteriopamEntity,CalificacionIndEntity,EvaluacionIndependientesEntity]), SicActaModule, 
+  imports: [TypeOrmModule.forFeature([MunicipioEntity, PrestadorEntity,EvaluacionSicEntity,DominioEntity, UsuarioEntity, RolEntity, ActaSicPdfEntity, CriterioIndEntity,EtapaInd,ActividadEntity,CriteriosicEntity, CumplimientoEstandarSicEntity,CumplimientoSicEntity,IndicadorEntity,CriteriopamEntity,CalificacionIndEntity,EvaluacionIndependientesEntity]), SicActaModule, 
   SpIndependientesModule, SpIpsModule, PamecActaModule, AuditoriaRegistroModule,AuditoriaActualizacionModule,AuditoriaEliminacionModule, JwtModule, CriteriosicCumplimientoModule,CriterioindModule,CriteriopamModule, IvcModule, VerificacionModule],
 
   controllers: [GenerarpdfController, SicActaController],
-  providers: [GenerarpdfService, UsuarioService, SicActaService,CriterioindService,CriteriopamService,SpIndService]
+  providers: [GenerarpdfService, UsuarioService, SicActaService,CriterioindService,CriteriopamService,SpIndService,CalificacionindService,CumplimientosicService]
 })
 export class GenerarpdfModule {}

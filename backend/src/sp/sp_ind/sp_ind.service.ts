@@ -49,17 +49,7 @@ export class SpIndService {
         return calificacion;
     }
     
-    //LISTANDO CRITERIOS Y CALIFICACION POR EVALUACION
-    async getCriCalIdeva(id: number): Promise<CalificacionIndEntity[]> {
-        const calificacion = await this.calificacionIndRepository.createQueryBuilder('listado')
-            .select(['listado','criterio_cal.cri_id', 'criterio_cal.cri_nombre','criterio_cal.cri_verificacion', 'cal_evaluacion_independientes.eva_id'])
-            .innerJoin('listado.criterio_cal', 'criterio_cal')
-            .innerJoin('listado.cal_evaluacion_independientes', 'cal_evaluacion_independientes')
-            .where('cal_evaluacion_independientes.eva_id = :eva_id', { eva_id: id })
-            .getMany()
-        if (!calificacion) throw new NotFoundException(new MessageDto('No Existe en la lista'))
-        return calificacion
-    }
+  
 
     // //criterio por titulo
     // async getallcriterioxtitulo2(): Promise<CalificacionIndEntity[]> {

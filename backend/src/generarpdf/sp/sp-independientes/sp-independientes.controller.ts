@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SpIndependientesService } from './sp-independientes.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { IndActaDto } from 'src/generarpdf/sp/dto/sp-ind-acta.dto';
@@ -65,5 +65,16 @@ export class SpIndependientesController {
     async cerrarActa(
         @Param('id', ParseIntPipe) id: number, @Body() payload: { tokenDto: TokenDto }) {
         return this.sp_IndependientesService.cerrarActa(id, payload);
+    }
+
+    @Get('sp/ind/evaluacion/:id')
+    async descargarPdfCriterioInd(@Param('id') id: number, @Res() res): Promise<void> {
+        const buffer = await this.sp_IndependientesService.generarPdfEvaluacionInd(id)
+
+        res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ind_sogcs.pdf"');
+        res.set({
+            'Content-Length': buffer.length,
+        })
+        res.end(buffer)
     }
 }

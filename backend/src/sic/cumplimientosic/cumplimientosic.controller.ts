@@ -24,4 +24,15 @@ export class CumplimientosicController {
         return await this.cumplimientosicService.getCriCalIdeva(id)
     }
 
+    //OBTENER CRITERIO Y CALIFICACION POR EVALUACION
+    //@UseGuards(JwtAuthGuard)
+    @Get('/cumpliestandar/:id')
+    async getcumpliestandar(@Param('id', ParseIntPipe) id: number) {
+        return await this.cumplimientosicService.getcumpliestandar(id)
+    }
+
+    @Get('cumplimiento/cumplesic/:id')
+    async getcumplesic(@Param('id', ParseIntPipe) id: number) {
+        return await this.cumplimientosicService.getCriCalIdeva(id)
+    }
 }

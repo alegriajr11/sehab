@@ -84,66 +84,9 @@ export class CriterioindService {
         return criterio_ind
     }
 
-    //criterio por titulo
-    async getallcriterioxtitulo(): Promise<CriterioIndEntity[]> {
+    
 
-        let titulo_uno
-        titulo_uno = "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE"
-
-        const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
-            .select(['etapa', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoin('etapa.eta_item', 'eta_item')
-            .innerJoinAndSelect('etapa.calificaciones_cri', 'calificaciones_cri')
-            .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_uno })
-            .getMany()
-
-        return criterio
-    }
-
-    async getallcriterioxtitulodos(): Promise<CriterioIndEntity[]> {
-
-        let titulo_dos
-        titulo_dos = "CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE"
-
-        const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
-            .select(['etapa', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoin('etapa.eta_item', 'eta_item')
-            .innerJoinAndSelect('etapa.calificaciones_cri', 'calificaciones_cri')
-            .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_dos })
-            .getMany()
-
-        return criterio
-    }
-
-    async getallcriterioxtitulotres(): Promise<CriterioIndEntity[]> {
-
-        let titulo_tres
-        titulo_tres = "REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO"
-
-        const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
-            .select(['etapa', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoin('etapa.eta_item', 'eta_item')
-            .innerJoinAndSelect('etapa.calificaciones_cri', 'calificaciones_cri')
-            .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_tres })
-            .getMany()
-
-        return criterio
-    }
-
-    async getallcriterioxtitulocuatro(): Promise<CriterioIndEntity[]> {
-
-        let titulo_cuatro
-        titulo_cuatro = "DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO"
-
-        const criterio = await this.criterioIndRepository.createQueryBuilder('etapa')
-            .select(['etapa', 'calificaciones_cri.cal_nota', 'calificaciones_cri.cal_observaciones', 'eta_item.eta_nombre'])
-            .innerJoin('etapa.eta_item', 'eta_item')
-            .innerJoinAndSelect('etapa.calificaciones_cri', 'calificaciones_cri')
-            .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_cuatro })
-            .getMany()
-
-        return criterio
-    }
+    
 
 
     

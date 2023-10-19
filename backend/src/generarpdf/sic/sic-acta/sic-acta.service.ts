@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
 import { ActaSicPdfEntity } from './sic-acta-pdf.entity';
@@ -17,6 +17,10 @@ import { EvaluacionsicRepository } from 'src/sic/evaluacionsic.repository';
 import { DominioEntity } from 'src/sic/dominio.entity';
 import { DominioRepository } from 'src/sic/dominio.repository';
 import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { CumplimientosicService } from 'src/sic/cumplimientosic/cumplimientosic.service';
+import { join } from 'path';
+
+const PDFDocument = require('pdfkit-table')
 
 @Injectable()
 export class SicActaService {
@@ -32,7 +36,9 @@ export class SicActaService {
         @InjectRepository(DominioEntity)
         private readonly dominioRepository: DominioRepository,
         private readonly auditoria_registro_services: AuditoriaRegistroService,
-        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService
+        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService,
+        @Inject(CumplimientosicService)
+        private readonly cumplimientosicService: CumplimientosicService,
     ) { }
 
     //LISTAR TODAS LAS ACTAS SIC
@@ -341,5 +347,536 @@ export class SicActaService {
 
     }
 
+
+    async generarPdfEvaluacionSic(id: number): Promise<Buffer> {
+
+        const cumplimientoestandar = await this.cumplimientosicService.getcumpliestandar(id);
+        const cumplimiento = await this.cumplimientosicService.getCriCalIdeva(id);
+
+
+        let totalCalificacionesEtapa1 = 0
+        let totalCalificacionesCountEtapa1 = 0; // Contador para la cantidad total de calificaciones
+
+        let nombreprestador = "";
+        let cargoprestador = "";
+        let nombrefuncionario = "";
+        let cargofuncionario = "";
+        let nombreindicador = "";
+        let codigoindicador= "";
+
+        const pdfBuffer: Buffer = await new Promise(resolve => {
+            const doc = new PDFDocument({
+                size: 'LETTER',
+                bufferPages: true,
+                autoFirstPage: false,
+            });
+
+            let pageNumber = 0;
+
+            doc.on('pageAdded', () => {
+                pageNumber++;
+                let bottom = doc.page.margins.bottom;
+
+                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                doc.moveDown()
+
+                doc.page.margins.top = 115;
+                doc.page.margins.bottom = 0;
+                doc.font("Helvetica").fontSize(14);
+                doc.text(
+                    'Pág. ' + pageNumber,
+                    0.5 * (doc.page.width - 100),
+                    doc.page.height - 50,
+                    {
+                        width: 100,
+                        align: 'center',
+                        lineBreak: false,
+                    }
+                );
+                doc.page.margins.bottom = bottom;
+
+            });
+
+            doc.addPage();
+            doc.text('', 90, 110);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
+            doc.text('', 185, 130);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('PROFESIONALES INDEPENDIENTES');
+            // doc.moveDown();
+            // doc.font('Helvetica').fontSize(14);
+
+            doc.text('', 50, 110);
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            // doc.moveDown();
+            // doc.moveDown();
+            // doc.moveDown();
+
+            // doc.fontSize(24);
+            function hayEspacioSuficiente(alturaContenido: number) {
+                const margenInferior = doc.page.margins.bottom;
+                const alturaPagina = doc.page.height;
+                const espacioRestante = alturaPagina - margenInferior - alturaContenido;
+                return espacioRestante >= 0;
+            }
+
+            cumplimiento.forEach(prestador=>{
+                nombreprestador= prestador.cump_eva_sic.eval_acta_sic.act_nombre_prestador;
+                nombrefuncionario= prestador.cump_eva_sic.eval_acta_sic.act_nombre_funcionario;
+                cargoprestador= prestador.cump_eva_sic.eval_acta_sic.act_cargo_prestador;
+                cargofuncionario= prestador.cump_eva_sic.eval_acta_sic.act_cargo_funcionario;
+                nombreindicador= prestador.indicadorsic.ind_nombre;
+                codigoindicador=prestador.indicadorsic.ind_id;
+            })
+
+
+            if (cumplimientoestandar.length) {
+                let rows_elements = [];
+
+                cumplimientoestandar.forEach(item => {
+                    var temp_list = [item.criterioestandar_sic.crie_id, item.criterioestandar_sic.crie_nombre, item.cumpl_cumple, item.cumpl_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 102, 210],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table = {
+                    //title: "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",
+                    headers: ["N°", "CRITERIOS", "CUMPLIMIENTO", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table, tableOptions);
+                // Calcular el promedio
+                const promedio = totalCalificacionesEtapa1 / totalCalificacionesCountEtapa1;
+                const promedioRedondeado = promedio.toFixed(2);
+
+                doc.text(`Calificación Promedio: ${promedioRedondeado}`);
+            }
+
+
+            doc.text(nombreprestador)
+            // Agregar las tablas a las páginas
+            if (cumplimiento.length) {
+                let rows_elements = [];
+
+                cumplimiento.forEach(item => {
+                    var temp_list = [item.criterio_sic.cri_id, item.criterio_sic.cri_nombre, item.cumpl_cumple, item.cumpl_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 102, 210],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table = {
+                    title: `NOMBRE: ${nombreindicador}`,
+                    subtitle:`CODIGO: ${codigoindicador}`,
+                    headers: ["N°", "CRITERIOS", "CUMPLIMIENTO", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table, tableOptions);
+
+
+            }
+
+            // doc.addPage();
+
+            // if (titulo_dos.length) {
+            //     let rows_elements = [];
+            //     titulo_dos.forEach(item => {
+            //         var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+            //         rows_elements.push(temp_list)
+            //     })
+
+            //     const tableOptions = {
+            //         columnsSize: [10, 210, 72, 65, 175],
+            //         headerAlign: 'center',
+            //         align: 'center',
+            //         rowHeight: 15,
+            //     };
+            //     const table2 = {
+            //         title: "CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",
+            //         headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+            //         rows: rows_elements
+            //     };
+            //     // Verificar si hay suficiente espacio en la página actual para la tabla
+            //     if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+            //         doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+            //         pageNumber++; // Incrementar el número de página
+            //     }
+            //     doc.moveDown();
+            //     doc.table(table2, tableOptions);
+            // }
+
+            // // doc.moveDown();
+            // // doc.moveDown();
+
+            // if (titulo_tres.length) {
+            //     let rows_elements = [];
+            //     titulo_tres.forEach(item => {
+            //         var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+            //         rows_elements.push(temp_list)
+            //     })
+
+            //     const tableOptions = {
+            //         columnsSize: [10, 210, 72, 65, 175],
+            //         headerAlign: 'center',
+            //         align: 'center',
+            //         rowHeight: 15,
+            //     };
+            //     const table3 = {
+            //         title: "REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",
+            //         headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+            //         rows: rows_elements
+            //     };
+            //     doc.moveDown();
+            //     // Verificar si hay suficiente espacio en la página actual para la tabla
+            //     if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+            //         doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+            //         pageNumber++; // Incrementar el número de página
+            //     }
+            //     doc.table(table3, tableOptions);
+            // }
+
+            // // doc.moveDown();
+            // // doc.moveDown();
+
+            // if (titulo_cuatro.length) {
+            //     let rows_elements = [];
+            //     titulo_cuatro.forEach(item => {
+            //         var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+            //         rows_elements.push(temp_list)
+            //     })
+
+            //     const tableOptions = {
+            //         columnsSize: [10, 210, 72, 65, 175],
+            //         headerAlign: 'center',
+            //         align: 'center',
+            //         rowHeight: 15,
+            //     };
+            //     const table4 = {
+            //         title: "DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",
+            //         headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+            //         rows: rows_elements
+            //     };
+            //     doc.moveDown();
+            //     // Verificar si hay suficiente espacio en la página actual para la tabla
+            //     if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+            //         doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+            //         pageNumber++; // Incrementar el número de página
+            //     }
+            //     doc.table(table4, tableOptions);
+            // }
+
+            doc.moveDown();
+
+            const tableOptions2 = {
+                columnsSize: [450],
+                headerAlign: 'center',
+                align: 'center',
+                rowHeight: 15,
+            };
+
+            const tableprestador = {
+                headers: ["SECRETARIA DE SALUD DEPARTAMENTAL"],
+                rows: [[`NOMBRE: ${nombreprestador}`],
+                [`CARGO: ${cargoprestador}`],
+                ["FIRMA"]]
+            };
+
+
+            doc.moveDown();
+
+            doc.table(tableprestador, tableOptions2);
+
+            doc.moveDown();
+
+            const tableOptions3 = {
+                columnsSize: [450],
+                headerAlign: 'center',
+                align: 'center',
+                rowHeight: 15,
+            };
+
+            const tablefuncionario = {
+                headers: ["SECRETARIA DE SALUD DEPARTAMENTAL"],
+                rows: [[`NOMBRE: ${nombrefuncionario}`],
+                [`CARGO: ${cargofuncionario}`],
+                ["FIRMA"]]
+            };
+
+
+            doc.moveDown();
+
+            doc.table(tablefuncionario, tableOptions3);
+
+            const buffer = [];
+            doc.on('data', buffer.push.bind(buffer));
+            doc.on('end', () => {
+                const data = Buffer.concat(buffer);
+                resolve(data);
+            });
+
+            doc.end();
+        });
+
+        return pdfBuffer;
+    }
+
+
+    // async generarPdfEvaluacionSic(id: number): Promise<Buffer> {
+
+    //     const cumplimientoestandar = await this.cumplimientosicService.getcumpliestandar(id);
+    //     const cumplimiento = await this.cumplimientosicService.getCriCalIdeva(id);
+
+
+    //     let totalCalificacionesEtapa1 = 0
+    //     let totalCalificacionesCountEtapa1 = 0; // Contador para la cantidad total de calificaciones
+
+    //     let nombreprestador = "";
+    //     let cargoprestador = "";
+    //     let nombrefuncionario = "";
+    //     let cargofuncionario = "";
+    //     let nombreindicador = "";
+    //     let codigoindicador = "";
+
+    //     const pdfBuffer: Buffer = await new Promise(resolve => {
+    //         const doc = new PDFDocument({
+    //             size: 'LETTER',
+    //             bufferPages: true,
+    //             autoFirstPage: false,
+    //         });
+
+    //         let pageNumber = 0;
+
+    //         doc.on('pageAdded', () => {
+    //             pageNumber++;
+    //             let bottom = doc.page.margins.bottom;
+
+    //             doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+    //             doc.moveDown()
+
+    //             doc.page.margins.top = 115;
+    //             doc.page.margins.bottom = 0;
+    //             doc.font("Helvetica").fontSize(14);
+    //             doc.text(
+    //                 'Pág. ' + pageNumber,
+    //                 0.5 * (doc.page.width - 100),
+    //                 doc.page.height - 50,
+    //                 {
+    //                     width: 100,
+    //                     align: 'center',
+    //                     lineBreak: false,
+    //                 }
+    //             );
+    //             doc.page.margins.bottom = bottom;
+
+    //         });
+
+    //         doc.addPage();
+    //         doc.text('', 90, 110);
+    //         doc.font('Helvetica-Bold').fontSize(14);
+    //         doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
+    //         doc.text('', 185, 130);
+    //         doc.font('Helvetica-Bold').fontSize(14);
+    //         doc.text('PROFESIONALES INDEPENDIENTES');
+    //         // doc.moveDown();
+    //         // doc.font('Helvetica').fontSize(14);
+
+    //         doc.text('', 50, 110);
+    //         doc.moveDown();
+    //         doc.moveDown();
+    //         doc.moveDown();
+    //         doc.moveDown();
+    //         // doc.moveDown();
+    //         // doc.moveDown();
+    //         // doc.moveDown();
+
+    //         // doc.fontSize(24);
+    //         function hayEspacioSuficiente(alturaContenido: number) {
+    //             const margenInferior = doc.page.margins.bottom;
+    //             const alturaPagina = doc.page.height;
+    //             const espacioRestante = alturaPagina - margenInferior - alturaContenido;
+    //             return espacioRestante >= 0;
+    //         }
+
+    //         cumplimiento.forEach(prestador => {
+    //             nombreprestador = prestador.cump_eva_sic.eval_acta_sic.act_nombre_prestador;
+    //             nombrefuncionario = prestador.cump_eva_sic.eval_acta_sic.act_nombre_funcionario;
+    //             cargoprestador = prestador.cump_eva_sic.eval_acta_sic.act_cargo_prestador;
+    //             cargofuncionario = prestador.cump_eva_sic.eval_acta_sic.act_cargo_funcionario;
+    //             nombreindicador = prestador.indicadorsic.ind_nombre;
+    //             codigoindicador = prestador.indicadorsic.ind_id;
+    //         })
+
+
+    //         // if (cumplimientoestandar.length) {
+    //         //     let rows_elements = [];
+
+    //         //     cumplimientoestandar.forEach(item => {
+    //         //         var temp_list = [item.criterioestandar_sic.crie_id, item.criterioestandar_sic.crie_nombre, item.cumpl_cumple, item.cumpl_observaciones];
+    //         //         rows_elements.push(temp_list)
+    //         //     })
+
+    //         //     const tableOptions = {
+    //         //         columnsSize: [10, 210, 102, 210],
+    //         //         headerAlign: 'center',
+    //         //         align: 'center',
+    //         //         rowHeight: 15,
+    //         //     };
+    //         //     const table = {
+    //         //         //title: "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",
+    //         //         headers: ["N°", "CRITERIOS", "CUMPLIMIENTO", "OBSERVACIONES"],
+    //         //         rows: rows_elements
+    //         //     };
+
+    //         //     // Verificar si hay suficiente espacio en la página actual para la tabla
+    //         //     if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+    //         //         doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+    //         //         pageNumber++; // Incrementar el número de página
+    //         //     }
+
+    //         //     doc.table(table, tableOptions);
+    //         //     // Calcular el promedio
+    //         //     const promedio = totalCalificacionesEtapa1 / totalCalificacionesCountEtapa1;
+    //         //     const promedioRedondeado = promedio.toFixed(2);
+
+    //         //     doc.text(`Calificación Promedio: ${promedioRedondeado}`);
+    //         // }
+
+
+    //         doc.text(nombreprestador)
+    //         // Agregar las tablas a las páginas
+    //         if (cumplimiento.length) {
+    //             let rows_elements = [];
+    //             const tableOptions = {
+    //                 columnsSize: [10, 210, 102, 210],
+    //                 headerAlign: 'center',
+    //                 align: 'center',
+    //                 rowHeight: 15,
+    //             };
+    //             let pageNumber = 1; // Inicializa el número de página
+    //             let currentIndicador = null; // Para realizar un seguimiento del indicador actual
+
+    //             cumplimiento.forEach((item, index) => {
+    //                 var temp_list =  [item.criterio_sic.cri_id, item.criterio_sic.cri_nombre, item.cumpl_cumple, item.cumpl_observaciones];
+    //                 rows_elements.push(temp_list)
+    //                 if (index > 0) {
+    //                     // Verificar si hay suficiente espacio en la página actual para la tabla
+    //                     if (!hayEspacioSuficiente(tableOptions.rowHeight)) {
+    //                         doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+    //                         pageNumber++; // Incrementar el número de página
+    //                     }
+    //                 }
+
+    //                 if (item.indicadorsic.ind_nombre !== currentIndicador) {
+    //                     // Si el indicador actual es diferente al anterior, crear una nueva tabla
+    //                     if (currentIndicador !== null) {
+    //                         doc.moveDown(); // Finalizar la tabla anterior
+    //                     }
+
+    //                     currentIndicador = item.indicadorsic.ind_nombre;
+
+    //                     // Configurar la nueva tabla
+    //                     doc.table(
+    //                         {
+    //                             title: `NOMBRE: ${nombreindicador}`,
+    //                             subtitle: `CODIGO: ${codigoindicador}`,
+    //                             headers: ["N°", "CRITERIOS", "CUMPLIMIENTO", "OBSERVACIONES"],
+    //                             rows: rows_elements
+    //                         },
+    //                         tableOptions
+    //                     );
+    //                 }
+
+    //                 // Agregar una fila a la tabla actual
+                    
+                   
+    //             });
+            
+
+            
+    //         }
+
+
+
+    //         doc.moveDown();
+
+    //         const tableOptions2 = {
+    //             columnsSize: [450],
+    //             headerAlign: 'center',
+    //             align: 'center',
+    //             rowHeight: 15,
+    //         };
+
+    //         const tableprestador = {
+    //             headers: ["SECRETARIA DE SALUD DEPARTAMENTAL"],
+    //             rows: [[`NOMBRE: ${nombreprestador}`],
+    //             [`CARGO: ${cargoprestador}`],
+    //             ["FIRMA"]]
+    //         };
+
+
+    //         doc.moveDown();
+
+    //         doc.table(tableprestador, tableOptions2);
+
+    //         doc.moveDown();
+
+    //         const tableOptions3 = {
+    //             columnsSize: [450],
+    //             headerAlign: 'center',
+    //             align: 'center',
+    //             rowHeight: 15,
+    //         };
+
+    //         const tablefuncionario = {
+    //             headers: ["SECRETARIA DE SALUD DEPARTAMENTAL"],
+    //             rows: [[`NOMBRE: ${nombrefuncionario}`],
+    //             [`CARGO: ${cargofuncionario}`],
+    //             ["FIRMA"]]
+    //         };
+
+
+    //         doc.moveDown();
+
+    //         doc.table(tablefuncionario, tableOptions3);
+
+    //         const buffer = [];
+    //         doc.on('data', buffer.push.bind(buffer));
+    //         doc.on('end', () => {
+    //             const data = Buffer.concat(buffer);
+    //             resolve(data);
+    //         });
+
+    //         doc.end();
+    //     });
+
+    //     return pdfBuffer;
+    // }
 
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PamecActaService } from './pamec-acta.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { ActaPamecDto } from '../dto/pamec-acta.dto';
@@ -51,4 +51,16 @@ export class PamecActaController {
         const { dto,tokenDto}= payload;
         return await this.pamecActaService.updateActaipspam(id,payload);
     }
+
+    @Get('pamec/evaluacion/:id')
+    async descargarPdfCriterioPamec(@Param('id') id: number,@Res() res): Promise<void> {
+        const buffer = await this.pamecActaService.generarPdfEvaluacionPamec(id)
+        res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ind_sogcs.pdf"');
+        res.set({
+            'Content-Length': buffer.length,
+        })
+        res.end(buffer)
+    }
+
+    
 }

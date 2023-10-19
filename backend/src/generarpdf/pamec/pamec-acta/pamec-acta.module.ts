@@ -11,11 +11,15 @@ import { PrestadorEntity } from 'src/prestador/prestador.entity';
 import { ActividadEntity } from 'src/pamec/actividad.entity';
 import { EvaluacionPamecEntity } from 'src/pamec/evaluacion-pamec.entity';
 import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
+import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.service';
+import { CriteriopamEntity } from 'src/pamec/criteriopam.entity';
+import { CalificacionpamecService } from 'src/pamec/calificacionpamec/calificacionpamec.service';
+import { CalificacionpamEntity } from 'src/pamec/calificacionpam.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ActaPamecEntity,PrestadorEntity,ActividadEntity,EvaluacionPamecEntity]),
-    AuditoriaRegistroModule,AuditoriaActualizacionModule,
+  imports: [TypeOrmModule.forFeature([ActaPamecEntity,PrestadorEntity,ActividadEntity,EvaluacionPamecEntity,CriteriopamEntity,CalificacionpamEntity]),
+    AuditoriaRegistroModule,AuditoriaActualizacionModule,JwtModule,
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),
   JwtModule.registerAsync({
@@ -29,7 +33,7 @@ import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizac
     inject: [ConfigService],
   }), //FINAL DE MODULO JwtService
   ],
-  providers: [PamecActaService],
+  providers: [PamecActaService,CalificacionpamecService],
   controllers: [PamecActaController]
 })
 export class PamecActaModule { }

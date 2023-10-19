@@ -61,4 +61,5 @@ export class CriteriopamController {
         return await this.criteriopamService.getallcriterio()
     }
 
+
 }
