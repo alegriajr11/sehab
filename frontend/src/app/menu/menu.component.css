@@ -1,7 +1,8 @@
+/* Estilos generales */
 h6 {
     font-size: 1.4rem;
     text-transform: capitalize;
-    color: white;
+    color: rgb(2, 2, 2);
     text-align: right;
 }
 
@@ -46,7 +47,6 @@ h6 {
 
 .white-color {
     color: white;
-
 }
 
 .fa-user-circle {
@@ -55,16 +55,13 @@ h6 {
 
 .fa-user-circle:hover {
     color: rgb(177, 174, 174);
-    ;
     cursor: pointer;
 }
-
 
 .btn-light:hover {
     color: white;
     border-color: black;
     background-color: black;
-
 }
 
 .container {
@@ -73,13 +70,11 @@ h6 {
     align-items: center;
 }
 
+/*Bordes Redondeados al contenedor - usuario*/
 .bg {
     border-radius: 1.4rem;
     background-color: #4e4e4e;
-
 }
-
-
 
 /*MENU DESPLEGABLE*/
 .dropdown_ser {
@@ -87,7 +82,6 @@ h6 {
     position: relative;
     cursor: pointer;
     z-index: 1;
-
 }
 
 .dropdown_ser a {
@@ -95,7 +89,6 @@ h6 {
 }
 
 .dropdown-content {
-
     display: none;
     position: absolute;
     width: 150%;
@@ -104,7 +97,6 @@ h6 {
     border-radius: 5px;
     font-size: 18px;
 }
-
 
 .dropdown_ser:hover .dropdown-content {
     display: block;
@@ -117,7 +109,6 @@ h6 {
     background-color: white;
     text-decoration: none;
     padding-top: 1rem;
-
 }
 
 .dropdown-content a:hover {
@@ -125,10 +116,12 @@ h6 {
     background-color: #4e4e4e;
 }
 
+
+
+/*CONTENIDO DEL LOGO IMG*/
 /*ESTILOS IMG HEADER*/
 .small-image {
     width: 50px;
-    /* Cambia este valor al ancho deseado */
     height: auto;
 }
 
@@ -138,7 +131,6 @@ h6 {
     justify-content: center;
     align-items: flex-start;
     height: 70px;
-    /* Ajusta la altura según tus necesidades */
 }
 
 .centered-content a,
@@ -147,13 +139,55 @@ h6 {
     height: auto;
 }
 
-img {
-    margin-left: 6px;
+/*OCULTAR NOMBRE USUARIO DEL C-DROPDOWN*/
+.mostrar-en-pantalla-pequena {
+    display: none;
 }
 
-/*MEDIA QUERY*/
+/* Media Query para pantallas pequeñas */
+@media(max-width: 1018px) {
+    .nav-item a span {
+        display: none;
+        /* Oculta todas las etiquetas <a> con span dentro de .nav-item */
+    }
+
+    .size-icon {
+        font-size: 40px;
+        /*Ajustar el tamaño de los Iconos*/
+        margin-left: 20px;
+    }
+
+    .dropdown_ser a span {
+        display: none;
+    }
+
+    .dropdown_ser a i {
+        font-size: 40px;
+        /*Ajustar el tamaño de los Iconos*/
+        margin-left: 20px;
+    }
+}
+
 @media (max-width: 1000px) {
     .navbar-collapse {
         display: none;
+    }
+
+    .navbar-collapse.show {
+        display: block;
+    }
+
+    .hide-on-small-screen {
+        display: none;
+    }
+}
+
+@media (max-width: 1120px) {
+    .ocultar-en-pantalla-pequena {
+        display: none;
+    }
+
+    .mostrar-en-pantalla-pequena {
+        display: block;
     }
 }

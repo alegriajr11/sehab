@@ -48,7 +48,8 @@ export class EvaluacionesSpIpsComponent implements OnInit {
   }
 
   cargarActas(): void {
-    this.actapdfService.listaSpIps().subscribe(
+    const token = this.tokenService.getToken()
+    this.actapdfService.listaSpIps(token).subscribe(
       data => {
         this.evaluaciones = data;
         this.listaVacia = undefined;

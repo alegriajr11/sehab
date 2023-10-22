@@ -16,4 +16,5 @@ export class ClasificacionService {
   public lista(): Observable<Clasificacion[]> {
     return this.httpClient.get<Clasificacion[]>(`${this.clasificacionURL}`);
   }
+
 }

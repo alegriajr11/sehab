@@ -27,7 +27,7 @@
                 DEL PACIENTE PROFESIONALES INDEPENDIENTES</h2>
             <hr class="up">
             <form #f="ngForm" novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()" id="form">
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
                     <input type="number" min="0" class="form-control" id="acta" readonly name="act_id"
                         [(ngModel)]="act_id">
@@ -63,7 +63,7 @@
                         Inicial.</div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-3">
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
                         [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl

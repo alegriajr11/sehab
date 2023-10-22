@@ -30,7 +30,6 @@
           <th scope="col" style="text-align: center;">Estado</th>
           <th scope="col" style="text-align: center;">Fecha de Creación</th>
           <th scope="col" *ngIf="isAdmin" style="text-align: center;">Editar</th>
-          <th scope="col" *ngIf="isAdmin" style="text-align: center;">Borrar</th>
           <th scope="col" *ngIf="isAdmin" style="text-align: center;">Restablecer Contraseña</th>
         </tr>
       </thead>
@@ -49,11 +48,6 @@
           <td *ngIf="isAdmin" style="text-align: center;">
             <button class="btn btn-outline-warning" routerLink="/usuarios/editar/{{usuario.usu_id}}">
               <i class="far fa-edit"></i>
-            </button>
-          </td>
-          <td *ngIf="isAdmin" style="text-align: center;">
-            <button class="btn btn-outline-danger" (click)="borrar(usuario.usu_id)">
-              <i class="far fa-trash-alt"></i>
             </button>
           </td>
           <td *ngIf="isAdmin" style="text-align: center;">

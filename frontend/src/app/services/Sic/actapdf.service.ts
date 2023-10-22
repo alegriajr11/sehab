@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ActaPamecDto } from 'src/app/models/actaPamePdf.dto';
-import { ActaSicPdfDto } from 'src/app/models/actaSicpdf.dto';
-import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
+import { ActaPamecDto } from 'src/app/models/Actas/actaPamePdf.dto';
+import { ActaSicPdfDto } from 'src/app/models/Actas/actaSicpdf.dto';
+import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 import { TokenDto } from 'src/app/models/token.dto';
 import { environment } from 'src/environments/environment';
 
@@ -24,8 +24,8 @@ export class ActapdfService {
 
   /*ROL SIC*/
   //SOLICITUD LISTAR ACTAS DEL ROL SIC
-  public listaSic(): Observable<ActaSicPdfDto[]> {
-    return this.httpClient.get<ActaSicPdfDto[]>(this.actasic_pdfUrl)
+  public listaSic(tokenDto: string): Observable<ActaSicPdfDto[]> {
+    return this.httpClient.get<ActaSicPdfDto[]>(this.actasic_pdfUrl + 'lista/acta/funcionario/login/sic/acta?tokenDto=' + `${tokenDto}`)
   }
 
   //SOLICITUD ULTIMA ACTA DEL ROL SIC
@@ -78,8 +78,8 @@ export class ActapdfService {
   /*ROL SP*/
   /*ROL SP - IPS*/
   //SOLICITUD LISTAR ACTAS DEL ROL SP - IPS
-  public listaSpIps(): Observable<ActaSpPdfDto[]> {
-    return this.httpClient.get<ActaSpPdfDto[]>(this.actasp_ips_pdfurl)
+  public listaSpIps(tokenDto: string): Observable<ActaSpPdfDto[]> {
+    return this.httpClient.get<ActaSpPdfDto[]>(this.actasp_ips_pdfurl + 'lista/acta/funcionario/login/spips/acta?tokenDto=' + `${tokenDto}`)
   }
 
   //SOLICITUD ULTIMA ACTA DEL ROL SP_IPS

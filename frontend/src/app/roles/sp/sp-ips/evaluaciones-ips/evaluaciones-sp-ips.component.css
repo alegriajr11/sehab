@@ -228,4 +228,14 @@ span{
     font-size: xx-large;
 }
 
+/* Estilos adicionales para hacer la tabla responsive */
+@media (max-width: 1080px) {
+    .table-wrapper {
+        overflow-x: auto; /* Agrega una barra de desplazamiento horizontal */
+    }
+    .table-wrapper table {
+        width: 100%; /* Establece el ancho de la tabla al 100% del contenedor */
+    }
+
+}
 

@@ -23,9 +23,14 @@ export class UsuarioService {
     return this.httpClient.get<Usuario[]>(`${this.usuarioURL}`);
   }
 
-  //SOLICITUD LISTAR USUARIOS ACTIVOS Y SIN ADMIN
-  public listaUserEstado(): Observable<Usuario[]> {
-    return this.httpClient.get<Usuario[]>(`${this.usuarioURL}` + 'estado/limitado');
+  //SOLICITUD LISTAR USUARIOS ACTIVOS Y POR ROL
+  public listaUserRol(rol_nombre: string): Observable<Usuario[]> {
+    return this.httpClient.get<Usuario[]>(`${this.usuarioURL}` + 'lista/rol?rol_nombre=' + `${rol_nombre}`);
+  }
+
+  //SOLICITUD LISTAR USUARIOS CONTADOR ACTIVOS
+  public listaUserContador(): Observable<Usuario[]> {
+    return this.httpClient.get<Usuario[]>(`${this.usuarioURL}` + 'estado/limitado/contador');
   }
 
   public oneUser(id: number): Observable<Usuario> {

@@ -9,6 +9,7 @@
 
 /*ESTILOS AL HEADER TABLE*/
 .table-title {
+    position: relative;
     padding-bottom: 15px;
     background: #343a40;
     color: #fff;
@@ -16,6 +17,7 @@
     margin: -20px -25px 10px;
     border-radius: 3px 3px 0 0;
 }
+
 
 
 /*ESTILOS A LOS BOTONES DEL CONTENEDOR - HEADER*/
@@ -47,4 +49,16 @@
 .btn-secondary:hover {
     transform: scale(1.1);
     transition-duration: 0.2s;
+}
+
+
+/* Estilos adicionales para hacer la tabla responsive */
+@media (max-width: 1030px) {
+    .table-wrapper {
+        overflow-x: auto; /* Agrega una barra de desplazamiento horizontal */
+    }
+    .table-wrapper table {
+        width: 100%; /* Establece el ancho de la tabla al 100% del contenedor */
+    }
+    
 }

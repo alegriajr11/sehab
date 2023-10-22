@@ -67,7 +67,7 @@ import { EditarcriteriosicComponent } from './usuario/admin/criteriosic/editarcr
 import { ModalsicComponent } from './roles/sic/evaluacion/modalsic/modalsic.component';
 import { Modalsic2Component } from './roles/sic/evaluacion/modalsic2/modalsic2.component';
 import { CapacidadInstaladaComponent } from './roles/reso/capacidad-instalada/capacidad-instalada.component';
-import { TodosServiciosComponent } from './roles/reso/home-estandar/todos-servicios/todos-servicios.component';
+import { TodosServiciosComponent } from './roles/reso/lista-verificacion/home-estandar/todos-servicios/todos-servicios.component';
 import { ConsultaExternaComponent } from './roles/reso/lista-verificacion/home-estandar/consulta-externa/consulta-externa.component';
 import { ApoyoDiagnosticoComponent } from './roles/reso/lista-verificacion/home-estandar/apoyo-diagnostico/apoyo-diagnostico.component';
 import { InternacionComponent } from './roles/reso/lista-verificacion/home-estandar/internacion/internacion.component';
@@ -123,6 +123,7 @@ import { ModalSedesPrestadorComponent } from './prestador/modal-sedes-prestador/
 import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.component';
 import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/editar-sedes-prestador/editar-sedes-prestador.component';
 import { ModalEditarFirmaAcompananteSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/editar-acta-sp-ips/modal-editar-firma-acompanante-sp-ips/modal-editar-firma-acompanante-sp-ips.component';
+import { ContadorComponent } from './roles/reso/contador/contador.component';
 
 
 
@@ -233,7 +234,8 @@ import { ModalEditarFirmaAcompananteSpIpsComponent } from './roles/sp/sp-ips/eva
     ModalSedesPrestadorComponent,
     RichTextEditorComponent,
     EditarSedesPrestadorComponent,
-    ModalEditarFirmaAcompananteSpIpsComponent
+    ModalEditarFirmaAcompananteSpIpsComponent,
+    ContadorComponent
 
   ],
   imports: [

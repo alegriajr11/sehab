@@ -2,7 +2,7 @@ import { Component, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
-import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
+import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 import { Usuario } from 'src/app/models/usuario';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { UsuarioService } from 'src/app/services/usuario.service';

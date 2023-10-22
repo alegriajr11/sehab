@@ -10,7 +10,6 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ActaSpPdfDto } from 'src/app/models/actaSpPdf.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { TokenService } from 'src/app/services/token.service';
@@ -18,6 +17,7 @@ import { TokenDto } from 'src/app/models/token.dto';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GenerarPdfActaIndService } from 'src/app/services/SpInd/generar-pdf-acta-ind.service';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
+import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 
 @Component({
   selector: 'app-acta-sp-pro',
@@ -149,7 +149,8 @@ export class ActaSpProComponent implements OnInit {
 
   //LISTAR USUARIOS
   cargarUsuario(): void {
-    this.usuarioService.listaUserEstado().subscribe(
+    const rol_sp = 'sp'
+    this.usuarioService.listaUserRol(rol_sp).subscribe(
       data => {
         this.usuario = data;
         this.listaVacia = undefined;

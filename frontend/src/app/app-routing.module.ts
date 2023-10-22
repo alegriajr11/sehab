@@ -55,7 +55,7 @@ import { NuevoUsuarioAdminComponent } from './usuario/admin/nuevo-usuario-admin.
 import { EditarUsuarioComponent } from './usuario/editar-usuario.component';
 import { ListaUsuarioComponent } from './usuario/lista-usuario.component';
 import { NuevoUsuarioComponent } from './usuario/nuevo-usuario.component';
-import { TodosServiciosComponent } from './roles/reso/home-estandar/todos-servicios/todos-servicios.component';
+import { TodosServiciosComponent } from './roles/reso/lista-verificacion/home-estandar/todos-servicios/todos-servicios.component';
 import { AtencionInmediataComponent } from './roles/reso/lista-verificacion/home-estandar/atencion-inmediata/atencion-inmediata.component';
 import { ConsultaExternaComponent } from './roles/reso/lista-verificacion/home-estandar/consulta-externa/consulta-externa.component';
 import { ApoyoDiagnosticoComponent } from './roles/reso/lista-verificacion/home-estandar/apoyo-diagnostico/apoyo-diagnostico.component';
@@ -90,6 +90,7 @@ import { EditarActaSpIndGuard } from './guards/editar-acta-sp-ind.guard';
 import { NuevoUsuarioRolComponent } from './usuario/nuevo-usuario-rol/nuevo-usuario-rol.component';
 import { ModalSedesPrestadorComponent } from './prestador/modal-sedes-prestador/modal-sedes-prestador.component';
 import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/editar-sedes-prestador/editar-sedes-prestador.component';
+import { ContadorComponent } from './roles/reso/contador/contador.component';
 
 
 const routes: Routes = [
@@ -177,9 +178,12 @@ const routes: Routes = [
 
 
   //Rutas RESOLUCIÓN
-  { path: 'reso', component: HomeResoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'reso', component: HomeResoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res', 'contador'] } },
   { path: 'reso/lista-verificacion', component: ListaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'servicios-capacidad', component: CapacidadInstaladaComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
+  //RUTA CONTADOR - RESOLUION 3100
+  { path: 'reso/contador', component: ContadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
 
   //RUTAS ACTA - RESOLUCIÓN 3100
   { path: 'reso/visita-verificacion', component: ActaVisitaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'coordinador'] } },
@@ -206,8 +210,8 @@ const routes: Routes = [
 
 
   //INFORME RESOLUCION - 3100 2019
-  { path: 'reso/informe', component: InformeResolucionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
-  { path: 'reso/informes-realizados', component: InformesRealizadosResolucionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'reso/informe', component: InformeResolucionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res', 'contador'] } },
+  { path: 'reso/informes-realizados', component: InformesRealizadosResolucionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res', 'contador'] } },
 
 
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },

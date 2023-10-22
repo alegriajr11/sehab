@@ -70,6 +70,9 @@ export const environment = {
 
 
   //RESOLUCIÓN 3100/2019
+  //ACTA-VERIFICACION
+  actaVerificacion: 'http://localhost:8080/verificacion/',
+
   todos_serviciosURL: 'http://localhost:8080/criterio-servicios/',
 
   //PRESTADOR

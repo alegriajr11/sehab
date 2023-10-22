@@ -25,13 +25,14 @@
                 ACTA DE VERIFICACION Y SEGUIMIENTO</h2>
             <hr class="up">
             <form novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()" id="form">
-                <div class="col-md-1">
+
+                <div id="num-acta" class="col-md-3 mb-3">
                     <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
                     <input type="number" min="0" class="form-control" id="acta" readonly name="act_id"
                         [(ngModel)]="act_id">
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-2 mb-3">
                     <label for="inicial" class="form-label">VISITA INICIAL</label>
                     <label class="switch">
                         <input type="checkbox" id="inicial" onclick="unsoloCheckbox()" name="act_visita_inicial"
@@ -40,7 +41,7 @@
                     </label>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-3 mb-3">
                     <label for="segumiento" class="form-label">VISITA DE SEGUIMIENTO</label>
                     <label class="switch">
                         <input type="checkbox" id="segumiento" onclick="unsoloCheckbox()" name="act_visita_seguimiento"
@@ -51,23 +52,26 @@
                 <div *ngIf="showTipoVisitaMessage" class="validation-message-visita">Seleccione un Tipo de
                     Visita.</div>
 
-                <div class="col-md-3">
+                <div class="col-md-4 mb-3">
                     <label class="form-label">FECHA INICIAL</label>
-                    <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
+                    <input type="date" class="form-control fecha-input" id="fecha-inicial" pattern="dd/MM/yyyy"
                         name="act_fecha_inicial" [(ngModel)]="act_fecha_inicial" [ngModelOptions]="{standalone: true}"
                         ngDefaultControl (change)="habilitarFechaFinal(); ocultarMensajes()">
                     <div *ngIf="showFechaInicialMessage" class="validation-message">Seleccione la Fecha
                         Inicial.</div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-4 mb-3">
                     <label class="form-label">FECHA FINAL</label>
-                    <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
-                        [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial" (change)="ocultarMensajes()">
+                    <input type="date" class="form-control fecha-input" id="fecha-final" pattern="dd/MM/yyyy"
+                        name="act_fecha_final" [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}"
+                        ngDefaultControl [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial"
+                        (change)="ocultarMensajes()">
                     <div *ngIf="showFechaFinalMessage" class="validation-message">Seleccione la Fecha
                         Final.</div>
                 </div>
+
+
 
                 <div class="col-12">
                     <hr class="medio">
@@ -251,9 +255,9 @@
                 </div>
 
 
-                <!--BOTON MODAL FIRMA-->
+                <!--BOTON CONFIRMAR SI RECIBE VISITA-->
                 <div class="col-4">
-                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma Prestador</span>
+                    <span class="button-like btn-span" (click)="recibeVisita()">No Recibe Visita</span>
                 </div>
 
 

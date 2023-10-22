@@ -12,10 +12,6 @@
     </div>
 </div>
 
-<ng-template #modalTemplate>
-    <app-modal-firma-verificacion [dataFromParent]="modalRef"></app-modal-firma-verificacion>
-</ng-template>
-
 <br>
 <div class="container">
     <div class="card">
@@ -24,7 +20,7 @@
                 HABILITACION</h2>
             <hr class="up">
             <form novalidate class="row g-3" name="ps" (ngSubmit)="onRegister()" id="form">
-                <div class="col-md-1">
+                <div class="col-md-2">
                     <label for="inputN_Acta" class="form-label text-center">N°ACTA</label>
                     <input type="number" min="0" class="form-control" id="acta" readonly name="act_id"
                         [(ngModel)]="act_id">
@@ -40,7 +36,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="segumiento" class="form-label">VISITA DE SEGUIMIENTO</label>
+                    <label for="segumiento" class="form-label">VISITA DE CERTIFICACION</label>
                     <label class="switch">
                         <input type="checkbox" id="segumiento" onclick="unsoloCheckbox()" name="act_visita_seguimiento"
                             [(ngModel)]="act_visita_seguimiento">
@@ -57,7 +53,7 @@
                     </label>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-3">
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
                         name="act_fecha_inicial" [(ngModel)]="act_fecha_inicio" [ngModelOptions]="{standalone: true}"
@@ -81,7 +77,7 @@
                 <div class="col-md-6">
                     <label for="habilitado" class="form-label">Municipio:</label>
                     <select id="mun_id" name="mun_id" class="form-select form-control"
-                        (change)="cargarPrestadoresByMun()" [(ngModel)]="act_municipio" ngDefaultControl>
+                        (change)="cargarPrestadoresByMun();" [(ngModel)]="act_municipioId" ngDefaultControl>
                         <option value="" disabled selected hidden>Selecciona un Municipio...</option>
                         <option *ngFor="let municipio of municipio" [value]="municipio.mun_id">
                             {{ municipio.mun_nombre }}
@@ -92,7 +88,8 @@
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Prestador:</label>
                     <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()"
-                        [(ngModel)]="act_prestador" ngDefaultControl>
+                        [(ngModel)]="act_prestadorId" ngDefaultControl
+                        (change)="cargarSedesByPrestador()">
                         <option value="" disabled selected hidden>Selecciona un Prestador...</option>
                         <option *ngFor="let prest of prestador" [value]="prest.pre_cod_habilitacion">
                             {{ prest.pre_nombre }}
@@ -102,17 +99,20 @@
 
                 <div class="col-12">
                     <label for="principal" class="form-label">Sede:</label>
-                    <select id="sede" class="form-select form-control" [(ngModel)]="act_sede"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl>
-                        <option disabled selected hidden>Sede...</option>
-                        <option value="">...........</option>
-                        <option value="">...........</option>
+
+                    <select id="sedep" class="form-select form-control" [(ngModel)]="act_sede_principalId"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="sedeSeleccionada()"
+                        [disabled]="!habilitarSelectSede">
+                        <option value="" disabled selected hidden>Selecciona una Sede...</option>
+                        <option *ngFor="let list_sede of sede" [value]="list_sede.sede_id">
+                            {{ list_sede.sede_nombre }}
+                        </option>
                     </select>
                 </div>
 
                 <div class="col-12">
                     <label for="" class="form-label">Tipo de Prestador:</label>
-                    <input type="text" class="form-control" id="codclasificacion" placeholder="Tipo de Prestador"
+                    <input type="text" class="form-control" id="clasificacionPrestador" placeholder="Tipo de Prestador"
                         readonly>
                     <input type="hidden" name="act_clasificacion" [(ngModel)]="act_clasificacion">
                 </div>
@@ -176,89 +176,27 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="" class="form-label">Municipio:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_municipio" placeholder="Municipio..."
-                        [(ngModel)]="dat_encontrado_municipio">
-                </div>
-
-                <div class="col-md-6">
-                    <label for="" class="form-label">Nombre del Prestador:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_prestador" placeholder="Prestador..."
-                        [(ngModel)]="dat_encontrado_prestador">
-                </div>
-
-                <div class="col-md-6">
-                    <label for="" class="form-label">Sede:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_sede" placeholder="Sede..."
-                        [(ngModel)]="dat_encontrado_sede">
-                </div>
-
-                <div class="col-md-6">
-                    <label for="" class="form-label">Tipo de Prestador:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_clasificacion"
-                        placeholder="Tipo de Prestador..." [(ngModel)]="dat_encontrado_clasificacion">
-                </div>
-
-                <div class="col-md-6">
-                    <label for="" class="form-label">Código Habilitación:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_cod_sede"
-                        placeholder="Código Habilitación..." [(ngModel)]="dat_encontrado_cod_sede">
-                </div>
-
-                <div class="col-md-6">
-                    <label for="" class="form-label">Código Habilitación Sede:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_nit"
-                        placeholder="Código Habilitación Sede..." [(ngModel)]="dat_encontrado_nit">
-                </div>
-
-                <div class="col-md-6">
                     <label for="" class="form-label">Teléfono:</label>
-                    <input type="tel" class="form-control" name="dato_encontrado_telefono" placeholder="Teléfono..."
+                    <input type="tel" class="form-control" name="dato_encontrado_telefono" id="encontrado_telefono" placeholder="Teléfono..."
                         [(ngModel)]="dat_encontrado_telefono">
                 </div>
 
                 <div class="col-md-6">
-                    <label for="" class="form-label">Nit:</label>
-                    <input type="text" class="form-control" name="dat_encontrado_nit" placeholder="Nit..."
-                        [(ngModel)]="dat_encontrado_nit">
-                </div>
-
-                <div class="col-md-6">
                     <label for="" class="form-label">Dirección:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_direccion" placeholder="Dirección..."
+                    <input type="text" class="form-control" name="dato_encontrado_direccion" id="encontrado_direccion" placeholder="Dirección..."
                         [(ngModel)]="dat_encontrado_direccion">
                 </div>
 
                 <div class="col-md-6">
-                    <label for="" class="form-label">Representante Legal:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_representante"
-                        placeholder="Representante Legal..." [(ngModel)]="dat_encontrado_representante">
-                </div>
-
-                <div class="col-md-6">
-                    <label for="" class="form-label">Gerente - Director:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_gerente"
-                        placeholder="Gerente - Director..." [(ngModel)]="dat_encontrado_gerente">
-                </div>
-
-                <div class="col-md-6">
                     <label for="" class="form-label">Correo Electrónico:</label>
-                    <input type="text" class="form-control" name="dato_encontrado_correo" placeholder="E-mail..."
+                    <input type="text" class="form-control" name="dato_encontrado_correo" id="encontrado_correo" placeholder="E-mail..."
                         [(ngModel)]="dat_encontrado_correo">
                 </div>
 
-                <div class="col-12">
-                    <hr class="medio">
+                <div class="col-md-12">
+                    <label for="" class="form-label">Observaciones:</label>
+                    <input type="text" class="form-control" name="act_observaciones" [(ngModel)]="act_observaciones">
                 </div>
-
-                <!-- <div class="col-12">
-                    <h3>LEVANTAMIENTO DE MEDIDA</h3>
-                </div>
-                
-                <div class="col-12">
-                    <span class="button-like btn-span" title="Si existe levantamiento de medida, agrégalo">Agregar Levantamiento de medida</span>
-                </div> -->
-                
 
                 <div class="col-12">
                     <hr class="medio">
@@ -268,11 +206,31 @@
                     <h3>MIEMBROS DE LA COMISIÓN TÉCNICA DE VERIFICADORES</h3>
                 </div>
 
+                <div *ngFor="let selectedUser of selectedUsersContador; let i = index">
+                    <div class="col-12">
+                        <label for="" class="form-label">Usuario Contabilidad:</label>
+                        <select class="form-select form-control" [(ngModel)]="selectedUser.userId"
+                            [ngModelOptions]="{standalone: true}" ngDefaultControl
+                            (ngModelChange)="updateSelectedUserId(selectedUser, $event)">
+                            <option hidden>Selecciona el Nombre...</option>
+                            <option *ngFor="let usuarioContador of usuariosContador" [value]="usuarioContador.usu_id">
+                                {{ usuarioContador.usu_nombre }} {{ usuarioContador.usu_apellido }}
+                            </option>
+                        </select>
+                    </div>
+                    <!-- Agregar botón para eliminar este select duplicado -->
+                    <div class="col-12">
+                        <span class="button-like btn-span" (click)="removeSelectContador(selectedUser.userId)">X</span>
+                    </div>
+                </div>
+
+                <!--Habilitar Select User-->
+                <div class="col-12" *ngIf="!userContador">
+                    <span class="button-like btn-span" (click)="addSelectContador()">Agregar Contador</span>
+                </div>
+
                 <div class="col-12">
-                    <label for="" class="form-label">Usuario Contabilidad :</label>
-                    <input type="text" class="form-control" id="usuAdicional"
-                        placeholder="Usuario Contabilidad Opcional...">
-                    <input type="hidden" name="act_usu_adicional" [(ngModel)]="act_usu_adicional">
+                    <hr>
                 </div>
 
                 <div *ngFor="let selectedUser of selectedUsersVerificadores; let i = index">
@@ -280,17 +238,18 @@
                     <div class="col-12">
                         <label for="" class="form-label">Verificador SOGCS:</label>
                         <select class="form-select form-control" [(ngModel)]="selectedUser.userId"
-                            [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                            [ngModelOptions]="{standalone: true}" ngDefaultControl
+                            (ngModelChange)="updateSelectedUserId(selectedUser, $event)">
                             <option hidden>Selecciona el Nombre...</option>
-                            <option *ngFor="let usuario of usuariosDisponibles" [value]="usuario.usu_id">
+                            <option *ngFor="let usuario of usuarios" [value]="usuario.usu_id">
                                 {{ usuario.usu_nombre }} {{ usuario.usu_apellido }}
                             </option>
                         </select>
                     </div>
-
                     <!-- Agregar botón para eliminar este select duplicado -->
                     <div class="col-12">
-                        <span class="button-like btn-span" (click)="removeSelectVerificador(i)">X</span>
+                        <span class="button-like btn-span"
+                            (click)="removeSelectVerificador(selectedUser.userId)">X</span>
                     </div>
                 </div>
 
@@ -298,7 +257,6 @@
                 <div class="col-md-12">
                     <span class="button-like btn-span" (click)="addSelectVerificador()">Agregar Verificador SOGCS</span>
                 </div>
-
 
                 <div class="col-12">
                     <hr class="medio">
@@ -311,17 +269,19 @@
                 <div *ngFor="let selectedUser of selectedUsersProfesionales; let i = index">
                     <!-- Aquí va el select duplicado -->
                     <div class="col-12">
-                        <label for="" class="form-label">Verificador SOGCS:</label>
+                        <label for="" class="form-label">Profesional Apoyo SOGCS:</label>
                         <select class="form-select form-control" [(ngModel)]="selectedUser.userId"
-                            [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                            [ngModelOptions]="{standalone: true}" ngDefaultControl
+                            (ngModelChange)="updateSelectedUserId(selectedUser, $event)">
                             <option hidden>Selecciona el Nombre...</option>
-                            <option *ngFor="let usuario of usuarios" [value]="usuario.usu_id">{{ usuario.usu_nombre }}
+                            <option *ngFor="let usuario of usuariosApoyo" [value]="usuario.usu_id">{{ usuario.usu_nombre }}
                                 {{ usuario.usu_apellido }}</option>
                         </select>
                     </div>
                     <!-- Agregar botón para eliminar este select duplicado -->
                     <div class="col-12">
-                        <span class="button-like btn-span" (click)="removeSelectProfesional(i)">X</span>
+                        <span class="button-like btn-span"
+                            (click)="removeSelectProfesional(selectedUser.userId)">X</span>
                     </div>
                 </div>
 
@@ -341,15 +301,9 @@
                         placeholder="Funcionario Visita..." [(ngModel)]="act_recibe_visita">
                 </div>
 
-                <!--BOTON MODAL FIRMA-->
-                <div class="col-4">
-                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma Prestador</span>
-                </div>
-
-
                 <div class="col-12">
-                    <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
-                        (click)="ruta()">
+                    <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar"
+                        type="submit" routerLink="/reso/lista-verificacion">
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>

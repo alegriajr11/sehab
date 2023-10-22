@@ -36,7 +36,7 @@ export class UsuarioInterceptor implements HttpInterceptor {
     setInterval(() => {
       const currentTime = new Date();
       const timeDifference = currentTime.getTime() - this.lastInteractionTime.getTime();
-      const maxInactiveTime = 60 * 60 * 1000; // 1 hora en milisegundos
+      const maxInactiveTime = 15 * 60 * 1000; // 15 minutos en milisegundos
 
       if (timeDifference > maxInactiveTime && this.tokenService.isLogged()) {
         // Realizar las acciones necesarias para cerrar la sesión
