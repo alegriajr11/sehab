@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CalificacionindService } from './calificacionind.service';
 import { calificacionindDto } from '../dto/calificacionind.dto';
 
@@ -22,4 +22,8 @@ export class CalificacionindController {
         return await this.calificacionindService.getallcriterioetapa(id)
     }
 
+    @Put(':id')
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: calificacionindDto) {
+        return await this.calificacionindService.edit(id,dto);
+    }
 }

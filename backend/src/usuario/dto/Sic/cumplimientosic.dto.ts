@@ -10,11 +10,12 @@ export class CumplimientoSicDto {
 
     @IsNotBlank()
     @IsString()
-    @MaxLength(11, {message: 'El Cumplimiento debe tener: longitud máxima de 11 caracteres'})
+    @MaxLength(11, { message: 'El Cumplimiento debe tener: longitud máxima de 11 caracteres' })
     cumpl_cumple: string;
 
     @IsString()
-    @MaxLength(300, {message: 'La Observacion debe tener: longitud máxima de 300 caracteres'})
+    @MaxLength(300, { message: 'La Observacion debe tener: longitud máxima de 300 caracteres' })
     cumpl_observaciones: string;
-    
+
+
 }

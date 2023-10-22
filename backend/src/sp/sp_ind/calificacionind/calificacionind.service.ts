@@ -25,6 +25,16 @@ export class CalificacionindService {
         private etapaindRepository: EtapaIndRepository,
     ) { }
 
+    //ENCONTRAR POR ID - CALIFICACION IND
+    async findById(cal_id: number): Promise<CalificacionIndEntity> {
+        const calificacion = await this.calificacionIndRepository.findOne({ where: { cal_id } });
+        if (!calificacion) {
+            throw new NotFoundException(new MessageDto('La calificacion No Existe'));
+        }
+        return calificacion;
+    }
+
+
     //CREAR CALIFICACION
     async create(eva_id: number, cri_id: number, dto: calificacionindDto): Promise<any> {
         const evaluacion = await this.evaluacionIndependientesRepository.findOne({ where: { eva_id: eva_id } });
@@ -110,5 +120,26 @@ export class CalificacionindService {
         .getMany()
 
         return criterio
+    }
+
+    //EDITAR CALIFICACION
+    async edit(id: number,  dto: calificacionindDto): Promise<any> {
+        try {
+            const calificacion= await this.findById(id);
+            if (!calificacion) {
+                throw new NotFoundException(new MessageDto('El cumplimiento no existe'));
+            }
+
+            dto.cal_nota ? calificacion.cal_nota = dto.cal_nota : calificacion.cal_nota = calificacion.cal_nota;
+            dto.cal_observaciones ? calificacion.cal_observaciones = dto.cal_observaciones : calificacion.cal_observaciones = calificacion.cal_observaciones;
+
+            await this.calificacionIndRepository.save(calificacion);
+
+
+            return new MessageDto(`La calificacion ha sido editada`);
+        } catch (error) {
+            // Aquí puedes manejar el error como desees, por ejemplo, registrarlo o lanzar una excepción personalizada.
+            throw error;
+        }
     }
 }
