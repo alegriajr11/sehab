@@ -88,7 +88,7 @@ export class CalificacionpamecService {
 
             const calificacion = await this.findByIdCalificacionPamec(id);
             if (!calificacion)
-                throw new NotFoundException(new MessageDto('El Criterio No Existe'));
+                throw new NotFoundException(new MessageDto('La Calificacion No Existe'));
 
             dto.cal_nota ? calificacion.cal_nota = dto.cal_nota : calificacion.cal_nota = calificacion.cal_nota;
             dto.cal_aplica ? calificacion.cal_aplica = dto.cal_aplica : calificacion.cal_aplica = calificacion.cal_aplica;
@@ -298,23 +298,6 @@ export class CalificacionpamecService {
         return criterio
     }
 
-    async getallcriterioxtituloonce(eva_id: number): Promise<CalificacionpamEntity[]> {
-
-        let titulo_uno
-        titulo_uno = "ACTIVIDADES PREVIAS"
-
-        const criterio = await this.calificacionPamRepository.createQueryBuilder('calificacion')
-            .select(['calificacion', 'criteriopam_calificacion.crip_nombre', 'criteriopam_calificacion.crip_desarrollo_etapas','crip_actividad.act_nombre','eval_acta_pamec.act_nombre_prestador',
-            'eval_acta_pamec.act_nombre_funcionario','eval_acta_pamec.act_cargo_funcionario','eval_acta_pamec.act_nombre_prestador'])
-            .innerJoin('calificacion.criteriopam_calificacion', 'criteriopam_calificacion')
-            .innerJoinAndSelect('criteriopam_calificacion.crip_actividad', 'crip_actividad')
-            .innerJoinAndSelect('calificacion.cal_evaluacion_pam', 'cal_evaluacion_pam')
-            .innerJoinAndSelect('cal_evaluacion_pam.eval_acta_pamec', 'eval_acta_pamec')
-            .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_uno })
-            .andWhere('cal_evaluacion_pam.eva_id = :eva_id', { eva_id: eva_id })
-            .getMany()
-
-        return criterio
-    }
+    
 
 }

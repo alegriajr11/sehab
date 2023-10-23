@@ -29,6 +29,15 @@ export class CumplimientosicService {
         private indicadorRepository: IndicadorRepository,
     ) { }
 
+    //ENCONTRAR POR ID - CUMPLIMIENTO SIC 
+    async findById(cumpl_id: number): Promise<CumplimientoSicEntity> {
+        const cumplimiento = await this.cumplimientoSicRepository.findOne({ where: { cumpl_id } });
+        if (!cumplimiento) {
+            throw new NotFoundException(new MessageDto('El Cumplimiento No Existe'));
+        }
+        return cumplimiento;
+    }
+
     //CREAR CUMPLIMIENTO
     async create(eva_id: number, cri_id: number, ind_id: string, dto: CumplimientoSicDto): Promise<any> {
         const evaluacion = await this.evaluacionsicRepository.findOne({ where: { eva_id: eva_id } });
@@ -52,9 +61,9 @@ export class CumplimientosicService {
     //LISTANDO CRITERIOS Y CUMPLIMIENTO POR EVALUACION
     async getCriCalIdeva(id: number): Promise<CumplimientoSicEntity[]> {
         const cumplimiento = await this.cumplimientoSicRepository.createQueryBuilder('cumplimiento')
-            .select(['cumplimiento', 'criterio_sic.cri_id', 'criterio_sic.cri_nombre','eval_acta_sic.act_nombre_prestador',
-            'eval_acta_sic.act_nombre_funcionario','eval_acta_sic.act_cargo_funcionario','eval_acta_sic.act_nombre_prestador',
-            'indicadorsic.ind_id', 'indicadorsic.ind_nombre'])
+            .select(['cumplimiento', 'criterio_sic.cri_id', 'criterio_sic.cri_nombre', 'eval_acta_sic.act_nombre_prestador',
+                'eval_acta_sic.act_nombre_funcionario', 'eval_acta_sic.act_cargo_funcionario', 'eval_acta_sic.act_nombre_prestador',
+                'indicadorsic.ind_id', 'indicadorsic.ind_nombre'])
             .innerJoin('cumplimiento.criterio_sic', 'criterio_sic')
             //.innerJoin('calificacion.cump_eva_sic', 'cump_eva_sic')
             .innerJoinAndSelect('cumplimiento.cump_eva_sic', 'cump_eva_sic')
@@ -77,5 +86,26 @@ export class CumplimientosicService {
             .getMany()
         if (!cumplimientoestandar) throw new NotFoundException(new MessageDto('No Existe en la lista'))
         return cumplimientoestandar
+    }
+
+    //EDITAR CUMPLIMIENTOS
+    async edit(id: number, dto: CumplimientoSicDto): Promise<any> {
+        try {
+            const cumplimiento = await this.findById(id);
+            if (!cumplimiento) {
+                throw new NotFoundException(new MessageDto('El cumplimiento no existe'));
+            }
+
+            dto.cumpl_cumple ? cumplimiento.cumpl_cumple = dto.cumpl_cumple : cumplimiento.cumpl_cumple = cumplimiento.cumpl_cumple;
+            dto.cumpl_observaciones ? cumplimiento.cumpl_observaciones = dto.cumpl_observaciones : cumplimiento.cumpl_observaciones = cumplimiento.cumpl_observaciones;
+
+            await this.cumplimientoSicRepository.save(cumplimiento);
+
+
+            return new MessageDto(`El cumplimiento ha sido Editado`);
+        } catch (error) {
+            // Aquí puedes manejar el error como desees, por ejemplo, registrarlo o lanzar una excepción personalizada.
+            throw error;
+        }
     }
 }
