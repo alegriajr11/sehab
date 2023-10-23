@@ -24,11 +24,14 @@ export class SedeController {
         return await this.sedeService.findByNombreSede(sede_nombre);
     }
 
+    //FILTRAR SEDE POR ID DE PRESTADOR
     @UseGuards(JwtAuthGuard)
     @Get('nombre/sede/prestador/:id')
     async getManySedePrestador(@Param('id') id: string) {
         return await this.sedeService.findBySedePrestador(id);
     }
+
+
     @Get('nombre/sede/prestador/principal/:id')
     async getSedePrincipal(@Param('id') id: string) {
         return await this.sedeService.findBySedePrestadorNumero(id);

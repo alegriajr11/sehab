@@ -44,7 +44,7 @@ export class ActaSicPdfEntity {
     @Column({ type: 'varchar', length: 120, nullable: false })
     act_email: string;
 
-    @Column({ type: 'varchar', length: 100, nullable: false })
+    @Column({ type: 'varchar', length: 100, nullable: true })
     act_sede_principal: string;
 
     @Column({ type: 'varchar', length: 35, nullable: true })
@@ -59,7 +59,7 @@ export class ActaSicPdfEntity {
     @Column({ type: 'varchar', length: 12, nullable: false })
     act_cod_prestador
 
-    @Column({ type: 'varchar', length: 20, nullable: false })
+    @Column({ type: 'varchar', length: 20, nullable: true })
     act_cod_sede
 
     @Column({ type: 'varchar', length: 150, nullable: false })

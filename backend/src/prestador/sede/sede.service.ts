@@ -29,7 +29,8 @@ export class SedeService {
     //LISTAR TODAS LAS SEDES
     async getallSedes(): Promise<SedeEntity[]> {
         const sede = await this.sedeRepository.createQueryBuilder('sede')
-            .select(['sede'])
+            .select(['sede', 'sede_municipio.sede_mun_nombre'])
+            .innerJoin('sede.sede_municipio', 'sede_municipio')
             .getMany()
         if (sede.length === 0) throw new NotFoundException(new MessageDto('No hay sedes en la lista'))
         return sede;
@@ -60,7 +61,9 @@ export class SedeService {
     //LISTAR SEDES POR ID PRESTADOR
     async findBySedePrestador(pre_cod_habilitacion: string): Promise<SedeEntity[]> {
         const sede_prestador = await this.sedeRepository.createQueryBuilder('sede')
+            .select(['sede', 'sede_municipio.sede_mun_nombre'])
             .innerJoin('sede.sede_prestador', 'sede_prestador')
+            .innerJoin('sede.sede_municipio', 'sede_municipio')
             .where('sede_prestador.pre_cod_habilitacion = :cod_prestador', { cod_prestador: pre_cod_habilitacion })
             // .andWhere('sede.sede_principal LIKE :principal', { principal: '%NO%' })
             .getMany()

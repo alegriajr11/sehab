@@ -458,9 +458,11 @@ export class SicActaService {
             if (cumplimientoestandar.length) {
                 let rows_elements = [];
 
+                let idCounter = 1; // Inicializa un contador
                 cumplimientoestandar.forEach(item => {
-                    var temp_list = [item.criterioestandar_sic.crie_id, item.criterioestandar_sic.crie_nombre, item.cumpl_cumple, item.cumpl_observaciones];
+                    var temp_list = [idCounter, item.criterioestandar_sic.crie_nombre, item.cumpl_cumple, item.cumpl_observaciones];
                     rows_elements.push(temp_list)
+                    idCounter++;
                 })
 
                 const tableOptions = {
@@ -486,7 +488,6 @@ export class SicActaService {
                 const promedio = totalCalificacionesEtapa1 / totalCalificacionesCountEtapa1;
                 const promedioRedondeado = promedio.toFixed(2);
 
-                doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
 
 
@@ -495,9 +496,11 @@ export class SicActaService {
             if (cumplimiento.length) {
                 let rows_elements = [];
 
+                let idCounter = 1; // Inicializa un contador
                 cumplimiento.forEach(item => {
-                    var temp_list = [item.criterio_sic.cri_id, item.criterio_sic.cri_nombre, item.cumpl_cumple, item.cumpl_observaciones];
+                    var temp_list = [idCounter, item.criterio_sic.cri_nombre, item.cumpl_cumple, item.cumpl_observaciones];
                     rows_elements.push(temp_list)
+                    idCounter++;
                 })
 
                 const tableOptions = {

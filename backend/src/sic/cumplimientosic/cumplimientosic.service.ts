@@ -61,6 +61,7 @@ export class CumplimientosicService {
             .innerJoinAndSelect('cump_eva_sic.eval_acta_sic', 'eval_acta_sic')
             .innerJoinAndSelect('cumplimiento.indicadorsic', 'indicadorsic')
             .where('cump_eva_sic.eva_id = :eva_id', { eva_id: id })
+            .orderBy('criterio_sic.cri_id', 'ASC')
             .getMany()
         if (!cumplimiento) throw new NotFoundException(new MessageDto('No Existe en la lista'))
         return cumplimiento
