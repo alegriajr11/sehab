@@ -80,8 +80,11 @@ export class ActaSpIndependientePdfEntity {
     @Column({ type: 'varchar', nullable: false, default:true })
     act_estado: string;
 
-    // @Column({ type: 'boolean', nullable: false, default: true })
-    // act_recibe_visita: boolean;
+    @Column({ type: 'varchar', length: 10, nullable: true })
+    act_recibe_visita: string;
+    
+    @Column({ type: 'varchar', length: 10, nullable: true })
+    noFirmaActa: string;    
     
 
     @BeforeInsert()
