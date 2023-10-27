@@ -29,7 +29,7 @@ export class EditarUsuarioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = this.activatedRoute.snapshot.params['id'];
+    const id = this.activatedRoute.snapshot.queryParams['id'];
     this.usuarioService.oneUser(id).subscribe(
       data => {
         this.usuario = data;
@@ -70,7 +70,7 @@ export class EditarUsuarioComponent implements OnInit {
   //METODO ACTUALIZAR USUARIO
   onUpdate(): void {
     //Por medio de ActivateRoute se atrapa el id del Usuario
-    const id = this.activatedRoute.snapshot.params['id'];
+    const id = this.activatedRoute.snapshot.queryParams['id'];
     //Construcción del DTO Token
     const token = this.tokenService.getToken();
     const tokenDto: TokenDto = new TokenDto(token);

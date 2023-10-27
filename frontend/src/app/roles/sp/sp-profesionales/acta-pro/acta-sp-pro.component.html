@@ -141,8 +141,7 @@
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Representante Legal:</label>
-                    <input type="text" class="form-control" id="repleg" placeholder="Representante Legal" readonly>
-                    <input type="hidden" name="act_representante" [(ngModel)]="act_representante">
+                    <input type="text" class="form-control" id="rep_legal" name="act_representante" [(ngModel)]="act_representante" placeholder="Representante Legal">
                 </div>
 
 
@@ -217,9 +216,9 @@
                     </div>
                 </div>
 
-                <!--BOTON MODAL FIRMA-->
+                <!--BOTON RECIBE VISITA-->
                 <div class="col-4">
-                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Agregar Firma Prestador</span>
+                    <span class="button-like btn-span" >No Recibe Visita</span>
                 </div>
 
                 <div class="col-12">

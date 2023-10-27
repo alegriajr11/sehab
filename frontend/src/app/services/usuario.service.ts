@@ -55,6 +55,7 @@ export class UsuarioService {
     return this.httpClient.delete<any>(`${this.usuarioURL}${id}`, { body: tokenDto});
   }
 
+  //GENERAR LISTADO DE USUARIOS POR PDF
   public pdf(){
     return this.httpClient.get(`${this.generarPdfURL}` , {responseType: 'blob'}).subscribe(res => {
       const file = new Blob([res], { type: 'application/pdf' });

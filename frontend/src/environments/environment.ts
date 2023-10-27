@@ -13,8 +13,8 @@ export const environment = {
   prestadorMunicipioURL: 'http://localhost:8080/prestador/mun/',
   prestadorPamecMunicipioURL: 'http://localhost:8080/prestador/mun/pamec/',
   
-  prestadorIpsMunicipioURL: 'http://localhost:8080/prestador/mun/sp/ips',
-  prestadorIndMunicipioURL: 'http://localhost:8080/prestador/mun/sp/pro/ips',
+  prestadorIpsMunicipioURL: 'http://localhost:8080/prestador/mun/sp/ips/',
+  prestadorIndMunicipioURL: 'http://localhost:8080/prestador/mun/sp/pro/ind/',
   rolURL: 'http://localhost:8080/rol/',
   claseURL: 'http://localhost:8080/clase/',
   generarPdfURL: 'http://localhost:8080/generarpdf/usuarios/',
@@ -49,6 +49,10 @@ export const environment = {
   etapaURL: 'http://localhost:8080/sp-ind/',
   criterioindURL: 'http://localhost:8080/criterioind/',
   criteindURL: 'http://localhost:8080/criterioind/criterio/',
+  calificacionIndURL: 'http://localhost:8080/calificacionind/',
+  
+  //EVALUACION-SP - INDEPENDIENTES
+  evaluacionIndUrl: 'http://localhost:8080/evaluacion-ind/',
 
 
   //SEGURIDAD DEL PACIENTE - IPS

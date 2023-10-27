@@ -66,15 +66,7 @@ import { HomeCriteriosComponent } from './usuario/admin/resolucion/home-criterio
 import { CriterioTodosServiciosComponent } from './usuario/admin/resolucion/criterio-todos-servicios/criterio-todos-servicios.component';
 import { AuditoriaComponent } from './usuario/admin/auditoria/auditoria.component';
 import { HomeEstandarComponent } from './roles/reso/lista-verificacion/home-estandar/home-estandar.component';
-import { EvaluacionUnoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-uno/evaluacion-uno.component';
-import { EvaluacionDosComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-dos/evaluacion-dos.component';
-import { EvaluacionTresComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-tres/evaluacion-tres.component';
-import { EvaluacionCuatroComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-cuatro/evaluacion-cuatro.component';
-import { EvaluacionCincoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-cinco/evaluacion-cinco.component';
-import { EvaluacionSeisComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-seis/evaluacion-seis.component';
-import { EvaluacionSieteComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-siete/evaluacion-siete.component';
-import { EvaluacionOchoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-ocho/evaluacion-ocho.component';
-import { EvaluacionNueveComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-nueve/evaluacion-nueve.component';
+import { EvaluacionSpIpsComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-sp-ips/evaluacion-sp-ips.component';
 import { ActaVisitaVerificacionComponent } from './roles/reso/acta-visita-verificacion/acta-visita-verificacion.component';
 import { ActaVisitaIvcComponent } from './roles/reso/acta-visita-ivc/acta-visita-ivc.component';
 import { InformeResolucionComponent } from './roles/reso/informe-resolucion/informe-resolucion.component';
@@ -91,6 +83,7 @@ import { NuevoUsuarioRolComponent } from './usuario/nuevo-usuario-rol/nuevo-usua
 import { ModalSedesPrestadorComponent } from './prestador/modal-sedes-prestador/modal-sedes-prestador.component';
 import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/editar-sedes-prestador/editar-sedes-prestador.component';
 import { ContadorComponent } from './roles/reso/contador/contador.component';
+import { EditarEvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/editar-evaluacion-sp-pro/editar-evaluacion-sp-pro.component';
 
 
 const routes: Routes = [
@@ -130,9 +123,9 @@ const routes: Routes = [
   { path: 'usuarios/nuevo', component: NuevoUsuarioComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   { path: 'usuarios/nuevo/admin', component: NuevoUsuarioAdminComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   { path: 'usuarios/nuevo/rol', component: NuevoUsuarioRolComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
-  { path: 'usuarios/editar/:id', component: EditarUsuarioComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
+  { path: 'usuarios/editar', component: EditarUsuarioComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
 
-  { path: 'usuarios/restablecer/:id', component: ResetpasswordComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
+  { path: 'usuarios/restablecer', component: ResetpasswordComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
 
   { path: 'usuario/cambiar-contraseña', component: PasswordcComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sic', 'sp', 'pamec', 'res'] } },
 
@@ -150,26 +143,19 @@ const routes: Routes = [
   { path: 'sp/evaluaciones-ips', component: EvaluacionesSpIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   //{ path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard,], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/home-evaluacion-ips', component: HomeEvaluacionIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-uno', component: EvaluacionUnoComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-dos', component: EvaluacionDosComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-tres', component: EvaluacionTresComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-cuatro', component: EvaluacionCuatroComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-cinco', component: EvaluacionCincoComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-seis', component: EvaluacionSeisComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-siete', component: EvaluacionSieteComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-ocho', component: EvaluacionOchoComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-nueve', component: EvaluacionNueveComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-uno', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
 
   //RUTAS SP-IPS EDITAR-ACTA
   { path: 'sp-ips/acta/editar/:id', component: EditarActaSpIpsComponent, canActivate: [UsuarioGuard, EditarActaSpIpsGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
+  
   //RUTAS SP-IND EDITAR-ACTA
   { path: 'sp-ind/acta/editar/:id', component: EditarActaSpProComponent, canActivate: [UsuarioGuard, EditarActaSpIndGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-
   //Rutas SP - PROFESIONALES
   { path: 'sp/acta-pro', component: ActaSpProComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/evaluaciones-pro', component: EvaluacionesSpProComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/evaluacion-pro', component: EvaluacionSpProComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-
+  { path: 'sp/evaluacion-pro/editar/:id', component: EditarEvaluacionSpProComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
+  
   //Rutas PAMEC
   { path: 'pamec', component: HomePamecComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'pamec'] } },
   { path: 'pamec/acta', component: ActaPamecComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'pamec'] } },
@@ -218,7 +204,7 @@ const routes: Routes = [
 
   //PRESTADORES
   { path: 'prestadores', component: ListaPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
-  { path: 'prestadores/editar/:id', component: EditarPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
+  { path: 'prestadores/editar', component: EditarPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   { path: 'prestadores/nuevo', component: NuevoPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },
   //SEDES - PRESTADORES
   { path: 'prestadores/sede', component: ModalSedesPrestadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin'] } },

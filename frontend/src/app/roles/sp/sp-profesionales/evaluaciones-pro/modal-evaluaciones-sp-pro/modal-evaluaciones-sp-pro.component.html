@@ -6,10 +6,24 @@
 	</div>
 </div>
 
+
 <div class="container">
 	<div class="row justify-content-between">
 		<div class="col-md-12">
 			<h4 class="modal-title pull-left text-center">{{nombre_prestador}}</h4>
+		</div>
+	</div>
+</div>
+
+<hr class="my-4">
+
+<div class="container">
+	<div class="row justify-content-between">
+        <div class="col-md-12 text-center">
+            <span>Verificador Responsable:</span>
+        </div>
+		<div class="col-md-12">
+			<h5 class="modal-title text-center underlined">{{nombre_funcionario}}</h5>
 		</div>
 	</div>
 </div>
@@ -50,14 +64,15 @@
 
 			<div class="col-md-9">
 				<button id="boton-evaluacion-sic" class="btn btn-dark esp btn-circle btn-xl"
-					title="Descargar Evaluación">
+					title="Descargar Evaluación" (click)="descargarEvaluacionInd()">
 					<i class='fas fa-file-download fa-lg'></i>
 				</button>
 				<span class="tittle-button">EVALUACIÓN</span>
 			</div>
 
 			<div class="col-md-3" *ngIf="estado_acta === '1'">
-				<button class="btn btn-dark esp btn-circle btn-xl" title="Editar Evaluación">
+				<button class="btn btn-dark esp btn-circle btn-xl" title="Editar Evaluación"
+				routerLink="/sp/evaluacion-pro/editar/{{id_evaluacion}}" (click)="modalRef.hide(); habilitarRutaEditar()">
 					<i class='fa fa-edit fa-lg'></i>
 				</button>
 			</div>

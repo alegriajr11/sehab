@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActaPamecDto } from 'src/app/models/Actas/actaPamePdf.dto';
 import { ActaSicPdfDto } from 'src/app/models/Actas/actaSicpdf.dto';
+import { ActaSpIndPdfDto } from 'src/app/models/Actas/actaSpIndPdf.dto';
 import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 import { TokenDto } from 'src/app/models/token.dto';
 import { environment } from 'src/environments/environment';
@@ -42,7 +43,7 @@ export class ActapdfService {
   }
 
   //FILTRAR ACTA POR FECHA - No ACTA - PRESTADOR - NIT
-  public listaActasSicFilter(year: number, act_id: number, act_prestador: string, act_nit: string): Observable<ActaSicPdfDto[]> {
+  public listaActasSicFilter(year: number, act_id: number, act_prestador: string, act_nit: string, tokenDto: string): Observable<ActaSicPdfDto[]> {
     let url = `${this.actasic_pdfUrl}busqueda/fecha/acta/prestador/nit?`;
 
     if (year) {
@@ -56,6 +57,9 @@ export class ActapdfService {
     }
     if (act_nit) {
       url += `act_nit=${act_nit}&`;
+    }
+    if (tokenDto) {
+      url += `tokenDto=${tokenDto}&`;
     }
 
     return this.httpClient.get<ActaSicPdfDto[]>(url);
@@ -102,8 +106,16 @@ export class ActapdfService {
   }
 
   //SOLICITUD ULTIMA ACTA DEL ROL SP_IND
-  public listaUltimaSpInd(): Observable<ActaSpPdfDto> {
-    return this.httpClient.get<ActaSpPdfDto>(this.actaSp_ind_pdf_URL + 'ultima/acta/spind')
+  public listaUltimaSpInd(): Observable<ActaSpIndPdfDto> {
+    return this.httpClient.get<ActaSpIndPdfDto>(this.actaSp_ind_pdf_URL + 'ultima/acta/spind')
+  }
+
+  //SOLICITUD ACTUALIZAR ACTA - SP_IPS
+  public updateActaSpInd(id: number, acta_sp_ind: ActaSpIndPdfDto, tokenDto: TokenDto): Observable<any> {
+    return this.httpClient.put<any>(`${this.actaSp_ind_pdf_URL}${id}`, {
+      dto: acta_sp_ind,
+      tokenDto: tokenDto
+    });
   }
 
 
@@ -125,7 +137,7 @@ export class ActapdfService {
 
 
   //FILTRAR ACTA POR FECHA - No ACTA - PRESTADOR - NIT
-  public listaActasSpIndFilter(year: number, act_id: number, act_prestador: string, act_nit: string): Observable<ActaSpPdfDto[]> {
+  public listaActasSpIndFilter(year: number, act_id: number, act_prestador: string, act_nit: string, tokenDto: string): Observable<ActaSpPdfDto[]> {
     let url = `${this.actaSp_ind_pdf_URL}busqueda/fecha/acta/prestador/nit?`;
 
     if (year) {
@@ -140,13 +152,16 @@ export class ActapdfService {
     if (act_nit) {
       url += `act_nit=${act_nit}&`;
     }
+    if (tokenDto) {
+      url += `tokenDto=${tokenDto}&`;
+    }
 
     return this.httpClient.get<ActaSpPdfDto[]>(url);
   }
 
 
   //FILTRAR ACTA POR FECHA - No ACTA - PRESTADOR - NIT
-  public listaActasSpIpsFilter(year: number, act_id: number, act_prestador: string, act_nit: string): Observable<ActaSpPdfDto[]> {
+  public listaActasSpIpsFilter(year: number, act_id: number, act_prestador: string, act_nit: string, tokenDto: string): Observable<ActaSpPdfDto[]> {
     let url = `${this.actasp_ips_pdfurl}busqueda/fecha/acta/prestador/nit?`;
 
     if (year) {
@@ -160,6 +175,10 @@ export class ActapdfService {
     }
     if (act_nit) {
       url += `act_nit=${act_nit}&`;
+    }
+
+    if (tokenDto) {
+      url += `tokenDto=${tokenDto}&`;
     }
 
     return this.httpClient.get<ActaSpPdfDto[]>(url);
@@ -188,9 +207,9 @@ export class ActapdfService {
 
 
 
-  //SOLICITUD LISTAR ACTAS DEL ROL SP - IPS
-  public listaSpInd(): Observable<ActaSpPdfDto[]> {
-    return this.httpClient.get<ActaSpPdfDto[]>(this.actaSp_ind_pdf_URL)
+  //SOLICITUD LISTAR ACTAS DEL ROL SP - INDEPNDIENTES
+  public listaSpInd(tokenDto: string): Observable<ActaSpIndPdfDto[]> {
+    return this.httpClient.get<ActaSpIndPdfDto[]>(this.actaSp_ind_pdf_URL + '?tokenDto=' + `${tokenDto}`)
   }
 
   //SOLICITUD LISTAR ACTAS DEL ROL PAMEC

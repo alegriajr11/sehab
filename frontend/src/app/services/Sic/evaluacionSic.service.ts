@@ -15,7 +15,7 @@ export class EvaluacionSicService {
   constructor(private httpClient: HttpClient) { }
 
   //SOLICITUD LISTAR ULTIMO CUMPLIMIENTO PARA CAPTURAR EL ATRIBUTO cumpl_asignado
-  public ultimoCumplimiento(): Observable<EvaluacionSicDto> {
+  public ultimaEvaluacionSic(): Observable<EvaluacionSicDto> {
     return this.httpClient.get<EvaluacionSicDto>(this.evaluacionSicURL);
   }
 }

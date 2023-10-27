@@ -73,6 +73,13 @@ export class EditarActaSicComponent {
     );
   }
 
+  habilitarFechaFinal() {
+    this.habilitarfechaFin = true;
+    var fecha_final = (document.getElementById('fecha-final')) as HTMLSelectElement
+    fecha_final.value = ''
+  }
+
+
   cargoUsuario() {
     var id = (document.getElementById('usu_secretaria')) as HTMLSelectElement
     var sel = id.selectedIndex;
@@ -113,10 +120,11 @@ export class EditarActaSicComponent {
   async obtenerFirmaFuncionario(): Promise<void> {
     if (this.actaSic.act_id_funcionario) {
       const result = await Swal.fire({
-        title: '¿Estás seguro de firmar el acta?',
+        title: `${this.actaSic.act_nombre_funcionario}`,
+        text: 'Al firmar la presente acta usted acepta haber realizado y diligenciado todo lo correspondiente a su competencia',
         showCancelButton: true,
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No'
+        confirmButtonText: 'FIRMAR',
+        cancelButtonText: 'CANCELAR'
       });
 
       if (result.value) {
@@ -148,7 +156,7 @@ export class EditarActaSicComponent {
 
 
   onUpdate(): void {
-    //Por medio de ActivateRoute se atrapa el id del Usuario
+    //Por medio de ActivateRoute se atrapa el id del Acta
     const id = this.activatedRoute.snapshot.params['id'];
     //Construcción del DTO Token
     const token = this.tokenService.getToken();
@@ -172,6 +180,7 @@ export class EditarActaSicComponent {
     if (valorVisitaSeguim) {
       seguimiento = 'X';
     }
+
     //ASIGNACIÓN VISITA SEGUIMIENTO
     this.actaSic.act_visita_seguimiento = seguimiento;
 

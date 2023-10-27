@@ -18,6 +18,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GenerarPdfActaIndService } from 'src/app/services/SpInd/generar-pdf-acta-ind.service';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
+import { ActaSpIndPdfDto } from 'src/app/models/Actas/actaSpIndPdf.dto';
 
 @Component({
   selector: 'app-acta-sp-pro',
@@ -31,7 +32,7 @@ export class ActaSpProComponent implements OnInit {
   municipio: Municipio[];
 
   //DTO DEL PDF ACTA
-  actaPdf: ActaSpPdfDto = null;
+  actaPdf: ActaSpIndPdfDto = null;
 
 
   //Habilitar la Fecha Final
@@ -116,7 +117,7 @@ export class ActaSpProComponent implements OnInit {
     this.cargarUsuario();
     this.unsoloCheckbox();
     this.obtenerNombres();
-    this.ultimaActaId();
+    this.mostrarActaId();
   }
 
   habilitarFechaFinal() {
@@ -137,16 +138,6 @@ export class ActaSpProComponent implements OnInit {
     this.act_municipioId = ''
   }
 
-  mostrarActaId(): void {
-    this.actaPdfService.listaUltimaSpInd().subscribe(
-      data => {
-        this.actaPdf = data
-        var acta = (document.getElementById('acta')) as HTMLSelectElement
-        acta.value = this.actaPdf.act_id.toString()
-      }
-    )
-  }
-
   //LISTAR USUARIOS
   cargarUsuario(): void {
     const rol_sp = 'sp'
@@ -163,7 +154,7 @@ export class ActaSpProComponent implements OnInit {
   }
 
   //LISTAR ÚLTIMA ACTA REGISTRADA
-  ultimaActaId(): void {
+  mostrarActaId(): void {
     this.actaPdfService.listaUltimaSpInd().subscribe(
       data => {
         this.actaPdf = data
@@ -175,7 +166,7 @@ export class ActaSpProComponent implements OnInit {
 
   //LISTAR PRESTADORES POR MUNICIPIO
   cargarPrestadoresByMun(): void {
-    this.prestadorService.listMun(this.act_municipioId).subscribe(
+    this.prestadorService.listMunInd(this.act_municipioId).subscribe(
       data => {
         this.prestador = data;
         this.listaVacia = undefined
@@ -255,7 +246,7 @@ export class ActaSpProComponent implements OnInit {
             telefono.value = pres.pre_telefono;
             var email = (document.getElementById('email')) as HTMLSelectElement
             email.value = pres.pre_email;
-            var rep_legal = (document.getElementById('repleg')) as HTMLSelectElement
+            var rep_legal = (document.getElementById('rep_legal')) as HTMLSelectElement
             rep_legal.value = pres.pre_representante;
             var cod_pres = (document.getElementById('codpres')) as HTMLSelectElement
             cod_pres.value = pres.pre_cod_habilitacion;
@@ -338,9 +329,6 @@ export class ActaSpProComponent implements OnInit {
     }
   }
 
-
-
-
   obtenerNombres(): void {
     //OBTENER NOMBRE DEL PRESTADOR
     const idp = document.getElementById('prestador') as HTMLSelectElement;
@@ -402,9 +390,6 @@ export class ActaSpProComponent implements OnInit {
     var email = (document.getElementById('email')) as HTMLInputElement
     var valorEmail = email.value
 
-    //REPRESENTANTE
-    var representante = (document.getElementById('repleg')) as HTMLInputElement
-    var valorRepresentante = representante.value
 
     //CODIGO PRESTADOR
     var codigoPres = (document.getElementById('codpres')) as HTMLInputElement
@@ -429,197 +414,185 @@ export class ActaSpProComponent implements OnInit {
     this.act_direccion = valorDireccion
     this.act_telefono = valorTelefono
     this.act_email = valorEmail
-    this.act_representante = valorRepresentante
     this.act_cod_prestador = valorCodigoPres
     this.act_nombre_prestador = valorPresNombre
-    this.act_firma_prestador = this.firma
-    //ID DEL FUNCIONARIO PARA CONTROLAR LA FIRMA
-    this.act_id_funcionario = parseInt(this.act_funcionarioId, 10);
+    this.act_id_funcionario = parseInt(this.act_funcionarioId)
 
     //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
-    // this.actaPdf = new ActaSpPdfDto(
-    //   this.act_id,
-    //   this.act_visita_inicial,
-    //   this.act_visita_seguimiento,
-    //   this.act_fecha_inicial,
-    //   this.act_fecha_final,
-    //   this.act_municipio,
-    //   this.act_prestador,
-    //   this.act_nit,
-    //   this.act_direccion,
-    //   this.act_barrio,
-    //   this.act_telefono,
-    //   this.act_email,
-    //   this.act_representante,
-    //   this.act_cod_prestador,
-    //   this.act_obj_visita,
-    //   this.act_id_funcionario,
-    //   this.act_nombre_funcionario,
-    //   this.act_cargo_funcionario,
-    //   this.act_firma_funcionario,
-    //   this.act_nombre_prestador,
-    //   this.act_cargo_prestador,
-    //   this.act_firma_prestador
-    // );
+    this.actaPdf = new ActaSpIndPdfDto(
+      this.act_id,
+      this.act_visita_inicial,
+      this.act_visita_seguimiento,
+      this.act_fecha_inicial,
+      this.act_fecha_final,
+      this.act_municipio,
+      this.act_prestador,
+      this.act_nit,
+      this.act_direccion,
+      this.act_barrio,
+      this.act_telefono,
+      this.act_email,
+      this.act_representante,
+      this.act_cod_prestador,
+      this.act_obj_visita,
+      this.act_id_funcionario,
+      this.act_nombre_funcionario,
+      this.act_cargo_funcionario,
+      this.act_firma_funcionario,
+      this.act_nombre_prestador,
+      this.act_cargo_prestador,
+      this.act_firma_prestador
+    );
 
-    // //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
-    // const token = this.tokenService.getToken()
-    // //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
-    // const tokenDto: TokenDto = new TokenDto(token);
+    //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
+    const token = this.tokenService.getToken()
+    //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
+    const tokenDto: TokenDto = new TokenDto(token);
 
-    // if (
-    //   !this.act_id ||
-    //   (!this.act_visita_inicial && !this.act_visita_seguimiento) ||
-    //   !this.act_fecha_inicial ||
-    //   !this.act_fecha_final ||
-    //   !this.act_municipioId ||
-    //   !this.act_prestador ||
-    //   !this.act_nit ||
-    //   !this.act_direccion ||
-    //   !this.act_barrio ||
-    //   !this.act_telefono ||
-    //   !this.act_email ||
-    //   !this.act_representante ||
-    //   !this.act_cod_prestador ||
-    //   !this.act_obj_visita ||
-    //   !this.act_nombre_funcionario ||
-    //   !this.act_cargo_funcionario ||
-    //   !this.act_nombre_prestador ||
-    //   !this.act_cargo_prestador
-    // ) {
-    //   //ASIGNANDO LOS RESPECTIVOS MENSAJES EN CASO DE ENTRAR AL IF DE VALIDACIÓN
-    //   let mensajeError = 'Por favor, complete los siguientes campos:';
+    if (
+      !this.act_id ||
+      (!this.act_visita_inicial && !this.act_visita_seguimiento) ||
+      !this.act_fecha_inicial ||
+      !this.act_fecha_final ||
+      !this.act_municipioId ||
+      !this.act_prestador ||
+      !this.act_nit ||
+      !this.act_direccion ||
+      !this.act_barrio ||
+      !this.act_telefono ||
+      !this.act_email ||
+      !this.act_representante ||
+      !this.act_cod_prestador ||
+      !this.act_obj_visita ||
+      !this.act_nombre_funcionario ||
+      !this.act_cargo_funcionario ||
+      !this.act_nombre_prestador ||
+      !this.act_cargo_prestador
+    ) {
+    //ASIGNANDO LOS RESPECTIVOS MENSAJES EN CASO DE ENTRAR AL IF DE VALIDACIÓN
+      let mensajeError = 'Por favor, complete los siguientes campos:';
 
-    //   if (!this.act_visita_inicial && !this.act_visita_seguimiento) {
-    //     mensajeError += ' Tipo de Visita,';
-    //     this.showTipoVisitaMessage = true
-    //   }
+      if (!this.act_visita_inicial && !this.act_visita_seguimiento) {
+        mensajeError += ' Tipo de Visita,';
+        this.showTipoVisitaMessage = true
+      }
 
-    //   if (!this.act_fecha_inicial) {
-    //     mensajeError += ' Fecha Inicial,';
-    //     this.showFechaInicialMessage = true
-    //   }
+      if (!this.act_fecha_inicial) {
+        mensajeError += ' Fecha Inicial,';
+        this.showFechaInicialMessage = true
+      }
 
-    //   if (this.act_fecha_inicial && !this.act_fecha_final) {
-    //     mensajeError += ' Fecha Final,';
-    //     this.showFechaFinalMessage = true
-    //   }
+      if (this.act_fecha_inicial && !this.act_fecha_final) {
+        mensajeError += ' Fecha Final,';
+        this.showFechaFinalMessage = true
+      }
 
-    //   if (!this.act_municipioId) {
-    //     mensajeError += ' Municipio,';
-    //     this.showMunicipioMessage = true
-    //   }
+      if (!this.act_municipioId) {
+        mensajeError += ' Municipio,';
+        this.showMunicipioMessage = true
+      }
 
-    //   if (!this.act_prestador && this.act_municipioId) {
-    //     mensajeError += ' Prestador,';
-    //     this.showPrestadorMessage = true
-    //   }
+      if (!this.act_prestador && this.act_municipioId) {
+        mensajeError += ' Prestador,';
+        this.showPrestadorMessage = true
+      }
 
-    //   if (!this.act_barrio) {
-    //     mensajeError += ' Barrio,';
-    //     this.showBarrioMessage = true
-    //   }
+      if (!this.act_barrio) {
+        mensajeError += ' Barrio,';
+        this.showBarrioMessage = true
+      }
 
-    //   if (!this.act_obj_visita) {
-    //     mensajeError += ' Objeto de visita,';
-    //     this.showObjVisitaMessage = true
+      if (!this.act_obj_visita) {
+        mensajeError += ' Objeto de visita,';
+        this.showObjVisitaMessage = true
+      }
 
-    //   }
+      if (!this.act_nombre_funcionario) {
+        mensajeError += ' Verificador SOGCS,';
+        this.showVerificadorMessage = true
+      }
 
-    //   if (!this.act_nombre_funcionario) {
-    //     mensajeError += ' Verificador SOGCS,';
-    //     this.showVerificadorMessage = true
-    //   }
+      if (!this.act_nombre_prestador) {
+        mensajeError += ' Nombre del Prestador Firma,';
+        this.showPresadorNombreMessage = true
+      }
 
-    //   if (!this.act_nombre_prestador) {
-    //     mensajeError += ' Nombre del Prestador Firma,';
-    //     this.showPresadorNombreMessage = true
-    //   }
+      if (!this.act_cargo_prestador) {
+        mensajeError += ' Cargo Prestador Firma,';
+        this.showPrestadorCargoMessage = true
+      }
 
-    //   if (!this.act_cargo_prestador) {
-    //     mensajeError += ' Cargo Prestador Firma,';
-    //     this.showPrestadorCargoMessage = true
-    //   }
-
-    //   mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA
+      mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA
 
     //   //MOSTRAR MENSAJE POR MEDIO DE TOASTR_SERVICE
-    //   this.toastrService.error(mensajeError, 'Error', {
-    //     timeOut: 3000,
-    //     positionClass: 'toast-top-center',
-    //   });
+      this.toastrService.error(mensajeError, 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-top-center',
+      });
 
-    // } else if (!this.act_firma_prestador) { //VERIFICAR QUE LA FIRMA DEL PRESTADOR SEA ASIGNADA
-    //   this.toastrService.error('Por favor, agregue una firma', 'Error', {
-    //     timeOut: 3000,
-    //     positionClass: 'toast-top-center',
-    //   })
-
-    // } else {
-    //   //SOLICITUD DE REGISTRO DE ACTA ENVIANDO COMO PARAMETRO LA ACTA_DTO Y EL TOKEN_DTO
-    //   this.authService.registroActaSpIndPdf(this.actaPdf, tokenDto).subscribe(
-    //     data => {
-    //       if (!data.error) {
-    //         localStorage.setItem('boton-acta-sp-ind', 'true'); //HABILITAR LA RUTA RESTRINGIDA - EVALUACIÓN_IND
-    //         //DESPUÉS DE REGISTRAR EL ACTA, SE SOLICITA LA ÚLTIMA ACTA
-    //         this.actaPdfService.listaUltimaSpInd().subscribe(
-    //           ultimaActa => {
-    //             //VERIFICA QUE EXISTA EL ACTA REGISTRADA
-    //             if (ultimaActa && ultimaActa.id) {
-    //               this.id_acta = ultimaActa.id;
-
-    //               Swal.fire({
-    //                 title: '¿Desea descargar el acta?',
-    //                 showCancelButton: true,
-    //                 confirmButtonText: 'Si',
-    //                 cancelButtonText: 'No'
-    //               }).then((result) => {
-    //                 //SOLICITUD AL SERVICIO QUE GENERA EL ACTA_PDF PASANDO COMO PARAMETRO LA ULTIMA ACTA REGISTRADA
-    //                 if (result.value) {
-    //                   this.generarPdfActaSpInd.ActaPdf(this.id_acta);
-    //                   //ASIGNAR NULL EL ATRIBUTO FIRMA PARA UNA NUEVA ACTA
-    //                   this.act_firma_prestador = null
-    //                   this.sharedService.setFirmaActaSpInd(this.act_firma_prestador) //ENVIAMOS LA FIRMA NULL PARA UNA NUEVA ACTA
-    //                   this.router.navigate(['/sp/evaluacion-pro']);
-    //                   window.scrollTo(0, 0);
-    //                 } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //                   this.router.navigate(['/sp/evaluacion-pro']);
-    //                   window.scrollTo(0, 0);
-    //                 }
-    //               });
-    //             } else {
-    //               Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Error',
-    //                 text: 'No se pudo obtener el ID del acta.'
-    //               });
-    //             }
-    //           },
-    //         );
-    //         //TOASTR PARA ENVIAR MENSAJE DE ÉXITO
-    //         this.toastrService.success(data.message, 'Éxito', {
-    //           timeOut: 3000,
-    //           positionClass: 'toast-top-center',
-    //         });
-    //       } else {
-    //         //TOASTR PARA ENVIAR MENSAJE DE ERROR
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'Error',
-    //           text: data.message
-    //         });
-    //       }
-    //     },
-    //     err => {
-    //       //MANEJAR EL ERROR DEL SUSCRIBE DATA - registroActaSicPdf
-    //       Swal.fire({
-    //         icon: 'error',
-    //         title: 'Error',
-    //         text: err.error.message
-    //       });
-    //     }
-    //   )
-    // }
+    } else {
+    //SOLICITUD DE REGISTRO DE ACTA ENVIANDO COMO PARAMETRO LA ACTA_DTO Y EL TOKEN_DTO
+      this.authService.registroActaSpIndPdf(this.actaPdf, tokenDto).subscribe(
+        data => {
+          if (!data.error) {
+            localStorage.setItem('boton-acta-sp-ind', 'true'); //HABILITAR LA RUTA RESTRINGIDA - EVALUACIÓN_IND
+            //DESPUÉS DE REGISTRAR EL ACTA, SE SOLICITA LA ÚLTIMA ACTA
+            this.actaPdfService.listaUltimaSpInd().subscribe(
+              ultimaActa => {
+                //VERIFICA QUE EXISTA EL ACTA REGISTRADA
+                if (ultimaActa && ultimaActa.id) {
+                  this.id_acta = ultimaActa.id;
+                  //ENVIAR EL ID DEL ACTA AL LOCAL STORAGE PARA LA EVALUACIÓN
+                  localStorage.setItem('id_acta_ind', this.id_acta.toString());
+                  Swal.fire({
+                    title: '¿Desea descargar el acta?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                  }).then((result) => {
+                    //SOLICITUD AL SERVICIO QUE GENERA EL ACTA_PDF PASANDO COMO PARAMETRO LA ULTIMA ACTA REGISTRADA
+                    if (result.value) {
+                      this.generarPdfActaSpInd.ActaPdf(this.id_acta);
+                      this.router.navigate(['/sp/evaluacion-pro']);
+                      window.scrollTo(0, 0);
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                      this.router.navigate(['/sp/evaluacion-pro']);
+                      window.scrollTo(0, 0);
+                    }
+                  });
+                } else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo obtener el ID del acta.'
+                  });
+                }
+              },
+            );
+            //TOASTR PARA ENVIAR MENSAJE DE ÉXITO
+            this.toastrService.success(data.message, 'Éxito', {
+              timeOut: 3000,
+              positionClass: 'toast-top-center',
+            });
+          } else {
+            //TOASTR PARA ENVIAR MENSAJE DE ERROR
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.message
+            });
+          }
+        },
+        err => {
+          //MANEJAR EL ERROR DEL SUSCRIBE DATA - registroActaSicPdf
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err.error.message
+          });
+        }
+      )
+    }
 
   }
 

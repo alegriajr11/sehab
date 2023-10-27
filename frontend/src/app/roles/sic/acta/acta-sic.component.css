@@ -233,8 +233,8 @@ select[aria-hidden="true"][hidden] {
     padding: 3px 10px;
     border-radius: 5px;
     font-size: 14px;
-    top: 107px;
-    left: 160px;
+    top: 94px;
+    left: 305px;
     z-index: 1;
 }
 
@@ -278,3 +278,9 @@ select[aria-hidden="true"][hidden] {
 }
 
 
+/*MEDIA QUERIES*/
+@media (max-width: 1040px) {
+    .validation-message-visita {
+        top: 144px; /* Cambio de estilo cuando la pantalla es menor o igual a 1040px */
+    }
+}

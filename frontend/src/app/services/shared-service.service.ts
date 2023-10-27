@@ -15,10 +15,19 @@ export class SharedServiceService {
 
   id_acta_sic: number
 
+  /**CUMPLIMIENTO ROL SIC */
   crie_id: number
   cumpl_asignado: string
+  /**FIN ATRIBUTOS ROL SIC */
 
-  criteriosGuardados: number[] = [];
+  /**CALIFICACION ROL SP-INDEPENDIENTES */
+  cri_ind_id: number
+  /**FIN ATRIBUTOS SP-INDEPENDIENTES */
+
+  //ARRAY CRITERIOS SIC
+  criteriosSicGuardados: any[] = [];
+  //ARRAY CRITERIOS SP-IND
+  criteriosIndGuardados: any[] = [];
 
   nombreUsuario: string;
 
@@ -39,84 +48,86 @@ export class SharedServiceService {
 
   //NOMBRES PRESTADORES MODAL
   pres_nombre: string
-    
+  //NOMBRE FUNCIONARIO MODAL
+  funcionario_nombre: string
+
   constructor() { }
 
   //METODOS SET
-  setFirmaActaSic(firmaActaSic: string){
+  setFirmaActaSic(firmaActaSic: string) {
     this.firmaActaSic = firmaActaSic
   }
 
-  setFirmaActaSpIpsPrestador(firmaActaSpIpsPrestador: string){
+  setFirmaActaSpIpsPrestador(firmaActaSpIpsPrestador: string) {
     this.firmaActaSpIpsPrestador = firmaActaSpIpsPrestador
   }
 
-  setFirmaActaSpIpsAcompanante(firmaActaSpIpsAcompanante: string){
+  setFirmaActaSpIpsAcompanante(firmaActaSpIpsAcompanante: string) {
     this.firmaActaSpIpsAcompanante = firmaActaSpIpsAcompanante
   }
 
-  setFirmaActaSpInd(firmaActaSpInd: string){
+  setFirmaActaSpInd(firmaActaSpInd: string) {
     this.firmaActaSpInd = firmaActaSpInd
   }
 
-  setFirmaActaPamec(firmaActaPamec: string){
+  setFirmaActaPamec(firmaActaPamec: string) {
     this.firmaActaPamec = firmaActaPamec
   }
 
 
-  setFirmaActaVisitaVerificacion(firmaVisitaVerificacion: string){
+  setFirmaActaVisitaVerificacion(firmaVisitaVerificacion: string) {
     this.firmaActaVisitaVerificacion = firmaVisitaVerificacion
   }
 
-  setFirmaActaVisitaIvc(firmaVisitaIvc: string){
+  setFirmaActaVisitaIvc(firmaVisitaIvc: string) {
     this.firmaActaVisitaIvc = firmaVisitaIvc
   }
 
-  setFirmaUsuario(firmaUsuario: string){
+  setFirmaUsuario(firmaUsuario: string) {
     this.firmaUsuario = firmaUsuario
   }
 
   //Capturar Nombre de Usuario
-  setNombreUsuario(usu_nombre: string){
-    this.nombreUsuario =  usu_nombre
+  setNombreUsuario(usu_nombre: string) {
+    this.nombreUsuario = usu_nombre
   }
 
-  
+
   //METODOS GET
-  getFirmaActaSic(): string{
+  getFirmaActaSic(): string {
     return this.firmaActaSic
   }
 
-  getFirmaActaSpIpsPrestador(): string{
+  getFirmaActaSpIpsPrestador(): string {
     return this.firmaActaSpIpsPrestador
   }
 
-  getFirmaActaSpIpsAcompanante(): string{
+  getFirmaActaSpIpsAcompanante(): string {
     return this.firmaActaSpIpsAcompanante
   }
 
-  getFirmaActaSpInd(): string{
+  getFirmaActaSpInd(): string {
     return this.firmaActaSpInd
   }
 
-  getFirmaActaPamec(): string{
+  getFirmaActaPamec(): string {
     return this.firmaActaPamec
   }
 
-  getFirmaActaVisitaVerificacion(): string{
+  getFirmaActaVisitaVerificacion(): string {
     return this.firmaActaVisitaVerificacion
   }
 
-  getFirmaActaVisitaIvc(): string{
+  getFirmaActaVisitaIvc(): string {
     return this.firmaActaVisitaIvc
   }
 
-  getFirmaUsuario(): string{
+  getFirmaUsuario(): string {
     return this.firmaUsuario
   }
 
 
-  setIdSic(id: number) {
+  setIdEvaluacionSic(id: number) {
     this.id_evaluacion_sic = id;
   }
 
@@ -128,12 +139,16 @@ export class SharedServiceService {
     this.crie_id = id;
   }
 
+  setIdCriterioInd(id: number) {
+    this.cri_ind_id = id;
+  }
+
 
   setIdSpIps(id: number) {
     this.id_evaluacion_sp_ips = id;
   }
 
-  setIdSpInd(id: number) {
+  setIdSpIndEvaluacion(id: number) {
     this.id_evaluacion_sp_ind = id;
   }
 
@@ -141,12 +156,16 @@ export class SharedServiceService {
     this.id_evaluacion_pamec = id;
   }
 
-  setNombrePrestador(name: string){
+  setNombrePrestador(name: string) {
     this.pres_nombre = name
   }
 
+  setNombreFuncionario(name: string) {
+    this.funcionario_nombre = name
+  }
 
-  setIdPrestador(id: string){
+
+  setIdPrestador(id: string) {
     this.pre_cod_habilitacion = id
   }
 

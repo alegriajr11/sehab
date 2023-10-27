@@ -7,12 +7,20 @@ h4 {
     font-weight: bold;
 }
 
+span{
+    font-weight: bold;
+}
 
 .btn-dark:hover {
     transform: scale(1.1);
     transition-duration: 0.2s;
     background-color: rgb(87, 86, 86);
     border-color: rgb(87, 86, 86);
+}
+
+/*SUBRAYADO NOMBRE FUNCIONARIO*/
+.underlined {
+    text-decoration: underline;
 }
 
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ActaSpIndPdfDto } from 'src/app/models/Actas/actaSpIndPdf.dto';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { TokenService } from 'src/app/services/token.service';
@@ -11,7 +12,7 @@ import { TokenService } from 'src/app/services/token.service';
 })
 export class EvaluacionesSpProComponent implements OnInit {
 
-  evaluaciones: any[] = [];
+  evaluaciones: ActaSpIndPdfDto[] = [];
 
   listaVacia: any = undefined;
 
@@ -23,6 +24,7 @@ export class EvaluacionesSpProComponent implements OnInit {
   //PRESTADOR O NIT
   act_prestador: string = ''
   act_nit: string = ''
+  codigo_prestador: string = ''
 
   public modalRef: BsModalRef;
 
@@ -49,7 +51,8 @@ export class EvaluacionesSpProComponent implements OnInit {
 
 
   cargarActas(): void {
-    this.actapdfService.listaSpInd().subscribe(
+    const token = this.tokenService.getToken()
+    this.actapdfService.listaSpInd(token).subscribe(
       data => {
         this.evaluaciones = data;
         this.listaVacia = undefined;
@@ -61,9 +64,12 @@ export class EvaluacionesSpProComponent implements OnInit {
     this.page = 1;
   }
 
-  openModal(modalTemplate: TemplateRef<any>, id: number, name: string) {
-    this.sharedService.setIdSpInd(id)
+  openModal(modalTemplate: TemplateRef<any>, id: number, name: string, name_funcionario: string, codigo_prestador: string) {
+    this.sharedService.setIdSpIndEvaluacion(id)
     this.sharedService.setNombrePrestador(name)
+    this.sharedService.setNombreFuncionario(name_funcionario)
+    this.sharedService.setIdPrestador(codigo_prestador)
+    
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',
@@ -71,6 +77,11 @@ export class EvaluacionesSpProComponent implements OnInit {
         keyboard: true
       }
     );
+
+    // Suscribirse al evento hide.bs.modal para cargar actas después de cerrar el modal y ver el icono cerrar acta
+    this.modalRef.onHide.subscribe(() => {
+      this.cargarActas();
+    });
   }
 
   obtenerAnios(): void {
@@ -78,6 +89,13 @@ export class EvaluacionesSpProComponent implements OnInit {
     const fechaActual = new Date();
     const anioActual = fechaActual.getFullYear();
 
+    // Agregar una opción en blanco (vacía)
+    const optionVacia = document.createElement("option");
+    optionVacia.text = ""; // Texto vacío
+    optionVacia.value = ""; // Valor vacío
+    selectAnio.add(optionVacia);
+
+    //Agregar Opciones de Año
     for (let i = anioActual; i >= 1990; i--) {
       const option = document.createElement("option");
       option.text = i.toString();
@@ -85,9 +103,12 @@ export class EvaluacionesSpProComponent implements OnInit {
       selectAnio.add(option);
     }
   }
+
   //CARGAR ACTAS POR ID_ACTA O AÑO O NOMBRE DE PRESTADOR O NIT
   cargarActasFilter() {
-    this.actapdfService.listaActasSpIndFilter(this.year, this.act_id, this.act_prestador, this.act_nit).subscribe(
+    //OBTENER EL TOKEN DEL USUARIO 
+    const token = this.tokenService.getToken()
+    this.actapdfService.listaActasSpIndFilter(this.year, this.act_id, this.act_prestador, this.act_nit, token).subscribe(
       data => {
         this.evaluaciones = data
         this.listaVacia = undefined

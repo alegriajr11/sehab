@@ -49,7 +49,7 @@
                     <td>{{ prestadores.pre_habilitado }}</td>
                     <td *ngFor="let municipio of this.prestadores.pre_municipio | keyvalue">{{municipio.value}}</td>
                     <td *ngIf="isAdmin">
-                        <button class="btn btn-outline-warning" routerLink="/prestadores/editar/{{prestadores.pre_cod_habilitacion}}">
+                        <button class="btn btn-outline-warning" [routerLink]="['/prestadores/editar']" [queryParams]="{ id: prestadores.pre_cod_habilitacion }">
                             <i class="far fa-edit"></i>
                         </button>
                     </td>

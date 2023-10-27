@@ -14,7 +14,6 @@ export class CumplimientoEstandarService {
 
   cumplimientoEstandarURL = environment.cumplimientoEstandarURL
 
-
   evaluacionURL = environment.evaluacionSicUrl
 
   constructor(private httpClient: HttpClient) { }

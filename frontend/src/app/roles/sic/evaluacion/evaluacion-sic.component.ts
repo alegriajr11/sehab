@@ -58,9 +58,8 @@ export class EvaluacionSicComponent implements OnInit {
 
   listaVacia: any = undefined;
 
-  // En tu componente TypeScript
+  // Objeto Deshabilitar Boton
   botonDeshabilitado: { [key: number]: boolean } = {};
-
 
 
   public modalRef: BsModalRef;
@@ -88,12 +87,12 @@ export class EvaluacionSicComponent implements OnInit {
     this.ultimaEvaluacionRegistrada();
 
     //GUARDAR LOS CRITERIOS CON CUMPLIMIENTO ASIGNADO
-    const storedCriteriosGuardados = localStorage.getItem('criteriosGuardados');
+    const storedCriteriosSicGuardados = localStorage.getItem('criteriosSicGuardados');
 
-    if (storedCriteriosGuardados) {
-      this.sharedService.criteriosGuardados = JSON.parse(storedCriteriosGuardados);
+    if (storedCriteriosSicGuardados) {
+      this.sharedService.criteriosSicGuardados = JSON.parse(storedCriteriosSicGuardados);
       // Configura botonDeshabilitado según los criterios con cumplimientos asignados
-      for (const crie_id of this.sharedService.criteriosGuardados) {
+      for (const crie_id of this.sharedService.criteriosSicGuardados) {
         this.botonDeshabilitado[crie_id] = true;
       }
     }
@@ -105,11 +104,19 @@ export class EvaluacionSicComponent implements OnInit {
 
 
   ultimaEvaluacionRegistrada() {
-    this.evaluacionSicService.ultimoCumplimiento().subscribe(
+    this.evaluacionSicService.ultimaEvaluacionSic().subscribe(
       (data) => {
         this.eva_id = data.eva_id
       }
     )
+  }
+
+  //ESTABLECER LOS COLORES POR CUMPLIMIENTO
+  getClassForCriterio(criterio: any): string{
+    if (this.sharedService.criteriosSicGuardados.includes(criterio.crie_id)) {
+      return 'btn-success';
+    }
+    return 'btn-outline-dark';
   }
 
   clonarDiv() {
@@ -122,6 +129,9 @@ export class EvaluacionSicComponent implements OnInit {
     const selIndicador = idIndicador.selectedIndex;
     const optIndicador = idIndicador.options[selIndicador];
     const valorIndicador = optIndicador.textContent;
+
+    console.log(valorDominio)
+    console.log(valorIndicador)
 
     if (selDominio && selIndicador) {
       this.numeroDeClones++;
@@ -174,6 +184,15 @@ export class EvaluacionSicComponent implements OnInit {
       divTitulos.appendChild(tableTitle);
       nuevoDiv.appendChild(divTitulos);
 
+      // Guardar información en el LocalStorage
+      const clonInfo = {
+        dominio: selDominio,
+        indicador: selIndicador,
+        numeroDeClones: this.numeroDeClones,
+      };
+
+      localStorage.setItem('clonInfo' + this.numeroDeClones, JSON.stringify(clonInfo));
+
     } else if (!selDominio) {
       this.toastrService.error('Selecciona un Dominio', 'Error', {
         timeOut: 3000,
@@ -194,7 +213,7 @@ export class EvaluacionSicComponent implements OnInit {
   }
 
   openModal(modalTemplate: TemplateRef<any>, id: number, eva_id: number) {
-    this.sharedService.setIdSic(eva_id)
+    this.sharedService.setIdEvaluacionSic(eva_id)
     this.eva_id = eva_id
     this.sharedService.setIdCriterioSic(id)
     this.crie_id = id
@@ -206,8 +225,8 @@ export class EvaluacionSicComponent implements OnInit {
       }
 
     );
-
   }
+
   cargarDominio(): void {
     this.dominioService.lista().subscribe(
       data => {

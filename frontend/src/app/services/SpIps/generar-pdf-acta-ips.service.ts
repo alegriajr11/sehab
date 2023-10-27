@@ -550,7 +550,7 @@ export class GenerarPdfActaIpsService {
       body: [
         {
           objeto:
-            `una vez realizada la respectiva revisión de la documentación y demás evidencias que soportan la ejecución e implementación del programa ` +
+            `Una vez realizada la respectiva revisión de la documentación y demás evidencias que soportan la ejecución e implementación del programa ` +
             `de seguridad del paciente, se procede a socializar los hallazgos (estos pueden indicar conformidad o no conformidad) u observaciones respectivas.`
 
         },
@@ -583,7 +583,7 @@ export class GenerarPdfActaIpsService {
       body: [
         {
           objeto:
-            `una vez socializado los hallazgos  u observaciones a que haya lugar a la IPS auditada y frente a la herramienta de evaluación  ` +
+            `Una vez socializado los hallazgos  u observaciones a que haya lugar a la IPS auditada y frente a la herramienta de evaluación  ` +
             `establecida por la secretaria de salud departamental, se procede hacer el cierre respectivo de la visita, recordando que aquello ` +
             `que se encuentre con calificación de 3 y/o 1 son objeto de acciones de mejoramiento (entiéndase como acciones de mejoramiento,` +
             `toda actividad implementada en la menor medida posible y que tiendan a corregir las desviaciones que se pudieren estar presentando) y los compromisos adquiridos. `

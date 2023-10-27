@@ -4,11 +4,11 @@ import { SharedServiceService } from 'src/app/services/shared-service.service';
 
 
 @Component({
-  selector: 'app-evaluacion-uno',
-  templateUrl: './evaluacion-uno.component.html',
-  styleUrls: ['./evaluacion-uno.component.css']
+  selector: 'app-evaluacion-sp-ips',
+  templateUrl: './evaluacion-sp-ips.component.html',
+  styleUrls: ['./evaluacion-sp-ips.component.css']
 })
-export class EvaluacionUnoComponent {
+export class EvaluacionSpIpsComponent {
 
   captCargoPres: string
   captCodPres: string

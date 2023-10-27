@@ -27,6 +27,9 @@ export class EditarActaSpIpsComponent {
   firma_prestador: string;
   firma_acompanante: string;
 
+  //Habilitar la Fecha Final
+  habilitarfechaFin = false;
+
   //MODAL
   public modalRef: BsModalRef;
 
@@ -88,6 +91,13 @@ export class EditarActaSpIpsComponent {
 
     );
   }
+
+  habilitarFechaFinal() {
+    this.habilitarfechaFin = true;
+    var fecha_final = (document.getElementById('fecha-final')) as HTMLSelectElement
+    fecha_final.value = ''
+  }
+
 
   cargoUsuario() {
     var id = (document.getElementById('usu_secretaria')) as HTMLSelectElement
@@ -212,7 +222,7 @@ export class EditarActaSpIpsComponent {
       this.actaSp.act_firma_prestador = this.firma_prestador
     }
     this.firma_acompanante = this.sharedService.getFirmaActaSpIpsAcompanante();
-    
+
     //ASIGNAR FIRMA ACOMPAÑANTE
     if (this.firma_acompanante) {
       this.actaSp.act_firma_prestador_acompanante = this.firma_acompanante

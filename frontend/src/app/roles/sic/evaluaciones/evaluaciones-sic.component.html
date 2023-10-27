@@ -72,7 +72,6 @@
                         <th scope="col" style="text-align: center;">MUNICIPIO</th>
                         <th scope="col" style="text-align: center;">FECHA DE CREACIÓN</th>
                         <th scope="col" style="text-align: center;">ESTADO</th>
-                        <th scope="col" style="text-align: center;">FUNCIONARIO</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -86,10 +85,9 @@
                         <td style="text-align: center;">{{evaluacion.act_creado | date: 'dd/MM/yyyy' }}</td>
                         <td *ngIf="evaluacion.act_estado === '1'" style="text-align: center;"><span class="fas fa-door-open" style="color: rgb(0, 128, 0);"></span></td>
                         <td *ngIf="evaluacion.act_estado === '0'" style="text-align: center;"><span class="fas fa-door-closed" style="color: rgb(204, 0, 0);"></span></td>
-                        <td>{{evaluacion.act_nombre_funcionario}}</td>
                         <td>
                             <button class="btn btn-outline-dark"
-                                (click)="openModal(modalTemplate, evaluacion.id, evaluacion.act_prestador)">
+                                (click)="openModal(modalTemplate, evaluacion.id, evaluacion.act_prestador, evaluacion.act_nombre_funcionario)">
                                 <span class="fas fa-clipboard-check"></span>
                             </button>
                         </td>

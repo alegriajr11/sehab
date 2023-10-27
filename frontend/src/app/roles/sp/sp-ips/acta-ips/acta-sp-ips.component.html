@@ -54,7 +54,7 @@
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy" name="fecha_inicial"
                         [(ngModel)]="fecha_inicial" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        (change)="ocultarMensajes()">
+                        (change)="ocultarMensajes(); habilitarFechaFinal()">
                     <div *ngIf="showFechaInicialMessage" class="validation-message">Seleccione la Fecha
                         Inicial.</div>
                 </div>
@@ -63,7 +63,7 @@
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="fecha_final"
                         [(ngModel)]="fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [min]="fecha_inicial" (change)="ocultarMensajes()">
+                        [disabled]="!habilitarfechaFin" [min]="fecha_inicial" (change)="ocultarMensajes()">
                     <div *ngIf="showFechaFinalMessage" class="validation-message">Seleccione la Fecha
                         Final.</div>
                 </div>
@@ -178,7 +178,7 @@
                 <div class="col-md-3">
                     <label for="fecha" class="form-label">Fecha:</label>
                     <input type="date" class="form-control" id="fecha_orden" name="fecha_orden"
-                        [(ngModel)]="fecha_orden">
+                        [(ngModel)]="fecha_orden" [disabled]="!habilitarfechaFin" [min]="fecha_inicial">
                 </div>
 
                 <div class="col-md-3">
@@ -202,7 +202,7 @@
                 <div class="col-md-6">
                     <label for="" class="form-label">Fecha Envío de Oficio:</label>
                     <input type="date" class="form-control" id="fecha_envio_oficio" placeholder="Fecha Envío de oficio"
-                        name="fecha_envio_oficio" [(ngModel)]="fecha_envio_oficio">
+                        name="fecha_envio_oficio" [(ngModel)]="fecha_envio_oficio" [min]="fecha_oficio" [max]="fecha_inicial">
                 </div>
 
                 <div class="col-12">

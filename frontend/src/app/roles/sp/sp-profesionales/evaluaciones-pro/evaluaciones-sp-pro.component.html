@@ -45,8 +45,6 @@
                     </select>
                 </div>
 
-
-
                 <div class="col-md-4">
                     <label for="">Nombre de Prestador:</label>
                     <input class="form-control" type="text" name="search" [(ngModel)]="act_prestador"
@@ -87,7 +85,7 @@
                         <td *ngIf="evaluacion.act_estado === '0'" style="text-align: center;"><span class="fas fa-door-closed" style="color: rgb(204, 0, 0);"></span></td>
                         <td>
                             <button class="btn btn-outline-dark"
-                                (click)="openModal(modalTemplate, evaluacion.id, evaluacion.act_prestador)">
+                                (click)="openModal(modalTemplate, evaluacion.id, evaluacion.act_prestador, evaluacion.act_nombre_funcionario, evaluacion.act_cod_prestador)">
                                 <span class="fas fa-clipboard-check"></span>
                             </button>
 

@@ -62,9 +62,10 @@ export class EvaluacionesSpIpsComponent implements OnInit {
   }
 
 
-  openModal(modalTemplate: TemplateRef<any>, id: number, name: string) {
+  openModal(modalTemplate: TemplateRef<any>, id: number, name: string, name_funcionario: string) {
     this.sharedService.setIdSpIps(id)
     this.sharedService.setNombrePrestador(name)
+    this.sharedService.setNombreFuncionario(name_funcionario)
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',
@@ -96,7 +97,9 @@ export class EvaluacionesSpIpsComponent implements OnInit {
 
   //CARGAR ACTAS POR ID_ACTA O AÑO O NOMBRE DE PRESTADOR O NIT
   cargarActasFilter() {
-    this.actapdfService.listaActasSpIpsFilter(this.year, this.act_id, this.act_prestador, this.act_nit).subscribe(
+    //OBTENER EL TOKEN DEL USUARIO 
+    const token = this.tokenService.getToken()
+    this.actapdfService.listaActasSpIpsFilter(this.year, this.act_id, this.act_prestador, this.act_nit, token).subscribe(
       data => {
         this.evaluaciones = data
         this.listaVacia = undefined

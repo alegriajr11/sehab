@@ -1,7 +1,16 @@
 <app-menu></app-menu>
 
-<div class="container">
-    <h1 class="text-center">SEGURIDAD DEL PACIENTE</h1>
+<div class="col">
+    <div class="row">
+        <div class="col-md-2">
+            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sp/evaluaciones-pro" (click)="deshabilitarRutaEditar()">
+                <i class="fa fa-reply fa-lg"></i>
+            </button>
+        </div>
+        <div class="col-md-8">
+            <h1 class="text-center">Seguridad del Paciente - Profesionales Independientes</h1>
+        </div>
+    </div>
 </div>
 
 <div class="t2">
@@ -9,18 +18,22 @@
         PROFESIONALES INDEPENDIENTES</h2>
 </div>
 
+<ng-template #modalTemplate>
+    <app-modal-cumplimiento-sp-ind [dataFromParent]="modalRef"></app-modal-cumplimiento-sp-ind>
+</ng-template>
+
 <div class="container">
     <div class="table-wrapper" id="dominio">
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-8">
                     <h5><b>Prestador:</b></h5>
-                    <span id="nombre-prestador"></span>
+                    <span id="nombre-prestador">{{nombre_prestador}}</span>
                 </div>
                 <div class="col-sm-7"></div>
             </div>
         </div>
-        
+
         <h4>{{Etapa1}}</h4>
         <table class="table table-wrapper table-hover">
             <thead>
@@ -38,15 +51,17 @@
                     <td>{{criterioIndEta1.cri_nombre}}</td>
                     <td>{{criterioIndEta1.cri_verificacion}}</td>
                     <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
+                        <button class="btn" [ngClass]="getClassForCriterio(criterioIndEta1)"
+                            [disabled]="sharedService.criteriosIndGuardados.includes(criterioIndEta1.cri_id)"
+                            (click)="openModal(modalTemplate, criterioIndEta1.cri_id, eva_ind_id)">
+                            <i class="fa fa-check"></i>
                         </button>
                     </td>
                 </tr>
             </tbody>
         </table>
         <hr style="border-top: 1px solid black;">
-        
+
         <h4>{{Etapa2}}</h4>
 
         <table class="table table-wrapper table-hover">
@@ -65,8 +80,10 @@
                     <td>{{criterioIndEta2.cri_nombre}}</td>
                     <td>{{criterioIndEta2.cri_verificacion}}</td>
                     <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
+                        <button class="btn" [ngClass]="getClassForCriterio(criterioIndEta2)"
+                            [disabled]="sharedService.criteriosIndGuardados.includes(criterioIndEta2.cri_id)"
+                            (click)="openModal(modalTemplate, criterioIndEta2.cri_id, eva_ind_id)">
+                            <i class="fa fa-check"></i>
                         </button>
                     </td>
                 </tr>
@@ -92,8 +109,10 @@
                     <td>{{criterioIndEta3.cri_nombre}}</td>
                     <td>{{criterioIndEta3.cri_verificacion}}</td>
                     <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
+                        <button class="btn" [ngClass]="getClassForCriterio(criterioIndEta3)"
+                            [disabled]="sharedService.criteriosIndGuardados.includes(criterioIndEta3.cri_id)"
+                            (click)="openModal(modalTemplate, criterioIndEta3.cri_id, eva_ind_id)">
+                            <i class="fa fa-check"></i>
                         </button>
                     </td>
                 </tr>
@@ -119,19 +138,16 @@
                     <td>{{criterioIndEta4.cri_nombre}}</td>
                     <td>{{criterioIndEta4.cri_verificacion}}</td>
                     <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
+                        <button class="btn" [ngClass]="getClassForCriterio(criterioIndEta4)"
+                            [disabled]="sharedService.criteriosIndGuardados.includes(criterioIndEta4.cri_id)"
+                            (click)="openModal(modalTemplate, criterioIndEta4.cri_id, eva_ind_id)">
+                            <i class="fa fa-check"></i>
                         </button>
                     </td>
                 </tr>
             </tbody>
         </table>
         <hr style="border-top: 1px solid black;">
-
-        <!-- <ng-template #modalTemplate>
-            <app-modalsic [dataFromParent]="modalRef"></app-modalsic>
-        </ng-template> -->
-
 
 
         <div class="row">
