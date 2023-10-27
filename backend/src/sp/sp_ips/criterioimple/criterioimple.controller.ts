@@ -35,4 +35,12 @@ export class CriterioimpleController {
     async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioImplementacionDto){
         return await this.criterioImplementacionService.update(id, dto);
     }
+
+    //creacion de criterio
+    //@UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({whitelist: true, transformOptions: {enableImplicitConversion: true}}))
+    @Post('criterio/:id')
+    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioImplementacionDto){
+        return await this.criterioImplementacionService.create(id, dto);
+    }
 }

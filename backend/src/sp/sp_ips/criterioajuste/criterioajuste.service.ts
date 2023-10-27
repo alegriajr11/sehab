@@ -5,13 +5,17 @@ import { CriterioAjusteDto } from 'src/usuario/dto/SpIps/criterioajuste.dto';
 import { CriterioPlaneacionDto } from 'src/usuario/dto/SpIps/criterioplaneacion.dto';
 import { CriterioAjusteEntity } from '../criterioajuste.entity';
 import { CriterioAjusteRepository } from '../criterioajuste.repository';
+import { EvaluacionipsEntity } from '../evaluacionips.entity';
+import { EvaluacionIpsRepository } from '../evaluacionips.repository';
 
 @Injectable()
 export class CriterioajusteService {
 
     constructor(
         @InjectRepository(CriterioAjusteEntity)
-        private criterioAjusteRepository: CriterioAjusteRepository
+        private criterioAjusteRepository: CriterioAjusteRepository,
+        @InjectRepository(EvaluacionipsEntity)
+        private evaluacionIpsRepository: EvaluacionIpsRepository,
     ){}
 
     //LISTAR CRITERIOS AJUSTE POR ID_EVALUACIÓN
@@ -36,10 +40,23 @@ export class CriterioajusteService {
         return criterio
     }
 
-    //ACTUALIZAR CRITERIO AJUSTE - PARAMETROS ID_CRITERIO Y DTO
-    async update(id_criterio: number, dto: CriterioAjusteDto): Promise<any> {
+    
+    // creacion de criterio con su respectiva evaluacion
+    async create(evips_id: number, dto: CriterioAjusteDto): Promise<any> {
+        const evaluacion = await this.evaluacionIpsRepository.findOne({ where: { evips_id: evips_id } });
+        if (!evaluacion) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
+        const criterio = this.criterioAjusteRepository.create(dto)
+        //asigna la evaluacion al criterio
+        criterio.cri_aju_eva = evaluacion
+        await this.criterioAjusteRepository.save(criterio)
+        return new MessageDto('El criterio ha sido Creada');
+    }
 
-        const criterio = await this.findByCri(id_criterio);
+    //ACTUALIZAR CRITERIO AJUSTE - PARAMETROS ID_CRITERIO Y DTO
+    async update(id: number, dto: CriterioAjusteDto): Promise<any> {
+
+        const criterio = await this.findByCri(id);
+
         if (!criterio)
             throw new NotFoundException(new MessageDto('El Criterio No Existe'));
 

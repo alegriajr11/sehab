@@ -13,6 +13,8 @@ export class PlaneacionService {
     constructor(
         @InjectRepository(CriterioPlaneacionEntity)
         private criterioPlaneacionRepository: CriterioPlaneacionRepository,
+        @InjectRepository(EvaluacionipsEntity)
+        private evaluacionIpsRepository: EvaluacionIpsRepository,
     ){}
 
 
@@ -33,6 +35,17 @@ export class PlaneacionService {
             throw new NotFoundException(new MessageDto('El criterio No Existe'));
         }
         return criterio
+    }
+
+     // creacion de criterio con su respectiva evaluacion
+     async create(evips_id: number, dto: CriterioPlaneacionDto): Promise<any> {
+        const evaluacion = await this.evaluacionIpsRepository.findOne({ where: { evips_id: evips_id } });
+        if (!evaluacion) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
+        const criterio = this.criterioPlaneacionRepository.create(dto)
+        //asigna la evaluacion al criterio
+        criterio.cri_pla_eva = evaluacion
+        await this.criterioPlaneacionRepository.save(criterio)
+        return new MessageDto('El criterio ha sido Creada');
     }
 
     async update(id: number, dto: CriterioPlaneacionDto): Promise<any> {

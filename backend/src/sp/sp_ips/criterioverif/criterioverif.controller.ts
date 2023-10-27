@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { Body, Delete, Get, Param, Put, UseGuards, UsePipes } from '@nestjs/common/decorators';
+import { Body, Delete, Get, Param, Post, Put, UseGuards, UsePipes } from '@nestjs/common/decorators';
 import { ParseIntPipe, ValidationPipe } from '@nestjs/common/pipes';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioVerificacionDto } from 'src/usuario/dto/SpIps/criterioverificacion.dto';
@@ -35,4 +35,13 @@ export class CriterioverifController {
     async delete(@Param('id', ParseIntPipe) id: number) {
         return await this.criterioVerificacionService.delete(id);
     }
+
+    //creacion de criterio
+    //@UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe({whitelist: true, transformOptions: {enableImplicitConversion: true}}))
+    @Post('criterio/:id')
+    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioVerificacionDto){
+        return await this.criterioVerificacionService.create(id, dto);
+    }
 }
+

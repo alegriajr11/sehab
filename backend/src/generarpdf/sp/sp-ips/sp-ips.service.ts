@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ActaSpIpsEntity } from './sp-ips.entity';
 import { ActaSpIpsRepository } from './sp-ips.repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +11,13 @@ import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/audit
 import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
 import { EvaluacionIpsRepository } from 'src/sp/sp_ips/evaluacionips.repository';
 import { EvaluacionipsEntity } from 'src/sp/sp_ips/evaluacionips.entity';
+import { join } from 'path';
+import { CalificacionipsAjusteService } from 'src/sp/sp_ips/calificacion/calificacionips_ajuste/calificacionips_ajuste.service';
+import { CalificacionipsImplementacionService } from 'src/sp/sp_ips/calificacion/calificacionips_implementacion/calificacionips_implementacion.service';
+import { CalificacionipsPlaneacionService } from 'src/sp/sp_ips/calificacion/calificacionips_planeacion/calificacionips_planeacion.service';
+import { CalificacionipsVerificacionService } from 'src/sp/sp_ips/calificacion/calificacionips_verificacion/calificacionips_verificacion.service';
 
+const PDFDocument = require('pdfkit-table')
 
 @Injectable()
 export class SpIpsService {
@@ -22,7 +28,16 @@ export class SpIpsService {
         private readonly evaluacionesIps: EvaluacionIpsRepository,
         private readonly jwtService: JwtService,
         private readonly auditoria_registro_services: AuditoriaRegistroService,
-        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService
+        private readonly auditoria_actualizacion_service: AuditoriaActualizacionService,
+        @Inject(CalificacionipsAjusteService)
+        private readonly calificacionipsAjusteService: CalificacionipsAjusteService,
+        @Inject(CalificacionipsImplementacionService)
+        private readonly calificacionipsImplementacionService: CalificacionipsImplementacionService,
+        @Inject(CalificacionipsPlaneacionService)
+        private readonly calificacionipsPlaneacionService: CalificacionipsPlaneacionService,
+        @Inject(CalificacionipsVerificacionService)
+        private readonly calificacionipsVerificacionService: CalificacionipsVerificacionService,
+
     ) { }
 
     //LISTAR TODAS LAS ACTAS SP IPS
@@ -342,5 +357,256 @@ export class SpIpsService {
             // Devuelve un mensaje de error apropiado
             return { error: true, message: 'Ocurrió un error al cerrar el Acta' };
         }
+    }
+
+    //La función para generar el PDF con las tablas ajustadas
+    async generarPdfEvaluacionIps(id: number): Promise<Buffer> {
+
+        const ajuste = await this.calificacionipsAjusteService.getallCalCrixEva(id);
+        const implementacion = await this.calificacionipsImplementacionService.getallCalCrixEva(id);
+        const planeacion = await this.calificacionipsPlaneacionService.getallCalCrixEva(id);
+        const verificacion = await this.calificacionipsVerificacionService.getallCalCrixEva(id);
+
+
+        let eva = "";
+
+        let nombreprestador = "";
+        let cargoprestador = "";
+        let nombrefuncionario = "";
+        let cargofuncionario = "";
+
+
+
+        const pdfBuffer: Buffer = await new Promise(resolve => {
+            const doc = new PDFDocument({
+                size: 'LETTER',
+                bufferPages: true,
+                autoFirstPage: false,
+            });
+
+            let pageNumber = 0;
+
+            doc.on('pageAdded', () => {
+                pageNumber++;
+                let bottom = doc.page.margins.bottom;
+
+                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                doc.moveDown()
+
+                doc.page.margins.top = 115;
+                doc.page.margins.bottom = 0;
+                doc.font("Helvetica").fontSize(14);
+                doc.text(
+                    'Pág. ' + pageNumber,
+                    0.5 * (doc.page.width - 100),
+                    doc.page.height - 50,
+                    {
+                        width: 100,
+                        align: 'center',
+                        lineBreak: false,
+                    }
+                );
+                doc.page.margins.bottom = bottom;
+
+            });
+
+            doc.addPage();
+            doc.text('', 180, 110);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('PROGRAMA DE SEGURIDAD DEL PACIENTE ');
+            doc.text('', 187, 130);
+            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('ACTA DE VERIFICACION Y SEGUIMIENTO');
+            // doc.moveDown();
+            // doc.font('Helvetica').fontSize(14);
+
+            doc.text('', 50, 110);
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            // doc.moveDown();
+            // doc.moveDown();
+            // doc.moveDown();
+
+            // doc.fontSize(24);
+            function hayEspacioSuficiente(alturaContenido: number) {
+                const margenInferior = doc.page.margins.bottom;
+                const alturaPagina = doc.page.height;
+                const espacioRestante = alturaPagina - margenInferior - alturaContenido;
+                return espacioRestante >= 0;
+            }
+
+            ajuste.forEach(evalua => {
+                eva = evalua.calificacionipsAjuste.cri_aju_eva.evips_nombre;
+                evalua.calificacionipsAjuste.cri_aju_eva.actas_ips.forEach(acta => {
+                    nombreprestador = acta.act_nombre_prestador;
+                    nombrefuncionario = acta.act_nombre_funcionario;
+                    cargoprestador = acta.act_cargo_prestador;
+                    cargofuncionario=acta.act_cargo_funcionario
+                });
+            });
+            doc.text(eva)
+
+            // Agregar las tablas a las páginas
+            if (planeacion.length) {
+                let rows_elements = [];
+                planeacion.forEach(item => {
+                    var temp_list = [item.calificacionipsPlaneacion.cri_pla_id, item.calificacionipsPlaneacion.cri_pla_nombre, '            ' + item.cal_nota, item.calificacionipsPlaneacion.cri_pla_verificacion, item.cal_observaciones];
+
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table = {
+                    title: "PLANEACIÓN",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+                doc.table(table, tableOptions);
+
+            }
+
+            doc.moveDown();
+            if (implementacion.length) {
+                let rows_elements = [];
+                implementacion.forEach(item => {
+                    var temp_list = [item.calificacionipsImpl.cri_imp_id, item.calificacionipsImpl.cri_imp_nombre, '            ' + item.cal_nota, item.calificacionipsImpl.cri_imp_verificacion, item.cal_observaciones];
+
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table2 = {
+                    title: "IMPLEMENTACIÓN",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table2, tableOptions);
+
+            }
+
+
+            if (verificacion.length) {
+                let rows_elements = [];
+                verificacion.forEach(item => {
+                    var temp_list = [item.calificacionipsVerif.cri_ver_id, item.calificacionipsVerif.cri_ver_nombre, '            ' + item.cal_nota, item.calificacionipsVerif.cri_ver_verificacion, item.cal_observaciones];
+
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+                const table3 = {
+                    title: "VERIFICACIÓN",
+                    headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
+                    rows: rows_elements
+                };
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+                doc.table(table3, tableOptions);
+
+            }
+
+            if (ajuste.length) {
+                let rows_elements = [];
+
+                ajuste.forEach(item => {
+                    var temp_list = [item.calificacionipsAjuste.cri_aju_id, item.calificacionipsAjuste.cri_aju_nombre, '            ' + item.cal_nota, item.calificacionipsAjuste.cri_aju_verificacion, item.cal_observaciones];
+                    rows_elements.push(temp_list)
+                })
+
+                const tableOptions = {
+                    columnsSize: [10, 210, 72, 65, 175],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+
+                };
+                const table4 = {
+                    title: "AJUSTE",
+                    headers: ["", "CRITERIOS", "CALIFICACIÓN", "VERIFICACIÓN", "OBSERVACIONES"],
+                    rows: rows_elements
+
+                };
+
+
+                doc.moveDown();
+                // Verificar si hay suficiente espacio en la página actual para la tabla
+                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
+                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
+                    pageNumber++; // Incrementar el número de página
+                }
+
+                doc.table(table4, tableOptions);
+
+            }
+
+
+
+                doc.moveDown();
+
+                const tableOptions2 = {
+                    columnsSize: [ 225, 225],
+                    headerAlign: 'center',
+                    align: 'center',
+                    rowHeight: 15,
+                };
+
+                const tablefirmas = {
+                        headers: [ "POR EL PRESTADOR", "POR LA SECRETARIA DE SALUD"],
+                        rows:[[`NOMBRE: ${nombreprestador}`,`NOMBRE: ${nombrefuncionario}`],
+                            [`CARGO: ${cargoprestador}`,`CARGO: ${cargofuncionario}`],
+                            ["FIRMA","FIRMA  :"]]
+                    };
+
+
+                    doc.moveDown();
+
+                    doc.table(tablefirmas, tableOptions2);
+
+            const buffer = [];
+            doc.on('data', buffer.push.bind(buffer));
+            doc.on('end', () => {
+                const data = Buffer.concat(buffer);
+                resolve(data);
+            });
+
+            doc.end();
+        });
+
+        return pdfBuffer;
     }
 }

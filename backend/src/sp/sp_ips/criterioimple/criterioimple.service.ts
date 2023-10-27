@@ -6,6 +6,8 @@ import { MessageDto } from 'src/common/message.dto';
 import { CriterioImplementacionDto } from 'src/usuario/dto/SpIps/criterioimple.dto';
 import { CriterioImplemRepository } from '../criterioimplement.repository';
 import { CriterioImplementacionEntity } from '../criterioimplementacion.entity';
+import { EvaluacionipsEntity } from '../evaluacionips.entity';
+import { EvaluacionIpsRepository } from '../evaluacionips.repository';
 
 @Injectable()
 export class CriterioimpleService {
@@ -13,6 +15,8 @@ export class CriterioimpleService {
     constructor(
         @InjectRepository(CriterioImplementacionEntity)
         private criterioImplementacionRepository: CriterioImplemRepository,
+        @InjectRepository(EvaluacionipsEntity)
+        private evaluacionIpsRepository: EvaluacionIpsRepository,
     ){}
 
 
@@ -34,6 +38,17 @@ export class CriterioimpleService {
             throw new NotFoundException(new MessageDto('El criterio No Existe'));
         }
         return criterio
+    }
+
+    // creacion de criterio con su respectiva evaluacion
+    async create(evips_id: number, dto: CriterioImplementacionDto): Promise<any> {
+        const evaluacion = await this.evaluacionIpsRepository.findOne({ where: { evips_id: evips_id } });
+        if (!evaluacion) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
+        const criterio = this.criterioImplementacionRepository.create(dto)
+        //asigna la evaluacion al criterio
+        criterio.cri_imp_eva = evaluacion
+        await this.criterioImplementacionRepository.save(criterio)
+        return new MessageDto('El criterio ha sido Creada');
     }
 
     async update(id: number, dto: CriterioImplementacionDto): Promise<any> {
