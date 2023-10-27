@@ -15,6 +15,7 @@ import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.
 import { CriteriopamEntity } from 'src/pamec/criteriopam.entity';
 import { CalificacionpamecService } from 'src/pamec/calificacionpamec/calificacionpamec.service';
 import { CalificacionpamEntity } from 'src/pamec/calificacionpam.entity';
+import { EvaluacionpamecService } from 'src/pamec/evaluacionpamec/evaluacionpamec.service';
 
 
 @Module({
@@ -33,7 +34,7 @@ import { CalificacionpamEntity } from 'src/pamec/calificacionpam.entity';
     inject: [ConfigService],
   }), //FINAL DE MODULO JwtService
   ],
-  providers: [PamecActaService,CalificacionpamecService],
+  providers: [PamecActaService,CalificacionpamecService,EvaluacionpamecService],
   controllers: [PamecActaController]
 })
 export class PamecActaModule { }

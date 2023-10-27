@@ -44,4 +44,17 @@ export class EvaluacionIndService {
         if (!ultima_evaluacion) throw new NotFoundException(new MessageDto('No existe evaluación en la lista'))
         return ultima_evaluacion
     }
+
+    //criterio por acta
+    async getallEvaActa(eva_id: number): Promise<EvaluacionIndependientesEntity[]> {
+
+        const criterio = await this.evaluacionIndRepository.createQueryBuilder('evaluacion')
+            .select(['evaluacion',  'eval_acta_ind.act_nombre_prestador','eval_acta_ind.act_nombre_funcionario', 
+                    'eval_acta_ind.act_cargo_funcionario', 'eval_acta_ind.act_nombre_prestador'])
+            .innerJoinAndSelect('evaluacion.eval_acta_ind', 'eval_acta_ind')
+            .where('evaluacion.eva_id = :id_eva', { id_eva: eva_id })
+            .getMany()
+
+        return criterio
+    }
 }

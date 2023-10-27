@@ -146,12 +146,10 @@ export class CalificacionindService {
         titulo_uno = "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE"
 
         const criterio = await this.calificacionIndRepository.createQueryBuilder('calificacion')
-            .select(['calificacion', 'criterio_cal.cri_id', 'criterio_cal.cri_nombre', 'criterio_cal.cri_verificacion', 'eta_item.eta_nombre', 'eval_acta_ind.act_nombre_prestador',
-                'eval_acta_ind.act_nombre_funcionario', 'eval_acta_ind.act_cargo_funcionario', 'eval_acta_ind.act_nombre_prestador'])
+            .select(['calificacion', 'criterio_cal.cri_id', 'criterio_cal.cri_nombre', 'criterio_cal.cri_verificacion', 'eta_item.eta_nombre'])
             .innerJoin('calificacion.criterio_cal', 'criterio_cal')
             .innerJoinAndSelect('criterio_cal.eta_item', 'eta_item')
             .innerJoinAndSelect('calificacion.cal_evaluacion_independientes', 'cal_evaluacion_independientes')
-            .innerJoinAndSelect('cal_evaluacion_independientes.eval_acta_ind', 'eval_acta_ind')
             .where('eta_item.eta_nombre LIKE :titulo', { titulo: titulo_uno })
             .andWhere('cal_evaluacion_independientes.eva_id = :id_eva', { id_eva: eva_id })
             .getMany()

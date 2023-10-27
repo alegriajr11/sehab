@@ -19,4 +19,9 @@ export class EvaluacionIndController {
 	async ultimaEvaluacion() {
 		return await this.evaluacionIndService.getUltimaEvaluacion()
 	}
+
+	@Get('/acta/:id')
+	async getOneEvaActa(@Param('id', ParseIntPipe) id: number) {
+		return await this.evaluacionIndService.getallEvaActa(id);
+	}
 }

@@ -19,6 +19,7 @@ import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualiza
 import { CriteriopamService } from 'src/pamec/actividad/criteriopam/criteriopam.service';
 import { join } from 'path';
 import { CalificacionpamecService } from 'src/pamec/calificacionpamec/calificacionpamec.service';
+import { EvaluacionpamecService } from 'src/pamec/evaluacionpamec/evaluacionpamec.service';
 
 const PDFDocument = require('pdfkit-table')
 @Injectable()
@@ -37,6 +38,8 @@ export class PamecActaService {
         private readonly auditoria_actualizacion_service: AuditoriaActualizacionService,
         @Inject(CalificacionpamecService)
         private readonly calificacionpamecService: CalificacionpamecService,
+        @Inject(EvaluacionpamecService)
+        private readonly evaluacionpamecService: EvaluacionpamecService,
     ) { }
 
     //LISTAR TODAS PAMEC IPS ACTA PDF
@@ -285,6 +288,13 @@ export class PamecActaService {
         const titulo_ocho = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
         const titulo_nueve = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
         const titulo_diez = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
+        const acta = await this.evaluacionpamecService.getallEvaActa(id);
+
+        let nombreprestador = "";
+        let prestadorPrincipal = "";
+        let cargoprestador = "";
+        let nombrefuncionario = "";
+        let cargofuncionario = "";
 
         let totalCalificacionesActividad1 = 0
         let totalCalificacionesCountActividad1 = 0; // Contador para la cantidad total de calificaciones
@@ -347,11 +357,23 @@ export class PamecActaService {
                 return espacioRestante >= 0;
             }
 
-            // Agregar las tablas a las páginas
+            //ASIGNAR NOMBRES DEL PRESTADOR Y FUNCIONARIO EN EL PDF
+            acta.forEach(acta => {
+                prestadorPrincipal = acta.eval_acta_pamec.act_prestador;
+                nombreprestador = acta.eval_acta_pamec.act_nombre_prestador;
+                nombrefuncionario = acta.eval_acta_pamec.act_nombre_funcionario;
+                cargoprestador = acta.eval_acta_pamec.act_cargo_prestador;
+                cargofuncionario = acta.eval_acta_pamec.act_cargo_funcionario;
+            })
+            doc.text(prestadorPrincipal)
+
             if (titulo_uno.length) {
                 let rows_elements = [];
+
                 titulo_uno.forEach(item => {
-                
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -362,39 +384,65 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table = {
                     title: "ACTIVIDADES PREVIAS",
                     headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable1 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable1.push(rows_elements.slice(i, i + chunkSize));
                 }
-                doc.table(table, tableOptions);
+
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable1.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table.title,
+                            headers: table.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table.title,
+                            headers: table.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
                 // Calcular el promedio
                 // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
                 // const promedioRedondeado = promedio.toFixed(2);
 
                 // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
             
+
             doc.moveDown();
             if (titulo_dos.length) {
                 let rows_elements = [];
+
                 titulo_dos.forEach(item => {
-                    // let calif
-                    // let obs
-                    // let apli
-                    // item.criterio_calificacionpam.forEach(cal => {
-                    //     calif = '            ' + cal.cal_nota
-                    //     totalCalificacionesActividad1 += cal.cal_nota
-                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
-                    //     obs = cal.cal_observaciones
-                    //     apli = cal.cal_aplica
-                    // })
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -405,35 +453,62 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table2 = {
-                    title: "AUTOEVALUACION",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    title: "AUTOEVALUACIÓN",
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                // Verificar si hay suficiente espacio en la página actual para la tabla
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable2 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable2.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table2, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable2.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table2.title,
+                            headers: table2.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table2.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table2.title,
+                            headers: table2.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
-            
+
             if (titulo_tres.length) {
                 let rows_elements = [];
+
                 titulo_tres.forEach(item => {
-                    // let calif
-                    // let obs
-                    // let apli
-                    // item.criterio_calificacionpam.forEach(cal => {
-                    //     calif = '            ' + cal.cal_nota
-                    //     totalCalificacionesActividad1 += cal.cal_nota
-                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
-                    //     obs = cal.cal_observaciones
-                    //     apli = cal.cal_aplica
-                    // })
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -444,35 +519,64 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table3 = {
                     title: "SELECCIÓN DE LOS PROCESOS A MEJORAR",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable3 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable3.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table3, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable3.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table3.title,
+                            headers: table3.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table3.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table3.title,
+                            headers: table3.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
 
 
             if (titulo_cuatro.length) {
                 let rows_elements = [];
+
                 titulo_cuatro.forEach(item => {
-                    // let calif
-                    // let obs
-                    // let apli
-                    // item.criterio_calificacionpam.forEach(cal => {
-                    //     calif = '            ' + cal.cal_nota
-                    //     totalCalificacionesActividad1 += cal.cal_nota
-                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
-                    //     obs = cal.cal_observaciones
-                    //     apli = cal.cal_aplica
-                    // })
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -483,34 +587,63 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table4 = {
                     title: "PRIORIZACION",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable4 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable4.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table4, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable4.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table4.title,
+                            headers: table4.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table4.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table4.title,
+                            headers: table4.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
 
             if (titulo_cinco.length) {
                 let rows_elements = [];
+
                 titulo_cinco.forEach(item => {
-                    // let calif
-                    // let obs
-                    // let apli
-                    // item.criterio_calificacionpam.forEach(cal => {
-                    //     calif = '            ' + cal.cal_nota
-                    //     totalCalificacionesActividad1 += cal.cal_nota
-                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
-                    //     obs = cal.cal_observaciones
-                    //     apli = cal.cal_aplica
-                    // })
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -521,34 +654,63 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table5 = {
                     title: "DEFINICIÓN DE LA CALIDAD ESPERADA",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable5 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable5.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table5, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable5.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table5.title,
+                            headers: table5.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table5.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table5.title,
+                            headers: table5.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
 
             if (titulo_seis.length) {
                 let rows_elements = [];
+
                 titulo_seis.forEach(item => {
-                    // let calif
-                    // let obs
-                    // let apli
-                    // item.criterio_calificacionpam.forEach(cal => {
-                    //     calif = '            ' + cal.cal_nota
-                    //     totalCalificacionesActividad1 += cal.cal_nota
-                    //     totalCalificacionesCountActividad1++; // Incrementar el contador
-                    //     obs = cal.cal_observaciones
-                    //     apli = cal.cal_aplica
-                    // })
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -559,25 +721,63 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table6 = {
                     title: "DEFINICIÓN DE LA CALIDAD OBSERVADA",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable6 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable6.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table6, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable6.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table6.title,
+                            headers: table6.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table6.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table6.title,
+                            headers: table6.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
 
             if (titulo_siete.length) {
                 let rows_elements = [];
+
                 titulo_siete.forEach(item => {
-                
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -588,25 +788,63 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table7 = {
                     title: "PLAN DE MEJORAMIENTO PARA EL CIERRE DE BRECHAS",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable7 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable7.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table7, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable7.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table7.title,
+                            headers: table7.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table7.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table7.title,
+                            headers: table7.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
 
             if (titulo_ocho.length) {
                 let rows_elements = [];
+
                 titulo_ocho.forEach(item => {
-                 
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -617,25 +855,63 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table8 = {
                     title: "EJECUCION Y SEGUIMIENTO AL PLAN DE MEJORAMIENTO",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable8 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable8.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table8, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable8.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table8.title,
+                            headers: table8.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table8.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table8.title,
+                            headers: table8.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
 
             if (titulo_nueve.length) {
                 let rows_elements = [];
+
                 titulo_nueve.forEach(item => {
-                   
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -646,25 +922,63 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table9 = {
                     title: "EVALUACION PLAN DE MEJORAMIENTO",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable9 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable9.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table9, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable9.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table9.title,
+                            headers: table9.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table9.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table9.title,
+                            headers: table9.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
 
             if (titulo_diez.length) {
                 let rows_elements = [];
+
                 titulo_diez.forEach(item => {
-                
+                    // totalCalificacionesEtapa1 += item.cal_nota
+                    // totalCalificacionesCountEtapa1++; // Incrementar el contador
+
                     var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
                     rows_elements.push(temp_list)
                 })
@@ -675,20 +989,99 @@ export class PamecActaService {
                     align: 'center',
                     rowHeight: 15,
                 };
+
                 const table10 = {
                     title: "APRENDIZAJE ORGANIZACIONAL",
-                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
+                    headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable10 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable10.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table10, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable10.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table10.title,
+                            headers: table10.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table10.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table10.title,
+                            headers: table10.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
+                // Calcular el promedio
+                // const promedio = totalCalificacionesActividad1 / totalCalificacionesCountActividad1;
+                // const promedioRedondeado = promedio.toFixed(2);
+
+                // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
+
+            // Tabla "PROFESIONAL INDEPENDIENTE"
+            const tableOptions2 = {
+                columnsSize: [225, 225],
+                headerAlign: 'center',
+                align: 'center',
+                rowHeight: 15,
+            };
+
+            const tablefirmas = {
+                headers: ["", ""],
+                rows: [[`NOMBRE: ${nombreprestador}`, `NOMBRE: ${nombrefuncionario}`],
+                [`CARGO: ${cargoprestador}`, `CARGO: ${cargofuncionario}`]]
+            };
+
+            // Dividir la tabla de firmas en secciones (por ejemplo, en grupos de 10 filas)
+            const chunkSize = 10;
+            const chunksTableFirmas = [];
+            for (let i = 0; i < tablefirmas.rows.length; i += chunkSize) {
+                chunksTableFirmas.push(tablefirmas.rows.slice(i, i + chunkSize));
+            }
+
+            // Iterar a través de las secciones y agregarlas al documento
+            chunksTableFirmas.forEach((section, index) => {
+                // Calcular el espacio requerido para la sección
+                const sectionHeight = section.length * tableOptions2.rowHeight;
+
+                // Verificar si hay espacio suficiente en la página actual
+                if (hayEspacioSuficiente(sectionHeight)) {
+                    // Agregar la sección a la página actual
+                    doc.table({
+                        headers: tablefirmas.headers,
+                        rows: section
+                    }, tableOptions2);
+                } else {
+                    // Agregar una nueva página antes de la sección
+                    doc.addPage();
+                    // Agregar la sección a la nueva página
+                    doc.table({
+                        headers: tablefirmas.headers,
+                        rows: section
+                    }, tableOptions2);
+                }
+            });
+
 
             const buffer = [];
             doc.on('data', buffer.push.bind(buffer));
@@ -703,302 +1096,5 @@ export class PamecActaService {
         return pdfBuffer;
     }
 
-     //GENERACIÓN DE REPORTE DE CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES
-    //La función para generar el PDF con las tablas ajustadas
-    // async generarPdfEvaluacionPamec(id: number): Promise<Buffer> {
 
-    //     const titulo_uno = await this.calificacionpamecService.getallcriterioxtitulouno(id);
-    //     const titulo_dos = await this.calificacionpamecService.getallcriterioxtitulodos(id);
-    //     const titulo_tres = await this.calificacionpamecService.getallcriterioxtitulotres(id);
-    //     const titulo_cuatro = await this.calificacionpamecService.getallcriterioxtitulocuatro(id);
-    //     const titulo_once = await this.calificacionpamecService.getallcriterioxtituloonce(id);
-
-    //     // let nombreprestador="";
-    //     let currentHeight = 0;
-    //     // let cargoprestador="";
-    //     // let nombrefuncionario="";
-    //     // let cargofuncionario="";
-
-    //     // let totalCalificacionesEtapa1 = 0
-    //     // let totalCalificacionesCountEtapa1 = 0; // Contador para la cantidad total de calificaciones
-    //     // let totalCalificacionesEtapa2 = 0
-    //     // let totalCalificacionesCountEtapa2 = 0; // Contador para la cantidad total de calificaciones
-    //     // let totalCalificacionesEtapa3 = 0
-    //     // let totalCalificacionesCountEtapa3 = 0; // Contador para la cantidad total de calificaciones
-    //     // let totalCalificacionesEtapa4 = 0
-    //     // let totalCalificacionesCountEtapa4 = 0; // Contador para la cantidad total de calificaciones
-
-    //     // let promedio=0;
-    //     // let promedio2=0;
-    //     // let promedio3=0;
-    //     // let promedio4=0;
-
-    //     // let total=0;
-
-    //     const pdfBuffer: Buffer = await new Promise(resolve => {
-    //         const doc = new PDFDocument({
-    //             size: 'LETTER',
-    //             bufferPages: true,
-    //             autoFirstPage: false,
-    //         });
-
-    //         let pageNumber = 0;
-
-    //         doc.on('pageAdded', () => {
-    //             pageNumber++;
-    //             let bottom = doc.page.margins.bottom;
-
-    //             doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
-    //             doc.moveDown()
-
-    //             doc.page.margins.top = 115;
-    //             doc.page.margins.bottom = 0;
-    //             doc.font("Helvetica").fontSize(14);
-    //             doc.text(
-    //                 'Pág. ' + pageNumber,
-    //                 0.5 * (doc.page.width - 100),
-    //                 doc.page.height - 50,
-    //                 {
-    //                     width: 100,
-    //                     align: 'center',
-    //                     lineBreak: false,
-    //                 }
-    //             );
-    //             doc.page.margins.bottom = bottom;
-
-    //         });
-
-    //         doc.addPage();
-    //         doc.text('', 90, 110);
-    //         doc.font('Helvetica-Bold').fontSize(14);
-    //         doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
-    //         doc.text('', 185, 130);
-    //         doc.font('Helvetica-Bold').fontSize(14);
-    //         doc.text('PROFESIONALES INDEPENDIENTES');
-    //         // doc.moveDown();
-    //         // doc.font('Helvetica').fontSize(14);
-
-    //         doc.text('', 50, 110);
-    //         doc.moveDown();
-    //         doc.moveDown();
-    //         doc.moveDown();
-    //         doc.moveDown();
-    //         // doc.moveDown();
-    //         // doc.moveDown();
-    //         // doc.moveDown();
-
-    //         // doc.fontSize(24);
-    //         function hayEspacioSuficiente(alturaContenido: number) {
-    //             const margenInferior = doc.page.margins.bottom;
-    //             const alturaPagina = doc.page.height;
-    //             const espacioRestante = alturaPagina - margenInferior - alturaContenido;
-    //             return espacioRestante >= 0;
-    //         }
-
-            
-
-    //         //Agregar las tablas a las páginas
-
-    //         if (titulo_uno.length) {
-    //             let rows_elements = [];
-
-    //             titulo_uno.forEach(item => {
-
-                    
-
-    //                 var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
-    //                 rows_elements.push(temp_list)
-    //             })
-
-    //             const tableOptions = {
-    //                 columnsSize: [120, 210, 32, 35, 135],
-    //                 headerAlign: 'center',
-    //                 align: 'center',
-    //                 rowHeight: 15,
-
-    //             };
-    //             const table = {
-    //                 title: "ACTIVIDADES PREVIAS",
-    //                 headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
-    //                 rows: rows_elements
-    //             };
-
-
-    //             doc.moveDown();
-    //             // Verificar si hay suficiente espacio en la página actual para la tabla
-    //             if (!hayEspacioSuficiente(currentHeight + tableOptions.rowHeight * rows_elements.length)) {
-    //                 doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-    //                 pageNumber++; // Incrementar el número de página
-                    
-    //             }
-
-    //             doc.table(table, tableOptions);
-    //             currentHeight += tableOptions.rowHeight * rows_elements.length;
-                
-    //         }
-
-    //         if (titulo_dos.length) {
-    //             let rows_elements = [];
-    //             titulo_dos.forEach(item => {
-                   
-    //                 var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
-    //                 rows_elements.push(temp_list)
-    //             })
-
-    //             const tableOptions = {
-    //                 columnsSize: [120, 210, 32, 35, 135],
-    //                 headerAlign: 'center',
-    //                 align: 'center',
-    //                 rowHeight: 15,
-    //             };
-    //             const table2 = {
-    //                 title: "AUTOEVALUACIÓN",
-    //                 headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "NOTA", "APLICA", "OBSERVACIONES"],
-    //                 rows: rows_elements
-    //             };
-
-    //             doc.moveDown();
-    //             // Verificar si hay suficiente espacio en la página actual para la tabla
-    //             if (!hayEspacioSuficiente(currentHeight + tableOptions.rowHeight * rows_elements.length)) {
-    //                 doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-    //                 pageNumber++; // Incrementar el número de página
-                    
-    //             }
-
-    //             doc.table(table2, tableOptions);
-    //             currentHeight += tableOptions.rowHeight * rows_elements.length;
-                
-    //         }
-
-    //         // doc.moveDown();
-    //         // doc.moveDown();
-
-    //         if (titulo_tres.length) {
-    //             let rows_elements = [];
-    //             titulo_tres.forEach(item => {
-                   
-    //                 var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
-    //                 rows_elements.push(temp_list)
-    //             })
-
-    //             const tableOptions = {
-    //                 columnsSize: [120, 210, 32, 35, 135],
-    //                 headerAlign: 'center',
-    //                 align: 'center',
-    //                 rowHeight: 15,
-    //             };
-    //             const table3 = {
-    //                 title: "SELECCIÓN DE LOS PROCESOS A MEJORAR",
-    //                 headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
-    //                 rows: rows_elements
-    //             };
-    //             doc.moveDown();
-    //             // Verificar si hay suficiente espacio en la página actual para la tabla
-    //             if (!hayEspacioSuficiente(currentHeight + tableOptions.rowHeight * rows_elements.length)) {
-    //                 doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-    //                 pageNumber++; // Incrementar el número de página
-                    
-    //             }
-
-    //             doc.table(table3, tableOptions);
-    //             currentHeight += tableOptions.rowHeight * rows_elements.length;
-            
-            
-    //         }
-
-    //         // doc.moveDown();
-    //         // doc.moveDown();
-
-    //         if (titulo_cuatro.length) {
-    //             let rows_elements = [];
-    //             titulo_cuatro.forEach(item => {
-                    
-    //                 var temp_list = [item.criteriopam_calificacion.crip_nombre, item.criteriopam_calificacion.crip_desarrollo_etapas, '    ' + item.cal_nota, item.cal_aplica, item.cal_observaciones];
-    //                 rows_elements.push(temp_list)
-    //             })
-
-    //             const tableOptions = {
-    //                 columnsSize: [120, 210, 32, 35, 135],
-    //                 headerAlign: 'center',
-    //                 align: 'center',
-    //                 rowHeight: 15,
-    //             };
-    //             const table4 = {
-    //                 title: "PRIORIZACION",
-    //                 headers: ["CRITERIOS", "DESARROLLO DE LOS CRITERIOS POR ETAPAS", "CALIFICACION", "APLICA", "OBSERVACIONES"],
-    //                 rows: rows_elements
-    //             };
-    //             doc.moveDown();
-    //             // Verificar si hay suficiente espacio en la página actual para la tabla
-    //             if (!hayEspacioSuficiente(currentHeight + tableOptions.rowHeight * rows_elements.length)) {
-    //                 doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-    //                 pageNumber++; // Incrementar el número de página
-                    
-    //             }
-
-    //             doc.table(table4, tableOptions);
-    //             currentHeight += tableOptions.rowHeight * rows_elements.length;
-                
-
-                
-    //         }
-
-            
-
-    //         // const tableOptions = {
-    //         //     columnsSize: [ 400, 50],
-    //         //     headerAlign: 'center',
-    //         //     align: 'center',
-    //         //     rowHeight: 15,
-    //         // };
-    //         // total=((promedio+promedio2+promedio3+promedio4)/4)
-    //         // const tablecount = {
-    //         //         title: "RANGO DE IMPLEMENTACION",
-    //         //         headers: [ "CRITERIOS", "TOTAL"],
-    //         //         rows:[["COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",'    '+promedio.toFixed(2)],
-    //         //             ["CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",'    '+promedio2.toFixed(2)],
-    //         //             ["REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",'    '+promedio3.toFixed(2)],
-    //         //             ["DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",'    '+promedio4.toFixed(2)],
-    //         //             ["RESULTADOS",'    '+total.toFixed(2)]]
-
-    //         //     };
-
-
-    //         //     doc.moveDown();
-
-    //         //     doc.table(tablecount, tableOptions);
-
-    //         //     doc.moveDown();
-
-    //         //     const tableOptions2 = {
-    //         //         columnsSize: [ 225, 225],
-    //         //         headerAlign: 'center',
-    //         //         align: 'center',
-    //         //         rowHeight: 15,
-    //         //     };
-
-    //             // const tablefirmas = {
-    //             //         headers: [ "PROFESIONAL INDEPENDIENTE", "POR SECRETARIA DE SALUD DEPARTAMENTAL"],
-    //             //         rows:[[`NOMBRE: ${nombreprestador}`,`NOMBRE: ${nombrefuncionario}`],
-    //             //             [`CARGO: ${cargoprestador}`,`CARGO: ${cargofuncionario}`],
-    //             //             ["FIRMA","FIRMA  :"]]
-    //             //     };
-    
-    
-    //             //     doc.moveDown();
-    
-    //             //     doc.table(tablefirmas, tableOptions2);
-
-    //         const buffer = [];
-    //         doc.on('data', buffer.push.bind(buffer));
-    //         doc.on('end', () => {
-    //             const data = Buffer.concat(buffer);
-    //             resolve(data);
-    //         });
-
-    //         doc.end();
-    //     });
-
-    //     return pdfBuffer;
-    // }
 }

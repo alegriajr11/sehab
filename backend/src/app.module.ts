@@ -119,6 +119,7 @@ import { CalificacionipsAjusteModule } from './sp/sp_ips/calificacion/calificaci
 import { CalificacionipsImplementacionModule } from './sp/sp_ips/calificacion/calificacionips_implementacion/calificacionips_implementacion.module';
 import { CalificacionipsPlaneacionModule } from './sp/sp_ips/calificacion/calificacionips_planeacion/calificacionips_planeacion.module';
 import { CalificacionipsVerificacionModule } from './sp/sp_ips/calificacion/calificacionips_verificacion/calificacionips_verificacion.module';
+import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.module';
 
 
 
@@ -217,6 +218,7 @@ import { CalificacionipsVerificacionModule } from './sp/sp_ips/calificacion/cali
     CalificacionipsImplementacionModule,
     CalificacionipsPlaneacionModule,
     CalificacionipsVerificacionModule,
+    EvaluacionpamecModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 

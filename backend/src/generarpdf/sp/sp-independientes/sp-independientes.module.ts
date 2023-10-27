@@ -14,6 +14,7 @@ import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizac
 import { CalificacionindService } from 'src/sp/sp_ind/calificacionind/calificacionind.service';
 import { CriterioIndEntity } from 'src/sp/sp_ind/criterioind.entity';
 import { CalificacionIndEntity } from 'src/sp/sp_ind/calificacionind.entity';
+import { EvaluacionIndService } from 'src/sp/sp_ind/evaluacion-ind/evaluacion-ind.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ActaSpIndependientePdfEntity, EvaluacionIndependientesEntity,CriterioIndEntity,CalificacionIndEntity,  PrestadorEntity, EtapaInd]),
@@ -31,7 +32,7 @@ import { CalificacionIndEntity } from 'src/sp/sp_ind/calificacionind.entity';
     inject: [ConfigService],
   }),
 ],
-  providers: [SpIndependientesService,CalificacionindService],
+  providers: [SpIndependientesService,CalificacionindService,EvaluacionIndService],
   controllers: [SpIndependientesController]
 })
 export class SpIndependientesModule {}

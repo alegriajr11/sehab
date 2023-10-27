@@ -18,6 +18,7 @@ import { EtapaIndRepository } from 'src/sp/sp_ind/etapaind.repository';
 import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
 import { CalificacionindService } from 'src/sp/sp_ind/calificacionind/calificacionind.service';
 import { join } from 'path';
+import { EvaluacionIndService } from 'src/sp/sp_ind/evaluacion-ind/evaluacion-ind.service';
 
 const PDFDocument = require('pdfkit-table')
 
@@ -37,6 +38,8 @@ export class SpIndependientesService {
         private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
         @Inject(CalificacionindService)
         private readonly calificacionindService: CalificacionindService,
+        @Inject(EvaluacionIndService)
+        private readonly evaluacionIndService: EvaluacionIndService,
     ) { }
 
     //LISTAR TODAS LAS ACTAS SP INDEPENDIENTE
@@ -412,6 +415,7 @@ export class SpIndependientesService {
         const titulo_dos = await this.calificacionindService.getallcriterioxtitulodos(id);
         const titulo_tres = await this.calificacionindService.getallcriterioxtitulotres(id);
         const titulo_cuatro = await this.calificacionindService.getallcriterioxtitulocuatro(id);
+        const acta = await this.evaluacionIndService.getallEvaActa(id);
 
 
         let nombreprestador = "";
@@ -433,8 +437,9 @@ export class SpIndependientesService {
         let promedio2 = 0;
         let promedio3 = 0;
         let promedio4 = 0;
-
+        let contador = 0;
         let total = 0;
+        let promedio_total = 0;
 
         const pdfBuffer: Buffer = await new Promise(resolve => {
             const doc = new PDFDocument({
@@ -493,12 +498,12 @@ export class SpIndependientesService {
             }
 
             //ASIGNAR NOMBRES DEL PRESTADOR Y FUNCIONARIO EN EL PDF
-            titulo_uno.forEach(prestador => {
-                prestadorPrincipal = prestador.cal_evaluacion_independientes.eval_acta_ind.act_prestador;
-                nombreprestador = prestador.cal_evaluacion_independientes.eval_acta_ind.act_nombre_prestador;
-                nombrefuncionario = prestador.cal_evaluacion_independientes.eval_acta_ind.act_nombre_funcionario;
-                cargoprestador = prestador.cal_evaluacion_independientes.eval_acta_ind.act_cargo_prestador;
-                cargofuncionario = prestador.cal_evaluacion_independientes.eval_acta_ind.act_cargo_funcionario;
+            acta.forEach(acta => {
+                prestadorPrincipal = acta.eval_acta_ind.act_prestador;
+                nombreprestador = acta.eval_acta_ind.act_nombre_prestador;
+                nombrefuncionario = acta.eval_acta_ind.act_nombre_funcionario;
+                cargoprestador = acta.eval_acta_ind.act_cargo_prestador;
+                cargofuncionario = acta.eval_acta_ind.act_cargo_funcionario;
             })
             doc.text(prestadorPrincipal)
 
@@ -747,6 +752,35 @@ export class SpIndependientesService {
                     }
                 });
 
+                // Calcular el promedio
+                promedio4 = totalCalificacionesEtapa4 / totalCalificacionesCountEtapa4;
+
+            }
+            //verifica si las tablas tienen datos
+            if (promedio > 0) {
+                total += promedio
+                contador += 1
+            }
+            if (promedio2 > 0) {
+                total += promedio2
+                contador += 1
+            }
+
+            if (promedio3 > 0) {
+                total += promedio3
+                contador += 1
+            }
+
+            if (promedio4 > 0) {
+                total += promedio4
+                contador += 1
+            }
+
+            // Calcula el promedio solo si hay promedios mayores que 0
+            if (contador > 0) {
+                promedio_total = total / contador
+            } else {
+                promedio_total = 0
             }
 
             // Tabla "RANGO DE IMPLEMENTACION"
@@ -756,7 +790,9 @@ export class SpIndependientesService {
                 align: 'center',
                 rowHeight: 15,
             };
-            total = ((promedio + promedio2 + promedio3 + promedio4) / 4)
+
+
+            //total = ((promedio + promedio2 + promedio3 + promedio4) / 4)
             const tablecount = {
                 title: "RANGO DE IMPLEMENTACION",
                 headers: ["CRITERIOS", "TOTAL"],
@@ -765,7 +801,7 @@ export class SpIndependientesService {
                     ["CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE", '    ' + promedio2.toFixed(2)],
                     ["REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO", '    ' + promedio3.toFixed(2)],
                     ["DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO", '    ' + promedio4.toFixed(2)],
-                    ["RESULTADOS", '    ' + total.toFixed(2)]
+                    ["RESULTADOS", '    ' + promedio_total.toFixed(2)]
                 ]
             };
 
@@ -805,7 +841,56 @@ export class SpIndependientesService {
             });
 
             doc.moveDown()
-            
+
+            // Tabla "DIAGNÓSTICO"
+            const tableOptions3 = {
+                columnsSize: [115,110, 225],
+                headerAlign: 'center',
+                align: 'center',
+                rowHeight: 15,
+            };
+
+            const tablerango = {
+                headers: ["","DIAGNÓSTICO",""],
+                rows: [[`Rango 1.0 – 4.0`, `INSUFICIENTE `, `El resultado fue:  `],
+                [`Rango 4.1 – 5.0`, `SATISFACTORIO `, `Se debe enviar el plan de mejoramiento con plazo de  un (1) mes, al siguiente correo electrónico: verificacionssdptyo@hotmail.com`]]
+            };
+
+            const chunkSize2 = 10;
+            const chunksTableRango = [];
+            for (let i = 0; i < tablerango.rows.length; i += chunkSize2) {
+                chunksTableRango.push(tablerango.rows.slice(i, i + chunkSize2));
+            }
+
+            // Iterar a través de las secciones y agregarlas al documento
+            chunksTableRango.forEach((section, index) => {
+                // Calcular el espacio requerido para la sección
+                const sectionHeight = section.length * tableOptions3.rowHeight;
+
+                // Verificar si hay espacio suficiente en la página actual
+                if (hayEspacioSuficiente(sectionHeight)) {
+                    // Agregar la sección a la página actual
+                    doc.table({
+                
+                        headers: tablerango.headers,
+                        rows: section
+                    }, tableOptions3);
+                } else {
+                    // Agregar una nueva página antes de la sección
+                    doc.addPage();
+                    // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                    
+                    doc.moveDown();
+                    // Agregar la sección a la nueva página
+                    doc.table({
+                        headers: tablerango.headers,
+                        rows: section
+                    }, tableOptions3);
+                }
+            });
+
+            doc.moveDown()
+
             // Tabla "PROFESIONAL INDEPENDIENTE"
             const tableOptions2 = {
                 columnsSize: [225, 225],
