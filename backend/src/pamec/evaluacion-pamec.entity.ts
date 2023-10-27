@@ -20,14 +20,9 @@ export class EvaluacionPamecEntity {
     eval_prestador: PrestadorEntity;
 
 
-    //Relacion Muchos a Muchos  EVALUACION-PAMEC - ACTIVIDAD-PAMEC
-    @ManyToMany(type => CalificacionpamEntity, actividadPamec => actividadPamec.cal_evaluacion_pam, { eager: true })
-    @JoinTable({
-        name: 'cal_eva_pam',
-        joinColumn: { name: 'cal_eva_id' },
-        inverseJoinColumn: { name: 'eva_cal_id' }
-    })
-    eval_calpam: CalificacionpamEntity[];
+    //Relacion Muchos a CALIFICACIONES - EVALUACION-PAMEC
+    @OneToMany(type => CalificacionpamEntity, calificacionPamec => calificacionPamec.cal_evaluacion_pam)
+    eval_calpam: CalificacionpamEntity
 
     //Relacion UNO a UNO EVALUACION PAMEC - ACTAS PAMEC
     @OneToOne(() => ActaPamecEntity, actaPamec => actaPamec.act_eval_pamec)
