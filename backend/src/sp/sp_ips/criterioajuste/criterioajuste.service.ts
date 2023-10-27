@@ -14,6 +14,7 @@ export class CriterioajusteService {
         private criterioAjusteRepository: CriterioAjusteRepository
     ){}
 
+    //LISTAR CRITERIOS AJUSTE POR ID_EVALUACIÓN
     async findByEva(id: number): Promise<CriterioAjusteEntity[]> {
         const criteriosaj = await this.criterioAjusteRepository.createQueryBuilder('criterioaj')
         .select(['criterioaj.cri_aju_id','criterioaj.cri_aju_nombre', 'criterioaj.cri_aju_verificacion','cri_aju_eva.evips_nombre'])
@@ -22,11 +23,11 @@ export class CriterioajusteService {
         .getMany()
         if(!criteriosaj.length){
             throw new NotFoundException(new MessageDto('No hay Criterios en la lista'))
-        } 
-        
+        }
         return criteriosaj;
     }
 
+    //LISTAR CRITERIO AJUSTE POR ID DE CRITERIO
     async findByCri(cri_aju_id: number): Promise<CriterioAjusteEntity> {
         const criterio = await this.criterioAjusteRepository.findOne({ where: { cri_aju_id } })
         if (!criterio) {
@@ -35,16 +36,10 @@ export class CriterioajusteService {
         return criterio
     }
 
-    async findCri(cri_aju_id: number): Promise<CriterioAjusteEntity>{
-        const criterio = await this.criterioAjusteRepository.findOne({where: {cri_aju_id}})
-        if(!criterio) throw new NotFoundException(new MessageDto('No Existe el criterio'))
-        return criterio
-    }
+    //ACTUALIZAR CRITERIO AJUSTE - PARAMETROS ID_CRITERIO Y DTO
+    async update(id_criterio: number, dto: CriterioAjusteDto): Promise<any> {
 
-
-    async update(id: number, dto: CriterioAjusteDto): Promise<any> {
-
-        const criterio = await this.findCri(id);
+        const criterio = await this.findByCri(id_criterio);
         if (!criterio)
             throw new NotFoundException(new MessageDto('El Criterio No Existe'));
 
@@ -56,8 +51,9 @@ export class CriterioajusteService {
         return new MessageDto(`El Criterio ha sido Actualizado`);
     }
 
-    async delete(id: number): Promise<any> {
-        const criterio = await this.findByCri(id);
+    //ELIMINAR CRITERIO AJUSTE
+    async delete(id_criterio: number): Promise<any> {
+        const criterio = await this.findByCri(id_criterio);
         await this.criterioAjusteRepository.delete(criterio.cri_aju_id)
         return new MessageDto(`Criterio Eliminado`);
     }

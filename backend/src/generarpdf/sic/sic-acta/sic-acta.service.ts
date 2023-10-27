@@ -69,7 +69,6 @@ export class SicActaService {
             if (acta.length === 0) throw new NotFoundException(new MessageDto('No hay evaluaciones asignadas'))
             return acta;
         }
-
     }
 
     //ENCONTRAR POR ACTA
@@ -123,49 +122,105 @@ export class SicActaService {
 
     //ENCONTRAR ACTAS POR FECHA EXACTA
     async findAllFromDate(date: string): Promise<ActaSicPdfEntity[]> {
-
         const actas = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
             .where('acta.act_creado = :date', { date })
             .getMany();
         if (actas.length === 0) {
             throw new NotFoundException(new MessageDto('No hay actas en esa fecha'));
         }
-
         return actas;
     }
 
 
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
-    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSicPdfEntity[]> {
-        let query = this.acta_sic_pdfRepository.createQueryBuilder('acta');
+    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string, tokenDto?: string): Promise<ActaSicPdfEntity[]> {
 
-        if (numActa) {
-            query = query.where('acta.act_id = :numActa', { numActa });
-        }
+        const usuario = await this.jwtService.decode(tokenDto);
 
-        if (year) {
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        //LISTAR POR PARAMETRO INGRESADO SOLO AL ID QUE LE CORRESPONDA EL ACTA
+        if (!payloadInterface.usu_roles.includes('admin')) {
+            let query = this.acta_sic_pdfRepository.createQueryBuilder('acta');
+
             if (numActa) {
-                query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
-            } else {
-                query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                query = query.where('acta.act_id = :numActa', { numActa });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
             }
+
+            if (year) {
+                if (numActa) {
+                    query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                } else {
+                    query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                }
+            }
+
+            if (nomPresta) {
+                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            }
+
+            if (nit) {
+                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            }
+
+            //LISTAR POR ID DE FUNCIONARIO SI ALGUN CAMPO ES VACIO
+            query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            const actas = await query.getMany();
+
+            if (actas.length === 0) {
+                throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
+            }
+
+            return actas;
+
+        }
+        //LISTAR POR PARAMETROS PARA EL ADMIN 
+        else {
+            let query = this.acta_sic_pdfRepository.createQueryBuilder('acta');
+
+            if (numActa) {
+                query = query.where('acta.act_id = :numActa', { numActa });
+            }
+
+            if (year) {
+                if (numActa) {
+                    query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+                } else {
+                    query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                }
+            }
+
+            if (nomPresta) {
+                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            }
+
+            if (nit) {
+                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            }
+
+            const actas = await query.getMany();
+
+            if (actas.length === 0) {
+                throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
+            }
+
+            return actas;
         }
 
-        if (nomPresta) {
-            query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
-        }
 
-        if (nit) {
-            query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
-        }
-
-        const actas = await query.getMany();
-
-        if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
-        }
-
-        return actas;
     }
 
 
@@ -383,7 +438,7 @@ export class SicActaService {
         let nombrefuncionario = "";
         let cargofuncionario = "";
         let nombreindicador = "";
-        let codigoindicador= "";
+        let codigoindicador = "";
 
         const pdfBuffer: Buffer = await new Promise(resolve => {
             const doc = new PDFDocument({
@@ -445,13 +500,13 @@ export class SicActaService {
                 return espacioRestante >= 0;
             }
 
-            cumplimiento.forEach(prestador=>{
-                nombreprestador= prestador.cump_eva_sic.eval_acta_sic.act_nombre_prestador;
-                nombrefuncionario= prestador.cump_eva_sic.eval_acta_sic.act_nombre_funcionario;
-                cargoprestador= prestador.cump_eva_sic.eval_acta_sic.act_cargo_prestador;
-                cargofuncionario= prestador.cump_eva_sic.eval_acta_sic.act_cargo_funcionario;
-                nombreindicador= prestador.indicadorsic.ind_nombre;
-                codigoindicador=prestador.indicadorsic.ind_id;
+            cumplimiento.forEach(prestador => {
+                nombreprestador = prestador.cump_eva_sic.eval_acta_sic.act_nombre_prestador;
+                nombrefuncionario = prestador.cump_eva_sic.eval_acta_sic.act_nombre_funcionario;
+                cargoprestador = prestador.cump_eva_sic.eval_acta_sic.act_cargo_prestador;
+                cargofuncionario = prestador.cump_eva_sic.eval_acta_sic.act_cargo_funcionario;
+                nombreindicador = prestador.indicadorsic.ind_nombre;
+                codigoindicador = prestador.indicadorsic.ind_id;
             })
 
 
@@ -492,6 +547,7 @@ export class SicActaService {
 
 
             doc.text(nombreprestador)
+            console.log(nombreprestador)
             // Agregar las tablas a las páginas
             if (cumplimiento.length) {
                 let rows_elements = [];
@@ -511,7 +567,7 @@ export class SicActaService {
                 };
                 const table = {
                     title: `NOMBRE: ${nombreindicador}`,
-                    subtitle:`CODIGO: ${codigoindicador}`,
+                    subtitle: `CODIGO: ${codigoindicador}`,
                     headers: ["N°", "CRITERIOS", "CUMPLIMIENTO", "OBSERVACIONES"],
                     rows: rows_elements
                 };
@@ -838,12 +894,12 @@ export class SicActaService {
     //                 }
 
     //                 // Agregar una fila a la tabla actual
-                    
-                   
-    //             });
-            
 
-            
+
+    //             });
+
+
+
     //         }
 
 

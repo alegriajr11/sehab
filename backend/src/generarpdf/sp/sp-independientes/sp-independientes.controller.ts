@@ -12,8 +12,8 @@ export class SpIndependientesController {
     //OBTENER TODOS LOS  SP INDEPENDIENTE ACTA PDF
     @UseGuards(JwtAuthGuard)
     @Get()
-    getAll() {
-        return this.sp_IndependientesService.getallActas();
+    getAll(@Query('tokenDto') tokenDto: string) {
+        return this.sp_IndependientesService.getallActas(tokenDto);
     }
 
     //OBTENER UN SP INDEPENDIENTE ACTA PDF POR ID
@@ -35,8 +35,9 @@ export class SpIndependientesController {
     async findAllBusqueda(@Query('year') year: number,
         @Query('acta_id') act_id: number,
         @Query('act_prestador') act_prestador: string,
-        @Query('act_nit') act_nit: string) {
-        return this.sp_IndependientesService.findAllBusqueda(year, act_id, act_prestador, act_nit);
+        @Query('act_nit') act_nit: string,
+        @Query('tokenDto') tokenDto: string) {
+        return this.sp_IndependientesService.findAllBusqueda(year, act_id, act_prestador, act_nit, tokenDto);
     }
 
     //CREAR SP INDEPENDIENTE ACTA PDF
@@ -54,7 +55,7 @@ export class SpIndependientesController {
         return await this.sp_IndependientesService.updateActaInd(id, payload);
     }
 
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Get('ultima/acta/spind')
     getLastActa() {
         return this.sp_IndependientesService.getLastestActa();

@@ -37,9 +37,10 @@ export class SicActaController {
     async findAllBusqueda(@Query('year') year: number,
         @Query('acta_id') acta_id: string,
         @Query('act_prestador') act_prestador: string,
-        @Query('act_nit') act_nit: string) {
+        @Query('act_nit') act_nit: string,
+        @Query('tokenDto') tokenDto: string) {
         const numericActaId = parseInt(acta_id);
-        return this.sic_act_pdfService.findAllBusqueda(year, numericActaId, act_prestador, act_nit);
+        return this.sic_act_pdfService.findAllBusqueda(year, numericActaId, act_prestador, act_nit, tokenDto);
     }
 
     //ÚLTIMA ACTA SIC
@@ -84,7 +85,7 @@ export class SicActaController {
     async descargarPdfCriterioInd(@Param('id') id: number, @Res() res): Promise<void> {
         const buffer = await this.sic_act_pdfService.generarPdfEvaluacionSic(id)
 
-        res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ind_sogcs.pdf"');
+        res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_sic_sogcs.pdf"');
         res.set({
             'Content-Length': buffer.length,
         })

@@ -1000,11 +1000,11 @@ export class AuditoriaRegistroService {
         act_id: number,
         anio: string,
     ): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha asignado una calificacion Sp Ind (${cal_nota}) al criterio "${cri_nombre}" del acta No. ${act_id} del año ${anio}`;
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha asignado una calificacion Sp Ind de: (${cal_nota}) al criterio "${cri_nombre}" del acta No. ${act_id} del año ${anio}`;
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Cumplimiento Sic',
+            'Calificacion Sp Independientes',
             details,
             direccionIp,
         );

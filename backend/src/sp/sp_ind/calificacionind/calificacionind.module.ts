@@ -6,13 +6,32 @@ import { CriterioIndEntity } from '../criterioind.entity';
 import { CalificacionIndEntity } from '../calificacionind.entity';
 import { EvaluacionIndependientesEntity } from '../evaluacion-independientes.entity';
 import { EtapaInd } from '../etapaind.entity';
+import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/auditoria_registro.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioIndEntity, EvaluacionIndependientesEntity, CalificacionIndEntity,EtapaInd])],
+  imports: [TypeOrmModule.forFeature([CriterioIndEntity, EvaluacionIndependientesEntity, CalificacionIndEntity, EtapaInd]),
+    AuditoriaRegistroModule,
+  //MODULO JwtService
+  PassportModule.register({ defaultStrategy: 'jwt' }),
+  JwtModule.registerAsync({
+    imports: [ConfigModule],
+    useFactory: async (configService: ConfigService) => ({
+      secret: configService.get('JWT_SECRET'),
+      signOptions: {
+        expiresIn: 7200,
+      },
+    }),
+    inject: [ConfigService],
+  }), //FINAL DE MODULO JwtService
+  ],
+  
   providers: [CalificacionindService],
   controllers: [CalificacionindController]
-}) 
+})
 export class CalificacionindModule {
 
-  
+
 }

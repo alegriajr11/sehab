@@ -80,6 +80,10 @@ export class ActaSpIndependientePdfEntity {
     @Column({ type: 'varchar', nullable: false, default:true })
     act_estado: string;
 
+    // @Column({ type: 'boolean', nullable: false, default: true })
+    // act_recibe_visita: boolean;
+    
+
     @BeforeInsert()
     async setDate() {
         this.act_creado = new Date();
