@@ -115,6 +115,10 @@ import { AuditoriaRegistroController } from './auditoria/auditoria_registro/audi
 import { GrupoEvaluacionModule } from './resolucion/grupo_evaluacion/grupo_evaluacion.module';
 import { ServicioModule } from './resolucion/servicio/servicio.module';
 import { CumplimientosicModule } from './sic/cumplimientosic/cumplimientosic.module';
+import { CalificacionipsAjusteModule } from './sp/sp_ips/calificacion/calificacionips_ajuste/calificacionips_ajuste.module';
+import { CalificacionipsImplementacionModule } from './sp/sp_ips/calificacion/calificacionips_implementacion/calificacionips_implementacion.module';
+import { CalificacionipsPlaneacionModule } from './sp/sp_ips/calificacion/calificacionips_planeacion/calificacionips_planeacion.module';
+import { CalificacionipsVerificacionModule } from './sp/sp_ips/calificacion/calificacionips_verificacion/calificacionips_verificacion.module';
 
 
 
@@ -209,6 +213,10 @@ import { CumplimientosicModule } from './sic/cumplimientosic/cumplimientosic.mod
     GrupoEvaluacionModule,
     ServicioModule,
     CumplimientosicModule,
+    CalificacionipsAjusteModule,
+    CalificacionipsImplementacionModule,
+    CalificacionipsPlaneacionModule,
+    CalificacionipsVerificacionModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SpIpsService } from './sp-ips.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { IpsDto } from 'src/generarpdf/sp/dto/sp-ips.dto';
@@ -61,5 +61,16 @@ export class SpIpsController {
     async cerrarActa(
         @Param('id', ParseIntPipe) id: number, @Body() payload: { tokenDto: TokenDto }) {
         return this.sp_IpsService.cerrarActa(id, payload);
+    }
+
+    @Get('sp/ips/evaluacion/:id')
+    async descargarPdfCriterioIps(@Param('id') id: number, @Res() res): Promise<void> {
+        const buffer = await this.sp_IpsService.generarPdfEvaluacionIps(id)
+
+        res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ips_sogcs.pdf"');
+        res.set({
+            'Content-Length': buffer.length,
+        })
+        res.end(buffer)
     }
 }
