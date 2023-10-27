@@ -5,8 +5,9 @@
 </div>
 
 <div class="t2">
-  <h2>INDICADORES PARA EL MONITOREO DE LA CALIDAD/PRESTADORES DE SERVICIOS
-    ACTA DE VERIFICACION Y SEGUIMIENTO
+  <h2>
+    INDICADORES PARA EL MONITOREO DE LA CALIDAD/PRESTADORES DE SERVICIOS ACTA DE
+    VERIFICACION Y SEGUIMIENTO
   </h2>
 </div>
 
@@ -32,24 +33,22 @@
       </thead>
       <tbody>
         <tr *ngFor="let criterio of criterioEstandar; let i = index">
-          <td>{{criterio.crie_id}} </td>
-          <td>{{criterio.crie_nombre}}</td>
+          <td>{{ criterio.crie_id }}</td>
+          <td>{{ criterio.crie_nombre }}</td>
           <td>
-            <button class="btn btn-outline-dark"
-              [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-              (click)="openModal(modalTemplate, criterio.crie_id, eva_id);">
-              <i class='fa fa-check'></i>
+            <button class="btn" [ngClass]="getClassForCriterio(criterio)"
+              [disabled]="sharedService.criteriosSicGuardados.includes(criterio.crie_id)"
+              (click)="openModal(modalTemplate, criterio.crie_id, eva_id)">
+              <i class="fa fa-check"></i>
             </button>
           </td>
         </tr>
       </tbody>
     </table>
-    <hr style="border-top: 1px solid black;">
+    <hr style="border-top: 1px solid black" />
     <ng-template #modalTemplate>
       <app-modalsic [dataFromParent]="modalRef"></app-modalsic>
     </ng-template>
-
-
 
     <!-- CRITERIOS SIC -->
     <div class="original-div" *ngFor="let i of range(numeroDeClones)">
@@ -74,78 +73,78 @@
                 <th scope="col">Cod</th>
                 <th scope="col">Criterio</th>
                 <th scope="col">Cumplimiento</th>
-
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let criterio of criterioSic; let i = index">
-                <td>{{i+1}} </td>
-                <td>{{criterio.cri_nombre}}</td>
+                <td>{{ i + 1 }}</td>
+                <td>{{ criterio.cri_nombre }}</td>
                 <td>
                   <button class="btn btn-outline-dark" (click)="openModal(modalTemplate2, criterio.cri_id, eva_id)">
-                    <i class='fa fa-check'></i>
+                    <i class="fa fa-check"></i>
                   </button>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <hr>
+        <hr />
         <ng-template #modalTemplate2>
           <app-modalsic2 [dataFromParent]="modalRef"></app-modalsic2>
         </ng-template>
       </div>
     </div>
 
-    <div class="row" style="padding-bottom: 2rem;" *ngIf="habilitarDiv">
+    <div class="row" style="padding-bottom: 2rem" *ngIf="habilitarDiv">
       <div class="col-md-5">
         <span for="" class="span">Dominio:</span>
         <select class="form-select form-control" name="dom_id" id="dom_id" (change)="cargarIndicadoresByDom()">
           <option hidden selected value="">Selecciona el Dominio...</option>
-          <option *ngFor="let dominio of dominio" value="{{dominio.dom_id}}">{{dominio.dom_nombre}}</option>
+          <option *ngFor="let dominio of dominio" value="{{ dominio.dom_id }}">
+            {{ dominio.dom_nombre }}
+          </option>
         </select>
       </div>
       <div class="col-md-5">
         <span for="" class="span">Indicador:</span>
         <select class="form-select form-control" name="ind_id" id="ind_id">
           <option hidden selected value="">Selecciona el Indicador...</option>
-          <option *ngFor="let indicador of indicador" value="{{indicador.ind_id}}">{{indicador.ind_nombre}}</option>
+          <option *ngFor="let indicador of indicador" value="{{ indicador.ind_id }}">
+            {{ indicador.ind_nombre }}
+          </option>
         </select>
       </div>
-      <div class="col-md-1" style="padding-top: 1.4rem;">
-        <button id="button-add" class="btn-dark plus sp" title="Agregar Indicador" (click)="clonarDiv()"> <span
-            class="size_span_plus">
-            <i class='fas fa-plus-circle'></i>
+      <div class="col-md-1" style="padding-top: 1.4rem">
+        <button id="button-add" class="btn-dark plus sp" title="Agregar Indicador" (click)="clonarDiv()">
+          <span class="size_span_plus">
+            <i class="fas fa-plus-circle"></i>
           </span>
         </button>
       </div>
-      <div class="col-md-1" style="padding-top: 1.4rem;">
+      <div class="col-md-1" style="padding-top: 1.4rem">
         <button id="button-add" class="btn-dark plus" title="Cerrar Indicador" (click)="deshabilitarAgregarIndicador()">
           <span class="size_span_plus">
-            <i class='fa fa-close'></i>
+            <i class="fa fa-close"></i>
           </span>
         </button>
       </div>
     </div>
-
-
-
-
 
     <div class="row">
       <div class="col-md-11">
         <button id="button-add" class="btn-dark plus sp" title="Agregar Indicador"
-          (click)="habilitarAgregarIndicador()"> <span class="size_span_plus">
-            <i class='fas fa-plus-circle'></i>
+          (click)="habilitarAgregarIndicador()">
+          <span class="size_span_plus">
+            <i class="fas fa-plus-circle"></i>
           </span>
         </button>
       </div>
       <div class="col-md-1">
-        <button id="boton-evaluacion-sic" class="btn btn-dark " title="Guardar" type="submit">
-          <i class='fa fa-save fa-lg'></i>
+        <button id="boton-evaluacion-sic" class="btn btn-dark" title="Guardar" type="submit">
+          <i class="fa fa-save fa-lg"></i>
         </button>
       </div>
     </div>
-
   </div>
 </div>
 

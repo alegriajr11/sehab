@@ -151,6 +151,12 @@ export class ActaSpIpsComponent implements OnInit {
     this.mostrarActaId();
   }
 
+  habilitarFechaFinal() {
+    this.habilitarfechaFin = true;
+    this.fecha_orden = this.fecha_inicial
+  }
+
+
 
   evaluacionesSeleccionadas: { [key: string]: number } = {}; // Usamos un objeto para almacenar los IDs de las evaluaciones
 
@@ -212,6 +218,7 @@ export class ActaSpIpsComponent implements OnInit {
     this.act_municipioId = ''
   }
 
+  //LISTAR ÚLTIMA ACTA REGISTRADA
   mostrarActaId(): void {
     this.actaPdfService.listaUltimaSpIps().subscribe(
       data => {
@@ -237,20 +244,10 @@ export class ActaSpIpsComponent implements OnInit {
     this.act_funcionarioId = ''
   }
 
-  //LISTAR ÚLTIMA ACTA REGISTRADA
-  ultimaActaId(): void {
-    this.actaPdfService.listaUltimaSpIps().subscribe(
-      data => {
-        this.actaPdf = data
-        var acta = (document.getElementById('acta')) as HTMLSelectElement
-        acta.value = this.actaPdf.act_id.toString()
-      }
-    )
-  }
 
   //LISTAR PRESTADORES POR MUNICIPIO
   cargarPrestadoresByMun(): void {
-    this.prestadorService.listMun(this.act_municipioId).subscribe(
+    this.prestadorService.listMunIps(this.act_municipioId).subscribe(
       data => {
         this.prestador = data;
         this.listaVacia = undefined

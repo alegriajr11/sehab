@@ -61,14 +61,37 @@ export class PrestadorService {
         return prestadores;
     }
 
-
+    //LISTAR PRESTADORES PARA PAMEC
     async findByMunicipioPamec(id: string): Promise<PrestadorEntity[]> {
         const prestadores = await this.prestadorRepository.createQueryBuilder('prestador')
-
             .leftJoinAndSelect('prestador.pre_municipio', 'pre_municipio')
             .leftJoinAndSelect('prestador.pre_clasificacion', 'pre_clasificacion')
             .where('pre_municipio.mun_id = :mun', { mun: id })
             .andWhere('pre_clasificacion.cla_id IN (:clasificacion)', { clasificacion: ['1', '2'] })
+            .andWhere('prestador.pre_habilitado LIKE :habilitado', { habilitado: '%SI%' })
+            .getMany()
+        return prestadores;
+    }
+
+    //LISTAR PRESTADORES PARA SP-INDEPENDIENTES
+    async findByMunicipioIndependientes(id: string): Promise<PrestadorEntity[]> {
+        const prestadores = await this.prestadorRepository.createQueryBuilder('prestador')
+            .leftJoinAndSelect('prestador.pre_municipio', 'pre_municipio')
+            .leftJoinAndSelect('prestador.pre_clasificacion', 'pre_clasificacion')
+            .where('pre_municipio.mun_id = :mun', { mun: id })
+            .andWhere('pre_clasificacion.cla_id IN (:clasificacion)', { clasificacion: ['3'] })
+            .andWhere('prestador.pre_habilitado LIKE :habilitado', { habilitado: '%SI%' })
+            .getMany()
+        return prestadores;
+    }
+
+    //LISTAR PRESTADORES PARA SP-IPS
+    async findByMunicipioIps(id: string): Promise<PrestadorEntity[]> {
+        const prestadores = await this.prestadorRepository.createQueryBuilder('prestador')
+            .leftJoinAndSelect('prestador.pre_municipio', 'pre_municipio')
+            .leftJoinAndSelect('prestador.pre_clasificacion', 'pre_clasificacion')
+            .where('pre_municipio.mun_id = :mun', { mun: id })
+            .andWhere('pre_clasificacion.cla_id IN (:clasificacion)', { clasificacion: ['1'] })
             .andWhere('prestador.pre_habilitado LIKE :habilitado', { habilitado: '%SI%' })
             .getMany()
         return prestadores;

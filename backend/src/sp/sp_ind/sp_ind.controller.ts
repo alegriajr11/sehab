@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { SpIndService } from './sp_ind.service';
-import { calificacionindDto } from './dto/calificacionind.dto';
 import { TokenDto } from 'src/auth/dto/token.dto';
+import { CalificacionindDto } from './dto/calificacionind.dto';
 
 @Controller('sp-ind')
 export class SpIndController {
@@ -26,7 +26,7 @@ export class SpIndController {
 
     //ACTUALIZAR CALIFICACION
     @Put(':id')
-    async update(@Param('id') id: number, @Body() dto: calificacionindDto) {
+    async update(@Param('id') id: number, @Body() dto: CalificacionindDto) {
         return await this.etapaIndService.update(id, dto);
     }
 

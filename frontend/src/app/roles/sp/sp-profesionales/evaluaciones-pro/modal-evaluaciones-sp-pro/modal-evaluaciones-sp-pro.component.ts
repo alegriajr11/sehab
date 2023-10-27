@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
 import { TokenDto } from 'src/app/models/token.dto';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
+import { EvaluacionIndService } from 'src/app/services/SpInd/evaluacion-ind.service';
 import { GenerarPdfActaIndService } from 'src/app/services/SpInd/generar-pdf-acta-ind.service';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
 import { TokenService } from 'src/app/services/token.service';
@@ -19,7 +20,10 @@ export class ModalEvaluacionesSpProComponent {
 
   
   id_evaluacion: number
+  //NOMBRE PRESTADOR MODAL
   nombre_prestador: string
+  nombre_funcionario: string
+  cod_prestador: string
 
   actaSpIps: ActaSpPdfDto;
 
@@ -39,6 +43,7 @@ export class ModalEvaluacionesSpProComponent {
     private generarPdfActaSpInd: GenerarPdfActaIndService,
     private tokenService: TokenService,
     private actaPdfService: ActapdfService,
+    private evaluacionIndService: EvaluacionIndService,
     private toastrService: ToastrService,
     private router: Router
   ) { }
@@ -46,6 +51,8 @@ export class ModalEvaluacionesSpProComponent {
   ngOnInit(): void {
     this.id_evaluacion = this.sharedService.id_evaluacion_sp_ind
     this.nombre_prestador = this.sharedService.pres_nombre
+    this.nombre_funcionario = this.sharedService.funcionario_nombre
+    this.cod_prestador = this.sharedService.pre_cod_habilitacion
     this.isAdmin = this.tokenService.isAdmin();
     this.estadoActa();
     console.log(this.id_evaluacion)
@@ -65,10 +72,9 @@ export class ModalEvaluacionesSpProComponent {
     this.modalRef.hide()
   }
 
-  // editarEvaluacion() {
-  //   this.modalRef.hide()
-  //   this.router.navigate(['/sic/evaluacion']);
-  // }
+  async habilitarRutaEditar() {
+    localStorage.setItem('boton-editar-evaluacion-sp-ind', 'true')
+  }
 
   async estadoActa() {
     // Obtener el estado actual del acta
@@ -91,23 +97,29 @@ export class ModalEvaluacionesSpProComponent {
       });
 
       if (result.isConfirmed) {
-        // Cerrar el acta
-        await this.actaPdfService.cerrarActaSpInd(this.id_evaluacion, tokenDto).toPromise();
-
         // Obtener el estado actualizado del acta
         const data = await this.actaPdfService.oneActaSpInd(this.id_evaluacion).toPromise();
-        this.estado_acta = data.act_estado;
+        if (!data.act_firma_prestador || !data.act_firma_funcionario) {
+          Swal.fire(
+            'No se puede cerrar el acta porque no está firmada',
+            'Debes firmar el acta',
+            'error'
+          );
+        } else {
+          await this.actaPdfService.cerrarActaSpInd(this.id_evaluacion, tokenDto).toPromise();
 
-        // Mostrar notificación Acta cerrada
-        this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
-          timeOut: 3000,
-          positionClass: 'toast-top-center',
-        });
-        this.modalRef.hide();
+          this.estado_acta = data.act_estado;
 
-        localStorage.setItem('boton-acta-sp-ind', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SIC
-
-        console.log(this.estado_acta);
+          // Mostrar notificación Acta cerrada
+          this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          });
+          this.modalRef.hide();
+  
+          localStorage.setItem('boton-acta-sp-ind', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
+  
+        }
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire(
           'Cancelado',
@@ -120,8 +132,15 @@ export class ModalEvaluacionesSpProComponent {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       });
-      console.log(error);
     }
+  }
+
+
+  descargarEvaluacionInd(){
+    this.evaluacionIndService.descargarEvaluacionPdfInd(this.id_evaluacion, this.cod_prestador)
+    this.router.navigate(['/sp/evaluaciones-pro']);
+    this.sharedService.criteriosIndGuardados = [];
+    this.modalRef.hide()
   }
 
 }

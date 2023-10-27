@@ -10,6 +10,7 @@ import { RestablecerPasswordDto } from '../models/reset-password.dto';
 import { NuevoUsuarioAdminDto } from '../models/nuevo-usuario-admin.dto';
 import { ActaSicPdfDto } from '../models/Actas/actaSicpdf.dto';
 import { ActaSpPdfDto } from '../models/Actas/actaSpPdf.dto';
+import { ActaSpIndPdfDto } from '../models/Actas/actaSpIndPdf.dto';
 
 
 @Injectable({
@@ -93,7 +94,7 @@ export class AuthService {
   }
 
   //REGISTRO ACTA PDF SP_IPS
-  registroActaSpIndPdf(dto: ActaSpPdfDto, tokenDto: TokenDto): Observable<any> {
+  registroActaSpIndPdf(dto: ActaSpIndPdfDto, tokenDto: TokenDto): Observable<any> {
     const body = {
       dto: dto,
       tokenDto: tokenDto

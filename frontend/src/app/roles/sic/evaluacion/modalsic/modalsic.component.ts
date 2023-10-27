@@ -30,11 +30,7 @@ export class ModalsicComponent {
   @Input('dataFromParent') public modalRef: BsModalRef;
 
   constructor(
-    private criterioSicService: CriterioSicService,
-    private modalService: BsModalService,
-    private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
-    private router: Router,
     private sharedService: SharedServiceService,
     private cumplimientoEstandarService: CumplimientoEstandarService,
     private tokenService: TokenService,
@@ -68,9 +64,9 @@ export class ModalsicComponent {
           timeOut: 3000,
           positionClass: 'toast-top-center',
         });
-        this.sharedService.criteriosGuardados.push(this.crie_id)
+        this.sharedService.criteriosSicGuardados.push(this.crie_id, this.cumpl_cumple)
         // Almacena la información en localStorage
-        localStorage.setItem('criteriosGuardados', JSON.stringify(this.sharedService.criteriosGuardados));
+        localStorage.setItem('criteriosGuardados', JSON.stringify(this.sharedService.criteriosSicGuardados));
 
         this.modalRef.hide();
       },

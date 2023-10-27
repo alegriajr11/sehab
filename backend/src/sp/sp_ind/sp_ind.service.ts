@@ -5,7 +5,6 @@ import { CriterioIndEntity } from './criterioind.entity';
 import { CriterioIndRepository } from './criterioind.repository';
 import { EtapaInd } from './etapaind.entity';
 import { EtapaIndRepository } from './etapaind.repository';
-import { calificacionindDto } from './dto/calificacionind.dto';
 import { CalificacionIndEntity } from './calificacionind.entity';
 import { CalificacionIndRepository } from './calificacionind.repository';
 import { TokenDto } from 'src/auth/dto/token.dto';
@@ -14,6 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
 import { EvaluacionIndependientesEntity } from './evaluacion-independientes.entity';
 import { EvaluacionIndependientesRepository } from './evaluacion-independientes.repository';
+import { CalificacionindDto } from './dto/calificacionind.dto';
 
 
 @Injectable()
@@ -70,7 +70,7 @@ export class SpIndService {
     // 
 
     //ACTUALIZACION CALIFICACION SP INDEPENDIENTES
-    async update(id: number, dto: calificacionindDto): Promise<any> {
+    async update(id: number, dto: CalificacionindDto): Promise<any> {
 
         try {
             const calificacion = await this.findByIdcalificacion(id);

@@ -22,7 +22,7 @@ export class EditarPrestadorComponent {
   ) { }
 
   ngOnInit(): void {
-    const id = this.activatedRoute.snapshot.params['id'];
+    const id = this.activatedRoute.snapshot.queryParams['id'];
     this.prestadorService.listaOne(id).subscribe(
       data => {
         this.prestador = data;

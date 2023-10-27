@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CalificacionindService } from './calificacionind.service';
-import { calificacionindDto } from '../dto/calificacionind.dto';
+import { CalificacionindDto } from '../dto/calificacionind.dto';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('calificacionind')
 export class CalificacionindController {
@@ -10,10 +11,19 @@ export class CalificacionindController {
 
     //CREAR CALIFICACION
     @Post()
-    async create(@Query('eva_id') eva_id: number,
-        @Query('cri_id') cri_id: number, @Body() dto: calificacionindDto) {
+    async create(@Body() payload: { dto: CalificacionindDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        console.log(dto)
+        return this.calificacionindService.createCalificacion(payload);
+    }
 
-        return this.calificacionindService.create(eva_id, cri_id, dto);
+    //LISTAR CALIFICACION POR ID_CRITERIO Y ID_EVALUACIÓN
+    @Get()
+    async getCriterioEvaluacion(
+        @Query('cri_id') cri_id: number,
+        @Query('eva_id') eva_id: number
+    ){
+        return await this.calificacionindService.getCriterioByIdEva(cri_id, eva_id)
     }
 
     //LISTAR TODOS LOS CRITERIOS CON EVALUACION 
@@ -22,8 +32,14 @@ export class CalificacionindController {
         return await this.calificacionindService.getallcriterioetapa(id)
     }
 
+    //LISTAR TODAS LAS CALIFICACIONES POR ID_EVALUACIÓN
+    @Get('lista/:id')
+    async getAllCalificaciones(@Param('id', ParseIntPipe) id: number) {
+        return await this.calificacionindService.getCalificacionByEva(id)
+    }
+
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: calificacionindDto) {
-        return await this.calificacionindService.edit(id,dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CalificacionindDto) {
+        return await this.calificacionindService.update(id,dto);
     }
 }

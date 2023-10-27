@@ -49,7 +49,7 @@ export class CumplimientosicService {
         const cumplimiento = this.cumplimientoSicRepository.create(dto)
         //asigna la evaluacion a la calificacion
         cumplimiento.cump_eva_sic = evaluacion
-        //asigna eñ criterio a la evaluacion
+        //asigna el criterio a la evaluacion
         cumplimiento.criterio_sic = criterio
         //asigna el indicador
         cumplimiento.indicadorsic = indicador
@@ -70,6 +70,7 @@ export class CumplimientosicService {
             .innerJoinAndSelect('cump_eva_sic.eval_acta_sic', 'eval_acta_sic')
             .innerJoinAndSelect('cumplimiento.indicadorsic', 'indicadorsic')
             .where('cump_eva_sic.eva_id = :eva_id', { eva_id: id })
+            .orderBy('criterio_sic.cri_id', 'ASC')
             .getMany()
         if (!cumplimiento) throw new NotFoundException(new MessageDto('No Existe en la lista'))
         return cumplimiento
@@ -78,9 +79,9 @@ export class CumplimientosicService {
     //LISTANDO CRITERIOS Y CUMPLIMIENTO POR EVALUACION
     async getcumpliestandar(id: number): Promise<CumplimientoEstandarSicEntity[]> {
         const cumplimientoestandar = await this.cumplimientoEstandarSicRepository.createQueryBuilder('listado')
-            .select(['listado', 'criterioestandar_sic.crie_id', 'criterioestandar_sic.crie_nombre'])
-            .innerJoin('listado.criterioestandar_sic', 'criterioestandar_sic')
-            .innerJoin('listado.cumplimiento_eva_sic', 'cumplimiento_eva_sic')
+            .select(['listado'])
+            .innerJoinAndSelect('listado.criterioestandar_sic', 'criterioestandar_sic')
+            .innerJoinAndSelect('listado.cumplimiento_eva_sic', 'cumplimiento_eva_sic')
             .where('cumplimiento_eva_sic.eva_id = :eva_id', { eva_id: id })
             .getMany()
         if (!cumplimientoestandar) throw new NotFoundException(new MessageDto('No Existe en la lista'))

@@ -42,7 +42,6 @@ export class SpIpsService {
 
     //LISTAR TODAS LAS ACTAS SP IPS
     async getallActas(tokenDto: string): Promise<ActaSpIpsEntity[]> {
-
         const usuario = await this.jwtService.decode(tokenDto);
         const payloadInterface: PayloadInterface = {
             usu_id: usuario[`usu_id`],
@@ -72,12 +71,14 @@ export class SpIpsService {
 
 
 
-    //ENCONTRAR POR ACTA
+
+
+    //ENCONTRAR POR ACTA POR ID PRIMARY_KEY
     async findByActa(id: number): Promise<ActaSpIpsEntity> {
-        const ips = await this.actaSpIpsRepository.findOne({ where: { id } });
-        if (!ips) {
-            throw new NotFoundException(new MessageDto('No Existe'));
-        }
+        const ips = await this.actaSpIpsRepository.createQueryBuilder('acta_ips')
+            .select(['acta_ips'])
+            .where('acta_ips.id = :id_acta', {id_acta: id})
+            .getOne()
         return ips;
     }
 
@@ -106,7 +107,6 @@ export class SpIpsService {
             acta.act_id = 1;
         }
 
-
         return acta;
     }
 
@@ -114,36 +114,93 @@ export class SpIpsService {
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
 
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
-    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSpIpsEntity[]> {
-        let query = this.actaSpIpsRepository.createQueryBuilder('acta');
+    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string, tokenDto?: string): Promise<ActaSpIpsEntity[]> {
+        const usuario = await this.jwtService.decode(tokenDto);
 
-        if (numActa) {
-            query = query.where('acta.act_id = :numActa', { numActa });
-        }
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
 
-        if (year) {
+        //LISTAR POR PARAMETRO INGRESADO SOLO AL ID QUE LE CORRESPONDA EL ACTA
+        if (!payloadInterface.usu_roles.includes('admin')) {
+            let query = this.actaSpIpsRepository.createQueryBuilder('acta');
+
             if (numActa) {
-                query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
-            } else {
-                query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                query = query.where('acta.act_id = :numActa', { numActa });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
             }
+
+            if (year) {
+                if (numActa) {
+                    query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                } else {
+                    query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                }
+            }
+
+            if (nomPresta) {
+                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            }
+
+            if (nit) {
+                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            }
+
+            //LISTAR POR ID DE FUNCIONARIO SI ALGUN CAMPO ES VACIO
+            query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            const actas = await query.getMany();
+
+            if (actas.length === 0) {
+                throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
+            }
+
+            return actas;
+
+        }
+        //LISTAR POR PARAMETROS PARA EL ADMIN 
+        else {
+            let query = this.actaSpIpsRepository.createQueryBuilder('acta');
+
+            if (numActa) {
+                query = query.where('acta.act_id = :numActa', { numActa });
+            }
+
+            if (year) {
+                if (numActa) {
+                    query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+                } else {
+                    query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                }
+            }
+
+            if (nomPresta) {
+                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            }
+
+            if (nit) {
+                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            }
+
+            const actas = await query.getMany();
+
+            if (actas.length === 0) {
+                throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
+            }
+
+            return actas;
         }
 
-        if (nomPresta) {
-            query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
-        }
 
-        if (nit) {
-            query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
-        }
-
-        const actas = await query.getMany();
-
-        if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
-        }
-
-        return actas;
     }
 
     /*CREACIÓN SP IPS ACTA PDF */

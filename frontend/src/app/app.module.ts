@@ -85,15 +85,7 @@ import { EvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluacion
 import { HomeEstandarComponent } from './roles/reso/lista-verificacion/home-estandar/home-estandar.component';
 import { ModalFirmaComponent } from './roles/sic/acta/modal-firma/modal-firma.component';
 import { ActaModule } from './roles/sic/acta/acta.module';
-import { EvaluacionUnoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-uno/evaluacion-uno.component';
-import { EvaluacionDosComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-dos/evaluacion-dos.component';
-import { EvaluacionTresComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-tres/evaluacion-tres.component';
-import { EvaluacionCuatroComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-cuatro/evaluacion-cuatro.component';
-import { EvaluacionCincoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-cinco/evaluacion-cinco.component';
-import { EvaluacionSeisComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-seis/evaluacion-seis.component';
-import { EvaluacionSieteComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-siete/evaluacion-siete.component';
-import { EvaluacionOchoComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-ocho/evaluacion-ocho.component';
-import { EvaluacionNueveComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-nueve/evaluacion-nueve.component';
+import { EvaluacionSpIpsComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-sp-ips/evaluacion-sp-ips.component';
 import { ActaVisitaVerificacionComponent } from './roles/reso/acta-visita-verificacion/acta-visita-verificacion.component';
 import { ActaVisitaIvcComponent } from './roles/reso/acta-visita-ivc/acta-visita-ivc.component';
 import { ModalFirmaVerificacionComponent } from './roles/reso/acta-visita-verificacion/modal-firma-verificacion/modal-firma-verificacion.component';
@@ -124,6 +116,8 @@ import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.com
 import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/editar-sedes-prestador/editar-sedes-prestador.component';
 import { ModalEditarFirmaAcompananteSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/editar-acta-sp-ips/modal-editar-firma-acompanante-sp-ips/modal-editar-firma-acompanante-sp-ips.component';
 import { ContadorComponent } from './roles/reso/contador/contador.component';
+import { ModalCumplimientoSpIndComponent } from './roles/sp/sp-profesionales/evaluacion-sp-pro/modal-cumplimiento-sp-ind/modal-cumplimiento-sp-ind.component';
+import { ModalEditarCumplimientoSpIndComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/editar-evaluacion-sp-pro/modal-editar-cumplimiento-sp-ind/modal-editar-cumplimiento-sp-ind.component';
 
 
 
@@ -199,15 +193,7 @@ import { ContadorComponent } from './roles/reso/contador/contador.component';
     AuditoriaComponent,
     HomeEvaluacionIpsComponent,
     ModalFirmaComponent,
-    EvaluacionUnoComponent,
-    EvaluacionDosComponent,
-    EvaluacionTresComponent,
-    EvaluacionCuatroComponent,
-    EvaluacionCincoComponent,
-    EvaluacionSeisComponent,
-    EvaluacionSieteComponent,
-    EvaluacionOchoComponent,
-    EvaluacionNueveComponent,
+    EvaluacionSpIpsComponent,
     ActaVisitaVerificacionComponent,
     ActaVisitaIvcComponent,
     ModalFirmaVerificacionComponent,
@@ -235,7 +221,9 @@ import { ContadorComponent } from './roles/reso/contador/contador.component';
     RichTextEditorComponent,
     EditarSedesPrestadorComponent,
     ModalEditarFirmaAcompananteSpIpsComponent,
-    ContadorComponent
+    ContadorComponent,
+    ModalCumplimientoSpIndComponent,
+    ModalEditarCumplimientoSpIndComponent
 
   ],
   imports: [

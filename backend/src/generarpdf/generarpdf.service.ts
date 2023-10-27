@@ -138,10 +138,6 @@ export class GenerarpdfService {
             });
             doc.moveDown();
 
-
-
-
-
             const buffer = []
             doc.on('data', buffer.push.bind(buffer))
             doc.on('end', () => {

@@ -19,6 +19,7 @@ export class ModalEvaluacionesSpIpsComponent {
 
   id_evaluacion: number
   nombre_prestador: string
+  nombre_funcionario: string
 
   actaSpIps: ActaSpPdfDto;
 
@@ -45,6 +46,7 @@ export class ModalEvaluacionesSpIpsComponent {
   ngOnInit(): void {
     this.id_evaluacion = this.sharedService.id_evaluacion_sp_ips
     this.nombre_prestador = this.sharedService.pres_nombre
+    this.nombre_funcionario = this.sharedService.funcionario_nombre
     this.isAdmin = this.tokenService.isAdmin();
     this.estadoActa();
   }

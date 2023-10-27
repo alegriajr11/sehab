@@ -65,9 +65,10 @@ export class EvaluacionesSicComponent implements OnInit {
   }
 
 
-  openModal(modalTemplate: TemplateRef<any>, id: number, name: string) {
-    this.sharedService.setIdSic(id)
+  openModal(modalTemplate: TemplateRef<any>, id: number, name: string, name_funcionario: string) {
+    this.sharedService.setIdEvaluacionSic(id)
     this.sharedService.setNombrePrestador(name)
+    this.sharedService.setNombreFuncionario(name_funcionario)
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',
@@ -98,8 +99,9 @@ export class EvaluacionesSicComponent implements OnInit {
 
   //CARGAR ACTAS POR ID_ACTA O AÑO O NOMBRE DE PRESTADOR O NIT
   cargarActasFilter() {
-    console.log(this.year)
-    this.actapdfService.listaActasSicFilter(this.year, this.act_id, this.act_prestador, this.act_nit).subscribe(
+    //OBTENER EL TOKEN DEL USUARIO 
+    const token = this.tokenService.getToken()
+    this.actapdfService.listaActasSicFilter(this.year, this.act_id, this.act_prestador, this.act_nit, token).subscribe(
       data => {
         this.evaluaciones = data
         this.listaVacia = undefined

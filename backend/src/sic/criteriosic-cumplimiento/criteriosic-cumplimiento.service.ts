@@ -158,9 +158,10 @@ export class CriteriosicCumplimientoService {
                 acta_idSic,
                 year,
             );
+            
             return new MessageDto('Cumplimiento Asignado');
         } catch (error) {
-            // Aquí puedes manejar el error, por ejemplo, lanzar una excepción personalizada o registrar el error en un registro de errores.
+            // Manejo de un error.
             throw new InternalServerErrorException(new MessageDto(error.message));
         }
     }

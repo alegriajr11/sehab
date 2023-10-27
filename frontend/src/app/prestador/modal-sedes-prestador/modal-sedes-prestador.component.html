@@ -27,9 +27,9 @@
 		<p><strong>No. Sede Principal:</strong> {{ sede.sede_numero_principal }}</p>
 		<p><strong>Dirección Sede:</strong> {{ sede.sede_direccion }}</p>
 		<p><strong>Barrio Sede:</strong> {{ sede.sede_barrio }}</p>
+		<p><strong>Municipio: </strong><label  *ngFor="let municipio of sede.sede_municipio | keyvalue">{{ municipio.value }}</label></p>
 		<button class="btn btn-warning" routerLink="/prestadores/sede/editar/{{sede.sede_id}}">
 			<i class="far fa-edit"></i>Editar
 		</button>
-
 	</div>
 </div>

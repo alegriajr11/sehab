@@ -53,13 +53,13 @@
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
                         name="act_fecha_inicial" [(ngModel)]="actaSic.act_fecha_inicial" [ngModelOptions]="{standalone: true}"
-                        ngDefaultControl>
+                        ngDefaultControl (change)="habilitarFechaFinal()">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="act_fecha_final"
                         [(ngModel)]="actaSic.act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [min]="actaSic.act_fecha_final">
+                        [disabled]="!habilitarfechaFin" [min]="actaSic.act_fecha_inicial">
                 </div>
 
                 <div class="col-12">

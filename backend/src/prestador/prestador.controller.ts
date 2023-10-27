@@ -42,6 +42,22 @@ export class PrestadorController {
         return await this.prestadorService.findByMunicipioPamec(id);
     }
 
+    //PRESTADORES PARA ROL SP-IPS
+    @RolDecorator(RolNombre.ADMIN)
+    @UseGuards(JwtAuthGuard)
+    @Get('/mun/sp/ips/:id')
+    async getManyMunIps(@Param('id') id: string) {
+        return await this.prestadorService.findByMunicipioIps(id);
+    }
+
+    //PRESTADORES PARA ROL SP-INDEPENDIENTES
+    @RolDecorator(RolNombre.ADMIN)
+    @UseGuards(JwtAuthGuard)
+    @Get('/mun/sp/pro/ind/:id')
+    async getManyMunIndepend(@Param('id') id: string) {
+        return await this.prestadorService.findByMunicipioIndependientes(id);
+    }
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete(':id')
     async delete(@Param('id') id: string) {

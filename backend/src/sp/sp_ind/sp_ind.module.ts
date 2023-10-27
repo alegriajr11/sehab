@@ -13,6 +13,7 @@ import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/audito
 import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
 import { EvaluacionIndependientesEntity } from './evaluacion-independientes.entity';
 import { CalificacionindModule } from './calificacionind/calificacionind.module';
+import { EvaluacionIndModule } from './evaluacion-ind/evaluacion-ind.module';
 
 @Module({
   imports:[TypeOrmModule.forFeature([EtapaInd,CriterioIndEntity,CalificacionIndEntity,EvaluacionIndependientesEntity]), TypeOrmModule.forFeature([CriterioIndEntity]), 
@@ -28,7 +29,8 @@ import { CalificacionindModule } from './calificacionind/calificacionind.module'
     }),
     inject: [ConfigService],
   }),
-  CalificacionindModule, //FINAL DE MODULO JwtService
+  CalificacionindModule,
+  EvaluacionIndModule, //FINAL DE MODULO JwtService
   ],
   providers: [SpIndService],
   controllers: [SpIndController]

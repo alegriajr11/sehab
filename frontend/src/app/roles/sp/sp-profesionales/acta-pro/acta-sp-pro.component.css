@@ -227,3 +227,10 @@ input:checked+.slider:before {
     left: 154px;
     z-index: 1;
 }
+
+/*MEDIA QUERIES*/
+@media (max-width: 1040px) {
+    .validation-message-visita {
+        top: 144px; /* Cambio de estilo cuando la pantalla es menor o igual a 1040px */
+    }
+}

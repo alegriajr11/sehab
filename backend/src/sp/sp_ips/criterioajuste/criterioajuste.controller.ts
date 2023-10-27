@@ -11,7 +11,7 @@ export class CriterioajusteController {
     constructor(private readonly criterioAjusteService: CriterioajusteService) {
     }
 
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOne(@Param('id', ParseIntPipe) id: number){
         return await this.criterioAjusteService.findByEva(id);

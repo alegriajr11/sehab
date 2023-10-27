@@ -40,12 +40,33 @@ export class SpIndependientesService {
     ) { }
 
     //LISTAR TODAS LAS ACTAS SP INDEPENDIENTE
-    async getallActas(): Promise<ActaSpIndependientePdfEntity[]> {
-        const indep = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
-            .select(['acta'])
-            .getMany()
-        if (indep.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Realiazadas en la lista'))
-        return indep;
+    async getallActas(tokenDto: string): Promise<ActaSpIndependientePdfEntity[]> {
+        const usuario = await this.jwtService.decode(tokenDto);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        if (!payloadInterface.usu_roles.includes('admin')) {
+            const acta = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
+                .select(['acta'])
+                .where('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                .getMany()
+            if (acta.length === 0) throw new NotFoundException(new MessageDto('No tienes evaluaciones asignadas'))
+            return acta;
+        } else {
+            const acta = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
+                .select(['acta'])
+                .getMany()
+            if (acta.length === 0) throw new NotFoundException(new MessageDto('No hay evaluaciones asignadas'))
+            return acta;
+        }
     }
 
     //ENCONTRAR POR ACTA
@@ -74,36 +95,94 @@ export class SpIndependientesService {
 
 
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
-    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string): Promise<ActaSpIndependientePdfEntity[]> {
-        let query = this.actaSpIndependientePdfRepository.createQueryBuilder('acta');
+    async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string, tokenDto?: string): Promise<ActaSpIndependientePdfEntity[]> {
 
-        if (numActa) {
-            query = query.where('acta.act_id = :numActa', { numActa });
-        }
 
-        if (year) {
+        const usuario = await this.jwtService.decode(tokenDto);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        //LISTAR POR PARAMETRO INGRESADO SOLO AL ID QUE LE CORRESPONDA EL ACTA
+        if (!payloadInterface.usu_roles.includes('admin')) {
+            let query = this.actaSpIndependientePdfRepository.createQueryBuilder('acta');
+
             if (numActa) {
-                query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
-            } else {
-                query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                query = query.where('acta.act_id = :numActa', { numActa });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
             }
+
+            if (year) {
+                if (numActa) {
+                    query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                } else {
+                    query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                }
+            }
+
+            if (nomPresta) {
+                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            }
+
+            if (nit) {
+                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            }
+
+            //LISTAR POR ID DE FUNCIONARIO SI ALGUN CAMPO ES VACIO
+            query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+            const actas = await query.getMany();
+
+            if (actas.length === 0) {
+                throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
+            }
+
+            return actas;
+
+        }
+        //LISTAR POR PARAMETROS PARA EL ADMIN 
+        else {
+            let query = this.actaSpIndependientePdfRepository.createQueryBuilder('acta');
+
+            if (numActa) {
+                query = query.where('acta.act_id = :numActa', { numActa });
+            }
+
+            if (year) {
+                if (numActa) {
+                    query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
+                } else {
+                    query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
+                }
+            }
+
+            if (nomPresta) {
+                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            }
+
+            if (nit) {
+                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            }
+
+            const actas = await query.getMany();
+
+            if (actas.length === 0) {
+                throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
+            }
+
+            return actas;
         }
 
-        if (nomPresta) {
-            query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
-        }
-
-        if (nit) {
-            query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
-        }
-
-        const actas = await query.getMany();
-
-        if (actas.length === 0) {
-            throw new NotFoundException(new MessageDto('No hay actas con los filtros especificados'));
-        }
-
-        return actas;
     }
 
 
@@ -242,31 +321,31 @@ export class SpIndependientesService {
     //ACTUALIZAR CRITERIOS SP INDEPENDIENTE
     async updateActaInd(id: number, payload: { dto: IndActaDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payload;
-        const ips = await this.findByActa(id);
-        if (!ips) {
+        const acta_ind = await this.findByActa(id);
+        if (!acta_ind) {
             throw new NotFoundException(new MessageDto('El Acta no existe'))
         }
-        dto.act_id ? ips.act_id = dto.act_id : ips.act_id = ips.act_id;
-        dto.act_visita_inicial ? ips.act_visita_inicial = dto.act_visita_inicial : ips.act_visita_inicial = ips.act_visita_inicial;
-        dto.act_visita_seguimiento ? ips.act_visita_seguimiento = dto.act_visita_seguimiento : ips.act_visita_seguimiento = ips.act_visita_seguimiento;
-        dto.act_fecha_inicial ? ips.act_fecha_inicial = dto.act_fecha_inicial : ips.act_fecha_inicial = ips.act_fecha_inicial;
-        dto.act_fecha_final ? ips.act_fecha_final = dto.act_fecha_final : ips.act_fecha_final = ips.act_fecha_final;
-        dto.act_municipio ? ips.act_municipio = dto.act_municipio : ips.act_municipio = ips.act_municipio;
-        dto.act_prestador ? ips.act_prestador = dto.act_prestador : ips.act_prestador = ips.act_prestador;
-        dto.act_nit ? ips.act_nit = dto.act_nit : ips.act_nit = ips.act_nit;
-        dto.act_direccion ? ips.act_direccion = dto.act_direccion : ips.act_direccion = ips.act_direccion;
-        dto.act_barrio ? ips.act_barrio = dto.act_barrio : ips.act_barrio = ips.act_barrio;
-        dto.act_telefono ? ips.act_telefono = dto.act_telefono : ips.act_telefono = ips.act_telefono;
-        dto.act_email ? ips.act_email = dto.act_email : ips.act_email = ips.act_email;
-        dto.act_representante ? ips.act_representante = dto.act_representante : ips.act_representante = ips.act_representante;
-        dto.act_cod_prestador ? ips.act_cod_prestador = dto.act_cod_prestador : ips.act_cod_prestador = ips.act_cod_prestador;
-        dto.act_obj_visita ? ips.act_obj_visita = dto.act_obj_visita : ips.act_obj_visita = ips.act_obj_visita;
-        dto.act_nombre_funcionario ? ips.act_nombre_funcionario = dto.act_nombre_funcionario : ips.act_nombre_funcionario = ips.act_nombre_funcionario;
-        dto.act_cargo_funcionario ? ips.act_cargo_funcionario = dto.act_cargo_funcionario : ips.act_cargo_funcionario = ips.act_cargo_funcionario;
-        dto.act_nombre_prestador ? ips.act_nombre_prestador = dto.act_nombre_prestador : ips.act_nombre_prestador = ips.act_nombre_prestador;
-        dto.act_cargo_prestador ? ips.act_cargo_prestador = dto.act_cargo_prestador : ips.act_cargo_prestador = ips.act_cargo_prestador;
-        dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
-        dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
+        dto.act_id ? acta_ind.act_id = dto.act_id : acta_ind.act_id = acta_ind.act_id;
+        acta_ind.act_visita_inicial = dto.act_visita_inicial !== undefined ? dto.act_visita_inicial : "";
+        acta_ind.act_visita_seguimiento = dto.act_visita_seguimiento !== undefined ? dto.act_visita_seguimiento : "";
+        dto.act_fecha_inicial ? acta_ind.act_fecha_inicial = dto.act_fecha_inicial : acta_ind.act_fecha_inicial = acta_ind.act_fecha_inicial;
+        dto.act_fecha_final ? acta_ind.act_fecha_final = dto.act_fecha_final : acta_ind.act_fecha_final = acta_ind.act_fecha_final;
+        dto.act_municipio ? acta_ind.act_municipio = dto.act_municipio : acta_ind.act_municipio = acta_ind.act_municipio;
+        dto.act_prestador ? acta_ind.act_prestador = dto.act_prestador : acta_ind.act_prestador = acta_ind.act_prestador;
+        dto.act_nit ? acta_ind.act_nit = dto.act_nit : acta_ind.act_nit = acta_ind.act_nit;
+        dto.act_direccion ? acta_ind.act_direccion = dto.act_direccion : acta_ind.act_direccion = acta_ind.act_direccion;
+        dto.act_barrio ? acta_ind.act_barrio = dto.act_barrio : acta_ind.act_barrio = acta_ind.act_barrio;
+        dto.act_telefono ? acta_ind.act_telefono = dto.act_telefono : acta_ind.act_telefono = acta_ind.act_telefono;
+        dto.act_email ? acta_ind.act_email = dto.act_email : acta_ind.act_email = acta_ind.act_email;
+        dto.act_representante ? acta_ind.act_representante = dto.act_representante : acta_ind.act_representante = acta_ind.act_representante;
+        dto.act_cod_prestador ? acta_ind.act_cod_prestador = dto.act_cod_prestador : acta_ind.act_cod_prestador = acta_ind.act_cod_prestador;
+        dto.act_obj_visita ? acta_ind.act_obj_visita = dto.act_obj_visita : acta_ind.act_obj_visita = acta_ind.act_obj_visita;
+        dto.act_nombre_funcionario ? acta_ind.act_nombre_funcionario = dto.act_nombre_funcionario : acta_ind.act_nombre_funcionario = acta_ind.act_nombre_funcionario;
+        dto.act_cargo_funcionario ? acta_ind.act_cargo_funcionario = dto.act_cargo_funcionario : acta_ind.act_cargo_funcionario = acta_ind.act_cargo_funcionario;
+        dto.act_nombre_prestador ? acta_ind.act_nombre_prestador = dto.act_nombre_prestador : acta_ind.act_nombre_prestador = acta_ind.act_nombre_prestador;
+        dto.act_cargo_prestador ? acta_ind.act_cargo_prestador = dto.act_cargo_prestador : acta_ind.act_cargo_prestador = acta_ind.act_cargo_prestador;
+        dto.act_firma_prestador ? acta_ind.act_firma_prestador = dto.act_firma_prestador : acta_ind.act_firma_prestador = acta_ind.act_firma_prestador;
+        dto.act_firma_funcionario ? acta_ind.act_firma_funcionario = dto.act_firma_funcionario : acta_ind.act_firma_funcionario = acta_ind.act_firma_funcionario;
 
 
         const usuario = await this.jwtService.decode(tokenDto.token);
@@ -283,7 +362,7 @@ export class SpIndependientesService {
 
         const year = new Date().getFullYear().toString();
 
-        await this.actaSpIndependientePdfRepository.save(ips);
+        await this.actaSpIndependientePdfRepository.save(acta_ind);
         await this.auditoria_actualizacion_services.logUpdateActaSpIndep(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,
@@ -325,8 +404,8 @@ export class SpIndependientesService {
         return acta;
     }
 
-    //GENERACIÓN DE REPORTE DE CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES
-    //La función para generar el PDF con las tablas ajustadas
+    //GENERACIÓN DE REPORTE DE CALIFICACIONES DEL PROGRAMA DE SEGURIDAD DEL PACIENTE PROFESIONALES INDEPENDIENTES
+    //Metodo para generar el PDF con las tablas ajustadas
     async generarPdfEvaluacionInd(id: number): Promise<Buffer> {
 
         const titulo_uno = await this.calificacionindService.getallcriterioetapa(id);
@@ -334,10 +413,12 @@ export class SpIndependientesService {
         const titulo_tres = await this.calificacionindService.getallcriterioxtitulotres(id);
         const titulo_cuatro = await this.calificacionindService.getallcriterioxtitulocuatro(id);
 
-        let nombreprestador="";
-        let cargoprestador="";
-        let nombrefuncionario="";
-        let cargofuncionario="";
+
+        let nombreprestador = "";
+        let prestadorPrincipal = "";
+        let cargoprestador = "";
+        let nombrefuncionario = "";
+        let cargofuncionario = "";
 
         let totalCalificacionesEtapa1 = 0
         let totalCalificacionesCountEtapa1 = 0; // Contador para la cantidad total de calificaciones
@@ -348,12 +429,12 @@ export class SpIndependientesService {
         let totalCalificacionesEtapa4 = 0
         let totalCalificacionesCountEtapa4 = 0; // Contador para la cantidad total de calificaciones
 
-        let promedio=0;
-        let promedio2=0;
-        let promedio3=0;
-        let promedio4=0;
+        let promedio = 0;
+        let promedio2 = 0;
+        let promedio3 = 0;
+        let promedio4 = 0;
 
-        let total=0;
+        let total = 0;
 
         const pdfBuffer: Buffer = await new Promise(resolve => {
             const doc = new PDFDocument({
@@ -403,11 +484,7 @@ export class SpIndependientesService {
             doc.moveDown();
             doc.moveDown();
             doc.moveDown();
-            // doc.moveDown();
-            // doc.moveDown();
-            // doc.moveDown();
 
-            // doc.fontSize(24);
             function hayEspacioSuficiente(alturaContenido: number) {
                 const margenInferior = doc.page.margins.bottom;
                 const alturaPagina = doc.page.height;
@@ -415,20 +492,21 @@ export class SpIndependientesService {
                 return espacioRestante >= 0;
             }
 
-            titulo_uno.forEach(prestador=>{
-                nombreprestador= prestador.cal_evaluacion_independientes.eval_acta_ind.act_nombre_prestador;
-                nombrefuncionario= prestador.cal_evaluacion_independientes.eval_acta_ind.act_nombre_funcionario;
-                cargoprestador= prestador.cal_evaluacion_independientes.eval_acta_ind.act_cargo_prestador;
-                cargofuncionario= prestador.cal_evaluacion_independientes.eval_acta_ind.act_cargo_funcionario;
+            //ASIGNAR NOMBRES DEL PRESTADOR Y FUNCIONARIO EN EL PDF
+            titulo_uno.forEach(prestador => {
+                prestadorPrincipal = prestador.cal_evaluacion_independientes.eval_acta_ind.act_prestador;
+                nombreprestador = prestador.cal_evaluacion_independientes.eval_acta_ind.act_nombre_prestador;
+                nombrefuncionario = prestador.cal_evaluacion_independientes.eval_acta_ind.act_nombre_funcionario;
+                cargoprestador = prestador.cal_evaluacion_independientes.eval_acta_ind.act_cargo_prestador;
+                cargofuncionario = prestador.cal_evaluacion_independientes.eval_acta_ind.act_cargo_funcionario;
             })
-            doc.text(nombreprestador)
+            doc.text(prestadorPrincipal)
 
             // Agregar las tablas a las páginas
             if (titulo_uno.length) {
                 let rows_elements = [];
 
                 titulo_uno.forEach(item => {
-
                     totalCalificacionesEtapa1 += item.cal_nota
                     totalCalificacionesCountEtapa1++; // Incrementar el contador
 
@@ -441,30 +519,55 @@ export class SpIndependientesService {
                     headerAlign: 'center',
                     align: 'center',
                     rowHeight: 15,
-
                 };
+
                 const table = {
-                    title: "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",
+                    title: "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION SEGURA DEL PACIENTE",
                     headers: ["", "CRITERIOS", "CALIFICACIÓN", "VERIFICACIÓN", "OBSERVACIONES"],
                     rows: rows_elements
-
                 };
 
-
-                doc.moveDown();
-                // Verificar si hay suficiente espacio en la página actual para la tabla
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable1 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable1.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable1.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table.title,
+                            headers: table.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table.title,
+                            headers: table.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
                 // Calcular el promedio
                 promedio = totalCalificacionesEtapa1 / totalCalificacionesCountEtapa1;
-                
             }
-           
 
+
+            //SEGUNDA ETAPA
             if (titulo_dos.length) {
                 let rows_elements = [];
                 titulo_dos.forEach(item => {
@@ -486,22 +589,47 @@ export class SpIndependientesService {
                     rows: rows_elements
                 };
 
-                doc.moveDown();
-                // Verificar si hay suficiente espacio en la página actual para la tabla
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable2 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable2.push(rows_elements.slice(i, i + chunkSize));
                 }
 
-                doc.table(table2, tableOptions);
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable2.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table2.title,
+                            headers: table2.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table2.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table2.title,
+                            headers: table2.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
                 // Calcular el promedio
-                promedio2 = totalCalificacionesEtapa2/ totalCalificacionesCountEtapa2;
-                
+                promedio2 = totalCalificacionesEtapa2 / totalCalificacionesCountEtapa2;
             }
 
-            // doc.moveDown();
-            // doc.moveDown();
 
+            //TERCERA ETAPA
             if (titulo_tres.length) {
                 let rows_elements = [];
                 titulo_tres.forEach(item => {
@@ -522,29 +650,55 @@ export class SpIndependientesService {
                     headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
                     rows: rows_elements
                 };
-                doc.moveDown();
-                // Verificar si hay suficiente espacio en la página actual para la tabla
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
+
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunksTable3 = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunksTable3.push(rows_elements.slice(i, i + chunkSize));
                 }
-                doc.table(table3, tableOptions);
+
+                // Iterar a través de las secciones y agregarlas al documento
+                chunksTable3.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table3.title,
+                            headers: table3.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table3.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table3.title,
+                            headers: table3.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
                 // Calcular el promedio
                 promedio3 = totalCalificacionesEtapa3 / totalCalificacionesCountEtapa3;
-            
             }
 
-            // doc.moveDown();
-            // doc.moveDown();
 
             if (titulo_cuatro.length) {
                 let rows_elements = [];
                 titulo_cuatro.forEach(item => {
-                    totalCalificacionesEtapa4 += item.cal_nota
+                    totalCalificacionesEtapa4 += item.cal_nota;
                     totalCalificacionesCountEtapa4++; // Incrementar el contador
                     var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
-                    rows_elements.push(temp_list)
-                })
+                    rows_elements.push(temp_list);
+                });
 
                 const tableOptions = {
                     columnsSize: [10, 210, 72, 65, 175],
@@ -557,63 +711,144 @@ export class SpIndependientesService {
                     headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
                     rows: rows_elements
                 };
-                doc.moveDown();
-                // Verificar si hay suficiente espacio en la página actual para la tabla
-                if (!hayEspacioSuficiente(tableOptions.rowHeight * rows_elements.length)) {
-                    doc.addPage(); // Agregar una nueva página si no hay suficiente espacio
-                    pageNumber++; // Incrementar el número de página
-                }
-                doc.table(table4, tableOptions);
-                // Calcular el promedio
-                promedio4 = totalCalificacionesEtapa4 / totalCalificacionesCountEtapa4;
-               
 
-                
+                // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+                const chunkSize = 10;
+                const chunks = [];
+                for (let i = 0; i < rows_elements.length; i += chunkSize) {
+                    chunks.push(rows_elements.slice(i, i + chunkSize));
+                }
+
+                // Iterar a través de las secciones y agregarlas al documento
+                chunks.forEach((section, index) => {
+                    // Calcular el espacio requerido para la sección
+                    const sectionHeight = section.length * tableOptions.rowHeight;
+
+                    // Verificar si hay espacio suficiente en la página actual
+                    if (hayEspacioSuficiente(sectionHeight)) {
+                        // Agregar la sección a la página actual
+                        doc.table({
+                            title: table4.title,
+                            headers: table4.headers,
+                            rows: section
+                        }, tableOptions);
+                    } else {
+                        // Agregar una nueva página antes de la sección
+                        doc.addPage();
+                        // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                        doc.font('Helvetica-Bold').fontSize(14).text(table4.title);
+                        doc.moveDown();
+                        // Agregar la sección a la nueva página
+                        doc.table({
+                            title: table4.title,
+                            headers: table4.headers,
+                            rows: section
+                        }, tableOptions);
+                    }
+                });
+
             }
 
+            // Tabla "RANGO DE IMPLEMENTACION"
             const tableOptions = {
-                columnsSize: [ 400, 50],
+                columnsSize: [400, 50],
                 headerAlign: 'center',
                 align: 'center',
                 rowHeight: 15,
             };
-            total=((promedio+promedio2+promedio3+promedio4)/4)
+            total = ((promedio + promedio2 + promedio3 + promedio4) / 4)
             const tablecount = {
-                    title: "RANGO DE IMPLEMENTACION",
-                    headers: [ "CRITERIOS", "TOTAL"],
-                    rows:[["COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE",'    '+promedio.toFixed(2)],
-                        ["CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",'    '+promedio2.toFixed(2)],
-                        ["REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",'    '+promedio3.toFixed(2)],
-                        ["DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",'    '+promedio4.toFixed(2)],
-                        ["RESULTADOS",'    '+total.toFixed(2)]]
+                title: "RANGO DE IMPLEMENTACION",
+                headers: ["CRITERIOS", "TOTAL"],
+                rows: [
+                    ["COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION  SEGURA DEL PACIENTE", '    ' + promedio.toFixed(2)],
+                    ["CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE", '    ' + promedio2.toFixed(2)],
+                    ["REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO", '    ' + promedio3.toFixed(2)],
+                    ["DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO", '    ' + promedio4.toFixed(2)],
+                    ["RESULTADOS", '    ' + total.toFixed(2)]
+                ]
+            };
 
-                };
+            // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
+            const chunkSize = 10;
+            const chunksTableCount = [];
+            for (let i = 0; i < tablecount.rows.length; i += chunkSize) {
+                chunksTableCount.push(tablecount.rows.slice(i, i + chunkSize));
+            }
 
+            // Iterar a través de las secciones y agregarlas al documento
+            chunksTableCount.forEach((section, index) => {
+                // Calcular el espacio requerido para la sección
+                const sectionHeight = section.length * tableOptions.rowHeight;
 
-                doc.moveDown();
-
-                doc.table(tablecount, tableOptions);
-
-                doc.moveDown();
-
-                const tableOptions2 = {
-                    columnsSize: [ 225, 225],
-                    headerAlign: 'center',
-                    align: 'center',
-                    rowHeight: 15,
-                };
-
-                const tablefirmas = {
-                        headers: [ "PROFESIONAL INDEPENDIENTE", "POR SECRETARIA DE SALUD DEPARTAMENTAL"],
-                        rows:[[`NOMBRE: ${nombreprestador}`,`NOMBRE: ${nombrefuncionario}`],
-                            [`CARGO: ${cargoprestador}`,`CARGO: ${cargofuncionario}`],
-                            ["FIRMA","FIRMA  :"]]
-                    };
-    
-    
+                // Verificar si hay espacio suficiente en la página actual
+                if (hayEspacioSuficiente(sectionHeight)) {
+                    // Agregar la sección a la página actual
+                    doc.table({
+                        title: tablecount.title,
+                        headers: tablecount.headers,
+                        rows: section
+                    }, tableOptions);
+                } else {
+                    // Agregar una nueva página antes de la sección
+                    doc.addPage();
+                    // Asegurarte de ajustar los encabezados o títulos según sea necesario
+                    doc.font('Helvetica-Bold').fontSize(14).text(tablecount.title);
                     doc.moveDown();
-    
-                    doc.table(tablefirmas, tableOptions2);
+                    // Agregar la sección a la nueva página
+                    doc.table({
+                        title: tablecount.title,
+                        headers: tablecount.headers,
+                        rows: section
+                    }, tableOptions);
+                }
+            });
+
+            doc.moveDown()
+            
+            // Tabla "PROFESIONAL INDEPENDIENTE"
+            const tableOptions2 = {
+                columnsSize: [225, 225],
+                headerAlign: 'center',
+                align: 'center',
+                rowHeight: 15,
+            };
+
+            const tablefirmas = {
+                headers: ["PROFESIONAL INDEPENDIENTE", "POR SECRETARIA DE SALUD DEPARTAMENTAL"],
+                rows: [[`NOMBRE: ${nombreprestador}`, `NOMBRE: ${nombrefuncionario}`],
+                [`CARGO: ${cargoprestador}`, `CARGO: ${cargofuncionario}`],
+                ["FIRMA", "FIRMA  :"]]
+            };
+
+            // Dividir la tabla de firmas en secciones (por ejemplo, en grupos de 10 filas)
+            const chunksTableFirmas = [];
+            for (let i = 0; i < tablefirmas.rows.length; i += chunkSize) {
+                chunksTableFirmas.push(tablefirmas.rows.slice(i, i + chunkSize));
+            }
+
+            // Iterar a través de las secciones y agregarlas al documento
+            chunksTableFirmas.forEach((section, index) => {
+                // Calcular el espacio requerido para la sección
+                const sectionHeight = section.length * tableOptions2.rowHeight;
+
+                // Verificar si hay espacio suficiente en la página actual
+                if (hayEspacioSuficiente(sectionHeight)) {
+                    // Agregar la sección a la página actual
+                    doc.table({
+                        headers: tablefirmas.headers,
+                        rows: section
+                    }, tableOptions2);
+                } else {
+                    // Agregar una nueva página antes de la sección
+                    doc.addPage();
+                    // Agregar la sección a la nueva página
+                    doc.table({
+                        headers: tablefirmas.headers,
+                        rows: section
+                    }, tableOptions2);
+                }
+            });
 
             const buffer = [];
             doc.on('data', buffer.push.bind(buffer));

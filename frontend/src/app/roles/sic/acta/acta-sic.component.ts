@@ -166,33 +166,53 @@ export class ActaSicComponent implements OnInit {
       }
     )
     this.act_municipioId = ''
+
   }
 
   //INPUTS VACIO SI SE SELECCIONA OTRO MUNICIPIO
   vaciarPorMunicipioSelect() {
+    //NIT DEL PRESTADOR
     var nit = (document.getElementById('nit')) as HTMLSelectElement
     nit.value = ''
+    //DIRECCIÓN DEL PRESTADOR
     var direccion = (document.getElementById('direccion')) as HTMLSelectElement
     direccion.value = ''
+    //BARRIO DEL PRESTADOR
     var barrio_prestador = (document.getElementById('barrio')) as HTMLSelectElement
     barrio_prestador.value = ''
+    //TELEFONO DEL PRESTADOR
     var telefono = (document.getElementById('telefono')) as HTMLSelectElement
     telefono.value = ''
+    //EMAIL DEL PRESTADOR
     var email = (document.getElementById('email')) as HTMLSelectElement
     email.value = ''
+    //REPRESENTANTE LEGAL
     var rep_legal = (document.getElementById('repleg')) as HTMLSelectElement
     rep_legal.value = ''
-    var cod_pres = (document.getElementById('codpres')) as HTMLSelectElement
-    cod_pres.value = ''
+
+    //NOMBRE PRESTADOR
     var nombrePrestador = (document.getElementById('nombrePrestador')) as HTMLSelectElement
     nombrePrestador.value = ''
+
+    //SEDE
+    //CODIGO DE PRESTADOR
+    var cod_pres = (document.getElementById('codpres')) as HTMLSelectElement
+    cod_pres.value = ''
+    //CODIGO DE SEDE
     var codigo_sede = (document.getElementById('codsede')) as HTMLSelectElement
     codigo_sede.value = ''
-    this.act_sede_principalId = ''
+
+    //BARRIO DE LA SEDE
     var sede_barrio = (document.getElementById('barrioSede')) as HTMLSelectElement
     sede_barrio.value = ''
+    //DIRECCIÓN DE LA SEDE
     var sede_direccion = (document.getElementById('direccionSede')) as HTMLSelectElement
     sede_direccion.value = ''
+
+    //VACIAR SELECT SEDES SI SELECCIONA OTRO MUNICIPIO
+    this.act_sede_principalId = '';
+    // Eliminar todas las opciones del select
+    this.sede = [];
   }
 
 
@@ -235,15 +255,21 @@ export class ActaSicComponent implements OnInit {
       },
       err => {
         this.listaVacia = err.error.message;
+        this.act_sede_principalId = '';
+        // Eliminar todas las opciones del select
+        this.sede = [];
       }
     );
-    //ASIGANAR LOS INPUT BARRIO Y DIRECCION EN VACIO - SI SE SELECCIONA OTRO PRESTADOR
+    //ASIGANAR LOS INPUT BARRIO, DIRECCION Y CODIGO_SEDE EN VACIO - SI SE SELECCIONA OTRO PRESTADOR
+    //BARRIO DE LA SEDE
     var sede_barrio = (document.getElementById('barrioSede')) as HTMLSelectElement
     sede_barrio.value = ''
+    //DIRECCIÓN DE LA SEDE
     var sede_direccion = (document.getElementById('direccionSede')) as HTMLSelectElement
     sede_direccion.value = ''
-
-    this.act_sede_principalId = ''
+    //CODIGO DE SEDE
+    var codigo_sede = (document.getElementById('codsede')) as HTMLSelectElement
+    codigo_sede.value = ''
 
   }
 
@@ -640,7 +666,7 @@ export class ActaSicComponent implements OnInit {
     const token = this.tokenService.getToken()
     //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
     const tokenDto: TokenDto = new TokenDto(token);
-    
+
 
     //VALIDAR QUE LOS CAMPOS NO ESTÉN VACIOS
     if (
@@ -655,9 +681,7 @@ export class ActaSicComponent implements OnInit {
       !this.act_barrio ||
       !this.act_telefono ||
       !this.act_email ||
-      !this.act_sede_principal ||
       !this.act_cod_prestador ||
-      !this.act_cod_sede ||
       !this.act_obj_visita ||
       !this.act_nombre_funcionario ||
       !this.act_cargo_funcionario ||
@@ -696,11 +720,6 @@ export class ActaSicComponent implements OnInit {
         this.showBarrioMessage = true
       }
 
-      if (!this.act_sede_principal) {
-        mensajeError += ' Sede,';
-        this.showSedeMessage = true
-      }
-
       if (!this.act_obj_visita) {
         mensajeError += ' Objeto de visita,';
         this.showObjVisitaMessage = true
@@ -729,7 +748,7 @@ export class ActaSicComponent implements OnInit {
         positionClass: 'toast-top-center',
       });
 
-    } 
+    }
     // else if (!this.act_firma_prestador) { //VERIFICAR QUE LA FIRMA DEL PRESTADOR SEA ASIGNADA
     //   this.toastrService.error('Por favor, agregue una firma', 'Error', {
     //     timeOut: 3000,
@@ -754,7 +773,7 @@ export class ActaSicComponent implements OnInit {
                   this.cumplimientoEstandarService.oneEvluacionSic(this.id_acta).subscribe(
                     data => {
                       this.eva_id = data.eva_id
-                      this.sharedService.setIdSic(this.eva_id)
+                      this.sharedService.setIdEvaluacionSic(this.eva_id)
                       console.log(this.eva_id)
                     }
                   )

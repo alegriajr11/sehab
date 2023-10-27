@@ -19,6 +19,7 @@ export class ModalEvaluacionesComponent {
 
   id_evaluacion: number
   nombre_prestador: string
+  nombre_funcionario: string
 
   acta_sic: ActaSicPdfDto;
 
@@ -46,6 +47,7 @@ export class ModalEvaluacionesComponent {
   ngOnInit(): void {
     this.id_evaluacion = this.sharedService.id_evaluacion_sic
     this.nombre_prestador = this.sharedService.pres_nombre
+    this.nombre_funcionario = this.sharedService.funcionario_nombre
     this.isAdmin = this.tokenService.isAdmin();
     this.estadoActa();
   }
@@ -93,7 +95,7 @@ export class ModalEvaluacionesComponent {
       });
 
       if (result.isConfirmed) {
-        // Cerrar el acta
+        // Obtener el estado actualizado del acta
         const data = await this.actaSicPdfService.oneActaSic(this.id_evaluacion).toPromise();
         if (!data.act_firma_prestador || !data.act_firma_funcionario) {
           Swal.fire(
