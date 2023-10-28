@@ -15,7 +15,7 @@ export class CalificacionipsAjusteService {
         private criterioAjusteRepository: CriterioAjusteRepository,
         @InjectRepository(CalificacionAjusteIpsEntity)
         private calificacionIpsAjusteRepository: CalificacionIpsAjusteRepository,
-    ){}
+    ) { }
 
     //buscar calificacion por id
     async findByCal(cal_id: number): Promise<CalificacionAjusteIpsEntity> {
@@ -28,21 +28,22 @@ export class CalificacionipsAjusteService {
 
     async findByCri(id: number): Promise<CalificacionAjusteIpsEntity[]> {
         const calificacion = await this.calificacionIpsAjusteRepository.createQueryBuilder('calificacion')
-        .select(['calificacion.cal_id','calificacion.cal_nota', 'calificacion.cal_observaciones','calificacionipsAjuste.cri_aju_nombre'])
-        .innerJoin('calificacion.calificacionipsAjuste','calificacionipsAjuste')
-        .where('calificacionipsAjuste.cri_aju_id = :cri', {cri: id})
-        .getMany()
-        if(!calificacion.length) throw new NotFoundException(new MessageDto('No hay Calificaciones en la lista'))
+            .select(['calificacion.cal_id', 'calificacion.cal_nota', 'calificacion.cal_observaciones', 'calificacionipsAjuste.cri_aju_nombre'])
+            .innerJoin('calificacion.calificacionipsAjuste', 'calificacionipsAjuste')
+            .where('calificacionipsAjuste.cri_aju_id = :cri', { cri: id })
+            .getMany()
+        if (!calificacion.length) throw new NotFoundException(new MessageDto('No hay Calificaciones en la lista'))
         return calificacion;
     }
 
     // creacion de criterio con su respectiva evaluacion
     async create(cri_aju_id: number, dto: CalificacionAjusteDto): Promise<any> {
         const criterio = await this.criterioAjusteRepository.findOne({ where: { cri_aju_id: cri_aju_id } });
-        if (!criterio) throw new NotFoundException(new MessageDto('El criterio no ha sido o'))
+        if (!criterio) throw new NotFoundException(new MessageDto('El criterio no ha sido '))
         const calificacion = this.calificacionIpsAjusteRepository.create(dto)
         //asigna la evaluacion al criterio
         calificacion.calificacionipsAjuste = criterio
+
         await this.calificacionIpsAjusteRepository.save(calificacion)
         return new MessageDto('La calificacion ha sido Creada');
     }
@@ -68,18 +69,16 @@ export class CalificacionipsAjusteService {
         return new MessageDto(`calificacion Eliminada`);
     }
 
-    async getallCalCrixEva(evips_id:number): Promise<CalificacionAjusteIpsEntity[]> {
+    async getallCalCrixEva(evips_id: number, act_id: number): Promise<CalificacionAjusteIpsEntity[]> {
 
         const criterio = await this.calificacionIpsAjusteRepository.createQueryBuilder('calificacion')
-            .select(['calificacion', 'calificacionipsAjuste.cri_aju_id', 'calificacionipsAjuste.cri_aju_nombre', 
-            'calificacionipsAjuste.cri_aju_verificacion', 'cri_aju_eva.evips_nombre','actas_ips.act_nombre_prestador',
-            'actas_ips.act_nombre_funcionario','actas_ips.act_cargo_funcionario','actas_ips.act_nombre_prestador'])
+            .select(['calificacion'])
             .innerJoinAndSelect('calificacion.calificacionipsAjuste', 'calificacionipsAjuste')
             .innerJoinAndSelect('calificacionipsAjuste.cri_aju_eva', 'cri_aju_eva')
             .innerJoinAndSelect('cri_aju_eva.actas_ips', 'actas_ips')
             //.innerJoinAndSelect('cal_evaluacion_independientes.eval_acta_ind', 'eval_acta_ind')
-            .where('cri_aju_eva.evips_id = :eva', {eva: evips_id })
-            //.andWhere('cal_evaluacion_independientes.eva_id = :id_eva',{id_eva:eva_id})
+            .where('actas_ips.id = :id_acta', { id_acta: act_id })
+            .andWhere('calificacion.cal_evaluacion = :id_eva', { id_eva: evips_id })
             .getMany()
 
         return criterio

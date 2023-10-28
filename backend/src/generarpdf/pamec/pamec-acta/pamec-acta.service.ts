@@ -333,12 +333,10 @@ export class PamecActaService {
             });
 
             doc.addPage();
-            doc.text('', 90, 110);
+            doc.text('', 155, 110);
             doc.font('Helvetica-Bold').fontSize(14);
-            doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
-            doc.text('', 185, 130);
+            doc.text('EVALUACIÓN DE VERIFICACIÓN AL PAMEC ');
             doc.font('Helvetica-Bold').fontSize(14);
-            doc.text('PAMEC');
             // doc.moveDown();
             // doc.font('Helvetica').fontSize(14);
 
