@@ -65,8 +65,10 @@ export class SpIpsController {
     }
 
     @Get('sp/ips/evaluacion/:id')
-    async descargarPdfCriterioIps(@Param('id') id: number, @Res() res): Promise<void> {
-        const buffer = await this.sp_IpsService.generarPdfEvaluacionIps(id)
+    async descargarPdfCriterioIps(@Query('evaips_id') evaips_id: number,
+        @Query('acta_id') acta_id: number,
+        @Res() res): Promise<void> {
+        const buffer = await this.sp_IpsService.generarPdfEvaluacionIps(evaips_id, acta_id)
 
         res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ips_sogcs.pdf"');
         res.set({

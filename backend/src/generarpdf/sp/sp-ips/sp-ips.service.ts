@@ -360,12 +360,12 @@ export class SpIpsService {
     }
 
     //La función para generar el PDF con las tablas ajustadas
-    async generarPdfEvaluacionIps(id: number): Promise<Buffer> {
+    async generarPdfEvaluacionIps(evaips_id: number, acta_id: number): Promise<Buffer> {
 
-        const ajuste = await this.calificacionipsAjusteService.getallCalCrixEva(id);
-        const implementacion = await this.calificacionipsImplementacionService.getallCalCrixEva(id);
-        const planeacion = await this.calificacionipsPlaneacionService.getallCalCrixEva(id);
-        const verificacion = await this.calificacionipsVerificacionService.getallCalCrixEva(id);
+        const ajuste = await this.calificacionipsAjusteService.getallCalCrixEva(evaips_id, acta_id);
+        const implementacion = await this.calificacionipsImplementacionService.getallCalCrixEva(evaips_id);
+        const planeacion = await this.calificacionipsPlaneacionService.getallCalCrixEva(evaips_id);
+        const verificacion = await this.calificacionipsVerificacionService.getallCalCrixEva(evaips_id);
 
 
         let eva = "";

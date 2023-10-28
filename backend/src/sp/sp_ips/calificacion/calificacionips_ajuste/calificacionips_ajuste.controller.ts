@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CalificacionipsAjusteService } from './calificacionips_ajuste.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CalificacionAjusteDto } from 'src/usuario/dto/SpIps/calificaciones/calificacionajuste.dto';
@@ -42,12 +42,14 @@ export class CalificacionipsAjusteController {
     //@UseGuards(JwtAuthGuard)
     //@UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Post('calificacion/:id')
-    async create(@Param('id') id: number, @Body() dto: CalificacionAjusteDto) {
-        return await this.calificacionipsAjusteService.create(id, dto);
+    async create(@Query('cri_aju_id') cri_aju_id: number,
+    @Body() dto: CalificacionAjusteDto) {
+        return await this.calificacionipsAjusteService.create(cri_aju_id, dto);
     }
 
-    @Get('/criterio/calificacion/:id')
-    async getcalcri(@Param('id', ParseIntPipe) id: number) {
-        return await this.calificacionipsAjusteService.getallCalCrixEva(id);
+    @Get('calificacion/evaluacion/acta')
+    async getcalcri(@Query('evips_id') evips_id: number,
+    @Query('act_id') act_id: number) {
+        return await this.calificacionipsAjusteService.getallCalCrixEva(evips_id, act_id);
     }
 }

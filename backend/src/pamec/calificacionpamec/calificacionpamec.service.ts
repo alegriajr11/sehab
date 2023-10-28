@@ -127,7 +127,7 @@ export class CalificacionpamecService {
             .innerJoinAndSelect('criteriopam_calificacion.crip_actividad', 'crip_actividad')
             .innerJoinAndSelect('calificacion.cal_evaluacion_pam', 'cal_evaluacion_pam')
             .where('crip_actividad.act_nombre LIKE :titulo', { titulo: titulo_uno })
-            .andWhere('cal_evaluacion_pam.eva_id = :eva_id', { eva_id: eva_id })
+            .andWhere('cal_evaluacion_pam.eva_id = :id_eva', { id_eva: eva_id })
             .getMany()
 
         return criterio

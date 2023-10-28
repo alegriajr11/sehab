@@ -19,6 +19,9 @@ export class CalificacionAjusteIpsEntity {
     @Column({type: 'varchar', length: 255, nullable: false, unique: false})
     cal_observaciones: string;
 
+    @Column({type: 'int'})
+    cal_evaluacion: number;
+
     
     //Relacion Muchos a Uno CALIFICACION_IPS - CRITERIO_AJUSTE
     @ManyToOne(type => CriterioAjusteEntity, calificacion_ips => calificacion_ips.criterio_ajuste)
