@@ -5,6 +5,7 @@ import { MessageDto } from 'src/common/message.dto';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioPamDto } from 'src/usuario/dto/Pamec/criteriopam.dto';
 import { CriteriopamService } from './criteriopam.service';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('criteriopam')
 export class CriteriopamController {
@@ -51,8 +52,9 @@ export class CriteriopamController {
 
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioPamDto) {
-        return this.criteriopamService.create(id, dto);
+    async create(@Param('id', ParseIntPipe) id: number, @Body()payloads: { dto: CriterioPamDto, tokenDto: TokenDto}) {
+        const { dto, tokenDto } = payloads;
+        return this.criteriopamService.create(id, payloads);
     }
 
     //LISTAR TODOS LOS CRITERIOS CON EVALUACION 

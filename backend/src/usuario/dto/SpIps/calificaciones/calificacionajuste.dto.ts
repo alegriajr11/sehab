@@ -13,6 +13,9 @@ export class CalificacionAjusteDto {
     cal_observaciones: string
 
     @IsNumber()
+    cri_aju_id:number
+
+    @IsNumber()
     cal_acta: number
 
     @IsNumber()

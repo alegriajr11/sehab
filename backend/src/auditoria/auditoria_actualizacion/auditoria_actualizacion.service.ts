@@ -187,6 +187,108 @@ export class AuditoriaActualizacionService {
         );
     }
 
+    //*CALIFICACIONES Y CUMPLIMIENTOS*//
+    //CONTROLAR LA ACTUALIZACIÓN DE UNA CALIFICACION PAMEC
+    async logUpdateCalificacionPamec(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        cal_nota: number,
+        cri_nombre: string,
+        act_id: number,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha actualizado una calificacion Pamec (${cal_nota}) al criterio "${cri_nombre}" del acta No. ${act_id} del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Calificacion Pamec',
+            details,
+            direccionIp,
+        );
+    }
+
+    //CONTROLAR LA ACTUALIZACIÓN DE UNA CALIFICACION PAMEC
+    async logUpdateCalificacionSpInd(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        cal_nota: number,
+        cri_nombre: string,
+        act_id: number,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha actualizado una calificacion Sp Indepenndiente (${cal_nota}) al criterio "${cri_nombre}" del acta No. ${act_id} del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Calificacion Sp Independiente',
+            details,
+            direccionIp,
+        );
+    }
+
+    //CONTROLAR LA ACTUALIZACIÓN DE UNA CALIFICACION PAMEC
+    async logUpdateCalificacionSpIps(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        cal_nota: number,
+        cri_nombre: string,
+        //act_id: number,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha actualizado una calificacion Sp Ips (${cal_nota}) al criterio "${cri_nombre}" del acta No. acta del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Calificacion Sp Ips',
+            details,
+            direccionIp,
+        );
+    }
+
+    //CONTROLAR LA ACTUALIZACIÓN DE UNA CALIFICACION PAMEC
+    async logUpdateCumplimientoSic(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        cumpl_cumple: String,
+        cri_nombre: string,
+        act_id: number,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha actualizado un Cumplimiento Sic (${cumpl_cumple}) al criterio "${cri_nombre}" del acta No. ${act_id} del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Cumplimiento Sic',
+            details,
+            direccionIp,
+        );
+    }
+
+    
+    //CONTROLAR LA ACTUALIZACION DE UN CRITERIO SP INDEPENDIENTES
+    async logUpdateCriterioSpind(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        crip_nombre: string,
+        etapa_nombre: string,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un Criterio Sp Independientes   "${crip_nombre}" con etapa "${etapa_nombre}"  del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Criterio Sp Independientes',
+            details,
+            direccionIp,
+        );
+    }
+
+
     //*EVALUACION CRITERIOS - APOYO DIAGNOSTICO*/
     //CONTROLAR LA ACTUALIZACIÓN DEL CRITERIO DIAGNOSTICO VASCULAR
     async logUpdateDiagnostico(

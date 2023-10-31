@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, U
 import { CalificacionipsAjusteService } from './calificacionips_ajuste.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CalificacionAjusteDto } from 'src/usuario/dto/SpIps/calificaciones/calificacionajuste.dto';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('calificacionips-ajuste')
 export class CalificacionipsAjusteController {
@@ -27,8 +28,9 @@ export class CalificacionipsAjusteController {
     //@UseGuards(JwtAuthGuard)
     //@UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CalificacionAjusteDto) {
-        return await this.calificacionipsAjusteService.update(id, dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body()payload: { dto: CalificacionAjusteDto, tokenDto: TokenDto}) {
+        const { dto, tokenDto } = payload;
+        return await this.calificacionipsAjusteService.update(id, payload);
     }
 
     //eliminar calificacion
@@ -42,11 +44,13 @@ export class CalificacionipsAjusteController {
     //@UseGuards(JwtAuthGuard)
     //@UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Post('calificacion/:id')
-    async create(@Query('cri_aju_id') cri_aju_id: number,
-    @Body() dto: CalificacionAjusteDto) {
-        return await this.calificacionipsAjusteService.create(cri_aju_id, dto);
+    async create(
+    @Body()payload: { dto: CalificacionAjusteDto, tokenDto: TokenDto}   ) {
+        const { dto, tokenDto } = payload;
+        return await this.calificacionipsAjusteService.create(payload);
     }
 
+    //lista las calificaciones con sus criterios
     @Get('calificacion/evaluacion/acta')
     async getcalcri(@Query('evips_id') evips_id: number,
     @Query('act_id') act_id: number) {

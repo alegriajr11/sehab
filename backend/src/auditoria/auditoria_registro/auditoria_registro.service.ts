@@ -1010,6 +1010,28 @@ export class AuditoriaRegistroService {
         );
     }
 
+    //CONTROLAR LA CREACIÓN DE UNA CALIFICACION SP IPS
+    async logCreateCalificacionSpIps(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        cal_nota: number,
+        cri_nombre: string,
+        //act_id: number,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha asignado una calificacion Sp Ips de: (${cal_nota}) al criterio "${cri_nombre}" del acta No. del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Calificacion Sp Independientes',
+            details,
+            direccionIp,
+        );
+    }
+
+    
+
     //CONTROLAR LA CREACIÓN DE UNA CALIFICACION PAMEC
     async logCreateCalificacionPamec(
         usu_nombre: string,
@@ -1024,11 +1046,87 @@ export class AuditoriaRegistroService {
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Cumplimiento Sic',
+            'Calificacion Pamec',
             details,
             direccionIp,
         );
     }
+
+
+    //CONTROLAR LA CREACIÓN DE UN CRITERIO PAMEC
+    async logCreateCriterioPamec(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        crip_nombre: string,
+        act_nombre: string,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Creado un Criterio Pamec  con descripcion "${crip_nombre}" y actividad "${act_nombre}" del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Criterio Pamec',
+            details,
+            direccionIp,
+        );
+    }
+
+    //CONTROLAR LA CREACIÓN DE UN CRITERIO SIC
+    async logCreateCriterioSic(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        cri_nombre: string,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Creado un Criterio Sic  con descripcion "${cri_nombre}"  del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Criterio Sic',
+            details,
+            direccionIp,
+        );
+    }
+
+    //CONTROLAR LA CREACIÓN DE UN CRITERIO SP INDEPENDIENTES
+    async logCreateCriterioSpind(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        crip_nombre: string,
+        etapa_nombre: string,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Creado un Criterio Sp Independientes   "${crip_nombre}" con etapa "${etapa_nombre}"  del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Criterio Sp Independientes',
+            details,
+            direccionIp,
+        );
+    }
+
+    //CONTROLAR LA CREACIÓN DE UN CRITERIO  SP IPS
+    async logCreateCriterioSpIps(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        crip_nombre: string,
+        anio: string,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Creado un Criterio Sp Ips  con descripcion "${crip_nombre}"  del año ${anio}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Criterio Sic',
+            details,
+            direccionIp,
+        );
+    }
+
 
     /* CONSULTAS DE AUDITORIA - SERVICIO DE AUDITORIA */
     // LISTA DE AUDITORIAS POR FECHA INICIO Y FECHA FINAL

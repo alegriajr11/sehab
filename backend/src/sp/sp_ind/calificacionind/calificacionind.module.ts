@@ -10,10 +10,11 @@ import { AuditoriaRegistroModule } from 'src/auditoria/auditoria_registro/audito
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CriterioIndEntity, EvaluacionIndependientesEntity, CalificacionIndEntity, EtapaInd]),
-    AuditoriaRegistroModule,
+    AuditoriaRegistroModule,AuditoriaActualizacionModule,
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),
   JwtModule.registerAsync({

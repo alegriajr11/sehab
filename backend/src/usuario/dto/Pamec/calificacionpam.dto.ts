@@ -18,5 +18,11 @@ export class CalificacionPamDto {
     @MaxLength(255, {message: 'La observacion: longitud máxima de 255 caracteres'})
     cal_observaciones
 
+    @IsNumber()
+    cri_pam_id: number
+
+    @IsNumber()
+    eva_pam_id: number
+
 
 }

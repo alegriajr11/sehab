@@ -17,5 +17,14 @@ export class CumplimientoSicDto {
     @MaxLength(300, { message: 'La Observacion debe tener: longitud máxima de 300 caracteres' })
     cumpl_observaciones: string;
 
+    @IsNumber()
+    cri_sic_id: number
+
+    @IsNumber()
+    eva_sic_id: number
+
+    @IsNumber()
+    ind_sic_id: string
+
 
 }

@@ -14,6 +14,7 @@ import { TokenDto } from 'src/auth/dto/token.dto';
 import { PayloadInterface } from 'src/auth/payload.interface';
 import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
 
 @Injectable()
 export class CalificacionindService {
@@ -29,6 +30,7 @@ export class CalificacionindService {
         private etapaindRepository: EtapaIndRepository,
         private readonly jwtService: JwtService,
         private readonly auditoria_registro_services: AuditoriaRegistroService,
+        private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
 
     ) { }
 
@@ -209,8 +211,23 @@ export class CalificacionindService {
     }
 
     //EDITAR CALIFICACION
-    async update(id: number, dto: CalificacionindDto): Promise<any> {
+    async update(id: number, payloads: { dto: CalificacionindDto, tokenDto: TokenDto }): Promise<any> {
         try {
+            const { dto, tokenDto } = payloads;
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
             const calificacion = await this.findById(id);
             if (!calificacion) {
                 throw new NotFoundException(new MessageDto('La Calificacion No existe'));
@@ -219,8 +236,35 @@ export class CalificacionindService {
             dto.cal_nota ? calificacion.cal_nota = dto.cal_nota : calificacion.cal_nota = calificacion.cal_nota;
             dto.cal_observaciones ? calificacion.cal_observaciones = dto.cal_observaciones : calificacion.cal_observaciones = calificacion.cal_observaciones;
 
-            await this.calificacionIndRepository.save(calificacion);
+            // SE BUSCA EL CRITERIO QUE SE ASIGNA A LA CALIFICACION
+            const criterio_ind = await this.criterioIndRepository.findOne({ where: { cri_id: dto.cri_ind_id } });
+            if (!criterio_ind) {
+                throw new Error('El criterio no ha sido creado');
+            }
 
+            const nombre_criterio = criterio_ind.cri_nombre;
+
+            // SE BUSCA LA EVALUACION QUE SE ASIGNA AL CUMPLIMIENTO
+            const evaluacion_ind = await this.evaluacionIndependientesRepository.findOne({ where: { eva_id: dto.eva_ind_id }, relations: ['eval_acta_ind'] });
+            if (!evaluacion_ind) {
+                throw new Error('La evaluación no ha sido creada');
+            }
+
+            //ASIGNO EL ACTA ID
+            const acta_idInd = evaluacion_ind.eval_acta_ind.act_id;
+
+            await this.calificacionIndRepository.save(calificacion);
+            
+            // ASIGNAR LA AUDITORIA DE LA CALIFICACION ASIGNADO AL CRITERIO
+            await this.auditoria_actualizacion_services.logUpdateCalificacionSpInd(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.cal_nota,
+                nombre_criterio,
+                acta_idInd,
+                year,
+            );
 
             return new MessageDto(`La calificacion ha sido Actualizada`);
         } catch (error) {

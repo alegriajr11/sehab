@@ -12,6 +12,11 @@ import { IndicadorEntity } from '../indicador.entity';
 import { IndicadorRepository } from '../indicador.repository';
 import { CumplimientoEstandarSicEntity } from '../cumplimientoestandar.entity';
 import { CumplimientoEstandarSicRepository } from '../cumplimientoEstandar.repository';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { JwtService } from '@nestjs/jwt';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { PayloadInterface } from 'src/auth/payload.interface';
 
 @Injectable()
 export class CumplimientosicService {
@@ -27,6 +32,9 @@ export class CumplimientosicService {
         private cumplimientoEstandarSicRepository: CumplimientoEstandarSicRepository,
         @InjectRepository(IndicadorEntity)
         private indicadorRepository: IndicadorRepository,
+        private readonly jwtService: JwtService,
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+        private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO SIC 
@@ -39,23 +47,71 @@ export class CumplimientosicService {
     }
 
     //CREAR CUMPLIMIENTO
-    async create(eva_id: number, cri_id: number, ind_id: string, dto: CumplimientoSicDto): Promise<any> {
-        const evaluacion = await this.evaluacionsicRepository.findOne({ where: { eva_id: eva_id } });
-        if (!evaluacion) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
-        const criterio = await this.criterioSicRepository.findOne({ where: { cri_id: cri_id } });
-        if (!criterio) throw new NotFoundException(new MessageDto('El criterio no ha sido creada'))
-        const indicador = await this.indicadorRepository.findOne({ where: { ind_id: ind_id } });
-        if (!indicador) throw new NotFoundException(new MessageDto('El indicador no ha sido creada'))
-        const cumplimiento = this.cumplimientoSicRepository.create(dto)
-        //asigna la evaluacion a la calificacion
-        cumplimiento.cump_eva_sic = evaluacion
-        //asigna el criterio a la evaluacion
-        cumplimiento.criterio_sic = criterio
-        //asigna el indicador
-        cumplimiento.indicadorsic = indicador
+    async create( payloads: { dto: CumplimientoSicDto, tokenDto: TokenDto}): Promise<any> {
+        try {
 
-        await this.cumplimientoSicRepository.save(cumplimiento)
-        return new MessageDto('El cumplimiento ha sido Creado');
+            const { dto, tokenDto } = payloads;
+
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
+            //busca si la evaluacion existe
+            const evaluacion_ind = await this.evaluacionsicRepository.findOne({ where: { eva_id: dto.eva_sic_id }, relations: ['eval_acta_sic'] });
+            if (!evaluacion_ind) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
+
+            //ASIGNO EL ACTA ID
+            const acta_idInd = evaluacion_ind.eval_acta_sic.act_id;
+
+            //busca si el criterio existe
+            const criterio_ind = await this.criterioSicRepository.findOne({ where: { cri_id: dto.cri_sic_id } });
+            if (!criterio_ind) throw new NotFoundException(new MessageDto('El criterio no ha sido creada'))
+
+            //asigna el criterio a la evaluacion
+            const nombre_criterio = criterio_ind.cri_nombre;
+
+            //busca si el indicador existe
+            const indicador = await this.indicadorRepository.findOne({ where: { ind_id: dto.ind_sic_id } });
+            if (!indicador) throw new NotFoundException(new MessageDto('El indicador no ha sido creada'))
+
+            const cumplimiento = this.cumplimientoSicRepository.create(dto)
+            
+            //ASIGNAMOS LA FORANEA DE CUMPLIMIENTO CON CRITERIO_IND
+            cumplimiento.criterio_sic=criterio_ind;
+
+            //ASIGNAMOS LA FORANEA DE CUMPLIMIENTO CON EVALUACIÓN_PAMEC
+            cumplimiento.cump_eva_sic=evaluacion_ind;
+
+            //ASIGNAMOS LA FORANEA DE CUMPLIMIENTO CON INDICADOR
+            cumplimiento.indicadorsic=indicador;
+
+
+            await this.cumplimientoSicRepository.save(cumplimiento)
+            // ASIGNAR LA AUDITORIA DE LA CALIFICACION ASIGNADO AL CRITERIO
+            await this.auditoria_registro_services.logCreateCumplimientoSic(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.cumpl_cumple,
+                nombre_criterio,
+                acta_idInd,
+                year,
+            );
+            return new MessageDto('El cumplimiento ha sido Creado');
+        } catch (error) {
+            
+        }
+    
     }
 
     //LISTANDO CRITERIOS Y CUMPLIMIENTO POR EVALUACION
@@ -89,8 +145,24 @@ export class CumplimientosicService {
     }
 
     //EDITAR CUMPLIMIENTOS
-    async edit(id: number, dto: CumplimientoSicDto): Promise<any> {
+    async edit(id: number,payloads: { dto: CumplimientoSicDto, tokenDto: TokenDto}): Promise<any> {
         try {
+
+            const { dto, tokenDto } = payloads;
+
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+            const year = new Date().getFullYear().toString();
+
             const cumplimiento = await this.findById(id);
             if (!cumplimiento) {
                 throw new NotFoundException(new MessageDto('El cumplimiento no existe'));
@@ -99,8 +171,34 @@ export class CumplimientosicService {
             dto.cumpl_cumple ? cumplimiento.cumpl_cumple = dto.cumpl_cumple : cumplimiento.cumpl_cumple = cumplimiento.cumpl_cumple;
             dto.cumpl_observaciones ? cumplimiento.cumpl_observaciones = dto.cumpl_observaciones : cumplimiento.cumpl_observaciones = cumplimiento.cumpl_observaciones;
 
-            await this.cumplimientoSicRepository.save(cumplimiento);
+            //busca si la evaluacion existe
+            const evaluacion = await this.evaluacionsicRepository.findOne({ where: { eva_id: dto.eva_sic_id }, relations: ['eval_acta_sic'] });
+            if (!evaluacion) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
 
+            //busca si el criterio existe
+            const criterio = await this.criterioSicRepository.findOne({ where: { cri_id: dto.cri_sic_id } });
+            if (!criterio) throw new NotFoundException(new MessageDto('El criterio no ha sido creada'))
+
+            //busca si el indicador existe
+            const indicador = await this.indicadorRepository.findOne({ where: { ind_id: dto.ind_sic_id } });
+            if (!indicador) throw new NotFoundException(new MessageDto('El indicador no ha sido creada'))
+
+            //asigna la evaluacion a la calificacion
+            const acta_idInd = evaluacion.eval_acta_sic.act_id;
+            //asigna el criterio a la evaluacion
+            const nombre_criterio = criterio.cri_nombre;
+
+            await this.cumplimientoSicRepository.save(cumplimiento);
+            // ASIGNAR LA AUDITORIA DE LA CALIFICACION ASIGNADO AL CRITERIO
+            await this.auditoria_actualizacion_services.logUpdateCumplimientoSic(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.cumpl_cumple,
+                nombre_criterio,
+                acta_idInd,
+                year,
+            );
 
             return new MessageDto(`El cumplimiento ha sido Editado`);
         } catch (error) {

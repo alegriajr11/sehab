@@ -362,9 +362,9 @@ export class SpIpsService {
     async generarPdfEvaluacionIps(evaips_id: number, acta_id: number): Promise<Buffer> {
 
         const ajuste = await this.calificacionipsAjusteService.getallCalCrixEva(evaips_id, acta_id);
-        const implementacion = await this.calificacionipsImplementacionService.getallCalCrixEva(evaips_id);
-        const planeacion = await this.calificacionipsPlaneacionService.getallCalCrixEva(evaips_id);
-        const verificacion = await this.calificacionipsVerificacionService.getallCalCrixEva(evaips_id);
+        const implementacion = await this.calificacionipsImplementacionService.getallCalCrixEva(evaips_id, acta_id);
+        const planeacion = await this.calificacionipsPlaneacionService.getallCalCrixEva(evaips_id, acta_id);
+        const verificacion = await this.calificacionipsVerificacionService.getallCalCrixEva(evaips_id, acta_id);
 
 
         let eva = "";

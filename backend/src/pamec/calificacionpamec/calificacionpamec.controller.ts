@@ -25,16 +25,16 @@ export class CalificacionpamecController {
 
     // CREAR CALIFICACION
     @Post()
-    async create(@Query('eva_id') eva_id: number,
-    @Query('crip_id') crip_id: number, @Body() dto: CalificacionPamDto) {
-
-        return this.calificacionpamecService.create(eva_id,crip_id, dto);
+    async create( @Body()payload: { dto: CalificacionPamDto, tokenDto: TokenDto} ) {
+        const { dto, tokenDto } = payload;
+        return this.calificacionpamecService.create(payload);
     }
 
     //ACTUALIZAR CALIFICACION
     @Put(':id')
-    async update(@Param('id') id: number, @Body() dto: CalificacionPamDto) {
-        return await this.calificacionpamecService.update(id, dto);
+    async update(@Param('id') id: number, @Body() payload: { dto: CalificacionPamDto, tokenDto: TokenDto}) {
+        const { dto, tokenDto } = payload;
+        return await this.calificacionpamecService.update(id, payload);
     }
 
     //LISTAR TODOS LAS CALIFICACIONES CON EVALUACION 

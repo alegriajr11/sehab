@@ -13,6 +13,7 @@ export class CalificacionindController {
     @Post()
     async create(@Body() payload: { dto: CalificacionindDto, tokenDto: TokenDto }) {
         const { dto, tokenDto } = payload;
+        console.log(dto)
         return this.calificacionindService.createCalificacion(payload);
     }
 
@@ -38,7 +39,8 @@ export class CalificacionindController {
     }
 
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CalificacionindDto) {
-        return await this.calificacionindService.update(id,dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payloads: { dto: CalificacionindDto, tokenDto: TokenDto}) {
+        const { dto, tokenDto } = payloads;
+        return await this.calificacionindService.update(id,payloads);
     }
 }

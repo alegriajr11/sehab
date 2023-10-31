@@ -20,7 +20,7 @@ export class GrupoEvaluacionService {
         return criterio;
     }
 
-    //METODO AGREGAR CRITERIO-GESTION PRETRANS
+    //METODO AGREGAR GRUPO DE EVALUACION
     async create(dto: GrupoEvaluacionDto): Promise<any> {
         //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
         const evaluacion = this.grupoEvaluacionRepository.create(dto)
@@ -29,7 +29,7 @@ export class GrupoEvaluacionService {
         return new MessageDto('La evaluacion ha sido Creado Correctamente');
     }
 
-    //ENCONTRAR POR ID - CRITERIO PRETANSFUNCIONAL
+    //ENCONTRAR POR ID - GRUPO DE EVALUACION
     async findById(id: number): Promise<GrupoEvaluacionEntity> {
         const evaluacion = await this.grupoEvaluacionRepository.findOne({ where: { id } });
         if (!evaluacion) {
@@ -38,14 +38,14 @@ export class GrupoEvaluacionService {
         return evaluacion;
     }
 
-    //ELIMINAR CRITERIO PRETANSFUNCIONAL
+    //ELIMINAR GRUPO DE EVALUACION
     async delete(id: number): Promise<any> {
         const evaluacion = await this.findById(id);
         await this.grupoEvaluacionRepository.delete(id)
         return new MessageDto(`Evaluacion Eliminada`);
     }
 
-    //ACTUALIZAR CRITERIOS PRETRANSFUNSIONAL
+    //ACTUALIZAR GRUPO DE EVALUACION
     async updateGestion(id: number, dto: GrupoEvaluacionDto): Promise<any> {
         const evaluacion = await this.findById(id);
         if (!evaluacion) {
