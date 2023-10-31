@@ -18,6 +18,11 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Escuchar el evento popstate del navegador
+    window.addEventListener('popstate', () => {
+      // Eliminar el elemento al navegar hacia atrás
+      localStorage.removeItem('boton-editar-acta-sic');
+    });
     this.usu_nombreUsuario = this.tokenService.getNombreUsuario();
     this.isLogged = this.tokenService.isLogged();
     this.usu_nombre = this.tokenService.getNombre();

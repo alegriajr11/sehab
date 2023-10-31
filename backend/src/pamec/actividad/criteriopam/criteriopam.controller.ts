@@ -50,12 +50,12 @@ export class CriteriopamController {
         return await this.criteriopamService.update(id, dto);
     }
 
-    @UsePipes(new ValidationPipe({ whitelist: true }))
-    @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body()payloads: { dto: CriterioPamDto, tokenDto: TokenDto}) {
-        const { dto, tokenDto } = payloads;
-        return this.criteriopamService.create(id, payloads);
-    }
+    // @UsePipes(new ValidationPipe({ whitelist: true }))
+    // @Post(':id')
+    // async create(@Param('id', ParseIntPipe) id: number, @Body()payloads: { dto: CriterioPamDto, tokenDto: TokenDto}) {
+    //     const { dto, tokenDto } = payloads;
+    //     return this.criteriopamService.create(id, payloads);
+    // }
 
     //LISTAR TODOS LOS CRITERIOS CON EVALUACION 
     @Get('cripam/pamec')

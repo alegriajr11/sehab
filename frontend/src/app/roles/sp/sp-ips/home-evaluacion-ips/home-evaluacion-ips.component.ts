@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Evaluacion } from 'src/app/models/SpIps/evaluacion.dto';
+import { EvaluacionIpsDto } from 'src/app/models/SpIps/evaluacion.dto';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
 import { EvaluacionipsService } from 'src/app/services/SpIps/evaluacionips.service';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
@@ -21,7 +21,7 @@ export class HomeEvaluacionIpsComponent implements OnInit {
   acta_id: number;
 
   //DTO EVALUACION
-  evaluacionDto: any[] = [];
+  evaluacionDto: EvaluacionIpsDto[] = [];
 
   nombrePrestador: string;
 
@@ -54,5 +54,10 @@ export class HomeEvaluacionIpsComponent implements OnInit {
     // Limpiar el localStorage para DESHABILITAR LA RUTA
     localStorage.removeItem('boton-acta-sp-ips');
     localStorage.removeItem('nombre-pres-sp-ips');
+  }
+
+  enviarIdEvaluacion(id_eva: number){
+    localStorage.setItem('id_evaluacion_ips', id_eva.toString());
+    window.scrollTo(0, 0);
   }
 }

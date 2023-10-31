@@ -84,6 +84,10 @@ import { ModalSedesPrestadorComponent } from './prestador/modal-sedes-prestador/
 import { EditarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/editar-sedes-prestador/editar-sedes-prestador.component';
 import { ContadorComponent } from './roles/reso/contador/contador.component';
 import { EditarEvaluacionSpProComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/editar-evaluacion-sp-pro/editar-evaluacion-sp-pro.component';
+import { EditarEvaluacionSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/editar-evaluacion-sp-ips/editar-evaluacion-sp-ips.component';
+import { CumplimientoRequisitosComponent } from './roles/reso/cumplimiento-requisitos/cumplimiento-requisitos.component';
+import { ConclusionesRecomendacionesComponent } from './roles/reso/conclusiones-recomendaciones/conclusiones-recomendaciones.component';
+import { EquipoVerificadoresComponent } from './roles/reso/equipo-verificadores/equipo-verificadores.component';
 
 
 const routes: Routes = [
@@ -143,7 +147,8 @@ const routes: Routes = [
   { path: 'sp/evaluaciones-ips', component: EvaluacionesSpIpsComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   //{ path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard,], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/home-evaluacion-ips', component: HomeEvaluacionIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  { path: 'sp/evaluacion-uno', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-ips', component: EvaluacionSpIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
+  { path: 'sp/evaluacion-ips/editar', component: EditarEvaluacionSpIpsComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
 
   //RUTAS SP-IPS EDITAR-ACTA
   { path: 'sp-ips/acta/editar/:id', component: EditarActaSpIpsComponent, canActivate: [UsuarioGuard, EditarActaSpIpsGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
@@ -167,6 +172,16 @@ const routes: Routes = [
   { path: 'reso', component: HomeResoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res', 'contador'] } },
   { path: 'reso/lista-verificacion', component: ListaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'servicios-capacidad', component: CapacidadInstaladaComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
+  //RUTA CUMPLIMIENTO DE REQUISITOS DE LAS CONDICIONES DE HABILITACIÓN
+  { path: 'cumplimiento-requisitos', component: CumplimientoRequisitosComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
+  //RUTA CONCLUSIONES Y RECOMENDACIONES
+  { path: 'conclusiones-recomendaciones', component: ConclusionesRecomendacionesComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  
+  //RUTA EQUIPO DE VERIFICADORES
+  { path: 'equipo-verificadores', component: EquipoVerificadoresComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+
 
   //RUTA CONTADOR - RESOLUION 3100
   { path: 'reso/contador', component: ContadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },

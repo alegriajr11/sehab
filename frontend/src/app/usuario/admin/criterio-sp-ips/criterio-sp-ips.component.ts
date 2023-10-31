@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Ajuste } from 'src/app/models/SpIps/criterioAjuste.dto';
-import { Implementacion } from 'src/app/models/SpIps/criterioImplementacion.dto';
-import { Planeacion } from 'src/app/models/SpIps/criterioPlaneacion.dto';
-import { Verificacion } from 'src/app/models/SpIps/criterioVerificacion.dto';
-import { Evaluacion } from 'src/app/models/SpIps/evaluacion.dto';
+import { AjusteDto } from 'src/app/models/SpIps/criterioAjuste.dto';
+import { ImplementacionDto } from 'src/app/models/SpIps/criterioImplementacion.dto';
+import { PlaneacionDto } from 'src/app/models/SpIps/criterioPlaneacion.dto';
+import { VerificacionDto } from 'src/app/models/SpIps/criterioVerificacion.dto';
+import { EvaluacionIpsDto } from 'src/app/models/SpIps/evaluacion.dto';
 import { Item } from 'src/app/models/SpIps/item.dto';
 import { AjusteService } from 'src/app/services/SpIps/ajuste.service';
 import { EvaluacionipsService } from 'src/app/services/SpIps/evaluacionips.service';
@@ -20,12 +20,12 @@ import Swal from 'sweetalert2';
 })
 export class CriterioSpIpsComponent implements OnInit {
 
-  evaluacion: Evaluacion[];
+  evaluacion: EvaluacionIpsDto[];
   item: Item[];
-  criteriosPlaneacion: Planeacion[];
-  criteriosVerificacion: Verificacion[];
-  criteriosImplementacion: Implementacion[];
-  criteriosAjuste: Ajuste[];
+  criteriosPlaneacion: PlaneacionDto[];
+  criteriosVerificacion: VerificacionDto[];
+  criteriosImplementacion: ImplementacionDto[];
+  criteriosAjuste: AjusteDto[];
 
   controlCriterio = false;
 
@@ -87,7 +87,7 @@ export class CriterioSpIpsComponent implements OnInit {
     var sel = id.selectedIndex;
     var opt = id.options[sel]
     var ValorEva = (<HTMLSelectElement><unknown>opt).value;
-
+    var idEvaluacion = parseInt(ValorEva, 10);
 
     var id = (document.getElementById('item_id')) as HTMLSelectElement
     var sel = id.selectedIndex;
@@ -96,7 +96,7 @@ export class CriterioSpIpsComponent implements OnInit {
 
 
     if (ValorItem === '1') {
-      this.planeacionService.listaPlaneacion(ValorEva).subscribe(
+      this.planeacionService.listaPlaneacion(idEvaluacion).subscribe(
         data => {
           this.criteriosPlaneacion = data;
           this.listaVacia = undefined;
@@ -111,7 +111,7 @@ export class CriterioSpIpsComponent implements OnInit {
     }
 
     if (ValorItem === '2') {
-      this.implementacionService.listaImpl(ValorEva).subscribe(
+      this.implementacionService.listaImpl(idEvaluacion).subscribe(
         data => {
           this.criteriosImplementacion = data;
           this.listaVacia = undefined;
@@ -126,7 +126,7 @@ export class CriterioSpIpsComponent implements OnInit {
     }
 
     if (ValorItem === '3') {
-      this.verificacionService.listaVerf(ValorEva).subscribe(
+      this.verificacionService.listaVerf(idEvaluacion).subscribe(
         data => {
           this.criteriosVerificacion = data;
           this.listaVacia = undefined;
@@ -141,7 +141,7 @@ export class CriterioSpIpsComponent implements OnInit {
     }
 
     if (ValorItem === '4') {
-      this.ajusteService.listaAjuste(ValorEva).subscribe(
+      this.ajusteService.listaAjuste(idEvaluacion).subscribe(
         data => {
           this.criteriosAjuste = data;
           this.listaVacia = undefined;
@@ -164,13 +164,16 @@ export class CriterioSpIpsComponent implements OnInit {
     var sel = id.selectedIndex;
     var opt = id.options[sel]
     var ValorEva = (<HTMLSelectElement><unknown>opt).value;
+    // Convertir ValorEva a un número entero
+    var ValorEvaNumero = parseInt(ValorEva, 10); // El segundo argumento es la base (10 para base decimal)
+
 
     var id = (document.getElementById('item_id')) as HTMLSelectElement
     var sel = id.selectedIndex;
     var opt = id.options[sel]
     var ValorItem = (<HTMLSelectElement><unknown>opt).value;
 
-    this.evaluacionService.listOne(ValorEva).subscribe(
+    this.evaluacionService.listOne(ValorEvaNumero).subscribe(
       data => {
         for (const evas of this.evaluacion) {
           if (evas.evips_id.toString() === ValorEva) {
@@ -307,12 +310,12 @@ export class CriterioSpIpsComponent implements OnInit {
     });
   }
 
-  obtenerNombreItem(): void{
+  obtenerNombreItem(): void {
     var original = document.getElementById("item_nombre");
     sessionStorage.setItem("idnombreitem", original.textContent);
   }
 
-  obtenerNombreEvaluacion(): void{
+  obtenerNombreEvaluacion(): void {
     var original = document.getElementById("eva_nombre");
     sessionStorage.setItem("idnombreeva", original.textContent);
   }

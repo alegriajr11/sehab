@@ -41,6 +41,11 @@ export class EvaluacionesSpProComponent implements OnInit {
 
 
   ngOnInit(): void {
+    // Escuchar el evento popstate del navegador
+    window.addEventListener('popstate', () => {
+      // Eliminar el elemento al navegar hacia atrás
+      localStorage.removeItem('boton-editar-acta-sp-ind');
+    });
     this.incializarMetodos();
   }
 
@@ -69,7 +74,6 @@ export class EvaluacionesSpProComponent implements OnInit {
     this.sharedService.setNombrePrestador(name)
     this.sharedService.setNombreFuncionario(name_funcionario)
     this.sharedService.setIdPrestador(codigo_prestador)
-    
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',

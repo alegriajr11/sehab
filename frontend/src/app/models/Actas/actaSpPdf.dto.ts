@@ -40,6 +40,10 @@ export class ActaSpPdfDto {
 
     act_captura_imagen: string;
 
+    //CONTROLAR RECIBE O FIRMA
+    act_recibe_visita: string;
+    noFirmaActa: string
+
     constructor(
         act_id: number,
         act_visita_inicial: string,
@@ -76,7 +80,8 @@ export class ActaSpPdfDto {
         //VARIABLES COMPROMISOS
         act_compromiso_actividad: string,
         act_compromiso_fecha: string,
-        act_compromiso_responsable: string
+        act_compromiso_responsable: string,
+        noFirmaActa: string
     ) {
         this.act_id = act_id
         this.act_visita_inicial = act_visita_inicial
@@ -114,5 +119,6 @@ export class ActaSpPdfDto {
         this.act_compromiso_actividad = act_compromiso_actividad
         this.act_compromiso_fecha = act_compromiso_fecha
         this.act_compromiso_responsable = act_compromiso_responsable
+        this.noFirmaActa = noFirmaActa
     }
 }

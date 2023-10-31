@@ -1,31 +1,71 @@
 export class ActaVerificacionDto {
 	id?: number;
     act_id?: number;
-    act_visita_inicial: string;
+    act_visita_previa: string;
     act_visita_seguimiento: string;
-    act_fecha_inicial: string;
+    act_visita_reactivacion: string;
+    act_fecha_inicio: string;
     act_fecha_final: string;
     act_municipio: string;
     act_prestador: string;
     act_nit: string;
     act_direccion: string
-    act_barrio: string
     act_telefono: string
     act_email: string
-    act_sede_principal: string
-    act_sede_localidad: string
-    act_sede_direccion: string
     act_representante: string
-    act_cod_prestador: string
+    act_gerente: string
+    act_cod_habilitacion: string
+    act_sede: string
     act_cod_sede: string
-    act_obj_visita: string
-    act_id_funcionario: number
-    act_nombre_funcionario: string
-    act_cargo_funcionario: string
-    act_firma_funcionario: string
-    act_nombre_prestador: string
+    act_observaciones: string
     act_firma_prestador: string
     act_cargo_prestador: string
 
     act_estado: string;
+
+
+    constructor(
+        act_id: number,
+        act_visita_previa: string,
+        act_visita_seguimiento: string,
+        act_visita_reactivacion: string,
+        act_fecha_inicio: string,
+        act_fecha_final: string,
+        act_municipio: string,
+        act_prestador: string,
+        act_nit: string,
+        act_direccion: string,
+        act_telefono: string,
+        act_email: string,
+        act_representante: string,
+        act_gerente: string,
+        act_cod_habilitacion: string,
+        act_sede: string,
+        act_cod_sede: string,
+        act_observaciones: string,
+        act_firma_prestador: string,
+        act_cargo_prestador: string,
+    ) {
+        this.act_id = act_id
+        this.act_visita_previa = act_visita_previa
+        this.act_visita_seguimiento = act_visita_seguimiento
+        this.act_visita_reactivacion = act_visita_reactivacion
+        this.act_fecha_inicio = act_fecha_inicio
+        this.act_fecha_final = act_fecha_final
+        this.act_municipio = act_municipio
+        this.act_prestador = act_prestador
+        this.act_nit = act_nit
+        this.act_direccion = act_direccion
+        this.act_telefono = act_telefono
+        this.act_email = act_email
+        this.act_representante = act_representante
+        this.act_gerente = act_gerente
+        this.act_cod_habilitacion = act_cod_habilitacion
+        this.act_sede = act_sede
+        this.act_cod_sede = act_cod_sede
+        this.act_observaciones = act_observaciones
+        this.act_firma_prestador = act_firma_prestador
+        this.act_cargo_prestador = act_cargo_prestador
+    }
 }
+

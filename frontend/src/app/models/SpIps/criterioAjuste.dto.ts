@@ -1,4 +1,4 @@
-export class Ajuste {
+export class AjusteDto {
     cri_aju_id?: number;
     cri_aju_nombre: string;
     cri_aju_verificacion: string;

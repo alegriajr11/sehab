@@ -54,6 +54,13 @@ h2 {
     color: white;
 }
 
+/*SPAN NOMBRE DE EVALUACION*/
+span {
+    color: white;
+    font-size: x-large;
+    font-weight: bold;
+}
+
 
 .span{
     color: #000;

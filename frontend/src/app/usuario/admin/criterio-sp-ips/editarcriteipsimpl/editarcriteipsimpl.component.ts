@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Implementacion } from 'src/app/models/SpIps/criterioImplementacion.dto';
+import { ImplementacionDto } from 'src/app/models/SpIps/criterioImplementacion.dto';
 import { ImplementacionService } from 'src/app/services/SpIps/implementacion.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { ImplementacionService } from 'src/app/services/SpIps/implementacion.ser
 })
 export class EditarcriteipsimplComponent implements OnInit {
 
-  criterioImple: Implementacion = null
+  criterioImple: ImplementacionDto = null
 
   constructor(
     private implementacionService: ImplementacionService,

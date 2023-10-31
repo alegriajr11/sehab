@@ -14,7 +14,6 @@ import { TokenService } from 'src/app/services/token.service';
 })
 export class EvaluacionesSicComponent implements OnInit {
 
-  // evaluaciones: Usuario[] = [];
 
   evaluaciones: any[] = [];
 
@@ -42,6 +41,11 @@ export class EvaluacionesSicComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Escuchar el evento popstate del navegador
+    window.addEventListener('popstate', () => {
+      // Eliminar el elemento al navegar hacia atrás
+      localStorage.removeItem('boton-editar-acta-sic');
+    });
     this.incializarMetodos();
   }
 
@@ -65,10 +69,11 @@ export class EvaluacionesSicComponent implements OnInit {
   }
 
 
-  openModal(modalTemplate: TemplateRef<any>, id: number, name: string, name_funcionario: string) {
+  openModal(modalTemplate: TemplateRef<any>, id: number, name: string, name_funcionario: string, codigo_prestador: string) {
     this.sharedService.setIdEvaluacionSic(id)
     this.sharedService.setNombrePrestador(name)
     this.sharedService.setNombreFuncionario(name_funcionario)
+    this.sharedService.setIdPrestador(codigo_prestador)
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',

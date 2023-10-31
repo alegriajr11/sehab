@@ -23,6 +23,12 @@ export class ActaSpIndPdfDto {
     act_cargo_prestador: string
     act_firma_prestador: string
 
+    act_estado: string;
+
+    //CONTROLAR RECIBE O FIRMA
+    act_recibe_visita: string;
+    noFirmaActa: string
+
     constructor(
         act_id: number,
         act_visita_inicial: string,
@@ -45,7 +51,8 @@ export class ActaSpIndPdfDto {
         act_firma_funcionario: string,
         act_nombre_prestador: string,
         act_cargo_prestador: string,
-        act_firma_prestador: string
+        act_firma_prestador: string,
+        noFirmaActa: string
     ){
         this.act_id = act_id
         this.act_visita_inicial = act_visita_inicial
@@ -68,6 +75,7 @@ export class ActaSpIndPdfDto {
         this.act_firma_funcionario = act_firma_funcionario
         this.act_nombre_prestador = act_nombre_prestador
         this.act_cargo_prestador = act_cargo_prestador
-        this.act_firma_prestador = act_firma_prestador 
+        this.act_firma_prestador = act_firma_prestador
+        this.noFirmaActa = noFirmaActa 
     }
 }

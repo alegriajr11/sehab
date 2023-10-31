@@ -43,7 +43,8 @@
             </div>
 
             <div class="col-md-3" *ngIf="estado_acta === '1'">
-                <button class="btn btn-dark esp btn-circle btn-xl" title="Editar Acta" routerLink="/sic/acta/editar/{{id_evaluacion}}" (click)="modalRef.hide()">
+                <button class="btn btn-dark esp btn-circle btn-xl" title="Editar Acta" 
+                routerLink="/sic/acta/editar/{{id_evaluacion}}" (click)="modalRef.hide(); habilitarRutaEditar()">
                     <i class='fa fa-edit fa-lg'></i>
                 </button>
             </div>
@@ -59,14 +60,14 @@
                 <hr class="my-4">
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9" *ngIf="recibeVisita ==='true'">
                 <button id="boton-evaluacion-sic" class="btn btn-dark esp btn-circle btn-xl" title="Descargar Evaluación">
                     <i class='fas fa-file-download fa-lg'></i>
                 </button>
                 <span class="tittle-button">EVALUACIÓN</span>
             </div>
 
-            <div class="col-md-3" *ngIf="estado_acta === '1'">
+            <div class="col-md-3" *ngIf="estado_acta === '1' && recibeVisita ==='true'">
                 <button class="btn btn-dark esp btn-circle btn-xl" title="Editar Evaluación">
                     <i class='fa fa-edit fa-lg'></i>
                 </button>

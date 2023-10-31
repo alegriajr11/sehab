@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Planeacion } from 'src/app/models/SpIps/criterioPlaneacion.dto';
+import { PlaneacionDto } from 'src/app/models/SpIps/criterioPlaneacion.dto';
 import { PlaneacionService } from 'src/app/services/SpIps/planeacion.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { PlaneacionService } from 'src/app/services/SpIps/planeacion.service';
   styleUrls: ['./editarcriteipsplan.component.css']
 })
 export class EditarcriteipsplanComponent implements OnInit {
-  criterioPla: Planeacion = null
+  criterioPla: PlaneacionDto = null
 
   constructor(
     private planeacionService: PlaneacionService,

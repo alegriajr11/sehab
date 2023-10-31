@@ -1,4 +1,4 @@
-export class Evaluacion {
+export class EvaluacionIpsDto {
     evips_id?: number;
     evips_nombre: string;
 

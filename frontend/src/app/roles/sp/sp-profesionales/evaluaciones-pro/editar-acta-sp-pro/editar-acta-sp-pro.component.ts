@@ -25,6 +25,7 @@ export class EditarActaSpProComponent {
 
   usuario: Usuario[] = null;
   act_cargo_funcionario: string
+  act_nombre_prestador: string
 
   //Habilitar la Fecha Final
   habilitarfechaFin = false;
@@ -34,6 +35,10 @@ export class EditarActaSpProComponent {
 
   //ESTADO DE ACTA
   estado_acta: string;
+  //HABILITAR FIRMA
+  acta_firmada: boolean = true;
+  //NO FIRMA ACTA
+  noFirmaActa: string = 'false';
 
   id_evaluacion: number
 
@@ -54,6 +59,8 @@ export class EditarActaSpProComponent {
     this.actaPdfService.oneActaSpInd(id).subscribe(
       data => {
         this.actaSpInd = data;
+        this.act_nombre_prestador = data.act_nombre_prestador
+        this.noFirmaActa = data.noFirmaActa
       },
       err => {
         this.toastr.error(err.error.message, 'Fail', {
@@ -63,9 +70,7 @@ export class EditarActaSpProComponent {
       }
     );
 
-    console.log(this.id_evaluacion)
     this.unsoloCheckbox();
-    this.estadoActa();
   }
 
   //Metodo Abrir Modal
@@ -122,18 +127,6 @@ export class EditarActaSpProComponent {
     }
   }
 
-  async estadoActa() {
-    // Obtener el estado actual del acta
-    const data = await this.actaPdfService.oneActaSpInd(this.id_evaluacion).toPromise();
-    this.estado_acta = data.act_estado;
-    console.log(this.estado_acta)
-    if (this.estado_acta === '0') {
-      localStorage.setItem('boton-editar-acta-sp-ind', 'false')
-    } else if (this.estado_acta === '1') {
-      localStorage.setItem('boton-editar-acta-sp-ind', 'true')
-    }
-  }
-
   //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO FIRMA FUNCIONARIO DEL actaSpInd DTO
   async obtenerFirmaFuncionario(): Promise<void> {
     if (this.actaSpInd.act_id_funcionario) {
@@ -170,6 +163,31 @@ export class EditarActaSpProComponent {
         );
       }
     }
+  }
+
+  //METODO CONTROLAR SI EL PRESTADOR NO FIRMA EL ACTA
+  noFirmaPrestador() {
+    Swal.fire({
+      title: `No firma el acta.`,
+      text: `¿Estás seguro de que ${this.act_nombre_prestador} no desea firmar el Acta?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        this.noFirmaActa = 'true'
+        //SOLICITUD NO FIRMA ACTA EN TRUE A LA ENTIDAD ACTA
+        this.actaSpInd.noFirmaActa = this.noFirmaActa
+      }
+      else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    })
   }
 
 
@@ -249,14 +267,33 @@ export class EditarActaSpProComponent {
         positionClass: 'toast-top-center',
       });
     } else {
-      this.actaPdfService.updateActaSpInd(id, this.actaSpInd, tokenDto).subscribe(
-        data => {
-          this.handleSuccess(data.message);
-        },
-        err => {
-          this.handleError(err.error.message);
+      Swal.fire({
+        title: '¿Estás seguro de actualizar el acta?',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.value) {
+          this.actaPdfService.updateActaSpInd(id, this.actaSpInd, tokenDto).subscribe(
+            data => {
+              this.handleSuccess(data.message);
+              // Remover el item
+              localStorage.removeItem('boton-editar-acta-sp-ind');
+            },
+            err => {
+              this.handleError(err.error.message);
+            }
+          )
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+            '',
+            'error'
+          );
         }
-      )
+
+      })
+
     }
   }
 
@@ -275,4 +312,10 @@ export class EditarActaSpProComponent {
     });
   }
 
+
+  volver() {
+    this.router.navigate(['/sp/evaluaciones-pro'])
+    // Remover el item
+    localStorage.removeItem('boton-editar-acta-sp-ind');
+  }
 }

@@ -29,7 +29,7 @@
         </div>
 
         <div *ngIf="selectedStandard">
-            <h3>Criterios para {{ getStandardName(selectedStandard) }}</h3>
+            <h3>ESTANDAR DE {{ getStandardName(selectedStandard) }}</h3>
             <div class="criteria-list rounded">
                 <div class="criteria custom-background rounded"
                     *ngFor="let criterion of getCriterions(selectedStandard);"

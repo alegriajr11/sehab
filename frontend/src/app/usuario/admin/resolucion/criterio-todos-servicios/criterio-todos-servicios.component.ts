@@ -29,6 +29,7 @@ export class CriterioTodosServiciosComponent {
 
   ngOnInit(): void {
     this.cargarEstandar();
+    this.cargarTodosCriterios();
   }
 
   cargarEstandar(): void{
@@ -62,6 +63,18 @@ export class CriterioTodosServiciosComponent {
     this.controlCriterio = true;
   }
 
+
+  cargarTodosCriterios(){
+    this.criterioTodosService.listaAllCriterios().subscribe(
+      data => {
+        this.criterio_servicios = data;
+        this.listaVacia = undefined
+      },
+      err => {
+        this.listaVacia = err.error.message;
+      }
+    )
+  }
 
   llenarSpan(): void{
     var id = (document.getElementById('tod_id')) as HTMLSelectElement

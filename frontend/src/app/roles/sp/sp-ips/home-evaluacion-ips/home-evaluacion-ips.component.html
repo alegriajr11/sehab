@@ -37,10 +37,11 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let evaluacion of this.evaluacionDto; let i = index">
-                        <td>{{ i + 1 }}</td>
+                        <td>{{ evaluacion.evips_id }}</td>
                         <td>{{ evaluacion.evips_nombre }}</td>
                         <td>
-                            <button class="btn btn-outline-dark" routerLink="/sp/evaluacion-uno">
+                            <button class="btn btn-outline-dark" routerLink="/sp/evaluacion-ips" 
+                            (click)="enviarIdEvaluacion(evaluacion.evips_id)">
                                 <span class="fas fa-clipboard"></span>
                             </button>
                         </td>

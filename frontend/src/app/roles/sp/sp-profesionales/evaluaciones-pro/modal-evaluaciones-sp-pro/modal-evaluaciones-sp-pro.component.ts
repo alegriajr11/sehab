@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 })
 export class ModalEvaluacionesSpProComponent {
 
-  
+
   id_evaluacion: number
   //NOMBRE PRESTADOR MODAL
   nombre_prestador: string
@@ -55,7 +55,6 @@ export class ModalEvaluacionesSpProComponent {
     this.cod_prestador = this.sharedService.pre_cod_habilitacion
     this.isAdmin = this.tokenService.isAdmin();
     this.estadoActa();
-    console.log(this.id_evaluacion)
   }
 
 
@@ -73,15 +72,17 @@ export class ModalEvaluacionesSpProComponent {
   }
 
   async habilitarRutaEditar() {
-    localStorage.setItem('boton-editar-evaluacion-sp-ind', 'true')
+    localStorage.setItem('boton-editar-acta-sp-ind', 'true')
   }
 
+  //METODO PARA CAPTURAR EL ESTADO DEL ACTA
   async estadoActa() {
     // Obtener el estado actual del acta
     const data = await this.actaPdfService.oneActaSpInd(this.id_evaluacion).toPromise();
     this.estado_acta = data.act_estado;
   }
 
+  //SOLICITUD PARA CERRAR EL ACTA
   async cerrarActa() {
     const token = this.tokenService.getToken();
     const tokenDto: TokenDto = new TokenDto(token);
@@ -99,28 +100,67 @@ export class ModalEvaluacionesSpProComponent {
       if (result.isConfirmed) {
         // Obtener el estado actualizado del acta
         const data = await this.actaPdfService.oneActaSpInd(this.id_evaluacion).toPromise();
-        if (!data.act_firma_prestador || !data.act_firma_funcionario) {
-          Swal.fire(
-            'No se puede cerrar el acta porque no está firmada',
-            'Debes firmar el acta',
-            'error'
-          );
-        } else {
+        if (data.noFirmaActa === 'true') {
+          if (!data.act_firma_funcionario) {
+            Swal.fire(
+              `Lo siento, no es posible cerrar el acta en este momento.`,
+              `Para proceder, necesitamos que ${data.act_nombre_funcionario} firme el acta.`,
+              'error'
+            );
+          }
+
+          //SOLICITUD FIRMAR EL ACTA SI YA ESTA FIRMADA POR EL FUNCIONARIO Y EL PRESTADOR NO FIRMA
           await this.actaPdfService.cerrarActaSpInd(this.id_evaluacion, tokenDto).toPromise();
-
           this.estado_acta = data.act_estado;
-
           // Mostrar notificación Acta cerrada
           this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
             timeOut: 3000,
             positionClass: 'toast-top-center',
           });
           this.modalRef.hide();
-  
           localStorage.setItem('boton-acta-sp-ind', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
-  
+          
         }
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        else if (!data.act_firma_prestador || !data.act_firma_funcionario) {
+          if (!data.act_firma_prestador && !data.act_firma_funcionario) {
+            Swal.fire(
+              'No se puede cerrar el acta porque no está firmada por ninguna de las partes',
+              `Tanto ${data.act_nombre_funcionario} como ${data.act_nombre_prestador} deben firmar el acta para poder cerrarla.`,
+              'error'
+            );
+            //VALIDAR SI EL PRESTADOR YA FIRMO EL ACTA
+          }
+          else if (!data.act_firma_prestador) {
+            Swal.fire(
+              `No se puede cerrar el acta porque no está firmada por el representante.`,
+              `Es necesario que  ${data.act_nombre_prestador} firme el acta para poder cerrarla.`,
+              'error'
+            );
+            //VALIDAR SI EL FUNCIONARIO YA FIRMO EL ACTA
+          }
+          else if (!data.act_firma_funcionario) {
+            Swal.fire(
+              `No se puede cerrar el acta porque no está firmada por el funcionario ${data.act_nombre_funcionario}`,
+              `Es necesario que firmes el acta para poder cerrarla.`,
+              'error'
+            );
+          }
+        }
+        //CERRAR EL ACTA SI ESTÁ FIRMADA
+        else {
+          await this.actaPdfService.cerrarActaSpInd(this.id_evaluacion, tokenDto).toPromise();
+          this.estado_acta = data.act_estado;
+          // Mostrar notificación Acta cerrada
+          this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          });
+          this.modalRef.hide();
+
+          localStorage.setItem('boton-acta-sp-ind', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
+        }
+      }
+      else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire(
           'Cancelado',
           'Acta sin Cerrar',
@@ -136,7 +176,7 @@ export class ModalEvaluacionesSpProComponent {
   }
 
 
-  descargarEvaluacionInd(){
+  descargarEvaluacionInd() {
     this.evaluacionIndService.descargarEvaluacionPdfInd(this.id_evaluacion, this.cod_prestador)
     this.router.navigate(['/sp/evaluaciones-pro']);
     this.sharedService.criteriosIndGuardados = [];

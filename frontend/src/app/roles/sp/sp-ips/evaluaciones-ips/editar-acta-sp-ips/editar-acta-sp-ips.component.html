@@ -2,7 +2,7 @@
 <div class="col">
     <div class="row">
         <div class="col-md-2">
-            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sp/evaluaciones-ips">
+            <button class="btn btn-light esp btn-circle btn-xl" (click)="volver()">
                 <i class="fa fa-reply fa-lg"></i>
             </button>
         </div>
@@ -176,9 +176,9 @@
 
                 <div class="col-6">
                     <label for="" class="form-label">Representante:</label>
-                    <input type="text" class="form-control" name="act_nombre_prestador" 
-                    [(ngModel)]="actaSp.act_nombre_prestador"
-                    (input)="actaSp.act_nombre_prestador = actaSp.act_nombre_prestador.toUpperCase()">
+                    <input type="text" class="form-control" name="act_nombre_prestador"
+                        [(ngModel)]="actaSp.act_nombre_prestador"
+                        (input)="actaSp.act_nombre_prestador = actaSp.act_nombre_prestador.toUpperCase()">
                 </div>
 
 
@@ -190,14 +190,16 @@
                 </div>
 
                 <!--BOTON MODAL FIRMA REPRESENTANTE-->
-                <div class="col-12" *ngIf="!actaSp.act_firma_prestador ">
-                    <span class="button-like btn-span" (click)="openModalFirmPrestador(modalTemplatePrestador)">Firma Representante</span>
+                <div class="col-12" *ngIf="!actaSp.act_firma_prestador && noFirmaActa === 'false'">
+                    <span class="button-like btn-span" (click)="openModalFirmPrestador(modalTemplatePrestador)">Firma
+                        Representante</span>
                 </div>
 
                 <div class="col-6">
                     <label for="" class="form-label">Acompañante de Visita:</label>
-                    <input type="text" class="form-control" id="nombrePrestadorAcom" name="act_nombre_prestador_acompanante"
-                        placeholder="Prestador..." [(ngModel)]="actaSp.act_nombre_prestador_acompanante"
+                    <input type="text" class="form-control" id="nombrePrestadorAcom"
+                        name="act_nombre_prestador_acompanante" placeholder="Prestador..."
+                        [(ngModel)]="actaSp.act_nombre_prestador_acompanante"
                         (input)="actaSp.act_nombre_prestador_acompanante = actaSp.act_nombre_prestador_acompanante.toUpperCase()">
                 </div>
 
@@ -210,8 +212,17 @@
                 </div>
 
                 <!--BOTON MODAL FIRMA ACOMPAÑANTE-->
-                <div class="col-12" *ngIf="!actaSp.act_firma_prestador_acompanante">
-                    <span class="button-like btn-span" (click)="openModalAcompanante(modalTemplateAcompanante)">Firma Acompañante</span>
+                <div class="col-12" *ngIf="!actaSp.act_firma_prestador_acompanante && noFirmaActa === 'false'">
+                    <span class="button-like btn-span" (click)="openModalAcompanante(modalTemplateAcompanante)">Firma
+                        Acompañante</span>
+                </div>
+
+                <!--BOTON NO FIRMA-->
+                <div class="col-12 text-center">
+                    <span class="button-like btn-span" *ngIf="noFirmaActa === 'false' && !actaSp.act_firma_prestador && 
+                    !actaSp.act_firma_prestador_acompanante" 
+                    (click)="noFirmaPrestador()">No
+                        Firma Prestador</span>
                 </div>
 
 

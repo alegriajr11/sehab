@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Implementacion } from 'src/app/models/SpIps/criterioImplementacion.dto';
+import { ImplementacionDto } from 'src/app/models/SpIps/criterioImplementacion.dto';
 import { TokenDto } from 'src/app/models/token.dto';
 import { environment } from 'src/environments/environment';
 
@@ -18,19 +18,20 @@ export class ImplementacionService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public detail(id: number): Observable<Implementacion> {
-    return this.httpClient.get<Implementacion>(`${this.implementacionOneURL}${id}`);
+  public detail(id: number): Observable<ImplementacionDto> {
+    return this.httpClient.get<ImplementacionDto>(`${this.implementacionOneURL}${id}`);
   }
 
-  public listaImpl(id: string): Observable<Implementacion[]>{
-    return this.httpClient.get<Implementacion[]>(`${this.implementacionURL}${id}`)
+  //LISTAR CRITERIOS POR ID EVALUACION
+  public listaImpl(id: number): Observable<ImplementacionDto[]>{
+    return this.httpClient.get<ImplementacionDto[]>(`${this.implementacionURL}${id}`)
   }
 
   public delete(id: number): Observable<any> {
     return this.httpClient.delete<any>(`${this.implementacionURL}${id}`);
   }
 
-  public update(id: number, criterio: Implementacion): Observable<any> {
+  public update(id: number, criterio: ImplementacionDto): Observable<any> {
     return this.httpClient.put<any>(`${this.implementacionURL}${id}`, criterio);
   }
 }

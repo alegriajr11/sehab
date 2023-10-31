@@ -20,14 +20,20 @@ export class SharedServiceService {
   cumpl_asignado: string
   /**FIN ATRIBUTOS ROL SIC */
 
-  /**CALIFICACION ROL SP-INDEPENDIENTES */
+  /**ID_CRITERIO - CALIFICACION ROL SP-INDEPENDIENTES */
   cri_ind_id: number
   /**FIN ATRIBUTOS SP-INDEPENDIENTES */
+
+  /**ID_CRITERIO - CALIFICACION ROL SP-IPS */
+  cri_ips_id: number
+  /**FIN ATRIBUTOS SP-IPS */
 
   //ARRAY CRITERIOS SIC
   criteriosSicGuardados: any[] = [];
   //ARRAY CRITERIOS SP-IND
   criteriosIndGuardados: any[] = [];
+  //ARRAY CRITERIOS SP-IND
+  criteriosIpsGuardados: any[] = [];
 
   nombreUsuario: string;
 
@@ -144,7 +150,7 @@ export class SharedServiceService {
   }
 
 
-  setIdSpIps(id: number) {
+  setIdEvaluacionSpIps(id: number) {
     this.id_evaluacion_sp_ips = id;
   }
 

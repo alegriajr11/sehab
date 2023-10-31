@@ -19,16 +19,17 @@ export class CriterioServiciosController {
     }
     
     //LISTAR TODOS CRITERIOS
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Get()
     getAll() {
         return this.criterioServiciosService.getall();
     }
 
     //OBTENER CRITERIO TODOS LOS SERVICIOS POR ESTANDAR
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOneCriterio(@Param('id', ParseIntPipe) id: number) {
+        console.log(id)
         return await this.criterioServiciosService.getCriterioForEstandar(id)
     }
 

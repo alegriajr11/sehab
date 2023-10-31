@@ -44,6 +44,7 @@ export class ActaSicComponent implements OnInit {
   habilitarSelectSede: boolean = false;
 
 
+
   listaVacia: any = undefined;
 
   //MODAL
@@ -85,9 +86,13 @@ export class ActaSicComponent implements OnInit {
   act_funcionarioId: string
   act_sede_principalId: string
 
+  act_recibe_visita: string = 'false';
+  noFirmaActa: string = 'false';
+
+  estado_recibe_visita: string
+
   //ID DE EVALUACION
   eva_id: number
-
 
   firma: string;
 
@@ -303,8 +308,7 @@ export class ActaSicComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.value) {
-        const token = this.tokenService.getToken()
-        const tokenDto: TokenDto = new TokenDto(token);
+        this.act_recibe_visita = 'false'
         Swal.fire(
           'Prestador No Recibe Visita',
           '',
@@ -659,7 +663,9 @@ export class ActaSicComponent implements OnInit {
       this.act_firma_funcionario,
       this.act_nombre_prestador,
       this.act_firma_prestador,
-      this.act_cargo_prestador
+      this.act_cargo_prestador,
+      this.act_recibe_visita,
+      this.noFirmaActa
     );
 
     //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
@@ -749,26 +755,18 @@ export class ActaSicComponent implements OnInit {
       });
 
     }
-    // else if (!this.act_firma_prestador) { //VERIFICAR QUE LA FIRMA DEL PRESTADOR SEA ASIGNADA
-    //   this.toastrService.error('Por favor, agregue una firma', 'Error', {
-    //     timeOut: 3000,
-    //     positionClass: 'toast-top-center',
-    //   })
-
-    // } 
     else {
       //SOLICITUD DE REGISTRO DE ACTA ENVIANDO COMO PARAMETRO LA ACTA_DTO Y EL TOKEN_DTO
       this.authService.registroActaSicPdf(this.actaPdf, tokenDto).subscribe(
         data => {
           if (!data.error) {
-            localStorage.setItem('boton-acta-sic', 'true'); //HABILITAR LA RUTA RESTRINGIDA - EVALUACIÓN_SIC
-
             //DESPUÉS DE REGISTRAR EL ACTA, SE SOLICITA LA ÚLTIMA ACTA
             this.actaPdfService.ultimaActaSicPk().subscribe(
               ultimaActa => {
                 //VERIFICA QUE EXISTA EL ACTA REGISTRADA
                 if (ultimaActa && ultimaActa.id) {
                   this.id_acta = ultimaActa.id;
+                  this.estado_recibe_visita = ultimaActa.act_recibe_visita
                   //POR MEDIO DE ID EVALUACION SE ENCUENTRA EL EVA ID
                   this.cumplimientoEstandarService.oneEvluacionSic(this.id_acta).subscribe(
                     data => {
@@ -790,11 +788,26 @@ export class ActaSicComponent implements OnInit {
                       //ASIGNAR NULL EL ATRIBUTO FIRMA PARA UNA NUEVA ACTA
                       this.act_firma_prestador = null
                       this.sharedService.setFirmaActaSic(this.act_firma_prestador) //ENVIAMOS LA FIRMA NULL PARA UNA NUEVA ACTA
-                      this.router.navigate(['/sic/evaluacion']);
-                      window.scrollTo(0, 0);
+                      //SI EL ESTADO DE RECIBE VISITA ES TRUE PUEDE ACCEDER A EVALUAR AL PRESTADOR
+                      if (this.estado_recibe_visita === 'true') {
+                        localStorage.setItem('boton-acta-sic', 'true'); //HABILITAR LA RUTA RESTRINGIDA - EVALUACIÓN_SIC
+                        this.router.navigate(['/sic/evaluacion']);
+                        window.scrollTo(0, 0);
+                      } else {
+                        this.router.navigate(['/sic/evaluaciones']);
+                        window.scrollTo(0, 0);
+                      }
+
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
-                      this.router.navigate(['/sic/evaluacion']);
-                      window.scrollTo(0, 0);
+                      //SI EL ESTADO DE RECIBE VISITA ES FALSE PUEDE RESTRINGIR EL ACCESO A LA EVALUACIÓN
+                      if (this.estado_recibe_visita === 'true') {
+                        localStorage.setItem('boton-acta-sic', 'true'); //HABILITAR LA RUTA RESTRINGIDA - EVALUACIÓN_SIC
+                        this.router.navigate(['/sic/evaluacion']);
+                        window.scrollTo(0, 0);
+                      } else {
+                        this.router.navigate(['/sic/evaluaciones']);
+                        window.scrollTo(0, 0);
+                      }
                     }
                   });
                 } else {

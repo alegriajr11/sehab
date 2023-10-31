@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Planeacion } from 'src/app/models/SpIps/criterioPlaneacion.dto';
+import { PlaneacionDto } from 'src/app/models/SpIps/criterioPlaneacion.dto';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -17,19 +17,19 @@ export class PlaneacionService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public detail(id: number): Observable<Planeacion> {
-    return this.httpClient.get<Planeacion>(`${this.planeacionOneURL}${id}`);
+  public detail(id: number): Observable<PlaneacionDto> {
+    return this.httpClient.get<PlaneacionDto>(`${this.planeacionOneURL}${id}`);
   }
 
-  public listaPlaneacion(id: string): Observable<Planeacion[]>{
-    return this.httpClient.get<Planeacion[]>(this.planeacionURL + id)
+  public listaPlaneacion(id: number): Observable<PlaneacionDto[]>{
+    return this.httpClient.get<PlaneacionDto[]>(this.planeacionURL + id)
   }
 
   public delete(id: number): Observable<any> {
     return this.httpClient.delete<any>(`${this.planeacionURL}${id}`);
   }
 
-  public update(id: number, criterio: Planeacion): Observable<any> {
+  public update(id: number, criterio: PlaneacionDto): Observable<any> {
     return this.httpClient.put<any>(`${this.planeacionURL}${id}`, criterio);
   }
 }

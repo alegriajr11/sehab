@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { ActaSicPdfDto } from 'src/app/models/Actas/actaSicpdf.dto';
-import { PrestadorDto } from 'src/app/models/prestador.dto';
 import { TokenDto } from 'src/app/models/token.dto';
 import { Usuario } from 'src/app/models/usuario';
 import { ActapdfService } from 'src/app/services/Sic/actapdf.service';
@@ -25,9 +24,17 @@ export class EditarActaSicComponent {
 
   usuario: Usuario[] = null;
   act_cargo_funcionario: string
+  act_nombre_prestador: string
 
   //Habilitar la Fecha Final
   habilitarfechaFin = false;
+
+  //HABILITAR FIRMA
+  acta_firmada: boolean = true;
+  //NO FIRMA ACTA
+  noFirmaActa: string = 'false';
+  //RECIBE VISITA
+  act_recibe_visita: string
 
   //MODAL
   public modalRef: BsModalRef;
@@ -41,14 +48,17 @@ export class EditarActaSicComponent {
     private tokenService: TokenService,
     public sharedService: SharedServiceService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.params['id'];
     this.actaPdfService.oneActaSic(id).subscribe(
       data => {
         this.actaSic = data;
-        console.log(this.actaSic)
+        this.act_nombre_prestador = data.act_nombre_prestador
+        this.firma = data.act_firma_prestador
+        this.noFirmaActa = data.noFirmaActa
+        this.act_recibe_visita = data.act_recibe_visita
       },
       err => {
         this.toastr.error(err.error.message, 'Fail', {
@@ -232,14 +242,33 @@ export class EditarActaSicComponent {
         positionClass: 'toast-top-center',
       });
     } else {
-      this.actaPdfService.updateActaSic(id, this.actaSic, tokenDto).subscribe(
-        data => {
-          this.handleSuccess(data.message);
-        },
-        err => {
-          this.handleError(err.error.message);
+      Swal.fire({
+        title: '¿Estás seguro de actualizar el acta?',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.value) {
+          this.actaPdfService.updateActaSic(id, this.actaSic, tokenDto).subscribe(
+            data => {
+              this.handleSuccess(data.message);
+              // Remover el item
+              localStorage.removeItem('boton-editar-acta-sp-ind');
+            },
+            err => {
+              this.handleError(err.error.message);
+            }
+          )
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+            '',
+            'error'
+          );
         }
-      )
+
+      })
+
     }
   }
 
@@ -258,8 +287,37 @@ export class EditarActaSicComponent {
     });
   }
 
+  //METODO CONTROLAR SI EL PRESTADOR NO FIRMA EL ACTA
+  noFirmaPrestador() {
+    Swal.fire({
+      title: `No firma el acta.`,
+      text: `¿Estás seguro de que ${this.act_nombre_prestador} no desea firmar el Acta?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        this.noFirmaActa = 'true'
+        //SOLICITUD NO FIRMA ACTA EN TRUE A LA ENTIDAD ACTA
+        this.actaSic.noFirmaActa = this.noFirmaActa
+      }
+      else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    })
+  }
 
 
+  volver() {
+    this.router.navigate(['/sic/evaluaciones'])
+    // Remover el item
+    localStorage.removeItem('boton-editar-acta-sic');
+  }
 }
 
 

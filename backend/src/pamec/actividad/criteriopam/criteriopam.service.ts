@@ -102,14 +102,14 @@ export class CriteriopamService {
         await this.criteriopamRepository.save(criterio)
 
         const act_nombre = criterio.crip_actividad.act_nombre
-        await this.auditoria_registro_services.logCreateCriterioPamec(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.crip_nombre,
-            act_nombre,
-            year,
-        );
+        // await this.auditoria_registro_services.logCreateCriterioPamec(
+        //     payloadInterface.usu_nombre,
+        //     payloadInterface.usu_apellido,
+        //     'ip',
+        //     dto.crip_nombre,
+        //     act_nombre,
+        //     year,
+        // );
         return new MessageDto('El criterio ha sido Creado');
     }
 

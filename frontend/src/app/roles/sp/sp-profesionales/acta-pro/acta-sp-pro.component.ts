@@ -77,6 +77,9 @@ export class ActaSpProComponent implements OnInit {
   act_prestadorId: string
   act_funcionarioId: string
 
+  act_recibe_visita: string = 'false';
+  noFirmaActa: string = 'false';
+
   firma: string;
 
 
@@ -441,7 +444,8 @@ export class ActaSpProComponent implements OnInit {
       this.act_firma_funcionario,
       this.act_nombre_prestador,
       this.act_cargo_prestador,
-      this.act_firma_prestador
+      this.act_firma_prestador,
+      this.noFirmaActa
     );
 
     //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA

@@ -33,6 +33,9 @@ export class ButtonGuard implements CanActivate {
         if(localStorage.getItem('boton-editar-acta-sp-ind') === 'true'){
             return true
         }
+        if(localStorage.getItem('boton-editar-evaluacion-sp-ips') === 'true'){
+            return true
+        }
         if(localStorage.getItem('boton-editar-evaluacion-sp-ind') === 'true'){
             return true
         }

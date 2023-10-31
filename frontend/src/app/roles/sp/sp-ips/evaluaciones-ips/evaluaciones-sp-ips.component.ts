@@ -38,7 +38,11 @@ export class EvaluacionesSpIpsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cargarActas();
+    // Escuchar el evento popstate del navegador
+    window.addEventListener('popstate', () => {
+      // Eliminar el elemento al navegar hacia atrás
+      localStorage.removeItem('boton-editar-acta-sic');
+    });
     this.incializarMetodos();
   }
 
@@ -63,7 +67,7 @@ export class EvaluacionesSpIpsComponent implements OnInit {
 
 
   openModal(modalTemplate: TemplateRef<any>, id: number, name: string, name_funcionario: string) {
-    this.sharedService.setIdSpIps(id)
+    this.sharedService.setIdEvaluacionSpIps(id)
     this.sharedService.setNombrePrestador(name)
     this.sharedService.setNombreFuncionario(name_funcionario)
     this.modalRef = this.modalService.show(modalTemplate,

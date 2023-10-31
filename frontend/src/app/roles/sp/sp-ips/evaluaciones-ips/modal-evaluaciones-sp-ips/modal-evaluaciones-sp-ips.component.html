@@ -18,9 +18,9 @@
 
 <div class="container">
 	<div class="row justify-content-between">
-        <div class="col-md-12 text-center">
-            <span>Verificador Responsable:</span>
-        </div>
+		<div class="col-md-12 text-center">
+			<span>Verificador Responsable:</span>
+		</div>
 		<div class="col-md-12">
 			<h5 class="modal-title text-center underlined">{{nombre_funcionario}}</h5>
 		</div>
@@ -45,7 +45,7 @@
 
 			<div class="col-md-3" *ngIf="estado_acta === '1'">
 				<button class="btn btn-dark esp btn-circle btn-xl" title="Editar Acta"
-					routerLink="/sp-ips/acta/editar/{{id_evaluacion}}" (click)="modalRef.hide()">
+					routerLink="/sp-ips/acta/editar/{{id_evaluacion}}" (click)="modalRef.hide(); habilitarRutaEditar()">
 					<i class='fa fa-edit fa-lg'></i>
 				</button>
 			</div>
@@ -60,22 +60,42 @@
 			<div class="col-md-12">
 				<hr class="my-4">
 			</div>
+		</div>
 
-			<div class="col-md-9">
+		<div class="row">
+			<div class="col-9 mx-auto">
+				<div class="text-center">
+					<span class="tittle-button">Evaluación:</span>
+				</div>
+
+				<select id="evips_id" name="evips_id" class="form-select form-control" style="margin-bottom: 10px;"
+					[(ngModel)]="eva_ips_id" ngDefaultControl (change)="capturarIdEvaluacion();">
+					<option disabled selected>Selecciona una Evaluación...</option>
+					<option *ngFor="let evaluacion of evaluacionesIps" [value]="evaluacion.evips_id">
+						{{ evaluacion.evips_nombre }}
+					</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="row">
+			<!-- Segunda Columna -->
+			<div class="col-3 mx-auto">
 				<button id="boton-evaluacion-sic" class="btn btn-dark esp btn-circle btn-xl"
-					title="Descargar Evaluación">
+					title="Descargar Evaluación" *ngIf="eva_ips_id">
 					<i class='fas fa-file-download fa-lg'></i>
 				</button>
-				<span class="tittle-button">EVALUACIÓN</span>
 			</div>
 
-			<div class="col-md-3" *ngIf="estado_acta === '1'">
-				<button class="btn btn-dark esp btn-circle btn-xl" title="Editar Evaluación">
+			<div class="col-3 mx-auto" *ngIf="estado_acta === '1' && eva_ips_id">
+				<button class="btn btn-dark esp btn-circle btn-xl" title="Editar Evaluación"
+				routerLink="/sp/evaluacion-ips/editar" (click)="enviarIdEvaluacion(this.selectedEvaluacion); modalRef.hide();">
 					<i class='fa fa-edit fa-lg'></i>
 				</button>
 			</div>
-
 		</div>
+
+
 
 	</div>
 

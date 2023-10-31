@@ -118,6 +118,11 @@ import { ModalEditarFirmaAcompananteSpIpsComponent } from './roles/sp/sp-ips/eva
 import { ContadorComponent } from './roles/reso/contador/contador.component';
 import { ModalCumplimientoSpIndComponent } from './roles/sp/sp-profesionales/evaluacion-sp-pro/modal-cumplimiento-sp-ind/modal-cumplimiento-sp-ind.component';
 import { ModalEditarCumplimientoSpIndComponent } from './roles/sp/sp-profesionales/evaluaciones-pro/editar-evaluacion-sp-pro/modal-editar-cumplimiento-sp-ind/modal-editar-cumplimiento-sp-ind.component';
+import { EditarEvaluacionSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/editar-evaluacion-sp-ips/editar-evaluacion-sp-ips.component';
+import { ModalEditarCalificacionSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-ips/editar-evaluacion-sp-ips/modal-editar-calificacion-sp-ips/modal-editar-calificacion-sp-ips.component';
+import { CumplimientoRequisitosComponent } from './roles/reso/cumplimiento-requisitos/cumplimiento-requisitos.component';
+import { ConclusionesRecomendacionesComponent } from './roles/reso/conclusiones-recomendaciones/conclusiones-recomendaciones.component';
+import { EquipoVerificadoresComponent } from './roles/reso/equipo-verificadores/equipo-verificadores.component';
 
 
 
@@ -223,7 +228,12 @@ import { ModalEditarCumplimientoSpIndComponent } from './roles/sp/sp-profesional
     ModalEditarFirmaAcompananteSpIpsComponent,
     ContadorComponent,
     ModalCumplimientoSpIndComponent,
-    ModalEditarCumplimientoSpIndComponent
+    ModalEditarCumplimientoSpIndComponent,
+    EditarEvaluacionSpIpsComponent,
+    ModalEditarCalificacionSpIpsComponent,
+    CumplimientoRequisitosComponent,
+    ConclusionesRecomendacionesComponent,
+    EquipoVerificadoresComponent
 
   ],
   imports: [

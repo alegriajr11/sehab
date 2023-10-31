@@ -57,13 +57,15 @@ export class ActaVisitaVerificacionComponent {
   act_cod_habilitacion: string
   act_cod_sede: string
   act_telefono: string
-  act_correo: string
+  act_email: string
   act_representante: string
   act_gerente: string
-  act_fecha_inicio: Date
-  act_fecha_final: Date
+  act_fecha_inicio: string
+  act_fecha_final: string
   //OBSERVACIONES DEL ACTA
   act_observaciones: string
+
+  act_cargo_prestador: string
 
   act_recibe_visita: string
   act_firma_prestador: string
@@ -161,6 +163,7 @@ export class ActaVisitaVerificacionComponent {
         )
       }
     }
+
     checkbox2.onclick = function () {
       if (checkbox2.checked != false) {
         checkbox1.checked = null;
@@ -176,6 +179,7 @@ export class ActaVisitaVerificacionComponent {
         )
       }
     }
+
     checkbox3.onclick = function () {
       if (checkbox3.checked != false) {
         checkbox1.checked = null;
@@ -264,6 +268,8 @@ export class ActaVisitaVerificacionComponent {
 
         var gerente = (document.getElementById('gerente')) as HTMLSelectElement;
         gerente.value = data.sede_gerente
+
+        this.act_sede = data.sede_nombre
       }
     )
   }
@@ -326,30 +332,48 @@ export class ActaVisitaVerificacionComponent {
             //ASIGNACION CODIGO HABILITACION PRESTADOR
             var cod_habilitacion = (document.getElementById('codhabilitacion')) as HTMLSelectElement;
             cod_habilitacion.value = pres.pre_cod_habilitacion;
+            //ASIGNAR A LA VARIABLE DTO
+            this.act_cod_habilitacion = cod_habilitacion.value
+
             //ASIGNACION NIT PRESTADOR
             var nit = (document.getElementById('nit')) as HTMLSelectElement;
             nit.value = pres.pre_nit;
+            //ASIGNAR A LA VARIABLE DTO
+            this.act_nit = nit.value
+
             //ASIGNACION DIRECCIÓN PRESTADOR
             var direccion = (document.getElementById('direccion')) as HTMLSelectElement;
             direccion.value = pres.pre_direccion;
+            //ASIGNAR A LA VARIABLE DTO
+            this.act_direccion = direccion.value
+
             //ASIGNACION TELEFONO PRESTADOR
             var telefono = (document.getElementById('telefono')) as HTMLSelectElement;
             telefono.value = pres.pre_telefono;
+            //ASIGNAR A LA VARIABLE DTO
+            this.act_telefono = telefono.value
+
             //ASIGNACION EMAIL PRESTADOR
             var email = (document.getElementById('email')) as HTMLSelectElement;
             email.value = pres.pre_email;
+            //ASIGNAR A LA VARIABLE DTO
+            this.act_email = email.value
+
             //ASIGNACION REPRESENTANTE LEGAL PRESTADOR
             var rep_legal = (document.getElementById('repleg')) as HTMLSelectElement;
             rep_legal.value = pres.pre_representante;
-
+            //ASIGNAR A LA VARIABLE DTO
+            this.act_representante = rep_legal.value
 
             /**LLENAR CAMPOS DATOS ENCONTRADOS CON INFORMACIÓN DEL REPS PERO EDITABLES*/
             //ASIGNACION TELEFONO PRESTADOR
             var telefonoEncontrada = (document.getElementById('encontrado_telefono')) as HTMLSelectElement;
             telefonoEncontrada.value = pres.pre_telefono;
+
             //ASIGNACION DIRECCIÓN PRESTADOR
             var direccionEncontrada = (document.getElementById('encontrado_direccion')) as HTMLSelectElement;
             direccionEncontrada.value = pres.pre_direccion;
+
             //ASIGNACION EMAIL PRESTADOR
             var emailEncontrada = (document.getElementById('encontrado_correo')) as HTMLSelectElement;
             emailEncontrada.value = pres.pre_email;
@@ -428,6 +452,34 @@ export class ActaVisitaVerificacionComponent {
 
   onRegister() {
 
+    //ASIGNAR EL VALOR DEL ACTA A LA VARIABLE DTO
+    var acta = (document.getElementById('acta')) as HTMLSelectElement
+    this.act_id = parseInt(acta.value, 10)
+
+    //REGISTRO DE LA INFORMACIÓN RECOPILADA A LA CLASE DTO - ACTA_VERIFICACIÓNDTO
+    this.actaVerificacion = new ActaVerificacionDto(
+      this.act_id,
+      this.act_visita_previa,
+      this.act_visita_seguimiento,
+      this.act_visita_reactivacion,
+      this.act_fecha_inicio,
+      this.act_fecha_final,
+      this.act_municipio,
+      this.act_prestador,
+      this.act_nit,
+      this.act_direccion,
+      this.act_telefono,
+      this.act_email,
+      this.act_representante,
+      this.act_gerente,
+      this.act_cod_habilitacion,
+      this.act_sede,
+      this.act_cod_sede,
+      this.act_observaciones,
+      this.act_firma_prestador,
+      this.act_cargo_prestador
+    )
+    console.log(this.actaVerificacion)
   }
 }
 

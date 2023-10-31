@@ -5,13 +5,14 @@ import autoTable from 'jspdf-autotable';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
+import { ActaSpIndPdfDto } from 'src/app/models/Actas/actaSpIndPdf.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GenerarPdfActaIndService {
 
-  actaPdf: ActaSpPdfDto = null
+  actaPdf: ActaSpIndPdfDto = null
   listaVacia: any = undefined;
 
   //ATRIBUTOS PARA FORMAR PDF
@@ -41,6 +42,14 @@ export class GenerarPdfActaIndService {
   act_cargo_prestador: string
   act_firma_prestador: string
 
+  //CONTROLAR RECIBE O FIRMA
+  act_recibe_visita: string;
+
+  act_estado: string
+  noFirmaActa: string
+  prestadorNoFirma: string = ''
+
+
   constructor(
     private actapdfService: ActapdfService
   ) { }
@@ -49,7 +58,7 @@ export class GenerarPdfActaIndService {
 
   //GENERAR PDF ULTIMA ACTA CREADA
   async ActaPdf(id_acta: number): Promise<void> {
-
+    console.log(id_acta)
     this.actapdfService.oneActaSpInd(id_acta).subscribe(
       async data => {
         this.actaPdf = data;
@@ -76,11 +85,15 @@ export class GenerarPdfActaIndService {
         this.act_nombre_prestador = this.actaPdf.act_nombre_prestador
         this.act_cargo_prestador = this.actaPdf.act_cargo_prestador
         this.act_firma_prestador = this.actaPdf.act_firma_prestador
+        this.act_recibe_visita = this.actaPdf.act_recibe_visita
+        this.act_estado = this.actaPdf.act_estado
+        this.noFirmaActa = this.actaPdf.noFirmaActa
 
 
         const doc = new jsPDF()
         var imgEncabezado = 'assets/img/encabezadoSp.png'
-        var marca_agua = 'assets/img/marcaAguaSP.png'
+        var marca_agua_borrador = 'assets/img/marcaAguaSsd.png'
+        var marca_agua_original = 'assets/img/marcaAguaSsdOriginal.png'
         doc.addImage(imgEncabezado, 'PNG', 23.5, 4, 160, 25);
 
         doc.setFontSize(9)
@@ -270,12 +283,16 @@ export class GenerarPdfActaIndService {
           tableWidth: 'auto',
         })
 
-        //NOMBRE PRESTADOR, CARGO USUARIO Y FIRMA
+        if (this.noFirmaActa === 'true') {
+          this.prestadorNoFirma = 'Declara no firmar el acta.'
+        }
+
+        //NOMBRE PRESTADOR, CARGO PRESTADOR Y FIRMA
         autoTable(doc, {
           startY: 212,
           columnStyles: { sede: { halign: 'left' } },
           body: [
-            { nombre: this.act_nombre_prestador, cargo: this.act_cargo_prestador, firma: '' },
+            { nombre: this.act_nombre_prestador, cargo: this.act_cargo_prestador, firma: this.prestadorNoFirma },
           ],
           columns: [
             { header: 'Nombre:', dataKey: 'nombre' },
@@ -292,33 +309,50 @@ export class GenerarPdfActaIndService {
           }
         })
 
-        // doc.addImage(marca_agua, 'PNG', -27, 33, 280, 255);
-        doc.addImage(marca_agua, 'PNG', -10, 10, 140, 115);
-        doc.addImage(marca_agua, 'PNG', -10, 100, 140, 115);
-        doc.addImage(marca_agua, 'PNG', 5, 168, 140, 115);
-        doc.addImage(marca_agua, 'PNG', 80, -14, 140, 115);
-        doc.addImage(marca_agua, 'PNG', 100, 49, 140, 115);
-        doc.addImage(marca_agua, 'PNG', 80, 168, 140, 115);
-
         var imgPiePagina = 'assets/img/piePaginaSpIps.png'
         doc.addImage(imgPiePagina, 'PNG', -2, 278, 220, 20);
 
-        // Convertir la firma usuario de base64 a Uint8Array
-        const firmaDataFuncionario = atob(this.act_firma_funcionario.split(',')[1]);
-        const firmaUint8ArrayFuncionario = new Uint8Array(firmaDataFuncionario.length);
-        for (let i = 0; i < firmaDataFuncionario.length; i++) {
-          firmaUint8ArrayFuncionario[i] = firmaDataFuncionario.charCodeAt(i);
+        if (this.act_estado === '1') {
+          //AGREGAR MARCA BORRADOR
+          doc.addImage(marca_agua_borrador, 'PNG', -10, 10, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', -10, 100, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', 5, 168, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', 80, -14, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', 100, 49, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', 80, 168, 140, 115);
+        } else {
+          marca_agua_original
+          //AGREGAR MARCA ORIGINAL
+          doc.addImage(marca_agua_original, 'PNG', -10, 10, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', -10, 100, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', 5, 168, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', 80, -14, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', 100, 49, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', 80, 168, 140, 115);
         }
-        doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 175, 192, 25, 9.25)
+
+
+
+        // Convertir la firma usuario de base64 a Uint8Array
+        if (this.act_firma_funcionario) {
+          const firmaDataFuncionario = atob(this.act_firma_funcionario.split(',')[1]);
+          const firmaUint8ArrayFuncionario = new Uint8Array(firmaDataFuncionario.length);
+          for (let i = 0; i < firmaDataFuncionario.length; i++) {
+            firmaUint8ArrayFuncionario[i] = firmaDataFuncionario.charCodeAt(i);
+          }
+
+          doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 175, 192, 25, 9.25)
+        }
 
         // Convertir la firma prestador de base64 a Uint8Array
-        const firmaDataPrestador = atob(this.act_firma_prestador.split(',')[1]);
-        const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestador.length);
-        for (let i = 0; i < firmaDataPrestador.length; i++) {
-          firmaUint8ArrayPrestador[i] = firmaDataPrestador.charCodeAt(i);
+        if (this.act_firma_prestador) {
+          const firmaDataPrestador = atob(this.act_firma_prestador.split(',')[1]);
+          const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestador.length);
+          for (let i = 0; i < firmaDataPrestador.length; i++) {
+            firmaUint8ArrayPrestador[i] = firmaDataPrestador.charCodeAt(i);
+          }
+          doc.addImage(firmaUint8ArrayPrestador, 'PNG', 173, 218, 25, 9.25)
         }
-        doc.addImage(firmaUint8ArrayPrestador, 'PNG', 173, 218, 25, 9.25)
-
         doc.save(this.act_cod_prestador + 'Sp_Ind')
       },
 
@@ -327,5 +361,5 @@ export class GenerarPdfActaIndService {
       }
     )
   }
-  
+
 }

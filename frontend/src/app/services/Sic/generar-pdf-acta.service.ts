@@ -49,6 +49,11 @@ export class GenerarPdfActaService {
   act_cargo_prestador: string
   act_firma_prestador: string
 
+  //ESTADO ACTA
+  act_estado: string
+
+  noFirmaActa: string = ''
+
   constructor(
     private actapdfService: ActapdfService
   ) { }
@@ -88,11 +93,13 @@ export class GenerarPdfActaService {
         this.act_nombre_prestador = this.actaPdf.act_nombre_prestador
         this.act_cargo_prestador = this.actaPdf.act_cargo_prestador
         this.act_firma_prestador = this.actaPdf.act_firma_prestador
+        this.act_estado = this.actaPdf.act_estado
 
         //GENERACIÓN ACTA PDF
         const doc = new jsPDF()
         var imgEncabezado = 'assets/img/encabezadoSic.png'
-        var marca_agua = 'assets/img/marcaAguaSic.png'
+        var marca_agua_borrador = 'assets/img/marcaAguaSsd.png'
+        var marca_agua_original = 'assets/img/marcaAguaSsdOriginal.png'
         doc.addImage(imgEncabezado, 'PNG', 23.5, 4, 160, 25);
 
 
@@ -328,13 +335,18 @@ export class GenerarPdfActaService {
           tableWidth: 'auto',
         })
 
+
+        if(this.act_estado === '0'){
+          this.noFirmaActa = 'Declara no firmar el acta.'
+        }
+
         //NOMBRE PRESTADOR 1 Y 2, CARGO PRESTADOR 1 Y 2 Y FIRMA1 Y 2
         autoTable(doc, {
           startY: 250,
           columnStyles: { sede: { halign: 'left' } },
 
           body: [
-            { nombre: this.act_nombre_prestador, cargo: this.act_cargo_prestador, firma: '' },
+            { nombre: this.act_nombre_prestador, cargo: this.act_cargo_prestador, firma: this.noFirmaActa },
           ],
           columns: [
             { header: 'Nombre:', dataKey: 'nombre' },
@@ -352,12 +364,24 @@ export class GenerarPdfActaService {
         })
 
         // doc.addImage(marca_agua, 'PNG', -27, 33, 280, 255);
-        doc.addImage(marca_agua, 'PNG', -10, 10, 140, 115);
-        doc.addImage(marca_agua, 'PNG', -10, 100, 140, 115);
-        doc.addImage(marca_agua, 'PNG', 5, 168, 140, 115);
-        doc.addImage(marca_agua, 'PNG', 80, -14, 140, 115);
-        doc.addImage(marca_agua, 'PNG', 100, 49, 140, 115);
-        doc.addImage(marca_agua, 'PNG', 80, 168, 140, 115);
+        if (this.act_estado === '1') {
+          //AGREGAR MARCA BORRADOR
+          doc.addImage(marca_agua_borrador, 'PNG', -10, 10, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', -10, 100, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', 5, 168, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', 80, -14, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', 100, 49, 140, 115);
+          doc.addImage(marca_agua_borrador, 'PNG', 80, 168, 140, 115);
+        } else {
+          marca_agua_original
+          //AGREGAR MARCA ORIGINAL
+          doc.addImage(marca_agua_original, 'PNG', -10, 10, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', -10, 100, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', 5, 168, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', 80, -14, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', 100, 49, 140, 115);
+          doc.addImage(marca_agua_original, 'PNG', 80, 168, 140, 115);
+        }
 
 
         // Convertir la firma usuario de base64 a Uint8Array
@@ -367,7 +391,7 @@ export class GenerarPdfActaService {
           for (let i = 0; i < firmaDataFuncionario.length; i++) {
             firmaUint8ArrayFuncionario[i] = firmaDataFuncionario.charCodeAt(i);
           }
-          doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 175, 226, 25, 9.25)
+          doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 178, 223, 25, 9.25)
         }
 
         if (this.act_firma_prestador) {

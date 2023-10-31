@@ -9,26 +9,24 @@
         </div>
         <div class="col-md-8">
 
-            <h1 class="text-center">PROGRAMA DE SEGURIDAD DEL PACIENTE
+            <h2 class="text-center">PROGRAMA DE SEGURIDAD DEL PACIENTE
                 ACTA DE VERIFICACIÓN Y SEGUIMIENTO
-            </h1>
+            </h2>
         </div>
     </div>
 </div>
-<div class="t2">
-    <h2>1. EVALUACION DE HERRAMIENTAS PARA LA IDENTIFICACIÓN Y GESTIÓN DE EVENTOS ADVERSO
-    </h2>
+<div class="t2 text-center">
+    <span class="text-center" style="text-decoration: underline;">{{numero_evaluacion}}. {{nombre_evaluacion}}</span>
 </div>
 
 <div class="container">
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <h5><b>Prestador:</b></h5>
                     <span>{{nombrePrestador}}</span>
                 </div>
-                <div class="col-sm-7"></div>
             </div>
         </div>
 
@@ -45,37 +43,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>La organización cuenta con un documento donde se describen entre otros, los riesgos
-                        identificados de los procesos, el sistema de clasificación, las características del sistema de
-                        reporte, como se realiza la gestión, manejo de la lección aprendida, establecimiento de barreras
-                        de seguridad, cuales procesos inseguros deberán ser rediseñados, el apoyo institucional a las
-                        acciones de mejoramiento y los mecanismos de búsqueda activa de los eventos adversos.</td>
-                    <!-- <tr *ngFor="let criterio of criterioEstandar; let i = index"> -->
-                    <!-- <td>{{i+1}} </td>
-                    <td>{{criterio.crie_nombre}}</td> -->
-                    <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
-                        </button>
-                        <!-- <button class="btn btn-outline-dark"
-                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-                            (click)="openModal(modalTemplate, criterio.crie_id)">
-                            <i class='fa fa-check'></i>
-                        </button> -->
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>La organización cuenta con un documento donde se describen entre otros, los riesgos
-                        identificados de los procesos, el sistema de clasificación, las características del sistema de
-                        reporte, como se realiza la gestión, manejo de la lección aprendida, establecimiento de barreras
-                        de seguridad, cuales procesos inseguros deberán ser rediseñados, el apoyo institucional a las
-                        acciones de mejoramiento y los mecanismos de búsqueda activa de los eventos adversos.</td>
-                    <!-- <tr *ngFor="let criterio of criterioEstandar; let i = index"> -->
-                    <!-- <td>{{i+1}} </td>
-                    <td>{{criterio.crie_nombre}}</td> -->
+                <tr *ngFor="let criterio_ajuste of criteriosAjuste; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{criterio_ajuste.cri_aju_nombre}}</td>
                     <td>
                         <button class="btn btn-outline-dark">
                             <i class='fa fa-check'></i>
@@ -104,79 +74,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>La organización cuenta con un documento donde se describen entre otros, los riesgos
-                        identificados de los procesos, el sistema de clasificación, las características del sistema de
-                        reporte, como se realiza la gestión, manejo de la lección aprendida, establecimiento de barreras
-                        de seguridad, cuales procesos inseguros deberán ser rediseñados, el apoyo institucional a las
-                        acciones de mejoramiento y los mecanismos de búsqueda activa de los eventos adversos.</td>
-                    <!-- <tr *ngFor="let criterio of criterioEstandar; let i = index"> -->
-                    <!-- <td>{{i+1}} </td>
-                    <td>{{criterio.crie_nombre}}</td> -->
-                    <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
-                        </button>
-                        <!-- <button class="btn btn-outline-dark"
-                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-                            (click)="openModal(modalTemplate, criterio.crie_id)">
-                            <i class='fa fa-check'></i>
-                        </button> -->
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>2</td>
-                    <td>La organización cuenta con un documento donde se describen entre otros, los riesgos
-                        identificados de los procesos, el sistema de clasificación, las características del sistema de
-                        reporte, como se realiza la gestión, manejo de la lección aprendida, establecimiento de barreras
-                        de seguridad, cuales procesos inseguros deberán ser rediseñados, el apoyo institucional a las
-                        acciones de mejoramiento y los mecanismos de búsqueda activa de los eventos adversos.</td>
-                    <!-- <tr *ngFor="let criterio of criterioEstandar; let i = index"> -->
-                    <!-- <td>{{i+1}} </td>
-                    <td>{{criterio.crie_nombre}}</td> -->
-                    <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
-                        </button>
-                        <!-- <button class="btn btn-outline-dark"
-                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-                            (click)="openModal(modalTemplate, criterio.crie_id)">
-                            <i class='fa fa-check'></i>
-                        </button> -->
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>3</td>
-                    <td>La organización ha definido una política de seguridad de la paciente alineada con el
-                        direccionamiento estratégico </td>
-                    <!-- <tr *ngFor="let criterio of criterioEstandar; let i = index"> -->
-                    <!-- <td>{{i+1}} </td>
-                    <td>{{criterio.crie_nombre}}</td> -->
-                    <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
-                        </button>
-                        <!-- <button class="btn btn-outline-dark"
-                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-                            (click)="openModal(modalTemplate, criterio.crie_id)">
-                            <i class='fa fa-check'></i>
-                        </button> -->
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>4</td>
-                    <td>La organización cuenta con un documento donde se describen entre otros, los riesgos
-                        identificados de los procesos, el sistema de clasificación, las características del sistema de
-                        reporte, como se realiza la gestión, manejo de la lección aprendida, establecimiento de barreras
-                        de seguridad, cuales procesos inseguros deberán ser rediseñados, el apoyo institucional a las
-                        acciones de mejoramiento y los mecanismos de búsqueda activa de los eventos adversos.</td>
-                    <!-- <tr *ngFor="let criterio of criterioEstandar; let i = index"> -->
-                    <!-- <td>{{i+1}} </td>
-                    <td>{{criterio.crie_nombre}}</td> -->
+                <tr *ngFor="let criterio_implementacion of criteriosImplementacion; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{criterio_implementacion.cri_imp_nombre}}</td>
                     <td>
                         <button class="btn btn-outline-dark">
                             <i class='fa fa-check'></i>
@@ -190,6 +90,72 @@
                 </tr>
             </tbody>
         </table>
+
+        <hr>
+
+        <div class="table-title-sub">
+            <span class="title-item">PLANEACIÓN</span>
+        </div>
+
+        <table class="table table-wrapper table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Cod</th>
+                    <th scope="col">Criterio</th>
+                    <th scope="col">Calificacion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let criterio_planeacion of criteriosPlaneacion; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{criterio_planeacion.cri_pla_nombre}}</td>
+                    <td>
+                        <button class="btn btn-outline-dark">
+                            <i class='fa fa-check'></i>
+                        </button>
+                        <!-- <button class="btn btn-outline-dark"
+                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
+                            (click)="openModal(modalTemplate, criterio.crie_id)">
+                            <i class='fa fa-check'></i>
+                        </button> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <div class="table-title-sub">
+            <span class="title-item">VERIFICACIÓN</span>
+        </div>
+
+        <table class="table table-wrapper table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Cod</th>
+                    <th scope="col">Criterio</th>
+                    <th scope="col">Calificacion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let criterio_verificacion of criteriosVerificacion; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{criterio_verificacion.cri_ver_nombre}}</td>
+                    <td>
+                        <button class="btn btn-outline-dark">
+                            <i class='fa fa-check'></i>
+                        </button>
+                        <!-- <button class="btn btn-outline-dark"
+                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
+                            (click)="openModal(modalTemplate, criterio.crie_id)">
+                            <i class='fa fa-check'></i>
+                        </button> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
         <!-- <ng-template #modalTemplate>
             <app-modalsic [dataFromParent]="modalRef"></app-modalsic>
         </ng-template> -->
