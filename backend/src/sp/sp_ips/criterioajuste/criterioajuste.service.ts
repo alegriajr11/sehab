@@ -18,6 +18,7 @@ export class CriterioajusteService {
         private evaluacionIpsRepository: EvaluacionIpsRepository,
     ){}
 
+
     //LISTAR CRITERIOS AJUSTE POR ID_EVALUACIÓN
     async findByEva(id: number): Promise<CriterioAjusteEntity[]> {
         const criteriosaj = await this.criterioAjusteRepository.createQueryBuilder('criterioaj')

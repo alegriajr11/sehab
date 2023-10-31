@@ -81,6 +81,12 @@ export class IpsDto {
     @IsNotBlank()
     act_firma_prestador_acompanante: string
 
+    @Column({ type: 'varchar', length: 10, nullable: true, default: 'false' })
+    act_recibe_visita: string;
+    
+    @Column({ type: 'varchar', length: 10, nullable: true, default: 'false' })
+    noFirmaActa: string;    
+
     //ATRIBUTOS COMPROMISOS
 
     @IsString()

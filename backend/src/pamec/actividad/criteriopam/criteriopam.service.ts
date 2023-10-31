@@ -87,7 +87,6 @@ export class CriteriopamService {
         const exists = await this.criteriopamRepository.findOne({where: [{crip_nombre: crip_nombre}]});
         if(exists) throw new BadRequestException(new MessageDto('Ese Criterio ya existe'));
         const actividad = await this.actividadRepository.findOne({where: {act_id: act_id}});
-        console.log(act_id)
         if(!actividad) throw new InternalServerErrorException(new MessageDto('La actividad no ha sido creada'))
         const criterio = this.criteriopamRepository.create(dto)
         criterio.crip_actividad = actividad

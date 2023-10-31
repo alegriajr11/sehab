@@ -206,7 +206,6 @@ export class PamecActaService {
             return { error: false, message: 'El acta ha sido creada' };
 
         } catch (error) {
-            console.log(error)
             // Devuelve un mensaje de error apropiado
             return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
         }

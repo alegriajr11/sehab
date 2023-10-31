@@ -60,12 +60,14 @@ export class SpIndependientesService {
             const acta = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
                 .select(['acta'])
                 .where('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                .orderBy("CASE WHEN acta.act_estado = '1' THEN 0 ELSE 1 END, acta.act_estado")
                 .getMany()
             if (acta.length === 0) throw new NotFoundException(new MessageDto('No tienes evaluaciones asignadas'))
             return acta;
         } else {
             const acta = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
                 .select(['acta'])
+                .orderBy("CASE WHEN acta.act_estado = '1' THEN 0 ELSE 1 END, acta.act_estado")
                 .getMany()
             if (acta.length === 0) throw new NotFoundException(new MessageDto('No hay evaluaciones asignadas'))
             return acta;
@@ -82,8 +84,7 @@ export class SpIndependientesService {
     }
 
 
-
-    //ENCONTRAR POR ACTA POR FECHAS
+    //ENCONTRAR ACTA POR FECHAS
     async findAllFromDate(date: string): Promise<ActaSpIndependientePdfEntity[]> {
 
         const actas = await this.actaSpIndependientePdfRepository.createQueryBuilder('acta')
@@ -99,7 +100,6 @@ export class SpIndependientesService {
 
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
     async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string, tokenDto?: string): Promise<ActaSpIndependientePdfEntity[]> {
-
 
         const usuario = await this.jwtService.decode(tokenDto);
 
@@ -189,7 +189,6 @@ export class SpIndependientesService {
     }
 
 
-
     /*CREACIÓN SP INDEPENDIENTE ACTA PDF */
     async create(payloads: { dto: IndActaDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
@@ -266,7 +265,6 @@ export class SpIndependientesService {
             return { error: false, message: 'El acta ha sido creada' };
 
         } catch (error) {
-            console.log(error)
             // Devuelve un mensaje de error apropiado
             return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
         }
@@ -280,7 +278,6 @@ export class SpIndependientesService {
 
         try {
             const acta = await this.findByActa(id);
-            console.log(acta)
 
             if (!acta) {
                 throw new NotFoundException(new MessageDto('El Acta no existe'));
@@ -349,7 +346,7 @@ export class SpIndependientesService {
         dto.act_cargo_prestador ? acta_ind.act_cargo_prestador = dto.act_cargo_prestador : acta_ind.act_cargo_prestador = acta_ind.act_cargo_prestador;
         dto.act_firma_prestador ? acta_ind.act_firma_prestador = dto.act_firma_prestador : acta_ind.act_firma_prestador = acta_ind.act_firma_prestador;
         dto.act_firma_funcionario ? acta_ind.act_firma_funcionario = dto.act_firma_funcionario : acta_ind.act_firma_funcionario = acta_ind.act_firma_funcionario;
-
+        dto.noFirmaActa ? acta_ind.noFirmaActa = dto.noFirmaActa : acta_ind.noFirmaActa = acta_ind.noFirmaActa = acta_ind.noFirmaActa;
 
         const usuario = await this.jwtService.decode(tokenDto.token);
 
@@ -454,7 +451,17 @@ export class SpIndependientesService {
                 pageNumber++;
                 let bottom = doc.page.margins.bottom;
 
-                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                //ASIGNAR NOMBRES DEL PRESTADOR Y FUNCIONARIO EN EL PDF
+                acta.forEach(acta => {
+                    prestadorPrincipal = acta.eval_acta_ind.act_prestador;
+                    nombreprestador = acta.eval_acta_ind.act_nombre_prestador;
+                    nombrefuncionario = acta.eval_acta_ind.act_nombre_funcionario;
+                    cargoprestador = acta.eval_acta_ind.act_cargo_prestador;
+                    cargofuncionario = acta.eval_acta_ind.act_cargo_funcionario;
+                })
+
+
+                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSPInd.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
                 doc.moveDown()
 
                 doc.page.margins.top = 115;
@@ -475,16 +482,47 @@ export class SpIndependientesService {
             });
 
             doc.addPage();
-            doc.text('', 90, 110);
+            doc.text('', 90, 90);
             doc.font('Helvetica-Bold').fontSize(14);
             doc.text('CUMPLIMIENTO DEL PROGRAMA DE SEGURIDAD DEL PACIENTE');
-            doc.text('', 185, 130);
-            doc.font('Helvetica-Bold').fontSize(14);
+            doc.text('', 185, 110);
             doc.text('PROFESIONALES INDEPENDIENTES');
-            // doc.moveDown();
-            // doc.font('Helvetica').fontSize(14);
 
+            doc.text('PRESTADOR: ', 260, 140);
+            // Obtener la longitud del texto
+            const textWidth = doc.widthOfString(prestadorPrincipal);
+            
+            // Coordenadas del Prestador Principal
+            let x = 185;
+            //ESTABLECER CORDENADAS DE X DEPENDIENDO EL TAMAÑO DE textWidth
+            if(textWidth > 290){
+                x = 160
+            } else if(textWidth <= 264 && textWidth >= 237 ){
+                x = 170
+            } else if(textWidth <= 183 ){
+                x = 212
+            } 
+
+            let y = 160;
+            doc.moveDown();
+            doc.text(prestadorPrincipal, x, y)
+
+
+            // Calcular las coordenadas para el subrayado
+            const underlineY = y + 12; //Posición vertical de la linea
+            const underlineX1 = x;
+            const underlineX2 = x + textWidth;
+            // Dibujar el subrayado
+            doc.moveTo(underlineX1, underlineY)
+                .lineTo(underlineX2, underlineY)
+                .lineWidth(1) // Grosor del subrayado
+                .stroke();
+
+
+
+            //DAR INICIO A LA TABLA DESDE LA POSICIÓN X = 50
             doc.text('', 50, 110);
+            doc.moveDown();
             doc.moveDown();
             doc.moveDown();
             doc.moveDown();
@@ -497,15 +535,7 @@ export class SpIndependientesService {
                 return espacioRestante >= 0;
             }
 
-            //ASIGNAR NOMBRES DEL PRESTADOR Y FUNCIONARIO EN EL PDF
-            acta.forEach(acta => {
-                prestadorPrincipal = acta.eval_acta_ind.act_prestador;
-                nombreprestador = acta.eval_acta_ind.act_nombre_prestador;
-                nombrefuncionario = acta.eval_acta_ind.act_nombre_funcionario;
-                cargoprestador = acta.eval_acta_ind.act_cargo_prestador;
-                cargofuncionario = acta.eval_acta_ind.act_cargo_funcionario;
-            })
-            doc.text(prestadorPrincipal)
+
 
             // Agregar las tablas a las páginas
             if (titulo_uno.length) {
@@ -526,11 +556,14 @@ export class SpIndependientesService {
                     rowHeight: 15,
                 };
 
+
                 const table = {
-                    title: "COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION SEGURA DEL PACIENTE",
+                    title: { label: 'COMPROMISO DEL PROFESIONAL INDEPENDIENTE CON LA ATENCION SEGURA DEL PACIENTE', color: '#050949' },
                     headers: ["", "CRITERIOS", "CALIFICACIÓN", "VERIFICACIÓN", "OBSERVACIONES"],
                     rows: rows_elements
                 };
+
+
 
                 // Dividir la tabla en secciones (por ejemplo, en grupos de 10 filas)
                 const chunkSize = 10;
@@ -557,7 +590,6 @@ export class SpIndependientesService {
                         doc.addPage();
                         // Asegurarte de ajustar los encabezados o títulos según sea necesario
                         doc.font('Helvetica-Bold').fontSize(14).text(table.title);
-                        doc.moveDown();
                         // Agregar la sección a la nueva página
                         doc.table({
                             title: table.title,
@@ -589,7 +621,7 @@ export class SpIndependientesService {
                     rowHeight: 15,
                 };
                 const table2 = {
-                    title: "CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE",
+                    title: { label: 'CONOCIMIENTOS BÁSICOS DE LA SEGURIDAD DEL PACIENTE', color: '#050949' },
                     headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
                     rows: rows_elements
                 };
@@ -651,7 +683,7 @@ export class SpIndependientesService {
                     rowHeight: 15,
                 };
                 const table3 = {
-                    title: "REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO",
+                    title: { label: 'REGISTRO DE FALLAS EN LA ATENCIÓN EN SALUD y PLAN DE MEJORAMIENTO', color: '#050949' },
                     headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
                     rows: rows_elements
                 };
@@ -712,7 +744,7 @@ export class SpIndependientesService {
                     rowHeight: 15,
                 };
                 const table4 = {
-                    title: "DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO",
+                    title: { label: 'DETECCIÓN, PREVENCIÓN Y CONTROL DE INFECCIONES ASOCIADAS AL CUIDADO', color: '#050949' },
                     headers: ["", "CRITERIOS", "CALIFICACION", "VERIFICACION", "OBSERVACIONES"],
                     rows: rows_elements
                 };
@@ -844,14 +876,14 @@ export class SpIndependientesService {
 
             // Tabla "DIAGNÓSTICO"
             const tableOptions3 = {
-                columnsSize: [115,110, 225],
+                columnsSize: [115, 110, 225],
                 headerAlign: 'center',
                 align: 'center',
                 rowHeight: 15,
             };
 
             const tablerango = {
-                headers: ["","DIAGNÓSTICO",""],
+                headers: ["", "DIAGNÓSTICO", ""],
                 rows: [[`Rango 1.0 – 4.0`, `INSUFICIENTE `, `El resultado fue:  `],
                 [`Rango 4.1 – 5.0`, `SATISFACTORIO `, `Se debe enviar el plan de mejoramiento con plazo de  un (1) mes, al siguiente correo electrónico: verificacionssdptyo@hotmail.com`]]
             };
@@ -871,7 +903,7 @@ export class SpIndependientesService {
                 if (hayEspacioSuficiente(sectionHeight)) {
                     // Agregar la sección a la página actual
                     doc.table({
-                
+
                         headers: tablerango.headers,
                         rows: section
                     }, tableOptions3);
@@ -879,7 +911,7 @@ export class SpIndependientesService {
                     // Agregar una nueva página antes de la sección
                     doc.addPage();
                     // Asegurarte de ajustar los encabezados o títulos según sea necesario
-                    
+
                     doc.moveDown();
                     // Agregar la sección a la nueva página
                     doc.table({
@@ -890,8 +922,9 @@ export class SpIndependientesService {
             });
 
             doc.moveDown()
+            doc.moveDown();
 
-            // Tabla "PROFESIONAL INDEPENDIENTE"
+            // Tabla "FIRMAS FUNCIONARIO Y PRESTADOR"
             const tableOptions2 = {
                 columnsSize: [225, 225],
                 headerAlign: 'center',
@@ -903,7 +936,7 @@ export class SpIndependientesService {
                 headers: ["PROFESIONAL INDEPENDIENTE", "POR SECRETARIA DE SALUD DEPARTAMENTAL"],
                 rows: [[`NOMBRE: ${nombreprestador}`, `NOMBRE: ${nombrefuncionario}`],
                 [`CARGO: ${cargoprestador}`, `CARGO: ${cargofuncionario}`],
-                ["FIRMA", "FIRMA  :"]]
+                ]
             };
 
             // Dividir la tabla de firmas en secciones (por ejemplo, en grupos de 10 filas)
@@ -924,6 +957,7 @@ export class SpIndependientesService {
                         headers: tablefirmas.headers,
                         rows: section
                     }, tableOptions2);
+
                 } else {
                     // Agregar una nueva página antes de la sección
                     doc.addPage();

@@ -252,36 +252,35 @@ export class SpIpsService {
     //ACTUALIZAR  SP IPS ACTA PDF
     async updateActaIps(id: number, payload: { dto: IpsDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payload;
-        const ips = await this.findByActa(id);
-        if (!ips) {
+        const acta_ips = await this.findByActa(id);
+        if (!acta_ips) {
             throw new NotFoundException(new MessageDto('El Acta no existe'))
         }
-        dto.act_id ? ips.act_id = dto.act_id : ips.act_id = ips.act_id;
-        ips.act_visita_inicial = dto.act_visita_inicial !== undefined ? dto.act_visita_inicial : "";
-        ips.act_visita_seguimiento = dto.act_visita_seguimiento !== undefined ? dto.act_visita_seguimiento : "";
-        dto.act_fecha_inicial ? ips.act_fecha_inicial = dto.act_fecha_inicial : ips.act_fecha_inicial = ips.act_fecha_inicial;
-        dto.act_fecha_final ? ips.act_fecha_final = dto.act_fecha_final : ips.act_fecha_final = ips.act_fecha_final;
-        dto.act_municipio ? ips.act_municipio = dto.act_municipio : ips.act_municipio = ips.act_municipio;
-        dto.act_prestador ? ips.act_prestador = dto.act_prestador : ips.act_prestador = ips.act_prestador;
-        dto.act_nit ? ips.act_nit = dto.act_nit : ips.act_nit = ips.act_nit;
-        dto.act_direccion ? ips.act_direccion = dto.act_direccion : ips.act_direccion = ips.act_direccion;
-        dto.act_barrio ? ips.act_barrio = dto.act_barrio : ips.act_barrio = ips.act_barrio;
-        dto.act_telefono ? ips.act_telefono = dto.act_telefono : ips.act_telefono = ips.act_telefono;
-        dto.act_email ? ips.act_email = dto.act_email : ips.act_email = ips.act_email;
-        dto.act_representante ? ips.act_representante = dto.act_representante : ips.act_representante = ips.act_representante;
-        dto.act_cod_prestador ? ips.act_cod_prestador = dto.act_cod_prestador : ips.act_cod_prestador = ips.act_cod_prestador;
-        dto.act_obj_visita ? ips.act_obj_visita = dto.act_obj_visita : ips.act_obj_visita = ips.act_obj_visita;
-        dto.act_nombre_funcionario ? ips.act_nombre_funcionario = dto.act_nombre_funcionario : ips.act_nombre_funcionario = ips.act_nombre_funcionario;
-        dto.act_cargo_funcionario ? ips.act_cargo_funcionario = dto.act_cargo_funcionario : ips.act_cargo_funcionario = ips.act_cargo_funcionario;
-        dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
-        dto.act_nombre_prestador ? ips.act_nombre_prestador = dto.act_nombre_prestador : ips.act_nombre_prestador = ips.act_nombre_prestador;
-        dto.act_cargo_prestador ? ips.act_cargo_prestador = dto.act_cargo_prestador : ips.act_cargo_prestador = ips.act_cargo_prestador;
-        dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
-        dto.act_nombre_prestador_acompanante ? ips.act_nombre_prestador_acompanante = dto.act_nombre_prestador_acompanante : ips.act_nombre_prestador_acompanante = ips.act_nombre_prestador_acompanante;
-        dto.act_cargo_prestador_acompanante ? ips.act_cargo_prestador_acompanante = dto.act_cargo_prestador_acompanante : ips.act_cargo_prestador_acompanante = ips.act_cargo_prestador_acompanante;
-        dto.act_firma_prestador_acompanante ? ips.act_firma_prestador_acompanante = dto.act_firma_prestador_acompanante : ips.act_firma_prestador_acompanante = ips.act_firma_prestador_acompanante;
-
-
+        dto.act_id ? acta_ips.act_id = dto.act_id : acta_ips.act_id = acta_ips.act_id;
+        acta_ips.act_visita_inicial = dto.act_visita_inicial !== undefined ? dto.act_visita_inicial : "";
+        acta_ips.act_visita_seguimiento = dto.act_visita_seguimiento !== undefined ? dto.act_visita_seguimiento : "";
+        dto.act_fecha_inicial ? acta_ips.act_fecha_inicial = dto.act_fecha_inicial : acta_ips.act_fecha_inicial = acta_ips.act_fecha_inicial;
+        dto.act_fecha_final ? acta_ips.act_fecha_final = dto.act_fecha_final : acta_ips.act_fecha_final = acta_ips.act_fecha_final;
+        dto.act_municipio ? acta_ips.act_municipio = dto.act_municipio : acta_ips.act_municipio = acta_ips.act_municipio;
+        dto.act_prestador ? acta_ips.act_prestador = dto.act_prestador : acta_ips.act_prestador = acta_ips.act_prestador;
+        dto.act_nit ? acta_ips.act_nit = dto.act_nit : acta_ips.act_nit = acta_ips.act_nit;
+        dto.act_direccion ? acta_ips.act_direccion = dto.act_direccion : acta_ips.act_direccion = acta_ips.act_direccion;
+        dto.act_barrio ? acta_ips.act_barrio = dto.act_barrio : acta_ips.act_barrio = acta_ips.act_barrio;
+        dto.act_telefono ? acta_ips.act_telefono = dto.act_telefono : acta_ips.act_telefono = acta_ips.act_telefono;
+        dto.act_email ? acta_ips.act_email = dto.act_email : acta_ips.act_email = acta_ips.act_email;
+        dto.act_representante ? acta_ips.act_representante = dto.act_representante : acta_ips.act_representante = acta_ips.act_representante;
+        dto.act_cod_prestador ? acta_ips.act_cod_prestador = dto.act_cod_prestador : acta_ips.act_cod_prestador = acta_ips.act_cod_prestador;
+        dto.act_obj_visita ? acta_ips.act_obj_visita = dto.act_obj_visita : acta_ips.act_obj_visita = acta_ips.act_obj_visita;
+        dto.act_nombre_funcionario ? acta_ips.act_nombre_funcionario = dto.act_nombre_funcionario : acta_ips.act_nombre_funcionario = acta_ips.act_nombre_funcionario;
+        dto.act_cargo_funcionario ? acta_ips.act_cargo_funcionario = dto.act_cargo_funcionario : acta_ips.act_cargo_funcionario = acta_ips.act_cargo_funcionario;
+        dto.act_firma_funcionario ? acta_ips.act_firma_funcionario = dto.act_firma_funcionario : acta_ips.act_firma_funcionario = acta_ips.act_firma_funcionario;
+        dto.act_nombre_prestador ? acta_ips.act_nombre_prestador = dto.act_nombre_prestador : acta_ips.act_nombre_prestador = acta_ips.act_nombre_prestador;
+        dto.act_cargo_prestador ? acta_ips.act_cargo_prestador = dto.act_cargo_prestador : acta_ips.act_cargo_prestador = acta_ips.act_cargo_prestador;
+        dto.act_firma_prestador ? acta_ips.act_firma_prestador = dto.act_firma_prestador : acta_ips.act_firma_prestador = acta_ips.act_firma_prestador;
+        dto.act_nombre_prestador_acompanante ? acta_ips.act_nombre_prestador_acompanante = dto.act_nombre_prestador_acompanante : acta_ips.act_nombre_prestador_acompanante = acta_ips.act_nombre_prestador_acompanante;
+        dto.act_cargo_prestador_acompanante ? acta_ips.act_cargo_prestador_acompanante = dto.act_cargo_prestador_acompanante : acta_ips.act_cargo_prestador_acompanante = acta_ips.act_cargo_prestador_acompanante;
+        dto.act_firma_prestador_acompanante ? acta_ips.act_firma_prestador_acompanante = dto.act_firma_prestador_acompanante : acta_ips.act_firma_prestador_acompanante = acta_ips.act_firma_prestador_acompanante;
+        dto.noFirmaActa ? acta_ips.noFirmaActa = dto.noFirmaActa : acta_ips.noFirmaActa = acta_ips.noFirmaActa = acta_ips.noFirmaActa;
 
         const usuario = await this.jwtService.decode(tokenDto.token);
 
@@ -297,7 +296,7 @@ export class SpIpsService {
 
         const year = new Date().getFullYear().toString();
 
-        await this.actaSpIpsRepository.save(ips);
+        await this.actaSpIpsRepository.save(acta_ips);
         await this.auditoria_actualizacion_service.logUpdateActaSpIps(
             payloadInterface.usu_nombre,
             payloadInterface.usu_apellido,

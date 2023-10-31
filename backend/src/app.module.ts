@@ -141,8 +141,8 @@ import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.m
         password: configService.get<string>(DB_PASSWORD),
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
-        logging: false 
+        synchronize: true,
+        logging: true 
         
       }),
       inject: [ConfigService],
