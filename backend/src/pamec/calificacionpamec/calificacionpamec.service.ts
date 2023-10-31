@@ -16,6 +16,8 @@ import { PayloadInterface } from 'src/auth/payload.interface';
 import { EvaluacionPamecEntity } from '../evaluacion-pamec.entity';
 import { EvaluacionPamecRepository } from '../evaluacion-pamec.repository';
 import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { AuditoriaEliminacionService } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.service';
 
 @Injectable()
 export class CalificacionpamecService {
@@ -32,7 +34,8 @@ export class CalificacionpamecService {
         private readonly criterioPamRepository: CriterioPamRepository,
         @InjectRepository(EvaluacionPamecEntity)
         private readonly evaluacionPamecRepository: EvaluacionPamecRepository,
-        private readonly auditoria_registro_services: AuditoriaRegistroService
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+        private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
 
     ) { }
 
@@ -68,25 +71,76 @@ export class CalificacionpamecService {
 
 
     //CREAR CALIFICACION PAMEC
-    async create(eva_id: number, crip_id: number, dto: CalificacionPamDto): Promise<any> {
-        const evaluacion = await this.evaluacionPamecRepository.findOne({ where: { eva_id: eva_id } });
+    async create(payloads: { dto: CalificacionPamDto, tokenDto: TokenDto }): Promise<any> {
+        const { dto, tokenDto } = payloads;
+
+        const usuario = await this.jwtService.decode(tokenDto.token);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        const year = new Date().getFullYear().toString();
+
+        const evaluacion = await this.evaluacionPamecRepository.findOne({ where: { eva_id: dto.eva_pam_id }, relations: ['eval_acta_pamec'] });
         if (!evaluacion) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
-        const criterio = await this.criterioPamRepository.findOne({ where: { crip_id: crip_id } });
+
+        const criterio = await this.criterioPamRepository.findOne({ where: { crip_id: dto.cri_pam_id } });
         if (!criterio) throw new NotFoundException(new MessageDto('El criterio no ha sido creada'))
+
         const calificacion = this.calificacionPamRepository.create(dto)
         //asigna la evaluacion a la calificacion
         calificacion.cal_evaluacion_pam = evaluacion
         //asigna eñ criterio a la evaluacion
         calificacion.criteriopam_calificacion = criterio
+
+        const nombre_criterio = calificacion.criteriopam_calificacion.crip_nombre;
+
+        //ASIGNO EL ACTA ID
+        const acta_idInd = evaluacion.eval_acta_pamec.act_id;
+
         await this.calificacionPamRepository.save(calificacion)
+
+        // ASIGNAR LA AUDITORIA DE LA CALIFICACION ASIGNADO AL CRITERIO
+        await this.auditoria_registro_services.logCreateCalificacionPamec(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            dto.cal_nota,
+            nombre_criterio,
+            acta_idInd,
+            year,
+        );
         return new MessageDto('La calificacionha sido Creada');
     }
 
     //ACTUALIZACION CALIFICACION PAMEC
-    async update(id: number, dto: CalificacionPamDto): Promise<any> {
+    async update(cal_id: number, payloads: { dto: CalificacionPamDto, tokenDto: TokenDto }): Promise<any> {
         try {
+            const { dto, tokenDto } = payloads;
 
-            const calificacion = await this.findByIdCalificacionPamec(id);
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
+
+            const calificacion = await this.findByIdCalificacionPamec(cal_id);
             if (!calificacion)
                 throw new NotFoundException(new MessageDto('La Calificacion No Existe'));
 
@@ -94,9 +148,27 @@ export class CalificacionpamecService {
             dto.cal_aplica ? calificacion.cal_aplica = dto.cal_aplica : calificacion.cal_aplica = calificacion.cal_aplica;
             dto.cal_observaciones ? calificacion.cal_observaciones = dto.cal_observaciones : calificacion.cal_observaciones = calificacion.cal_observaciones;
 
+            const evaluacion = await this.evaluacionPamecRepository.findOne({ where: { eva_id: dto.eva_pam_id } });
+            if (!evaluacion) throw new NotFoundException(new MessageDto('La evaluacion no ha sido creada'))
+
+            const criterio = await this.criterioPamRepository.findOne({ where: { crip_id: dto.cri_pam_id } });
+            if (!criterio) throw new NotFoundException(new MessageDto('El criterio no ha sido creada'))
+
+            const nombre_criterio = calificacion.criteriopam_calificacion.crip_nombre;
+
+            const acta_idInd = evaluacion.eval_acta_pamec.act_id;
 
             await this.calificacionPamRepository.save(calificacion);
-
+            // ASIGNAR LA AUDITORIA DE LA CALIFICACION ASIGNADO AL CRITERIO
+            await this.auditoria_actualizacion_services.logUpdateCalificacionPamec(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.cal_nota,
+                nombre_criterio,
+                acta_idInd,
+                year,
+            );
             return new MessageDto(`La calificacion ha sido Actualizada`);
         } catch (error) {
             throw new InternalServerErrorException(new MessageDto(error.message));

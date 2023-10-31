@@ -15,6 +15,9 @@ export class CalificacionImplementacionIpsEntity {
     @Column({type: 'varchar', length: 255, nullable: false, unique: false})
     cal_observaciones: string;
 
+    @Column({type: 'int'})
+    cal_evaluacion: number;
+
     
     //Relacion Muchos a Uno CALIFICACION_IPS - CRITERIO_IMPLEMENTACION
     @ManyToOne(type => CriterioImplementacionEntity, calificacion_implement_ips => calificacion_implement_ips.criterio_implementacion_cal)

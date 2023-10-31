@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuard
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CriterioIndDto } from 'src/usuario/dto/SpInd/criterioind.dto';
 import { CriterioindService } from './criterioind.service';
+import { TokenDto } from 'src/auth/dto/token.dto';
 
 @Controller('criterioind')
 export class CriterioindController {
@@ -24,8 +25,9 @@ export class CriterioindController {
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioIndDto) {
-        return await this.criterioIndService.update(id, dto);
+    async update(@Param('id', ParseIntPipe) id: number, @Body()payloads: { dto: CriterioIndDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payloads;
+        return await this.criterioIndService.update(id, payloads);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -37,8 +39,9 @@ export class CriterioindController {
 
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')
-    async create(@Param('id', ParseIntPipe) id: number, @Body() dto: CriterioIndDto) {
-        return this.criterioIndService.create(id, dto);
+    async create(@Param('id', ParseIntPipe) id: number, @Body()payloads: { dto: CriterioIndDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payloads;
+        return this.criterioIndService.create(id, payloads);
     }
 
     //LISTAR TODOS LOS CRITERIOS CON EVALUACION 

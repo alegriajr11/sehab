@@ -9,6 +9,11 @@ import { EtapaInd } from '../etapaind.entity';
 import { EtapaIndRepository } from '../etapaind.repository';
 import { CalificacionIndEntity } from '../calificacionind.entity';
 import { CalificacionIndRepository } from '../calificacionind.repository';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { AuditoriaActualizacionService } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.service';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { JwtService } from '@nestjs/jwt';
+import { PayloadInterface } from 'src/auth/payload.interface';
 
 @Injectable()
 export class CriterioindService {
@@ -20,6 +25,9 @@ export class CriterioindService {
         private etapaindRepository: EtapaIndRepository,
         @InjectRepository(CalificacionIndEntity)
         private calificacionIndRepository: CalificacionIndRepository,
+        private readonly jwtService: JwtService,
+        private readonly auditoria_registro_services: AuditoriaRegistroService,
+        private readonly auditoria_actualizacion_services: AuditoriaActualizacionService,
 
 
     ) { }
@@ -40,7 +48,23 @@ export class CriterioindService {
         return criterio
     }
 
-    async update(id: number, dto: CriterioIndDto): Promise<any> {
+    //actualiza el criterio
+    async update(id: number, payloads: { dto: CriterioIndDto, tokenDto: TokenDto }): Promise<any> {
+        const { dto, tokenDto } = payloads;
+
+        const usuario = await this.jwtService.decode(tokenDto.token);
+
+        const payloadInterface: PayloadInterface = {
+            usu_id: usuario[`usu_id`],
+            usu_nombre: usuario[`usu_nombre`],
+            usu_apellido: usuario[`usu_apellido`],
+            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+            usu_email: usuario[`usu_email`],
+            usu_estado: usuario[`usu_estado`],
+            usu_roles: usuario[`usu_roles`]
+        };
+
+        const year = new Date().getFullYear().toString();
 
         const criterio = await this.findCri(id);
         if (!criterio)
@@ -51,6 +75,17 @@ export class CriterioindService {
 
         await this.criterioIndRepository.save(criterio);
 
+        const etapa_nombre= criterio.eta_item.eta_nombre
+
+        await this.auditoria_actualizacion_services.logUpdateCriterioSpind(
+            payloadInterface.usu_nombre,
+            payloadInterface.usu_apellido,
+            'ip',
+            dto.cri_nombre,
+            etapa_nombre,
+            year,
+        );
+
         return new MessageDto(`El Criterio ha sido Actualizado`);
     }
 
@@ -60,16 +95,50 @@ export class CriterioindService {
         return new MessageDto(`Criterio Eliminado`);
     }
 
-    async create(item_id: number, dto: CriterioIndDto ): Promise<any> {
-        const { cri_nombre } = dto;
-        const exists = await this.criterioIndRepository.findOne({ where: [{ cri_nombre: cri_nombre }] });
-        if (exists) throw new BadRequestException(new MessageDto('Ese Criterio ya existe'));
-        const etapa = await this.etapaindRepository.findOne({ where: { eta_id: item_id } });
-        if (!etapa) throw new InternalServerErrorException(new MessageDto('La actividad no ha sido creada'))
-        const criterio = this.criterioIndRepository.create(dto)
-        criterio.eta_item = etapa
-        await this.criterioIndRepository.save(criterio)
-        return new MessageDto('El criterio ha sido Creado');
+    //creacion de criterio con su respectivo item
+    async create(item_id: number, payloads: { dto: CriterioIndDto, tokenDto: TokenDto }): Promise<any> {
+        try {
+            const { dto, tokenDto } = payloads;
+            const { cri_nombre } = dto;
+
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
+            const exists = await this.criterioIndRepository.findOne({ where: [{ cri_nombre: cri_nombre }] });
+            if (exists) throw new BadRequestException(new MessageDto('Ese Criterio ya existe'));
+            const etapa = await this.etapaindRepository.findOne({ where: { eta_id: item_id } });
+            if (!etapa) throw new InternalServerErrorException(new MessageDto('La actividad no ha sido creada'))
+            const criterio = this.criterioIndRepository.create(dto)
+            criterio.eta_item = etapa
+            await this.criterioIndRepository.save(criterio)
+
+            //asignamos la etapa
+            const etapa_nombre = etapa.eta_nombre;
+
+            // ASIGNAR LA AUDITORIA DE LA CALIFICACION ASIGNADO AL CRITERIO
+            await this.auditoria_registro_services.logCreateCriterioSpind(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                dto.cri_nombre,
+                etapa_nombre,
+                year,
+            );
+            return new MessageDto('El criterio ha sido Creado');
+        } catch (error) {
+
+        }
     }
 
     //LISTAR TODOS LOS CRITERIOS.
@@ -84,11 +153,11 @@ export class CriterioindService {
         return criterio_ind
     }
 
-    
-
-    
 
 
-    
-    
+
+
+
+
+
 }
