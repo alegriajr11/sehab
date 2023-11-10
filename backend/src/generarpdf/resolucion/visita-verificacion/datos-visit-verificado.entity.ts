@@ -11,13 +11,13 @@ export class DatosVisitVErificadoEntity {
     id: number;
 
     @Column({type: 'varchar', length: 85, nullable: false})
-    act_telefono: string;
+    dat_encontrado_telefono: string;
 
     @Column({type: 'varchar', length: 55, nullable: false})
-    act_direccion: string;
+    dat_encontrado_direccion: string;
 
     @Column({type: 'varchar', length: 50, nullable: false})
-    act_correo: string;
+    dat_encontrado_correo: string;
 
     @Column({type: 'varchar', length: 255, nullable: false})
     act_observaciones: string;
