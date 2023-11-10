@@ -149,8 +149,6 @@ export class CriterioQuimioterapiaService {
             dto.criquim_modalidad ? criterio_quimioterapia.criquim_modalidad = dto.criquim_modalidad : criterio_quimioterapia.criquim_modalidad = criterio_quimioterapia.criquim_modalidad;
             dto.criquim_complejidad ? criterio_quimioterapia.criquim_complejidad = dto.criquim_complejidad : criterio_quimioterapia.criquim_complejidad = criterio_quimioterapia.criquim_complejidad;
             criterio_quimioterapia.criquim_articulo = dto.criquim_articulo !== undefined ? dto.criquim_articulo : "";
-            criterio_quimioterapia.criquim_seccion = dto.criquim_seccion !== undefined ? dto.criquim_seccion : "";
-            criterio_quimioterapia.criquim_apartado = dto.criquim_apartado !== undefined ? dto.criquim_apartado : "";
             dto.criquim_nombre_criterio ? criterio_quimioterapia.criquim_nombre_criterio = dto.criquim_nombre_criterio : criterio_quimioterapia.criquim_nombre_criterio = criterio_quimioterapia.criquim_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

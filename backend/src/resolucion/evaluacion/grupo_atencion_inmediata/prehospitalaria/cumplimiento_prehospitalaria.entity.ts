@@ -28,10 +28,7 @@ export class CumplimientoPrehospitalariaEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_preh_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO PREHOSPITALARIA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumpl_prehospitalaria)
-    prestador: PrestadorEntity
-    
+
 
     @OneToOne(() => CriterioPrehospitalariaEntity)
     @JoinColumn()

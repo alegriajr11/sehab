@@ -3,6 +3,8 @@ import { UsuarioEntity } from "src/usuario/usuario.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 import { ProfesionalApoyoEntity } from "../profesional/profesional.entity";
 import { DatosVisitVErificadoEntity } from "../visita-verificacion/datos-visit-verificado.entity";
+import { EvaluacionIndependientesEntity } from "src/sp/sp_ind/evaluacion-independientes.entity";
+import { EvaluacionResEntity } from "src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity";
 
 @Entity({ name: 'acta-verificacion' })
 export class ActaVerificacionEntity {
@@ -99,5 +101,8 @@ export class ActaVerificacionEntity {
 
     @ManyToMany(type => ProfesionalApoyoEntity, profecional => profecional.profesional_verificacion)
     verificacion_profecional: ProfesionalApoyoEntity;
+
+    @OneToOne(() => EvaluacionResEntity, evaluacionRes => evaluacionRes.eval_acta_veri)
+    act_eval_veri: EvaluacionResEntity;
 
 }

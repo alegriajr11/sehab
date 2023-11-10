@@ -148,8 +148,6 @@ export class CriteriosCuidIntensPediatricoService {
             dto.cri_int_ped_modalidad ? criterio_cuid_intens_pedi.cri_int_ped_modalidad = dto.cri_int_ped_modalidad : criterio_cuid_intens_pedi.cri_int_ped_modalidad = criterio_cuid_intens_pedi.cri_int_ped_modalidad;
             dto.cri_int_ped_complejidad ? criterio_cuid_intens_pedi.cri_int_ped_complejidad = dto.cri_int_ped_complejidad : criterio_cuid_intens_pedi.cri_int_ped_complejidad = criterio_cuid_intens_pedi.cri_int_ped_complejidad;
             criterio_cuid_intens_pedi.cri_int_ped_articulo = dto.cri_int_ped_articulo !== undefined ? dto.cri_int_ped_articulo : "";
-            criterio_cuid_intens_pedi.cri_int_ped_seccion = dto.cri_int_ped_seccion !== undefined ? dto.cri_int_ped_seccion : "";
-            criterio_cuid_intens_pedi.cri_int_ped_apartado = dto.cri_int_ped_apartado !== undefined ? dto.cri_int_ped_apartado : "";
             dto.cri_int_ped_nombre_criterio ? criterio_cuid_intens_pedi.cri_int_ped_nombre_criterio = dto.cri_int_ped_nombre_criterio : criterio_cuid_intens_pedi.cri_int_ped_nombre_criterio = criterio_cuid_intens_pedi.cri_int_ped_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

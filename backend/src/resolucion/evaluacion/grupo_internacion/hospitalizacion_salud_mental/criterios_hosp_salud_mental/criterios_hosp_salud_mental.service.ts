@@ -148,8 +148,6 @@ export class CriteriosHospSaludMentalService {
             dto.crihosp_ment_modalidad ? criterio_hosp_ment.crihosp_ment_modalidad = dto.crihosp_ment_modalidad : criterio_hosp_ment.crihosp_ment_modalidad = criterio_hosp_ment.crihosp_ment_modalidad;
             dto.crihosp_ment_complejidad ? criterio_hosp_ment.crihosp_ment_complejidad = dto.crihosp_ment_complejidad : criterio_hosp_ment.crihosp_ment_complejidad = criterio_hosp_ment.crihosp_ment_complejidad;
             criterio_hosp_ment.crihosp_ment_articulo = dto.crihosp_ment_articulo !== undefined ? dto.crihosp_ment_articulo : "";
-            criterio_hosp_ment.crihosp_ment_seccion = dto.crihosp_ment_seccion !== undefined ? dto.crihosp_ment_seccion : "";
-            criterio_hosp_ment.crihosp_ment_apartado = dto.crihosp_ment_apartado !== undefined ? dto.crihosp_ment_apartado : "";
             dto.crihosp_ment_nombre_criterio ? criterio_hosp_ment.crihosp_ment_nombre_criterio = dto.crihosp_ment_nombre_criterio : criterio_hosp_ment.crihosp_ment_nombre_criterio = criterio_hosp_ment.crihosp_ment_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

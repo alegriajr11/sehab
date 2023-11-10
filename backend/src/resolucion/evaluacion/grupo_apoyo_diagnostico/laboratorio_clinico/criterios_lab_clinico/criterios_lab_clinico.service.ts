@@ -147,8 +147,6 @@ export class CriteriosLabClinicoService {
             dto.cri_lab_cli_modalidad ? criterio_lab_clinico.cri_lab_cli_modalidad = dto.cri_lab_cli_modalidad : criterio_lab_clinico.cri_lab_cli_modalidad = criterio_lab_clinico.cri_lab_cli_modalidad;
             dto.cri_lab_cli_complejidad ? criterio_lab_clinico.cri_lab_cli_complejidad = dto.cri_lab_cli_complejidad : criterio_lab_clinico.cri_lab_cli_complejidad = criterio_lab_clinico.cri_lab_cli_complejidad;
             criterio_lab_clinico.cri_lab_cli_articulo = dto.cri_lab_cli_articulo !== undefined ? dto.cri_lab_cli_articulo : "";
-            criterio_lab_clinico.cri_lab_cli_seccion = dto.cri_lab_cli_seccion !== undefined ? dto.cri_lab_cli_seccion : "";
-            criterio_lab_clinico.cri_lab_cli_apartado = dto.cri_lab_cli_apartado !== undefined ? dto.cri_lab_cli_apartado : "";
             dto.cri_lab_cli_nombre_criterio ? criterio_lab_clinico.cri_lab_cli_nombre_criterio = dto.cri_lab_cli_nombre_criterio : criterio_lab_clinico.cri_lab_cli_nombre_criterio = criterio_lab_clinico.cri_lab_cli_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

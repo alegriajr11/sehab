@@ -28,9 +28,6 @@ export class CumplimientoCuelloUterinoEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_cue_uter_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO TOMA_MUESTRAS_CUELLO_UTERINO - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_tom_mue_uterino)
-    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioCuelloUterinoEntity)

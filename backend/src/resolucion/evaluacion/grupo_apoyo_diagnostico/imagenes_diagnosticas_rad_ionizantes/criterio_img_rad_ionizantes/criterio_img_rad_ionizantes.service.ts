@@ -147,8 +147,6 @@ export class CriterioImgRadIonizantesService {
             dto.cri_imgioni_modalidad ? criterio_img_rad_ionizantes.cri_imgioni_modalidad = dto.cri_imgioni_modalidad : criterio_img_rad_ionizantes.cri_imgioni_modalidad = criterio_img_rad_ionizantes.cri_imgioni_modalidad;
             dto.cri_imgioni_complejidad ? criterio_img_rad_ionizantes.cri_imgioni_complejidad = dto.cri_imgioni_complejidad : criterio_img_rad_ionizantes.cri_imgioni_complejidad = criterio_img_rad_ionizantes.cri_imgioni_complejidad;
             criterio_img_rad_ionizantes.cri_imgioni_articulo = dto.cri_imgioni_articulo !== undefined ? dto.cri_imgioni_articulo : "";
-            criterio_img_rad_ionizantes.cri_imgioni_seccion = dto.cri_imgioni_seccion !== undefined ? dto.cri_imgioni_seccion : "";
-            criterio_img_rad_ionizantes.cri_imgioni_apartado = dto.cri_imgioni_apartado !== undefined ? dto.cri_imgioni_apartado : "";
             dto.cri_imgioni_nombre_criterio ? criterio_img_rad_ionizantes.cri_imgioni_nombre_criterio = dto.cri_imgioni_nombre_criterio : criterio_img_rad_ionizantes.cri_imgioni_nombre_criterio = criterio_img_rad_ionizantes.cri_imgioni_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

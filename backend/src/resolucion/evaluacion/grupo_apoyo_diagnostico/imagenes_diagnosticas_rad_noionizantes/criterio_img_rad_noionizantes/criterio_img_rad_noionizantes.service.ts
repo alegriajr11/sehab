@@ -150,8 +150,6 @@ export class CriterioImgRadNoionizantesService {
             dto.cri_img_noioni_modalidad ? criterio_img_rad_noionizantes.cri_img_noioni_modalidad = dto.cri_img_noioni_modalidad : criterio_img_rad_noionizantes.cri_img_noioni_modalidad = criterio_img_rad_noionizantes.cri_img_noioni_modalidad;
             dto.cri_img_noioni_complejidad ? criterio_img_rad_noionizantes.cri_img_noioni_complejidad = dto.cri_img_noioni_complejidad : criterio_img_rad_noionizantes.cri_img_noioni_complejidad = criterio_img_rad_noionizantes.cri_img_noioni_complejidad;
             criterio_img_rad_noionizantes.cri_img_noioni_articulo = dto.cri_img_noioni_articulo !== undefined ? dto.cri_img_noioni_articulo : "";
-            criterio_img_rad_noionizantes.cri_img_noioni_seccion = dto.cri_img_noioni_seccion !== undefined ? dto.cri_img_noioni_seccion : "";
-            criterio_img_rad_noionizantes.cri_img_noioni_apartado = dto.cri_img_noioni_apartado !== undefined ? dto.cri_img_noioni_apartado : "";
             dto.cri_img_noioni_nombre_criterio ? criterio_img_rad_noionizantes.cri_img_noioni_nombre_criterio = dto.cri_img_noioni_nombre_criterio : criterio_img_rad_noionizantes.cri_img_noioni_nombre_criterio = criterio_img_rad_noionizantes.cri_img_noioni_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

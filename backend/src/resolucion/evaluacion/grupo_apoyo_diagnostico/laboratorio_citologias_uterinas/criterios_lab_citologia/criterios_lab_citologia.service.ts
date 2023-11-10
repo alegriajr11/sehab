@@ -149,8 +149,6 @@ export class CriteriosLabCitologiaService {
             dto.cri_lab_ute_modalidad ? criterio_lab_citologia_uterina.cri_lab_ute_modalidad = dto.cri_lab_ute_modalidad : criterio_lab_citologia_uterina.cri_lab_ute_modalidad = criterio_lab_citologia_uterina.cri_lab_ute_modalidad;
             dto.cri_lab_ute_complejidad ? criterio_lab_citologia_uterina.cri_lab_ute_complejidad = dto.cri_lab_ute_complejidad : criterio_lab_citologia_uterina.cri_lab_ute_complejidad = criterio_lab_citologia_uterina.cri_lab_ute_complejidad;
             criterio_lab_citologia_uterina.cri_lab_ute_articulo = dto.cri_lab_ute_articulo !== undefined ? dto.cri_lab_ute_articulo : "";
-            criterio_lab_citologia_uterina.cri_lab_ute_seccion = dto.cri_lab_ute_seccion !== undefined ? dto.cri_lab_ute_seccion : "";
-            criterio_lab_citologia_uterina.cri_lab_ute_apartado = dto.cri_lab_ute_apartado !== undefined ? dto.cri_lab_ute_apartado : "";
             dto.cri_lab_ute_nombre_criterio ? criterio_lab_citologia_uterina.cri_lab_ute_nombre_criterio = dto.cri_lab_ute_nombre_criterio : criterio_lab_citologia_uterina.cri_lab_ute_nombre_criterio = criterio_lab_citologia_uterina.cri_lab_ute_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

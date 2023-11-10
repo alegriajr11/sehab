@@ -28,11 +28,7 @@ export class CumplimientoImgRadNoIonizanteEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_img_noion_fecha_limite: string;
 
-    //Relación MUCHOS a UNO IMAGENES DIAGNOSTICAS RAD_ NO IONIZANTES - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_img_no_ionizantes)
-    prestador: PrestadorEntity
     
-
     @OneToOne(() => CriterioImgRadNoIonizantesEntity)
     @JoinColumn()
     criterio_img_rad_noion: CriterioImgRadNoIonizantesEntity

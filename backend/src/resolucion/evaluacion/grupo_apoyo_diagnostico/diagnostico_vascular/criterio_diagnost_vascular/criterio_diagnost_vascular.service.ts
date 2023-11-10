@@ -149,8 +149,6 @@ export class CriterioDiagnostVascularService {
             dto.cridiagv_modalidad ? criterio_diagnost_vascular.cridiagv_modalidad = dto.cridiagv_modalidad : criterio_diagnost_vascular.cridiagv_modalidad = criterio_diagnost_vascular.cridiagv_modalidad;
             dto.cridiagv_complejidad ? criterio_diagnost_vascular.cridiagv_complejidad = dto.cridiagv_complejidad : criterio_diagnost_vascular.cridiagv_complejidad = criterio_diagnost_vascular.cridiagv_complejidad;
             criterio_diagnost_vascular.cridiagv_articulo = dto.cridiagv_articulo !== undefined ? dto.cridiagv_articulo : "";
-            criterio_diagnost_vascular.cridiagv_seccion = dto.cridiagv_seccion !== undefined ? dto.cridiagv_seccion : "";
-            criterio_diagnost_vascular.cridiagv_apartado = dto.cridiagv_apartado !== undefined ? dto.cridiagv_apartado : "";
             dto.cridiagv_nombre_criterio ? criterio_diagnost_vascular.cridiagv_nombre_criterio = dto.cridiagv_nombre_criterio : criterio_diagnost_vascular.cridiagv_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

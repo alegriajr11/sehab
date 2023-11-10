@@ -136,25 +136,6 @@ export class CriterioRadioOdontService {
 
     }
 
-    //ACTUALIZAR CRITERIOS RADIOLOGIA ODOCTOLOGICA
-    async updateRadio_Odon(id: number, dto: CriterioRadiologiaOdontoDto): Promise<any> {
-        const criterio_radio_odont = await this.findById(id);
-        if (!criterio_radio_odont) {
-            throw new NotFoundException(new MessageDto('El criterio no existe'))
-        }
-        dto.crirad_odon_modalidad ? criterio_radio_odont.crirad_odon_modalidad = dto.crirad_odon_modalidad : criterio_radio_odont.crirad_odon_modalidad = criterio_radio_odont.crirad_odon_modalidad;
-        dto.crirad_odon_complejidad ? criterio_radio_odont.crirad_odon_complejidad = dto.crirad_odon_complejidad : criterio_radio_odont.crirad_odon_complejidad = criterio_radio_odont.crirad_odon_complejidad;
-        criterio_radio_odont.crirad_odon_articulo = dto.crirad_odon_articulo !== undefined ? dto.crirad_odon_articulo : "";
-        criterio_radio_odont.crirad_odon_seccion = dto.crirad_odon_seccion !== undefined ? dto.crirad_odon_seccion : "";
-        criterio_radio_odont.crirad_odon_apartado = dto.crirad_odon_apartado !== undefined ? dto.crirad_odon_apartado : "";
-        dto.crirad_odon_nombre_criterio ? criterio_radio_odont.crirad_odon_nombre_criterio = dto.crirad_odon_nombre_criterio : criterio_radio_odont.crirad_odon_nombre_criterio = criterio_radio_odont.crirad_odon_nombre_criterio;
-
-        await this.criterioRadiologiaOdontoRepository.save(criterio_radio_odont);
-
-        return new MessageDto(`El criterio ha sido Actualizado`);
-
-    }
-
     async update(id: number, payloads: { dto: CriterioRadiologiaOdontoDto, tokenDto: TokenDto }): Promise<any> {
         try {
             const { dto, tokenDto } = payloads;
@@ -166,8 +147,6 @@ export class CriterioRadioOdontService {
             dto.crirad_odon_modalidad ? criterio_radio_odont.crirad_odon_modalidad = dto.crirad_odon_modalidad : criterio_radio_odont.crirad_odon_modalidad = criterio_radio_odont.crirad_odon_modalidad;
             dto.crirad_odon_complejidad ? criterio_radio_odont.crirad_odon_complejidad = dto.crirad_odon_complejidad : criterio_radio_odont.crirad_odon_complejidad = criterio_radio_odont.crirad_odon_complejidad;
             criterio_radio_odont.crirad_odon_articulo = dto.crirad_odon_articulo !== undefined ? dto.crirad_odon_articulo : "";
-            criterio_radio_odont.crirad_odon_seccion = dto.crirad_odon_seccion !== undefined ? dto.crirad_odon_seccion : "";
-            criterio_radio_odont.crirad_odon_apartado = dto.crirad_odon_apartado !== undefined ? dto.crirad_odon_apartado : "";
             dto.crirad_odon_nombre_criterio ? criterio_radio_odont.crirad_odon_nombre_criterio = dto.crirad_odon_nombre_criterio : criterio_radio_odont.crirad_odon_nombre_criterio = criterio_radio_odont.crirad_odon_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

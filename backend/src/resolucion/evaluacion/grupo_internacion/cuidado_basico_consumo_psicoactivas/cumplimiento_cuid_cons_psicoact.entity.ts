@@ -28,10 +28,7 @@ export class CumplimientoConsPsicoactivasEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_cons_psic_fecha_limite: string;
     
-    //Relación MUCHOS a UNO CUMPLIMIENTO CUIDADO_BASICO_CONSUMO_PSICOACTIVAS - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_cons_psicoactivas)
-    prestador: PrestadorEntity
-
+    
     @OneToOne(() => CriterioConsumoPsicoactivasEntity)
     @JoinColumn()
     criterio_cons_psico: CriterioConsumoPsicoactivasEntity

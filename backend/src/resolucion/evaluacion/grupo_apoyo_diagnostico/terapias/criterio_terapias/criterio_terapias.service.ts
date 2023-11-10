@@ -148,8 +148,6 @@ export class CriterioTerapiasService {
             dto.criter_modalidad ? criterio_terapia.criter_modalidad = dto.criter_modalidad : criterio_terapia.criter_modalidad = criterio_terapia.criter_modalidad;
             dto.criter_complejidad ? criterio_terapia.criter_complejidad = dto.criter_complejidad : criterio_terapia.criter_complejidad = criterio_terapia.criter_complejidad;
             criterio_terapia.criter_articulo = dto.criter_articulo !== undefined ? dto.criter_articulo : "";
-            criterio_terapia.criter_seccion = dto.criter_seccion !== undefined ? dto.criter_seccion : "";
-            criterio_terapia.criter_apartado = dto.criter_apartado !== undefined ? dto.criter_apartado : "";
             dto.criter_nombre_criterio ? criterio_terapia.criter_nombre_criterio = dto.criter_nombre_criterio : criterio_terapia.criter_nombre_criterio = criterio_terapia.criter_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

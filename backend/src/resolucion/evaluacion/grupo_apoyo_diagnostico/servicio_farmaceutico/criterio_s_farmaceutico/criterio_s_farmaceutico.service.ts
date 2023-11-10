@@ -137,25 +137,7 @@ export class CriterioSFarmaceuticoService {
 
     }
 
-    //ACTUALIZAR CRITERIOS SERVICIO FARMACEUTICO
-    async updateFarma(id: number, dto: CriterioSerFarmaceuticoDto): Promise<any> {
-        const criterio_ser_farm = await this.findById(id);
-        if (!criterio_ser_farm) {
-            throw new NotFoundException(new MessageDto('El criterio no existe'))
-        }
-        dto.criser_farm_modalidad ? criterio_ser_farm.criser_farm_modalidad = dto.criser_farm_modalidad : criterio_ser_farm.criser_farm_modalidad = criterio_ser_farm.criser_farm_modalidad;
-        dto.criser_farm_complejidad ? criterio_ser_farm.criser_farm_complejidad = dto.criser_farm_complejidad : criterio_ser_farm.criser_farm_complejidad = criterio_ser_farm.criser_farm_complejidad;
-        criterio_ser_farm.criser_farm_articulo = dto.criser_farm_articulo !== undefined ? dto.criser_farm_articulo : "";
-        criterio_ser_farm.criser_farm_seccion = dto.criser_farm_seccion !== undefined ? dto.criser_farm_seccion : "";
-        criterio_ser_farm.criser_farm_apartado = dto.criser_farm_apartado !== undefined ? dto.criser_farm_apartado : "";
-        dto.criser_farm_nombre_criterio ? criterio_ser_farm.criser_farm_nombre_criterio = dto.criser_farm_nombre_criterio : criterio_ser_farm.criser_farm_nombre_criterio = criterio_ser_farm.criser_farm_nombre_criterio;
-
-        await this.criterioSerFarmaceuticoRepository.save(criterio_ser_farm);
-
-        return new MessageDto(`El criterio ha sido Actualizado`);
-
-    }
-
+   
     async update(id: number, payloads: { dto: CriterioSerFarmaceuticoDto, tokenDto: TokenDto }): Promise<any> {
         try {
             const { dto, tokenDto } = payloads;
@@ -167,8 +149,6 @@ export class CriterioSFarmaceuticoService {
             dto.criser_farm_modalidad ? criterio_ser_farm.criser_farm_modalidad = dto.criser_farm_modalidad : criterio_ser_farm.criser_farm_modalidad = criterio_ser_farm.criser_farm_modalidad;
             dto.criser_farm_complejidad ? criterio_ser_farm.criser_farm_complejidad = dto.criser_farm_complejidad : criterio_ser_farm.criser_farm_complejidad = criterio_ser_farm.criser_farm_complejidad;
             criterio_ser_farm.criser_farm_articulo = dto.criser_farm_articulo !== undefined ? dto.criser_farm_articulo : "";
-            criterio_ser_farm.criser_farm_seccion = dto.criser_farm_seccion !== undefined ? dto.criser_farm_seccion : "";
-            criterio_ser_farm.criser_farm_apartado = dto.criser_farm_apartado !== undefined ? dto.criser_farm_apartado : "";
             dto.criser_farm_nombre_criterio ? criterio_ser_farm.criser_farm_nombre_criterio = dto.criser_farm_nombre_criterio : criterio_ser_farm.criser_farm_nombre_criterio = criterio_ser_farm.criser_farm_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

@@ -154,8 +154,6 @@ export class CriterioServiciosService {
 
             dto.cris_modalidad ? criterio_servicios.cris_modalidad = dto.cris_modalidad : criterio_servicios.cris_modalidad = criterio_servicios.cris_modalidad;
             criterio_servicios.cris_articulo = dto.cris_articulo !== undefined ? dto.cris_articulo : "";
-            criterio_servicios.cris_seccion = dto.cris_seccion !== undefined ? dto.cris_seccion : "";
-            criterio_servicios.cris_apartado = dto.cris_apartado !== undefined ? dto.cris_apartado : "";
             dto.cris_nombre_criterio ? criterio_servicios.cris_nombre_criterio = dto.cris_nombre_criterio : criterio_servicios.cris_nombre_criterio = criterio_servicios.cris_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

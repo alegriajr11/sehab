@@ -149,8 +149,6 @@ export class CriteriosExtGeneralService {
             dto.criextg_modalidad ? criterio_ext_gene.criextg_modalidad = dto.criextg_modalidad : criterio_ext_gene.criextg_modalidad = criterio_ext_gene.criextg_modalidad;
             dto.criextg_complejidad ? criterio_ext_gene.criextg_complejidad = dto.criextg_complejidad : criterio_ext_gene.criextg_complejidad = criterio_ext_gene.criextg_complejidad;
             criterio_ext_gene.criextg_articulo = dto.criextg_articulo !== undefined ? dto.criextg_articulo : "";
-            criterio_ext_gene.criextg_seccion = dto.criextg_seccion !== undefined ? dto.criextg_seccion : "";
-            criterio_ext_gene.criextg_apartado = dto.criextg_apartado !== undefined ? dto.criextg_apartado : "";
             dto.criextg_nombre_criterio ? criterio_ext_gene.criextg_nombre_criterio = dto.criextg_nombre_criterio : criterio_ext_gene.criextg_nombre_criterio = criterio_ext_gene.criextg_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

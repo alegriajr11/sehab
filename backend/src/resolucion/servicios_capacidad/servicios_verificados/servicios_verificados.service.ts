@@ -34,7 +34,6 @@ async create(pre_cod_habilitacion: string, dto: ServiciosVerificadosDto): Promis
     //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
     const servicioverificado = this.serviciosVerificadosRepository.create(dto)
     //ASIGNAMOS EL PRESTADOR AL SERVICIO
-    servicioverificado.prestadores = servicio_prestador
     //GUARDAR LOS DATOS EN LA BD
     await this.serviciosVerificadosRepository.save(servicioverificado)
     return new MessageDto('La capacidad ha sido Creada Correctamente');
@@ -63,11 +62,6 @@ async updateservico(id: number, dto: ServiciosVerificadosDto): Promise<any> {
         throw new NotFoundException(new MessageDto('El servicio no existe'))
     }
     dto.ser_codigo ? servicio_verificada.ser_codigo = dto.ser_codigo : servicio_verificada.ser_codigo = servicio_verificada.ser_codigo;
-    dto.ser_grupo ? servicio_verificada.ser_grupo = dto.ser_grupo : servicio_verificada.ser_grupo = servicio_verificada.ser_grupo;
-    dto.ser_nombre_servicio ? servicio_verificada.ser_nombre_servicio = dto.ser_nombre_servicio : servicio_verificada.ser_nombre_servicio = servicio_verificada.ser_nombre_servicio;
-    dto.ser_modalidad ? servicio_verificada.ser_modalidad = dto.ser_modalidad : servicio_verificada.ser_modalidad = servicio_verificada.ser_modalidad;
-    dto.ser_complejidad ? servicio_verificada.ser_complejidad = dto.ser_complejidad : servicio_verificada.ser_complejidad = servicio_verificada.ser_complejidad;
-    dto.ser_num_distintivo ? servicio_verificada.ser_num_distintivo = dto.ser_num_distintivo : servicio_verificada.ser_num_distintivo = servicio_verificada.ser_num_distintivo;
     await this.serviciosVerificadosRepository.save(servicio_verificada);
 
     return new MessageDto(`El servicio ha sido Actualizado`);

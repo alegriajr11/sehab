@@ -28,10 +28,7 @@ export class CumplimientoHermoIntervenEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_herminter_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO HERMODINAMIA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_hermo_interven)
-    prestador: PrestadorEntity
-
+    
     @OneToOne(() => CriterioHermoIntervenEntity)
     @JoinColumn()
     criterio_hermo_interven: CriterioHermoIntervenEntity

@@ -28,10 +28,7 @@ export class CumplimientoHospitalizacionParcialEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_hosp_parc_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO HOSPITALIZACION_PARCIAL - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_hospitalizacion_parcial)
-    prestador: PrestadorEntity
-    
+
 
     @OneToOne(() => CriterioHospitalizacionParcialEntity)
     @JoinColumn()

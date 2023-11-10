@@ -3,6 +3,8 @@ import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, 
 import { DiagnosticoVascularEntity } from "./diagnostico_vascular.entity";
 import { CumplimientoDiagnostVascularRepository } from "./cumplimiento_diagnost_vascular.repository";
 import { CumplimientoDiagnosticoVascularEntity } from "./cumplimiento_diagnost_vascular.entity";
+import { ApartadoEntity } from "../../seccion-apartado/apartado.entity";
+import { SeccionEntity } from "../../seccion-apartado/seccion.entity";
 
 
 
@@ -20,12 +22,6 @@ export class CriterioDiagnostVascularEntity {
     @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     cridiagv_articulo: string;
 
-    @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
-    cridiagv_seccion: string;
-
-    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
-    cridiagv_apartado: string;
-
     @Column({ type: 'varchar', length: 700, nullable: true, unique: false })
     cridiagv_nombre_criterio: string;
 
@@ -38,4 +34,11 @@ export class CriterioDiagnostVascularEntity {
     @OneToOne(() => CumplimientoDiagnosticoVascularEntity, cumplimiento => cumplimiento.criterio_diag_vascular)
     cumplimiento: CumplimientoDiagnosticoVascularEntity;
 
+    //Relacion MUCHOS a UNO CRITERIOS_DIAGNOSTICO_VASCULAR - SECCION
+    @ManyToOne(type => SeccionEntity,  seccion=> seccion.seccion_diag_vas)
+    diag_seccion: SeccionEntity;
+
+    //Relacion MUCHOS a UNO CRITERIOS_DIAGNOSTICO_VASCULAR - APARTADO
+    @ManyToOne(type => ApartadoEntity,  apartado=> apartado.apartado_diag_vas)
+    diag_apartado: ApartadoEntity;
 }

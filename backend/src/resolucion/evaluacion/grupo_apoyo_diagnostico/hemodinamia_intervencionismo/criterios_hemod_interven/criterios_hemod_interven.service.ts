@@ -148,8 +148,6 @@ export class CriteriosHemodIntervenService {
             dto.criherminte_modalidad ? criterio_hemo_inter.criherminte_modalidad = dto.criherminte_modalidad : criterio_hemo_inter.criherminte_modalidad = criterio_hemo_inter.criherminte_modalidad;
             dto.criherminte_complejidad ? criterio_hemo_inter.criherminte_complejidad = dto.criherminte_complejidad : criterio_hemo_inter.criherminte_complejidad = criterio_hemo_inter.criherminte_complejidad;
             criterio_hemo_inter.criherminte_articulo = dto.criherminte_articulo !== undefined ? dto.criherminte_articulo : "";
-            criterio_hemo_inter.criherminte_seccion = dto.criherminte_seccion !== undefined ? dto.criherminte_seccion : "";
-            criterio_hemo_inter.criherminte_apartado = dto.criherminte_apartado !== undefined ? dto.criherminte_apartado : "";
             dto.criherminte_nombre_criterio ? criterio_hemo_inter.criherminte_nombre_criterio = dto.criherminte_nombre_criterio : criterio_hemo_inter.criherminte_nombre_criterio = criterio_hemo_inter.criherminte_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

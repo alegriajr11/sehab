@@ -147,8 +147,6 @@ export class CriteriosPrehospitalariaService {
             dto.cripreh_modalidad ? criterio_prehospi.cripreh_modalidad = dto.cripreh_modalidad : criterio_prehospi.cripreh_modalidad = criterio_prehospi.cripreh_modalidad;
             dto.cripreh_complejidad ? criterio_prehospi.cripreh_complejidad = dto.cripreh_complejidad : criterio_prehospi.cripreh_complejidad = criterio_prehospi.cripreh_complejidad;
             criterio_prehospi.cripreh_articulo = dto.cripreh_articulo !== undefined ? dto.cripreh_articulo : "";
-            criterio_prehospi.cripreh_seccion = dto.cripreh_seccion !== undefined ? dto.cripreh_seccion : "";
-            criterio_prehospi.cripreh_apartado = dto.cripreh_apartado !== undefined ? dto.cripreh_apartado : "";
             dto.cripreh_nombre_criterio ? criterio_prehospi.cripreh_nombre_criterio = dto.cripreh_nombre_criterio : criterio_prehospi.cripreh_nombre_criterio = criterio_prehospi.cripreh_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

@@ -136,24 +136,7 @@ export class CriteriosCirugiaService {
 
     }
 
-    //ACTUALIZAR CRITERIOS CUIDADO  CIRUGIA
-    async updatecirugia(id: number, dto: CriterioCirugiaDto): Promise<any> {
-        const criterio_cirugia = await this.findById(id);
-        if (!criterio_cirugia) {
-            throw new NotFoundException(new MessageDto('El criterio no existe'))
-        }
-        dto.cri_ciru_modalidad ? criterio_cirugia.cri_ciru_modalidad = dto.cri_ciru_modalidad : criterio_cirugia.cri_ciru_modalidad = criterio_cirugia.cri_ciru_modalidad;
-        dto.cri_ciru_complejidad ? criterio_cirugia.cri_ciru_complejidad = dto.cri_ciru_complejidad : criterio_cirugia.cri_ciru_complejidad = criterio_cirugia.cri_ciru_complejidad;
-        criterio_cirugia.cri_ciru_articulo = dto.cri_ciru_articulo !== undefined ? dto.cri_ciru_articulo : "";
-        criterio_cirugia.cri_ciru_seccion = dto.cri_ciru_seccion !== undefined ? dto.cri_ciru_seccion : "";
-        criterio_cirugia.cri_ciru_apartado = dto.cri_ciru_apartado !== undefined ? dto.cri_ciru_apartado : "";
-        dto.cri_ciru_nombre_criterio ? criterio_cirugia.cri_ciru_nombre_criterio = dto.cri_ciru_nombre_criterio : criterio_cirugia.cri_ciru_nombre_criterio = criterio_cirugia.cri_ciru_nombre_criterio;
-
-        await this.criterioCirugiaRepository.save(criterio_cirugia);
-
-        return new MessageDto(`El criterio ha sido Actualizado`);
-
-    }
+    
 
     async update(id: number, payloads: { dto: CriterioCirugiaDto, tokenDto: TokenDto }): Promise<any> {
         try {
@@ -166,8 +149,6 @@ export class CriteriosCirugiaService {
             dto.cri_ciru_modalidad ? criterio_cirugia.cri_ciru_modalidad = dto.cri_ciru_modalidad : criterio_cirugia.cri_ciru_modalidad = criterio_cirugia.cri_ciru_modalidad;
             dto.cri_ciru_complejidad ? criterio_cirugia.cri_ciru_complejidad = dto.cri_ciru_complejidad : criterio_cirugia.cri_ciru_complejidad = criterio_cirugia.cri_ciru_complejidad;
             criterio_cirugia.cri_ciru_articulo = dto.cri_ciru_articulo !== undefined ? dto.cri_ciru_articulo : "";
-            criterio_cirugia.cri_ciru_seccion = dto.cri_ciru_seccion !== undefined ? dto.cri_ciru_seccion : "";
-            criterio_cirugia.cri_ciru_apartado = dto.cri_ciru_apartado !== undefined ? dto.cri_ciru_apartado : "";
             dto.cri_ciru_nombre_criterio ? criterio_cirugia.cri_ciru_nombre_criterio = dto.cri_ciru_nombre_criterio : criterio_cirugia.cri_ciru_nombre_criterio = criterio_cirugia.cri_ciru_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

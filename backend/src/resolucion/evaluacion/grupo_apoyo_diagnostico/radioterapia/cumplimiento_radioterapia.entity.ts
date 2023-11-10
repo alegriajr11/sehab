@@ -27,10 +27,6 @@ export class CumplimientoRadioterapiaEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_rad_ter_fecha_limite: string;
-
-    //Relación MUCHOS a UNO CUMPLIMIENTO RADIOTERAPIA - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador. cumplimiento_radioterapia)
-    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioRadioterapiaEntity)

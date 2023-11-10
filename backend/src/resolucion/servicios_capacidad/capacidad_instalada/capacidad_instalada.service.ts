@@ -62,10 +62,6 @@ async updateCapacidad(id: number, dto: CapacidadInstaladaDto): Promise<any> {
     if (!capacidad_instalada) {
         throw new NotFoundException(new MessageDto('La capacidad no existe'))
     }
-    dto.cap_grupo ? capacidad_instalada.cap_grupo = dto.cap_grupo : capacidad_instalada.cap_grupo = capacidad_instalada.cap_grupo;
-    dto.cap_concepto ? capacidad_instalada.cap_concepto = dto.cap_concepto : capacidad_instalada.cap_concepto = capacidad_instalada.cap_concepto;
-    dto.cap_inscritas ? capacidad_instalada.cap_inscritas = dto.cap_inscritas : capacidad_instalada.cap_inscritas = capacidad_instalada.cap_inscritas;
-    dto.cap_observados ? capacidad_instalada.cap_observados = dto.cap_observados : capacidad_instalada.cap_observados = capacidad_instalada.cap_observados;
     dto.cap_num_placa ? capacidad_instalada.cap_num_placa = dto.cap_num_placa : capacidad_instalada.cap_num_placa = capacidad_instalada.cap_num_placa;
     dto.cap_movilidad ? capacidad_instalada.cap_movilidad = dto.cap_movilidad : capacidad_instalada.cap_movilidad = capacidad_instalada.cap_movilidad;
     dto.cap_modelo ? capacidad_instalada.cap_modelo = dto.cap_modelo : capacidad_instalada.cap_modelo = capacidad_instalada.cap_modelo;

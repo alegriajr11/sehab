@@ -28,12 +28,7 @@ export class CumplimientoCuidBasNeonatalEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_cui_neona_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO CUIDADO_BASICO_NEONATAL - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_cuid_bas_neonatal)
-    prestador: PrestadorEntity
-
     
-
     @OneToOne(() => CriterioCuidBasNeonatalEntity)
     @JoinColumn()
     criterio_cuid_bas_neonatal: CriterioCuidBasNeonatalEntity
