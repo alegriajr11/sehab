@@ -3,6 +3,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import SignaturePad from 'signature_pad';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-editar-firma-sp-ind',
@@ -11,7 +12,7 @@ import { SharedServiceService } from 'src/app/services/shared-service.service';
 })
 export class ModalEditarFirmaSpIndComponent {
 
-  
+
   @ViewChild('signatureCanvas', { static: true }) signatureCanvas: ElementRef<HTMLCanvasElement>;
   signaturePad: SignaturePad;
 
@@ -67,22 +68,57 @@ export class ModalEditarFirmaSpIndComponent {
 
   capturarFirma() {
     if (this.signaturePad.isEmpty()) {
-      this.toastrService.error('Debe Hacer una firma', 'Error', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
-      });
+      this.mostrarErrorFirma();
     } else {
-      const firmaDataURL = this.signatureCanvas.nativeElement.toDataURL();
-      this.firma = firmaDataURL;
-      this.sharedService.setFirmaActaSpInd(this.firma);
-
-      this.toastrService.success('Firma Agregada Exitosamente', 'Éxito', {
-        timeOut: 3000,
-        positionClass: 'toast-top-center',
+      Swal.fire({
+        title: `¿Estás seguro de firmar el acta?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.guardarFirma();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          this.mostrarCancelacionFirma();
+        }
       });
-      this.modalRef?.hide();
     }
   }
+
+  mostrarErrorFirma() {
+    this.toastrService.error('Debe hacer una firma', 'Error', {
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+    });
+  }
+
+  mostrarCancelacionFirma() {
+    Swal.fire(
+      'Cancelado',
+      '',
+      'error'
+    );
+    this.modalRef?.hide();
+  }
+
+  //Enviar la firma al servicio compartido
+  guardarFirma() {
+    const firmaDataURL = this.signatureCanvas.nativeElement.toDataURL();
+    this.firma = firmaDataURL;
+    this.sharedService.setFirmaActaSpInd(this.firma);
+
+    this.mostrarExitoFirma();
+    this.modalRef?.hide();
+  }
+
+  mostrarExitoFirma() {
+    this.toastrService.success('Firma Agregada Exitosamente', 'Éxito', {
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+    });
+  }
+
 
 
   cargarImagen(event: any) {

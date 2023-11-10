@@ -90,43 +90,26 @@ export class CriteriopamService {
         return new MessageDto(`El Criterio ha sido Actualizado`);
     }
 
-    async create(act_id: number, payloads: { dto: CriterioPamDto, tokenDto: TokenDto }): Promise<any> {
-        const { dto, tokenDto } = payloads;
-        const { crip_nombre } = dto;
-
-        const usuario = await this.jwtService.decode(tokenDto.token);
-
-        const payloadInterface: PayloadInterface = {
-            usu_id: usuario[`usu_id`],
-            usu_nombre: usuario[`usu_nombre`],
-            usu_apellido: usuario[`usu_apellido`],
-            usu_nombreUsuario: usuario[`usu_nombreUsuario`],
-            usu_email: usuario[`usu_email`],
-            usu_estado: usuario[`usu_estado`],
-            usu_roles: usuario[`usu_roles`]
-        };
-
-        const year = new Date().getFullYear().toString();
-
-        const exists = await this.criteriopamRepository.findOne({ where: [{ crip_nombre: crip_nombre }] });
-        if (exists) throw new BadRequestException(new MessageDto('Ese Criterio ya existe'));
-
-        const actividad = await this.actividadRepository.findOne({ where: { act_id: act_id } });
-        if (!actividad) throw new InternalServerErrorException(new MessageDto('La actividad no ha sido creada'))
-        
+    async create(act_id: number, dto: CriterioPamDto): Promise<any> {
+        const {crip_nombre} = dto;
+        const exists = await this.criteriopamRepository.findOne({where: [{crip_nombre: crip_nombre}]});
+        if(exists) throw new BadRequestException(new MessageDto('Ese Criterio ya existe'));
+        const actividad = await this.actividadRepository.findOne({where: {act_id: act_id}});
+        console.log(act_id)
+        if(!actividad) throw new InternalServerErrorException(new MessageDto('La actividad no ha sido creada'))
         const criterio = this.criteriopamRepository.create(dto)
         criterio.crip_actividad = actividad
         await this.criteriopamRepository.save(criterio)
 
         const act_nombre = criterio.crip_actividad.act_nombre
-        await this.auditoria_registro_services.logCreateCriterioPamec(
-            payloadInterface.usu_nombre,
-            payloadInterface.usu_apellido,
-            'ip',
-            dto.crip_nombre,
-            act_nombre,
-            year,
-        );
+        // await this.auditoria_registro_services.logCreateCriterioPamec(
+        //     payloadInterface.usu_nombre,
+        //     payloadInterface.usu_apellido,
+        //     'ip',
+        //     dto.crip_nombre,
+        //     act_nombre,
+        //     year,
+        // );
         return new MessageDto('El criterio ha sido Creado');
     }
 

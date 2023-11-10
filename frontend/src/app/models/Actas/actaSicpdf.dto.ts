@@ -29,9 +29,13 @@ export class ActaSicPdfDto {
 
     act_estado: string;
 
+    //CONTROLAR RECIBE O FIRMA
+    act_recibe_visita: string;
+    noFirmaActa: string
+
     constructor(
-        act_id: number, 
-        act_visita_inicial: string, 
+        act_id: number,
+        act_visita_inicial: string,
         act_visita_seguimiento: string,
         act_fecha_inicial: string,
         act_fecha_final: string,
@@ -55,10 +59,11 @@ export class ActaSicPdfDto {
         act_firma_funcionario: string,
         act_nombre_prestador: string,
         act_firma_prestador: string,
-        act_cargo_prestador: string
+        act_cargo_prestador: string,
+        act_recibe_visita: string,
+        noFirmaActa: string
 
-
-        ){
+    ) {
         this.act_id = act_id
         this.act_visita_inicial = act_visita_inicial
         this.act_visita_seguimiento = act_visita_seguimiento
@@ -85,6 +90,8 @@ export class ActaSicPdfDto {
         this.act_nombre_prestador = act_nombre_prestador
         this.act_firma_prestador = act_firma_prestador
         this.act_cargo_prestador = act_cargo_prestador
+        this.act_recibe_visita = act_recibe_visita
+        this.noFirmaActa = noFirmaActa
 
     }
 }

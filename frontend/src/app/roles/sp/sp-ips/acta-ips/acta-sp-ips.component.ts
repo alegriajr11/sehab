@@ -109,6 +109,9 @@ export class ActaSpIpsComponent implements OnInit {
   act_compromiso_responsable: string
 
 
+  act_recibe_visita: string = 'false';
+  noFirmaActa: string = 'false';
+
 
   //ATRIBUTOS CONTROLAR MENSAJES VALIDACION
   showTipoVisitaMessage: boolean = false;
@@ -121,6 +124,7 @@ export class ActaSpIpsComponent implements OnInit {
   showVerificadorMessage: boolean = false;
   showPresadorNombreMessage: boolean = false;
   showPrestadorCargoMessage: boolean = false;
+  showEvaluacionMessage: boolean = false;
 
 
 
@@ -423,6 +427,10 @@ export class ActaSpIpsComponent implements OnInit {
     if (this.act_cargo_prestador) {
       this.showPrestadorCargoMessage = false
     }
+
+    if (Object.keys(this.evaluacionesSeleccionadas).length > 0) {
+      this.showEvaluacionMessage = false
+    }
   }
 
   obtenerNombres(): void {
@@ -609,7 +617,8 @@ export class ActaSpIpsComponent implements OnInit {
       //COMPROMISOS
       this.act_compromiso_actividad,
       this.act_compromiso_fecha,
-      this.act_compromiso_responsable
+      this.act_compromiso_responsable,
+      this.noFirmaActa
     );
 
     //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ CREANDO EL ACTA
@@ -620,7 +629,6 @@ export class ActaSpIpsComponent implements OnInit {
     //Obtener los IDS de las evaluaciones Seleccionados
     const evaluacionesIds = Object.values(this.evaluacionesSeleccionadas);
 
-    console.log(evaluacionesIds)
     if (
       !this.act_id ||
       (!this.act_visita_inicial && !this.act_visita_seguimiento) ||
@@ -639,10 +647,20 @@ export class ActaSpIpsComponent implements OnInit {
       !this.act_nombre_funcionario ||
       !this.act_cargo_funcionario ||
       !this.act_nombre_prestador ||
-      !this.act_cargo_prestador
+      !this.act_cargo_prestador ||
+      !this.act_fecha_orden ||
+      !this.act_hora_orden ||
+      !this.act_num_oficio ||
+      !this.act_fecha_oficio ||
+      !this.act_fecha_envio_oficio ||
+
+      !(Object.keys(this.evaluacionesSeleccionadas).length > 0)
     ) {
       //ASIGNANDO LOS RESPECTIVOS MENSAJES EN CASO DE ENTRAR AL IF DE VALIDACIÓN
       let mensajeError = 'Por favor, complete los siguientes campos:';
+
+      console.log(this.act_fecha_oficio)
+      console.log(this.fecha_envio_oficio)
 
       if (!this.act_visita_inicial && !this.act_visita_seguimiento) {
         mensajeError += ' Tipo de Visita,';
@@ -677,7 +695,6 @@ export class ActaSpIpsComponent implements OnInit {
       if (!this.act_obj_visita) {
         mensajeError += ' Objeto de visita,';
         this.showObjVisitaMessage = true
-
       }
 
       if (!this.act_nombre_funcionario) {
@@ -693,6 +710,31 @@ export class ActaSpIpsComponent implements OnInit {
       if (!this.act_cargo_prestador) {
         mensajeError += ' Cargo Prestador Firma,';
         this.showPrestadorCargoMessage = true
+      }
+
+      if (!this.act_fecha_orden) {
+        mensajeError += ' Fecha del Ordén día,';
+      }
+
+      if (!this.act_hora_orden) {
+        mensajeError += ' Hora del Ordén día,';
+      }
+
+      if (!this.act_num_oficio) {
+        mensajeError += ' Número de Oficio,';
+      }
+
+      if (!this.act_fecha_oficio) {
+        mensajeError += ' Fecha de Oficio,';
+      }
+
+      if (!this.act_fecha_envio_oficio) {
+
+        mensajeError += ' Fecha de envio del Oficio,';
+      }
+
+      if (Object.keys(this.evaluacionesSeleccionadas).length === 0) {
+        mensajeError += ' Selecciona al menos una evaluación,';
       }
 
       mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA

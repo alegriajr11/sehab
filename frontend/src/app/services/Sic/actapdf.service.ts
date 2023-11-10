@@ -126,8 +126,8 @@ export class ActapdfService {
 
 
   //SOLICITUD MOSTRAR UN ACTA DEL ROL SP_IND
-  public oneActaSpInd(id: number): Observable<ActaSpPdfDto> {
-    return this.httpClient.get<ActaSpPdfDto>(`${this.actaSp_ind_pdf_URL}${id}`);
+  public oneActaSpInd(id: number): Observable<ActaSpIndPdfDto> {
+    return this.httpClient.get<ActaSpIndPdfDto>(`${this.actaSp_ind_pdf_URL}${id}`);
   }
 
   //SOLICITUD MOSTRAR UN ACTA DEL ROL PAMEC
@@ -137,7 +137,7 @@ export class ActapdfService {
 
 
   //FILTRAR ACTA POR FECHA - No ACTA - PRESTADOR - NIT
-  public listaActasSpIndFilter(year: number, act_id: number, act_prestador: string, act_nit: string, tokenDto: string): Observable<ActaSpPdfDto[]> {
+  public listaActasSpIndFilter(year: number, act_id: number, act_prestador: string, act_nit: string, tokenDto: string): Observable<ActaSpIndPdfDto[]> {
     let url = `${this.actaSp_ind_pdf_URL}busqueda/fecha/acta/prestador/nit?`;
 
     if (year) {
@@ -156,7 +156,7 @@ export class ActapdfService {
       url += `tokenDto=${tokenDto}&`;
     }
 
-    return this.httpClient.get<ActaSpPdfDto[]>(url);
+    return this.httpClient.get<ActaSpIndPdfDto[]>(url);
   }
 
 

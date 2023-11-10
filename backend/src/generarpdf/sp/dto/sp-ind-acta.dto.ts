@@ -74,4 +74,10 @@ export class IndActaDto {
 
     @IsString()
     act_estado: string;
+
+    @IsString()
+    act_recibe_visita: string
+
+    @IsString()
+    noFirmaActa: string
 }

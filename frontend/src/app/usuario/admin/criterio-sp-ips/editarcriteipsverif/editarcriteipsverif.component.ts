@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Verificacion } from 'src/app/models/SpIps/criterioVerificacion.dto';
+import { VerificacionDto } from 'src/app/models/SpIps/criterioVerificacion.dto';
 import { VerificacionService } from 'src/app/services/SpIps/verificacion.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { VerificacionService } from 'src/app/services/SpIps/verificacion.service
 export class EditarcriteipsverifComponent implements OnInit {
 
 
-  criterioVerf: Verificacion = null
+  criterioVerf: VerificacionDto = null
 
   constructor(
     private verificacionService: VerificacionService,

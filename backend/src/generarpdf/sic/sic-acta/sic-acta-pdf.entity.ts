@@ -93,6 +93,13 @@ export class ActaSicPdfEntity {
     @Column({ type: 'date' })
     act_creado: Date;
 
+    @Column({ type: 'varchar', length: 10, nullable: true, default: 'true' })
+    act_recibe_visita: string;
+    
+    @Column({ type: 'varchar', length: 10, nullable: true, default: 'false' })
+    noFirmaActa: string;    
+    
+
     @BeforeInsert()
     async setDate() {
         this.act_creado = new Date();

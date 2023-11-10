@@ -1,4 +1,4 @@
-export class Verificacion {
+export class VerificacionDto {
     cri_ver_id?: number;
     cri_ver_nombre: string;
     cri_ver_verificacion: string;

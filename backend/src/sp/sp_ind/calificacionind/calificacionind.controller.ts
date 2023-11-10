@@ -11,10 +11,10 @@ export class CalificacionindController {
 
     //CREAR CALIFICACION
     @Post()
-    async create(@Body() payloads: { dto: CalificacionindDto, tokenDto: TokenDto }) {
-        const { dto, tokenDto } = payloads;
+    async create(@Body() payload: { dto: CalificacionindDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
         console.log(dto)
-        return this.calificacionindService.createCalificacion(payloads);
+        return this.calificacionindService.createCalificacion(payload);
     }
 
     //LISTAR CALIFICACION POR ID_CRITERIO Y ID_EVALUACIÓN

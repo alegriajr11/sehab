@@ -34,128 +34,40 @@
                 </div>
             </div>
         </div>
-        <form #f="ngForm" novalidate (ngSubmit)="onRegister()">
 
-            <div id="servicios">
-                <div class="row">
-                    <div class="col-sm-1">
-                        <label for="">Nro.</label>
-                        <input class="form-control" type="text" name="" id="" placeholder="Número...">
-                    </div>
-    
-                    <div class="col-sm-1">
-                        <label for="">Código</label>
-                        <input class="form-control" type="text" placeholder="Código...">
-                    </div>
-    
-                    <div class="col-sm-2">
-                        <label for="">Grupo</label>
-                        <input class="form-control" type="text" placeholder="Grupo...">
-                    </div>
-    
-                    <div class="col-sm-2">
-                        <label for="">Nombre Servicio</label>
-                        <input class="form-control" type="text" placeholder="Nombre Servicio...">
-                    </div>
-    
-                    <div class="col-sm-2">
-                        <label for="">Modalidad</label>
-                        <input class="form-control" type="text" placeholder="Modalidad...">
-                    </div>
-    
-                    <div class="col-sm-2">
-                        <label for="">Complejidad</label>
-                        <input class="form-control" type="text" placeholder="Complejidad...">
-                    </div>
-    
-                    <div class="col-sm-2">
-                        <label for="">No. Distintivo</label>
-                        <input class="form-control" type="text" placeholder="Distintivo...">
-                    </div>
-                </div>
-                <hr>
+        <table class="table table-wrapper table-hover">
+            <thead>
+                <th>No.</th>
+                <th>CODIGO</th>
+                <th>GRUPO</th>
+                <th>NOMBRE DE SERVICIO</th>
+                <th>MODALIDAD</th>
+                <th>COMPLEJIDAD</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>1.</strong></td>
+                    <td>304</td>
+                    <td>Consulta Externa</td>
+                    <td>Cirugía General</td>
+                    <td>Intramural</td>
+                    <td>Mediana</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+        <div class="table-title">
+            <div class="col-sm-12">
+                <h2><b>2. Capacidad Instalada:</b></h2>
+                <span id="eta_nombre"></span>
             </div>
+        </div>
 
 
+        <hr>
 
-            <div class="col-sm-12" style="padding-top: 1.4rem; padding-bottom: 3.4rem;">
-                <button id="button-add" class="btn-dark plus" title="Agregar Indicador" (click)="clonarDivServicios()"> <span
-                        class="size_span_plus">
-                        <i class='fas fa-plus-circle'></i>
-                    </span>
-                </button>
-                <hr>
-            </div>
-
-            <div class="table-title">
-                <div class="col-sm-12">
-                    <h2><b>2. Capacidad Instalada:</b></h2>
-                    <span id="eta_nombre"></span>
-                </div>
-            </div>
-
-            <div id="capacidad">
-                <div class="row">
-                    <div class="col-sm-1">
-                        <label for="">Grupo:</label>
-                        <input class="form-control" type="text" placeholder="Grupo...">
-                    </div>
-    
-                    <div class="col-sm-2">
-                        <label for="">Concepto:</label>
-                        <input class="form-control" type="text" placeholder="Concepto...">
-                    </div>
-    
-                    <div class="col-sm-2">
-                        <label for="">Inscritas:</label>
-                        <input class="form-control" type="number" placeholder="Inscritas...">
-                    </div>
-
-                    <div class="col-sm-2">
-                        <label for="">Observados:</label>
-                        <input class="form-control" type="number" placeholder="Observados...">
-                    </div>
-
-                    <div class="col-sm-2">
-                        <label for="">Placa:</label>
-                        <input class="form-control" type="number" placeholder="Placa...">
-                    </div>
-
-                    <div class="col-sm-2">
-                        <label for="">Modalidad:</label>
-                        <input class="form-control" type="text" placeholder="Modalidad...">
-                    </div>
-
-                    <div class="col-sm-3">
-                        <label for="">Modelo:</label>
-                        <input class="form-control" type="number" placeholder="Modelo...">
-                    </div>
-
-                    <div class="col-sm-3">
-                        <label for="">Tarjeta de Propiedad:</label>
-                        <input class="form-control" type="text" placeholder="Tarjeta Propiedad...">
-                    </div>
-                </div>
-
-            </div>
-
-            <hr>
-
-            <div class="col-sm-12" style="padding-top: 1.4rem; padding-bottom: 1rem;">
-                <button id="button-add" class="btn-dark plus" title="Agregar Indicador" (click)="clonarDivServicios()"> <span
-                        class="size_span_plus">
-                        <i class='fas fa-plus-circle'></i>
-                    </span>
-                </button>
-                <hr>
-            </div>
-
-            <div class="form-group">
-                <button class="btn btn-dark btn-block" type="submit" [disabled]="!f.valid">
-                    <i class='fa fa-plus-square'></i> Crear Servicio
-                </button>
-            </div>
-        </form>
 
     </div>
 </div>

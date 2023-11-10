@@ -1,4 +1,4 @@
-export class Implementacion {
+export class ImplementacionDto {
     cri_imp_id?: number;
     cri_imp_nombre: string;
     cri_imp_verificacion: string;

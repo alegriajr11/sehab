@@ -47,7 +47,6 @@ export class EvaluacionIndService {
 
     //criterio por acta
     async getallEvaActa(eva_id: number): Promise<EvaluacionIndependientesEntity[]> {
-
         const criterio = await this.evaluacionIndRepository.createQueryBuilder('evaluacion')
             .select(['evaluacion',  'eval_acta_ind.act_nombre_prestador','eval_acta_ind.act_nombre_funcionario', 
                     'eval_acta_ind.act_cargo_funcionario', 'eval_acta_ind.act_nombre_prestador'])

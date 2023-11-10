@@ -28,8 +28,8 @@ export class SedesPrestadorService {
   }
 
   //SOLICITUD LISTAR UNA SEDE SELECCIONADA
-  listaOneSede(sede_id: string): Observable<any> {
-    return this.httpClient.get<any>(this.sedeURL + sede_id)
+  listaOneSede(sede_id: string): Observable<SedesDto> {
+    return this.httpClient.get<SedesDto>(this.sedeURL + sede_id)
   }
 
   listaOneSedeByPrestador(pre_cod_habilitacion: string): Observable<SedesDto> {

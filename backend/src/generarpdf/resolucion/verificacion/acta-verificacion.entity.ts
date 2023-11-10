@@ -40,7 +40,7 @@ export class ActaVerificacionEntity {
     act_direccion: string;
 
     @Column({ type: 'varchar', length: 70, nullable: false })
-    act_clasificacion: string;
+    act_cargo_prestador: string;
 
     @Column({ type: 'varchar', length: 12, nullable: false })
     act_cod_habilitacion: string;

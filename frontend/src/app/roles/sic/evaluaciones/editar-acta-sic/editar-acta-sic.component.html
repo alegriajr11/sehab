@@ -2,7 +2,7 @@
 <div class="col">
     <div class="row">
         <div class="col-md-2">
-            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/sic/evaluaciones">
+            <button class="btn btn-light esp btn-circle btn-xl" (click)="volver()">
                 <i class="fa fa-reply fa-lg"></i>
             </button>
         </div>
@@ -52,8 +52,8 @@
                 <div class="col-md-3">
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy"
-                        name="act_fecha_inicial" [(ngModel)]="actaSic.act_fecha_inicial" [ngModelOptions]="{standalone: true}"
-                        ngDefaultControl (change)="habilitarFechaFinal()">
+                        name="act_fecha_inicial" [(ngModel)]="actaSic.act_fecha_inicial"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="habilitarFechaFinal()">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
@@ -70,16 +70,16 @@
                     <h3>INFORMACIÓN DEL PRESTADOR</h3>
                 </div>
 
-				<div class="col-12">
+                <div class="col-12">
                     <label for="mun_id" class="form-label">Municipio:</label>
-                    <input type="text" class="form-control" id="mun_id" placeholder="Municipio..." readonly name="mun_id"
-                        [(ngModel)]="actaSic.act_municipio">
+                    <input type="text" class="form-control" id="mun_id" placeholder="Municipio..." readonly
+                        name="mun_id" [(ngModel)]="actaSic.act_municipio">
                 </div>
 
-				<div class="col-12">
+                <div class="col-12">
                     <label for="mun_id" class="form-label">Prestador:</label>
-                    <input type="text" class="form-control" id="prestador" placeholder="Prestador..." readonly name="prestador"
-                        [(ngModel)]="actaSic.act_prestador">
+                    <input type="text" class="form-control" id="prestador" placeholder="Prestador..." readonly
+                        name="prestador" [(ngModel)]="actaSic.act_prestador">
                 </div>
 
                 <div class="col-6">
@@ -91,8 +91,8 @@
 
                 <div class="col-6">
                     <label for="direccion" class="form-label">Dirección:</label>
-                    <input type="text" class="form-control" id="act_direccion" placeholder="Dirección Prestador" readonly name="act_direccion" 
-					[(ngModel)]="actaSic.act_direccion">
+                    <input type="text" class="form-control" id="act_direccion" placeholder="Dirección Prestador"
+                        readonly name="act_direccion" [(ngModel)]="actaSic.act_direccion">
                 </div>
 
                 <div class="col-6">
@@ -103,21 +103,21 @@
 
                 <div class="col-6">
                     <label for="telefono" class="form-label">Telefono:</label>
-                    <input type="tel" class="form-control" id="telefono" placeholder="Telefono" readonly 
-					name="act_telefono" [(ngModel)]="actaSic.act_telefono">
+                    <input type="tel" class="form-control" id="telefono" placeholder="Telefono" readonly
+                        name="act_telefono" [(ngModel)]="actaSic.act_telefono">
                 </div>
 
                 <div class="col-12">
                     <label for="email" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="email" placeholder="E-mail" readonly
-					name="act_email" [(ngModel)]="actaSic.act_email">
+                    <input type="email" class="form-control" id="email" placeholder="E-mail" readonly name="act_email"
+                        [(ngModel)]="actaSic.act_email">
                 </div>
 
 
                 <div class="col-12">
                     <label for="sede_principal" class="form-label">Sede:</label>
-                    <input type="text" class="form-control" id="act_sede_principal" readonly
-					name="act_sede_principal" [(ngModel)]="actaSic.act_sede_principal">
+                    <input type="text" class="form-control" id="act_sede_principal" readonly name="act_sede_principal"
+                        [(ngModel)]="actaSic.act_sede_principal">
                 </div>
 
 
@@ -136,14 +136,14 @@
                 <div class="col-md-6">
                     <label for="" class="form-label">Representante Legal:</label>
                     <input type="text" class="form-control" id="repleg" placeholder="Representante Legal" readonly
-					name="act_representante" [(ngModel)]="actaSic.act_representante">
+                        name="act_representante" [(ngModel)]="actaSic.act_representante">
                 </div>
 
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Código Prestador:</label>
                     <input type="text" class="form-control" id="codpres" placeholder="Código Prestador" readonly
-					name="act_cod_prestador" [(ngModel)]="actaSic.act_cod_prestador">
+                        name="act_cod_prestador" [(ngModel)]="actaSic.act_cod_prestador">
                 </div>
 
                 <div class="col-md-6">
@@ -156,10 +156,10 @@
                     <hr class="medio">
                 </div>
 
-				<div class="col-12">
+                <div class="col-12">
                     <label for="inputAddress" class="form-label">Objeto de la Visita:</label>
-                    <input type="text" class="form-control" id="objVisita" readonly
-					name="objVisita" [(ngModel)]="actaSic.act_obj_visita">
+                    <input type="text" class="form-control" id="objVisita" readonly name="objVisita"
+                        [(ngModel)]="actaSic.act_obj_visita">
                 </div>
 
 
@@ -172,22 +172,22 @@
                 </div>
 
 
-				<div class="col-12" hidden>
+                <div class="col-12" hidden>
                     <label for="" class="form-label">ID Verificador SOGCS:</label>
-                    <input type="text" class="form-control" id="usu_id_secretaria" placeholder="Verificador SOGCS..." readonly
-					name="usu_id_secretaria" [(ngModel)]="actaSic.act_id_funcionario">
+                    <input type="text" class="form-control" id="usu_id_secretaria" placeholder="Verificador SOGCS..."
+                        readonly name="usu_id_secretaria" [(ngModel)]="actaSic.act_id_funcionario">
                 </div>
 
-				<div class="col-12">
+                <div class="col-12">
                     <label for="" class="form-label">Verificador SOGCS:</label>
-                    <input type="text" class="form-control" id="usu_secretaria" placeholder="Verificador SOGCS..." readonly
-					name="usu_secretaria" [(ngModel)]="actaSic.act_nombre_funcionario">
+                    <input type="text" class="form-control" id="usu_secretaria" placeholder="Verificador SOGCS..."
+                        readonly name="usu_secretaria" [(ngModel)]="actaSic.act_nombre_funcionario">
                 </div>
 
                 <div class="col-12">
                     <label for="" class="form-label">Cargo:</label>
                     <input type="text" class="form-control" id="cargoSecre" placeholder="Cargo Verificador..." readonly
-					name="act_cargo_funcionario" [(ngModel)]="actaSic.act_cargo_funcionario">
+                        name="act_cargo_funcionario" [(ngModel)]="actaSic.act_cargo_funcionario">
                 </div>
 
                 <div class="col-3" style="margin-bottom: 20px;" *ngIf="!actaSic.act_firma_funcionario">
@@ -203,7 +203,7 @@
                     <input type="text" class="form-control" id="nombrePrestador" name="act_nombre_prestador"
                         placeholder="Prestador..." [(ngModel)]="actaSic.act_nombre_prestador">
                 </div>
-                
+
 
                 <div class="col-12">
                     <label for="" class="form-label">Cargo:</label>
@@ -211,15 +211,21 @@
                         placeholder="Cargo..." [(ngModel)]="actaSic.act_cargo_prestador">
                 </div>
 
-                
+
                 <!--BOTON MODAL FIRMA-->
                 <div class="col-3">
-                    <span class="button-like btn-span" (click)="openModal(modalTemplate)">Firma Prestador</span>
+                    <span class="button-like btn-span" *ngIf="noFirmaActa === 'false' && !firma && act_recibe_visita === 'true'" (click)="openModal(modalTemplate)">Firma Prestador</span>
                 </div>
 
+                <!--BOTON NO FIRMA-->
+                <div class="col-3">
+                    <span class="button-like btn-span" *ngIf="noFirmaActa === 'false' && !firma && act_recibe_visita === 'true'" (click)="noFirmaPrestador()">No
+                        Firma Prestador</span>
+                </div>
 
                 <div class="col-12">
-                    <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit">
+                    <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar"
+                        type="submit">
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>

@@ -59,12 +59,14 @@ export class SicActaService {
             const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
                 .select(['acta'])
                 .where('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                .orderBy("CASE WHEN acta.act_estado = '1' THEN 0 ELSE 1 END, acta.act_estado")
                 .getMany()
             if (acta.length === 0) throw new NotFoundException(new MessageDto('No tienes evaluaciones asignadas'))
             return acta;
         } else {
             const acta = await this.acta_sic_pdfRepository.createQueryBuilder('acta')
                 .select(['acta'])
+                .orderBy("CASE WHEN acta.act_estado = '1' THEN 0 ELSE 1 END, acta.act_estado")
                 .getMany()
             if (acta.length === 0) throw new NotFoundException(new MessageDto('No hay evaluaciones asignadas'))
             return acta;
@@ -319,7 +321,6 @@ export class SicActaService {
 
         try {
             const acta = await this.findByActa(id);
-            console.log(acta)
 
             if (!acta) {
                 throw new NotFoundException(new MessageDto('El Acta no existe'));
@@ -392,6 +393,7 @@ export class SicActaService {
         dto.act_nombre_prestador ? acta.act_nombre_prestador = dto.act_nombre_prestador : acta.act_nombre_prestador = acta.act_nombre_prestador;
         dto.act_cargo_prestador ? acta.act_cargo_prestador = dto.act_cargo_prestador : acta.act_cargo_prestador = acta.act_cargo_prestador;
         dto.act_firma_prestador ? acta.act_firma_prestador = dto.act_firma_prestador : acta.act_firma_prestador = acta.act_firma_prestador;
+        dto.noFirmaActa ? acta.noFirmaActa = dto.noFirmaActa : acta.noFirmaActa = acta.noFirmaActa = acta.noFirmaActa;
 
 
         const usuario = await this.jwtService.decode(tokenDto.token);
@@ -547,7 +549,7 @@ export class SicActaService {
 
 
             doc.text(nombreprestador)
-            console.log(nombreprestador)
+
             // Agregar las tablas a las páginas
             if (cumplimiento.length) {
                 let rows_elements = [];

@@ -143,7 +143,7 @@ import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.m
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
         logging: false 
-      
+        
       }),
       inject: [ConfigService],
     }),

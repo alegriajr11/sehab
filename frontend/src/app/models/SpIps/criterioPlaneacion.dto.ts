@@ -1,4 +1,4 @@
-export class Planeacion {
+export class PlaneacionDto {
     cri_pla_id?: number;
     cri_pla_nombre: string;
     cri_pla_verificacion: string;

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Ajuste } from 'src/app/models/SpIps/criterioAjuste.dto';
+import { AjusteDto } from 'src/app/models/SpIps/criterioAjuste.dto';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -19,12 +19,13 @@ export class AjusteService {
   constructor(private httpClient: HttpClient) { }
 
 
-  public listaAjuste(id: string): Observable<Ajuste[]>{
-    return this.httpClient.get<Ajuste[]>(this.ajusteURL + id)
+  //LISTAR CRITERIOS POR ID EVALUACION
+  public listaAjuste(id: number): Observable<AjusteDto[]>{
+    return this.httpClient.get<AjusteDto[]>(this.ajusteURL + id)
   }
 
-  public detail(id: number): Observable<Ajuste> {
-    return this.httpClient.get<Ajuste>(`${this.ajusteDetailURL}${id}`);
+  public detail(id: number): Observable<AjusteDto> {
+    return this.httpClient.get<AjusteDto>(`${this.ajusteDetailURL}${id}`);
   }
 
   public delete(id: number): Observable<any> {
@@ -32,7 +33,7 @@ export class AjusteService {
   }
 
   
-  public update(id: number, criterio: Ajuste): Observable<any> {
+  public update(id: number, criterio: AjusteDto): Observable<any> {
     return this.httpClient.put<any>(`${this.ajusteURL}${id}`, criterio);
   }
 }

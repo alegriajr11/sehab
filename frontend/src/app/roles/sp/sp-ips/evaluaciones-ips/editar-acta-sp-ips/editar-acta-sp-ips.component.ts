@@ -29,6 +29,12 @@ export class EditarActaSpIpsComponent {
 
   //Habilitar la Fecha Final
   habilitarfechaFin = false;
+  act_nombre_prestador: string
+
+  //HABILITAR FIRMA
+  acta_firmada: boolean = true;
+  //NO FIRMA ACTA
+  noFirmaActa: string = 'false';
 
   //MODAL
   public modalRef: BsModalRef;
@@ -55,6 +61,8 @@ export class EditarActaSpIpsComponent {
     this.actaPdfService.oneActaSpIps(id).subscribe(
       data => {
         this.actaSp = data;
+        this.act_nombre_prestador = data.act_nombre_prestador
+        this.noFirmaActa = data.noFirmaActa
       },
       err => {
         this.toastr.error(err.error.message, 'Fail', {
@@ -91,6 +99,32 @@ export class EditarActaSpIpsComponent {
 
     );
   }
+
+    //METODO CONTROLAR SI EL PRESTADOR NO FIRMA EL ACTA POR ENDE EL ACOMPAÑANTE TAMPOCO
+    noFirmaPrestador() {
+      Swal.fire({
+        title: `No firma el acta.`,
+        text: `¿Estás seguro de que ${this.act_nombre_prestador} no desea firmar el Acta?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.value) {
+          this.noFirmaActa = 'true'
+          //SOLICITUD NO FIRMA ACTA EN TRUE A LA ENTIDAD ACTA
+          this.actaSp.noFirmaActa = this.noFirmaActa
+        }
+        else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+            '',
+            'error'
+          );
+        }
+      })
+    }
+  
 
   habilitarFechaFinal() {
     this.habilitarfechaFin = true;
@@ -185,6 +219,8 @@ export class EditarActaSpIpsComponent {
       }
     }
   }
+
+  
 
 
   onUpdate(): void {
@@ -294,5 +330,11 @@ export class EditarActaSpIpsComponent {
     this.toastr.error(errorMessage, 'Fail', {
       timeOut: 3000, positionClass: 'toast-top-center',
     });
+  }
+
+  volver() {
+    this.router.navigate(['/sp/evaluaciones-ips'])
+    // Remover el item
+    localStorage.removeItem('boton-editar-acta-sp-ips');
   }
 }

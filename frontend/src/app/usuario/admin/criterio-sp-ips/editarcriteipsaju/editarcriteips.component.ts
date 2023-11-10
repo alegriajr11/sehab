@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Ajuste } from 'src/app/models/SpIps/criterioAjuste.dto';
+import { AjusteDto } from 'src/app/models/SpIps/criterioAjuste.dto';
 import { AjusteService } from 'src/app/services/SpIps/ajuste.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { AjusteService } from 'src/app/services/SpIps/ajuste.service';
 })
 export class EditarcriteipsComponent implements OnInit {
 
-  criterioAjus: Ajuste = null
+  criterioAjus: AjusteDto = null
 
   constructor(
     private ajusteService: AjusteService,
