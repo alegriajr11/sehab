@@ -18,7 +18,7 @@ export class ConceptoResEntity {
     cumplimientohab: CumplimientoHabilitacionEntity;
 
 
-    @ManyToMany(type => ActaVerificacionEntity, acta_verificacion => acta_verificacion.acta_verificacion_condiciones, { eager: true })
+    @ManyToMany(type => ActaVerificacionEntity, acta_verificacion => acta_verificacion.acta_verificacion_concepto3100, { eager: true })
     @JoinTable({
         name: 'concept_acta_verificacion',
         joinColumn: { name: 'conc_acta_id' },

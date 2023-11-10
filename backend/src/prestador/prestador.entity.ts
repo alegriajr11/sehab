@@ -10,6 +10,7 @@ import { EvaluacionIndependientesEntity } from "src/sp/sp_ind/evaluacion-indepen
 import { EvaluacionSicEntity } from "src/sic/evaluacionsic.entity";
 import { SedeEntity } from "./sede/sede.entity";
 import { EvaluacionipsCreadasEntity } from "src/sp/sp_ips/evaluacion_ips_creada.entity";
+import { ServiciosVerificadosEntity } from "src/resolucion/servicios_capacidad/servicios_verificados.entity";
 
 
 
@@ -79,5 +80,7 @@ export class PrestadorEntity {
     @OneToMany(type => CapacidadInstaladaEntity, capacidad_instalada => capacidad_instalada.prestadores)
     capacidad_instalada: CapacidadInstaladaEntity
 
-
+    //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
+    @OneToMany(type => ServiciosVerificadosEntity, servicios_verf => servicios_verf.prestadores)
+    servicios_verificados: ServiciosVerificadosEntity
 }

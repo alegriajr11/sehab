@@ -11,6 +11,7 @@ export class EvaluacionResEntity {
     eva_creado: Date;
 
 
+    //RELACION ONE TO ONE EVALUACION CON ACTA VERIFICACION
     @OneToOne(() => ActaVerificacionEntity, actaVerificacion => actaVerificacion.act_eval_veri)
     @JoinColumn()
     eval_acta_veri: ActaVerificacionEntity;

@@ -3,6 +3,8 @@ import { UsuarioEntity } from "src/usuario/usuario.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 import { ProfesionalApoyoEntity } from "../profesional/profesional.entity";
 import { DatosVisitVErificadoEntity } from "../visita-verificacion/datos-visit-verificado.entity";
+import { ConceptoResEntity } from "src/resolucion/requisitos_condiciones_habilitacion/concepto_res.entity";
+import { EvaluacionResEntity } from "src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity";
 
 @Entity({ name: 'acta-verificacion' })
 export class ActaVerificacionEntity {
@@ -107,6 +109,12 @@ export class ActaVerificacionEntity {
     verificacion_usuario: UsuarioEntity[];
 
     @ManyToMany(type => ProfesionalApoyoEntity, profecional => profecional.profesional_verificacion)
-    verificacion_profecional: ProfesionalApoyoEntity;
+    verificacion_profesional: ProfesionalApoyoEntity;
 
+    @ManyToMany(type => ConceptoResEntity, concepto_resolucion_codiciones => concepto_resolucion_codiciones.concepto3100_acta_verificacion)
+    acta_verificacion_concepto3100: ConceptoResEntity;
+
+    //Relacion UNO a UNO EVALUACION VERIFICACION - ACTA VERIFICACION
+    @OneToOne(() => EvaluacionResEntity, evaluacion_verificacion => evaluacion_verificacion.eval_acta_veri)
+    act_eval_veri: EvaluacionResEntity;
 }
