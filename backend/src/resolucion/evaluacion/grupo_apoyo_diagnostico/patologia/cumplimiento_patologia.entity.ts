@@ -28,11 +28,6 @@ export class CumplimientoPatologiaEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_pato_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO PATOLOGIA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimiento_patologia)
-    prestador: PrestadorEntity
-    
-
     @OneToOne(() => CriterioPatologiaEntity)
     @JoinColumn()
     criterio_patologia: CriterioPatologiaEntity

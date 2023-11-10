@@ -28,9 +28,6 @@ export class CumplimientoTranspAsistencialEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_trans_asis_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO TRANSPORTE_ASISTENCIAL - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_transp_asistencial)
-    prestador: PrestadorEntity
     
 
     @OneToOne(() => CriterioTranspAsistencialEntity)

@@ -148,8 +148,6 @@ export class CriterioHospitalizacionService {
             dto.crihosp_modalidad ? criterio_hospitalizacion.crihosp_modalidad = dto.crihosp_modalidad : criterio_hospitalizacion.crihosp_modalidad = criterio_hospitalizacion.crihosp_modalidad;
             dto.crihosp_complejidad ? criterio_hospitalizacion.crihosp_complejidad = dto.crihosp_complejidad : criterio_hospitalizacion.crihosp_complejidad = criterio_hospitalizacion.crihosp_complejidad;
             criterio_hospitalizacion.crihosp_articulo = dto.crihosp_articulo !== undefined ? dto.crihosp_articulo : "";
-            criterio_hospitalizacion.crihosp_seccion = dto.crihosp_seccion !== undefined ? dto.crihosp_seccion : "";
-            criterio_hospitalizacion.crihosp_apartado = dto.crihosp_apartado !== undefined ? dto.crihosp_apartado : "";
             dto.crihosp_nombre_criterio ? criterio_hospitalizacion.crihosp_nombre_criterio = dto.crihosp_nombre_criterio : criterio_hospitalizacion.crihosp_nombre_criterio = criterio_hospitalizacion.crihosp_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

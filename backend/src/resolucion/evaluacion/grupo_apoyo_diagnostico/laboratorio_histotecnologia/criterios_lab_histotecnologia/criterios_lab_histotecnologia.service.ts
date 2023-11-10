@@ -149,8 +149,6 @@ export class CriteriosLabHistotecnologiaService {
             dto.cri_lab_histo_modalidad ? criterio_lab_histotec.cri_lab_histo_modalidad = dto.cri_lab_histo_modalidad : criterio_lab_histotec.cri_lab_histo_modalidad = criterio_lab_histotec.cri_lab_histo_modalidad;
             dto.cri_lab_histo_complejidad ? criterio_lab_histotec.cri_lab_histo_complejidad = dto.cri_lab_histo_complejidad : criterio_lab_histotec.cri_lab_histo_complejidad = criterio_lab_histotec.cri_lab_histo_complejidad;
             criterio_lab_histotec.cri_lab_histo_articulo = dto.cri_lab_histo_articulo !== undefined ? dto.cri_lab_histo_articulo : "";
-            criterio_lab_histotec.cri_lab_histo_seccion = dto.cri_lab_histo_seccion !== undefined ? dto.cri_lab_histo_seccion : "";
-            criterio_lab_histotec.cri_lab_histo_apartado = dto.cri_lab_histo_apartado !== undefined ? dto.cri_lab_histo_apartado : "";
             dto.cri_lab_histo_nombre_criterio ? criterio_lab_histotec.cri_lab_histo_nombre_criterio = dto.cri_lab_histo_nombre_criterio : criterio_lab_histotec.cri_lab_histo_nombre_criterio = criterio_lab_histotec.cri_lab_histo_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

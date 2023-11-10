@@ -148,8 +148,6 @@ export class CriteriosMuesCuelloService {
             dto.cri_cuel_ute_modalidad ? criterio_mue_cuello_ute.cri_cuel_ute_modalidad = dto.cri_cuel_ute_modalidad : criterio_mue_cuello_ute.cri_cuel_ute_modalidad = criterio_mue_cuello_ute.cri_cuel_ute_modalidad;
             dto.cri_cuel_ute_complejidad ? criterio_mue_cuello_ute.cri_cuel_ute_complejidad = dto.cri_cuel_ute_complejidad : criterio_mue_cuello_ute.cri_cuel_ute_complejidad = criterio_mue_cuello_ute.cri_cuel_ute_complejidad;
             criterio_mue_cuello_ute.cri_cuel_ute_articulo = dto.cri_cuel_ute_articulo !== undefined ? dto.cri_cuel_ute_articulo : "";
-            criterio_mue_cuello_ute.cri_cuel_ute_seccion = dto.cri_cuel_ute_seccion !== undefined ? dto.cri_cuel_ute_seccion : "";
-            criterio_mue_cuello_ute.cri_cuel_ute_apartado = dto.cri_cuel_ute_apartado !== undefined ? dto.cri_cuel_ute_apartado : "";
             dto.cri_cuel_ute_nombre_criterio ? criterio_mue_cuello_ute.cri_cuel_ute_nombre_criterio = dto.cri_cuel_ute_nombre_criterio : criterio_mue_cuello_ute.cri_cuel_ute_nombre_criterio = criterio_mue_cuello_ute.cri_cuel_ute_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

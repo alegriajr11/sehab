@@ -149,8 +149,6 @@ export class CriteriosTomMuestrasService {
             dto.cri_muest_cli_modalidad ? criterio_tom_muestras.cri_muest_cli_modalidad = dto.cri_muest_cli_modalidad : criterio_tom_muestras.cri_muest_cli_modalidad = criterio_tom_muestras.cri_muest_cli_modalidad;
             dto.cri_muest_cli_complejidad ? criterio_tom_muestras.cri_muest_cli_complejidad = dto.cri_muest_cli_complejidad : criterio_tom_muestras.cri_muest_cli_complejidad = criterio_tom_muestras.cri_muest_cli_complejidad;
             criterio_tom_muestras.cri_muest_cli_articulo = dto.cri_muest_cli_articulo !== undefined ? dto.cri_muest_cli_articulo : "";
-            criterio_tom_muestras.cri_muest_cli_seccion = dto.cri_muest_cli_seccion !== undefined ? dto.cri_muest_cli_seccion : "";
-            criterio_tom_muestras.cri_muest_cli_apartado = dto.cri_muest_cli_apartado !== undefined ? dto.cri_muest_cli_apartado : "";
             dto.cri_muest_cli_nombre_criterio ? criterio_tom_muestras.cri_muest_cli_nombre_criterio = dto.cri_muest_cli_nombre_criterio : criterio_tom_muestras.cri_muest_cli_nombre_criterio = criterio_tom_muestras.cri_muest_cli_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

@@ -146,8 +146,6 @@ export class CriteriosUrgenciasService {
             dto.criurge_modalidad ? criterio_urgencias.criurge_modalidad = dto.criurge_modalidad : criterio_urgencias.criurge_modalidad = criterio_urgencias.criurge_modalidad;
             dto.criurge_complejidad ? criterio_urgencias.criurge_complejidad = dto.criurge_complejidad : criterio_urgencias.criurge_complejidad = criterio_urgencias.criurge_complejidad;
             criterio_urgencias.criurge_articulo = dto.criurge_articulo !== undefined ? dto.criurge_articulo : "";
-            criterio_urgencias.criurge_seccion = dto.criurge_seccion !== undefined ? dto.criurge_seccion : "";
-            criterio_urgencias.criurge_apartado = dto.criurge_apartado !== undefined ? dto.criurge_apartado : "";
             dto.criurge_nombre_criterio ? criterio_urgencias.criurge_nombre_criterio = dto.criurge_nombre_criterio : criterio_urgencias.criurge_nombre_criterio = criterio_urgencias.criurge_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

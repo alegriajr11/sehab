@@ -28,10 +28,6 @@ export class CumplimientoUrgenciasEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_urge_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO URGENCIAS - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_urgencias)
-    prestador: PrestadorEntity
-    
 
     @OneToOne(() => CriterioUrgenciasEntity)
     @JoinColumn()

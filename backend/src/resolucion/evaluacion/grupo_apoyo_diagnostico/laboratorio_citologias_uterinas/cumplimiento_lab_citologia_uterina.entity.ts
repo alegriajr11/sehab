@@ -28,10 +28,7 @@ export class CumplimientoLabUterinaEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_labuter_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLOMIENTO LAB_CITOLOGIA UTERINA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_lab_cit_uterina)
-    prestador: PrestadorEntity
-    
+
 
     @OneToOne(() => CriterioLabUterinaEntity)
     @JoinColumn()

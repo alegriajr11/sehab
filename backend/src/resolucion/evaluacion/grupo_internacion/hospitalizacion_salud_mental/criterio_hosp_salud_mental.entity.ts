@@ -1,6 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { HospitalizacionMentalEntity } from "./hosp_salud_mental.entity";
+import { SeccionEntity } from "../../seccion-apartado/seccion.entity";
+import { ApartadoEntity } from "../../seccion-apartado/apartado.entity";
+import { CumplimientoHospitalizacionMentalEntity } from "./cumplimiento_hosp_salud_mental.entity";
 
 
 
@@ -18,12 +21,6 @@ export class CriterioHospitalizacionMentalEntity {
     @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
     crihosp_ment_articulo: string;
 
-    @Column({ type: 'varchar', length: 3, nullable: true, unique: false })
-    crihosp_ment_seccion: string;
-
-    @Column({ type: 'varchar', length: 10, nullable: true, unique: false })
-    crihosp_ment_apartado: string;
-
     @Column({ type: 'varchar', length: 700, nullable: true, unique: false })
     crihosp_ment_nombre_criterio: string;
 
@@ -32,5 +29,15 @@ export class CriterioHospitalizacionMentalEntity {
     @ManyToOne(type => HospitalizacionMentalEntity,  hospitalizacion_mental=> hospitalizacion_mental.criterios_hospitalizacion_mental)
     hospitalizacion_mental: HospitalizacionMentalEntity;
 
+    //RELACION ONTE TO ONE CRITERIOS HOSPITALIZACION_MENTAL A CUMPLIMIENTO HOSPITALIZACION_MENTAL
+    @OneToOne(() => CumplimientoHospitalizacionMentalEntity, cumplimiento => cumplimiento.criterio_hospitalizacion_mental)
+    cumplimiento: CumplimientoHospitalizacionMentalEntity;
 
+    //Relacion MUCHOS a UNO CRITERIOS  HOSPITALIZACION_MENTAL - SECCION
+    @ManyToOne(type => SeccionEntity, seccion => seccion.seccion_hosp_salud_men)
+    hosp_salud_men_seccion: SeccionEntity;
+
+    //Relacion MUCHOS a UNO CRITERIOS  HOSPITALIZACION_MENTAL - APARTADO
+    @ManyToOne(type => ApartadoEntity, apartado => apartado.apartado_hosp_salud_men)
+    hosp_salud_men_aparto: ApartadoEntity;
 }

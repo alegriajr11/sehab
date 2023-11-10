@@ -28,10 +28,6 @@ export class CumplimientoRadOdontologicaEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_rad_odont_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO RADIOLOGIA_ODONTOLOGICA - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_rad_odtontologica)
-    prestador: PrestadorEntity
-    
 
     @OneToOne(() => CriterioRadiologiaOdontoEntity)
     @JoinColumn()

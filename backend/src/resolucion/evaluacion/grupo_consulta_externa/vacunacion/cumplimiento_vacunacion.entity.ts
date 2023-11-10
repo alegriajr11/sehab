@@ -28,10 +28,7 @@ export class CumplimientoVacunacionEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_vac_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO VACUNACION - PRESTAOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cump_vacunacion)
-    prestador: PrestadorEntity
-    
+
 
     @OneToOne(() => CriterioVacunacionEntity)
     @JoinColumn()

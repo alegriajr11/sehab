@@ -119,9 +119,6 @@ export class PrestadorEntity {
     @OneToMany(type => EvaluacionSicEntity, evaluacionSic => evaluacionSic.eval_sic_prestator)
     prestator_eval_sic: EvaluacionSicEntity;
 
-    //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
-    @OneToMany(type => ServiciosVerificadosEntity, servicios_verf => servicios_verf.prestadores)
-    servicios_verificados: ServiciosVerificadosEntity
 
     //Relacion Uno a Muchos PRESTADORES - CAPACIDAD INSTALADA
     @OneToMany(type => CapacidadInstaladaEntity, capacidad_instalada => capacidad_instalada.prestadores)
@@ -306,8 +303,4 @@ export class PrestadorEntity {
     //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO HOSPITALIZACION
     @OneToMany(type => CumplimientoHospitalizacionEntity, cump_hospitalizacion => cump_hospitalizacion.prestador)
     cump_hospitalizacion: CumplimientoHospitalizacionEntity
-
-
-
-
 }

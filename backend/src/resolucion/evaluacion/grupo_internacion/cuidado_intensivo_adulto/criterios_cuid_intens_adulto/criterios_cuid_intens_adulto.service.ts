@@ -147,8 +147,6 @@ export class CriteriosCuidIntensAdultoService {
             dto.cri_int_adult_modalidad ? criterio_cuid_intens_adulto.cri_int_adult_modalidad = dto.cri_int_adult_modalidad : criterio_cuid_intens_adulto.cri_int_adult_modalidad = criterio_cuid_intens_adulto.cri_int_adult_modalidad;
             dto.cri_int_adult_complejidad ? criterio_cuid_intens_adulto.cri_int_adult_complejidad = dto.cri_int_adult_complejidad : criterio_cuid_intens_adulto.cri_int_adult_complejidad = criterio_cuid_intens_adulto.cri_int_adult_complejidad;
             criterio_cuid_intens_adulto.cri_int_adult_articulo = dto.cri_int_adult_articulo !== undefined ? dto.cri_int_adult_articulo : "";
-            criterio_cuid_intens_adulto.cri_int_adult_seccion = dto.cri_int_adult_seccion !== undefined ? dto.cri_int_adult_seccion : "";
-            criterio_cuid_intens_adulto.cri_int_adult_apartado = dto.cri_int_adult_apartado !== undefined ? dto.cri_int_adult_apartado : "";
             dto.cri_int_adult_nombre_criterio ? criterio_cuid_intens_adulto.cri_int_adult_nombre_criterio = dto.cri_int_adult_nombre_criterio : criterio_cuid_intens_adulto.cri_int_adult_nombre_criterio = criterio_cuid_intens_adulto.cri_int_adult_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

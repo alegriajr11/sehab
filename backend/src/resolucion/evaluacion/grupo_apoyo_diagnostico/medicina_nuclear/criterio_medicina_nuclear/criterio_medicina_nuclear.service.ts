@@ -147,8 +147,6 @@ export class CriterioMedicinaNuclearService {
             dto.crimed_nucl_modalidad ? criterio_medicina_nuclear.crimed_nucl_modalidad = dto.crimed_nucl_modalidad : criterio_medicina_nuclear.crimed_nucl_modalidad = criterio_medicina_nuclear.crimed_nucl_modalidad;
             dto.crimed_nucl_complejidad ? criterio_medicina_nuclear.crimed_nucl_complejidad = dto.crimed_nucl_complejidad : criterio_medicina_nuclear.crimed_nucl_complejidad = criterio_medicina_nuclear.crimed_nucl_complejidad;
             criterio_medicina_nuclear.crimed_nucl_articulo = dto.crimed_nucl_articulo !== undefined ? dto.crimed_nucl_articulo : "";
-            criterio_medicina_nuclear.crimed_nucl_seccion = dto.crimed_nucl_seccion !== undefined ? dto.crimed_nucl_seccion : "";
-            criterio_medicina_nuclear.crimed_nucl_apartado = dto.crimed_nucl_apartado !== undefined ? dto.crimed_nucl_apartado : "";
             dto.crimed_nucl_nombre_criterio ? criterio_medicina_nuclear.crimed_nucl_nombre_criterio = dto.crimed_nucl_nombre_criterio : criterio_medicina_nuclear.crimed_nucl_nombre_criterio = criterio_medicina_nuclear.crimed_nucl_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

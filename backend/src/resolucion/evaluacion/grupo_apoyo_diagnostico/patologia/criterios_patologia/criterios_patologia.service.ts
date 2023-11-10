@@ -148,8 +148,6 @@ export class CriteriosPatologiaService {
             dto.cripat_modalidad ? criterio_patologia.cripat_modalidad = dto.cripat_modalidad : criterio_patologia.cripat_modalidad = criterio_patologia.cripat_modalidad;
             dto.cripat_complejidad ? criterio_patologia.cripat_complejidad = dto.cripat_complejidad : criterio_patologia.cripat_complejidad = criterio_patologia.cripat_complejidad;
             criterio_patologia.cripat_articulo = dto.cripat_articulo !== undefined ? dto.cripat_articulo : "";
-            criterio_patologia.cripat_seccion = dto.cripat_seccion !== undefined ? dto.cripat_seccion : "";
-            criterio_patologia.cripat_apartado = dto.cripat_apartado !== undefined ? dto.cripat_apartado : "";
             dto.cripat_nombre_criterio ? criterio_patologia.cripat_nombre_criterio = dto.cripat_nombre_criterio : criterio_patologia.cripat_nombre_criterio = criterio_patologia.cripat_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

@@ -150,8 +150,6 @@ export class CriteriosCuidInterAdultoService {
             dto.cri_inter_adult_modalidad ? criterio_cuid_inter_adulto.cri_inter_adult_modalidad = dto.cri_inter_adult_modalidad : criterio_cuid_inter_adulto.cri_inter_adult_modalidad = criterio_cuid_inter_adulto.cri_inter_adult_modalidad;
             dto.cri_inter_adult_complejidad ? criterio_cuid_inter_adulto.cri_inter_adult_complejidad = dto.cri_inter_adult_complejidad : criterio_cuid_inter_adulto.cri_inter_adult_complejidad = criterio_cuid_inter_adulto.cri_inter_adult_complejidad;
             criterio_cuid_inter_adulto.cri_inter_adult_articulo = dto.cri_inter_adult_articulo !== undefined ? dto.cri_inter_adult_articulo : "";
-            criterio_cuid_inter_adulto.cri_inter_adult_seccion = dto.cri_inter_adult_seccion !== undefined ? dto.cri_inter_adult_seccion : "";
-            criterio_cuid_inter_adulto.cri_inter_adult_apartado = dto.cri_inter_adult_apartado !== undefined ? dto.cri_inter_adult_apartado : "";
             dto.cri_inter_adult_nombre_criterio ? criterio_cuid_inter_adulto.cri_inter_adult_nombre_criterio = dto.cri_inter_adult_nombre_criterio : criterio_cuid_inter_adulto.cri_inter_adult_nombre_criterio = criterio_cuid_inter_adulto.cri_inter_adult_nombre_criterio;
 
             const usuario = await this.jwtService.decode(tokenDto.token);

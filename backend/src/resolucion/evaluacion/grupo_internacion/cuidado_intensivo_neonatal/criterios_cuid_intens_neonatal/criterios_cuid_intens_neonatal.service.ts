@@ -148,8 +148,6 @@ export class CriteriosCuidIntensNeonatalService {
             dto.cri_neona_modalidad ? criterio_cuid_intens_neo.cri_neona_modalidad = dto.cri_neona_modalidad : criterio_cuid_intens_neo.cri_neona_modalidad = criterio_cuid_intens_neo.cri_neona_modalidad;
             dto.cri_neona_complejidad ? criterio_cuid_intens_neo.cri_neona_complejidad = dto.cri_neona_complejidad : criterio_cuid_intens_neo.cri_neona_complejidad = criterio_cuid_intens_neo.cri_neona_complejidad;
             criterio_cuid_intens_neo.cri_neona_articulo = dto.cri_neona_articulo !== undefined ? dto.cri_neona_articulo : "";
-            criterio_cuid_intens_neo.cri_neona_seccion = dto.cri_neona_seccion !== undefined ? dto.cri_neona_seccion : "";
-            criterio_cuid_intens_neo.cri_neona_apartado = dto.cri_neona_apartado !== undefined ? dto.cri_neona_apartado : "";
             dto.cri_neona_nombre_criterio ? criterio_cuid_intens_neo.cri_neona_nombre_criterio = dto.cri_neona_nombre_criterio : criterio_cuid_intens_neo.cri_neona_nombre_criterio = criterio_cuid_intens_neo.cri_neona_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

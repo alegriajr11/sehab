@@ -29,11 +29,6 @@ export class CumplimientoCirugiaEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_ciru_fecha_limite: string;
 
-
-    //Relación MUCHOS a UNO CUMPLIMIENTO_CIRUGIA - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cumplimineto_cirugia)
-    prestador: PrestadorEntity
-
    //relacion OneToOne de  cumplimiento a criterios cirugia  
     @OneToOne(() => CriterioCirugiaEntity)
     @JoinColumn()

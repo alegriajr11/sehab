@@ -149,8 +149,6 @@ export class CriteriosVacunacionService {
             dto.crivac_modalidad ? criterio_vacunacion.crivac_modalidad = dto.crivac_modalidad : criterio_vacunacion.crivac_modalidad = criterio_vacunacion.crivac_modalidad;
             dto.crivac_complejidad ? criterio_vacunacion.crivac_complejidad = dto.crivac_complejidad : criterio_vacunacion.crivac_complejidad = criterio_vacunacion.crivac_complejidad;
             criterio_vacunacion.crivac_articulo = dto.crivac_articulo !== undefined ? dto.crivac_articulo : "";
-            criterio_vacunacion.crivac_seccion = dto.crivac_seccion !== undefined ? dto.crivac_seccion : "";
-            criterio_vacunacion.crivac_apartado = dto.crivac_apartado !== undefined ? dto.crivac_apartado : "";
             dto.crivac_nombre_criterio ? criterio_vacunacion.crivac_nombre_criterio = dto.crivac_nombre_criterio : criterio_vacunacion.crivac_nombre_criterio = criterio_vacunacion.crivac_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

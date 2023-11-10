@@ -150,8 +150,6 @@ export class CriterioRadioterapiaService {
             dto.crirad_ter_modalidad ? criterio_radioterapia.crirad_ter_modalidad = dto.crirad_ter_modalidad : criterio_radioterapia.crirad_ter_modalidad = criterio_radioterapia.crirad_ter_modalidad;
             dto.crirad_ter_complejidad ? criterio_radioterapia.crirad_ter_complejidad = dto.crirad_ter_complejidad : criterio_radioterapia.crirad_ter_complejidad = criterio_radioterapia.crirad_ter_complejidad;
             criterio_radioterapia.crirad_ter_articulo = dto.crirad_ter_articulo !== undefined ? dto.crirad_ter_articulo : "";
-            criterio_radioterapia.crirad_ter_seccion = dto.crirad_ter_seccion !== undefined ? dto.crirad_ter_seccion : "";
-            criterio_radioterapia.crirad_ter_apartado = dto.crirad_ter_apartado !== undefined ? dto.crirad_ter_apartado : "";
             dto.crirad_ter_nombre_criterio ? criterio_radioterapia.crirad_ter_nombre_criterio = dto.crirad_ter_nombre_criterio : criterio_radioterapia.crirad_ter_nombre_criterio = criterio_radioterapia.crirad_ter_nombre_criterio;
     
             const usuario = await this.jwtService.decode(tokenDto.token);

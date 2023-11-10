@@ -28,10 +28,6 @@ export class CumplimientoLabClinicoEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_labclin_fecha_limite: string;
 
-    //Relación MUCHOS a UNO CUMPLIMIENTO LAB_CLINICO - PRESTADOR
-    @ManyToOne(type => PrestadorEntity, prestador => prestador.cum_lab_clinico)
-    prestador: PrestadorEntity
-    
 
     @OneToOne(() => CriterioLabClinicoEntity)
     @JoinColumn()

@@ -9,16 +9,10 @@ export class CapacidadInstaladaEntity {
     cap_id: number;
 
     @Column({ type: 'varchar', length: 20, nullable: false, unique: false })
-    cap_grupo: string;
+    cap_grupo_nombre: string;
     
     @Column({ type: 'varchar', length: 20, nullable: false, unique: false })
-    cap_concepto: string;
-
-    @Column({ type: 'varchar', length: 3, nullable: false, unique: false })
-    cap_inscritas: string;
-
-    @Column({ type: 'varchar', length: 3, nullable: false, unique: false })
-    cap_observados: string;
+    cap_tipo: string;
     
     @Column({ type: 'varchar', length: 8, nullable: false, unique: false })
     cap_num_placa: string;
