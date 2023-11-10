@@ -10,4 +10,7 @@ export class DatosVerificadosDto {
 
     @IsString()
     act_correo: string
+
+    @IsString()
+    act_observaciones: string
 }

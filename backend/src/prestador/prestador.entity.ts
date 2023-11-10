@@ -11,6 +11,7 @@ import { EvaluacionSicEntity } from "src/sic/evaluacionsic.entity";
 import { SedeEntity } from "./sede/sede.entity";
 import { EvaluacionipsCreadasEntity } from "src/sp/sp_ips/evaluacion_ips_creada.entity";
 import { ServiciosVerificadosEntity } from "src/resolucion/servicios_capacidad/servicios_verificados.entity";
+import { EvaluacionResVerificacionEntity } from "src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity";
 
 
 
@@ -83,4 +84,9 @@ export class PrestadorEntity {
     //Relacion Uno a Muchos PRESTADORES - SERVICIOS VERIFICADOS
     @OneToMany(type => ServiciosVerificadosEntity, servicios_verf => servicios_verf.prestadores)
     servicios_verificados: ServiciosVerificadosEntity
+
+    //Relacion Uno a Muchos PRESTADORES - EVALUACION-RESOLUCION-VERIFICACION
+    @OneToMany(type => EvaluacionResVerificacionEntity, evaluacionVerificacion => evaluacionVerificacion.eval_verificacion_prestador)
+    eval_prestador_verificacion: EvaluacionResVerificacionEntity
+    
 }

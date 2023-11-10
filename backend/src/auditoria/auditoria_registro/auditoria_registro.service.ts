@@ -212,11 +212,32 @@ export class AuditoriaRegistroService {
         pre_nombre: string,
         pre_cod_habilitacion,
     ): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Pamec Acta  con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta Pamec con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
         await this.logActivity(
             usu_nombre,
             usu_apellido,
             'Creación Acta Pamec',
+            details,
+            direccionIp,
+        );
+    }
+
+    /*ACTAS - RESOLUCIÓN VERIFICACION*/
+    //CONTROLAR LA CREACIÓN DE ACTA-VERIFICACION
+    async logCreateActaVerificacion(
+        usu_nombre: string,
+        usu_apellido: string,
+        direccionIp: string,
+        act_id: number,
+        anio: string,
+        pre_nombre: string,
+        pre_cod_habilitacion,
+    ): Promise<void> {
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha creado un Acta de Verificacion con No. ${act_id} del año ${anio} perteneciente al prestador: ${pre_nombre} con código de habilitación: ${pre_cod_habilitacion}`;
+        await this.logActivity(
+            usu_nombre,
+            usu_apellido,
+            'Creación Acta Verificacion',
             details,
             direccionIp,
         );
@@ -1030,7 +1051,7 @@ export class AuditoriaRegistroService {
         );
     }
 
-    
+
 
     //CONTROLAR LA CREACIÓN DE UNA CALIFICACION PAMEC
     async logCreateCalificacionPamec(

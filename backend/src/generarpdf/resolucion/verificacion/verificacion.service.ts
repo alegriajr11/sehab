@@ -6,6 +6,20 @@ import { PrestadorEntity } from 'src/prestador/prestador.entity';
 import { PrestadorRepository } from 'src/prestador/prestador.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { retry } from 'rxjs';
+import { ActaVerificacionDto } from './dto/acta-verificacion.dto';
+import { TokenDto } from 'src/auth/dto/token.dto';
+import { JwtService } from '@nestjs/jwt';
+import { PayloadInterface } from 'src/auth/payload.interface';
+import { DatosVerificadosDto } from './dto/datos-verificados.dto';
+import { DatosVisitVErificadoEntity } from '../visita-verificacion/datos-visit-verificado.entity';
+import { DatosVerificadosRepository } from '../visita-verificacion/datos-visit-verificado.repository';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
+import { EvaluacionResolucionVerificacionDto } from 'src/resolucion/dtos/evaluacion_verificacion_acta/evaluacion_verificacion.dto';
+import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
+import { UsuariosSeleccionadosDto } from './dto/usuarios-seleccionados.dto';
+import { UsuarioEntity } from 'src/usuario/usuario.entity';
+import { UsuarioRepository } from 'src/usuario/usuario.repository';
 
 @Injectable()
 export class VerificacionService {
@@ -15,6 +29,14 @@ export class VerificacionService {
 		private readonly acta_verificacion_pdfRepository: ActaCerificacionRepository,
 		@InjectRepository(PrestadorEntity)
 		private readonly prestadorRepository: PrestadorRepository,
+		@InjectRepository(DatosVisitVErificadoEntity)
+		private readonly datosverificadosRepository: DatosVerificadosRepository,
+		@InjectRepository(EvaluacionResVerificacionEntity)
+		private readonly evaluacionVerificacionRepository: EvaluacionResVerificacionRepository,
+		@InjectRepository(UsuarioEntity)
+		private readonly usuarioRepository: UsuarioRepository,
+		private readonly jwtService: JwtService,
+		private readonly auditoria_registro_services: AuditoriaRegistroService,
 	) { }
 
 	//LISTAR ULTIMO ACTA_ID POR TIPO DE VISITA
@@ -97,5 +119,100 @@ export class VerificacionService {
 
 	}
 
-	
+	//CONSULTA CREAR UN ACTA VERIFICACIÓN
+	async create(payloads: {
+		dto_acta: ActaVerificacionDto, dto_verificados: DatosVerificadosDto,
+		dto_usuarios_seleccionados: UsuariosSeleccionadosDto, tokenDto: TokenDto
+	}): Promise<any> {
+
+		const { dto_acta, dto_verificados, dto_usuarios_seleccionados, tokenDto } = payloads;
+
+		try {
+			const acta_verificacion = this.acta_verificacion_pdfRepository.create(dto_acta)
+			const usuario = await this.jwtService.decode(tokenDto.token);
+
+			const payloadInterface: PayloadInterface = {
+				usu_id: usuario[`usu_id`],
+				usu_nombre: usuario[`usu_nombre`],
+				usu_apellido: usuario[`usu_apellido`],
+				usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+				usu_email: usuario[`usu_email`],
+				usu_estado: usuario[`usu_estado`],
+				usu_roles: usuario[`usu_roles`]
+			};
+
+			const year = new Date().getFullYear().toString();
+
+			await this.acta_verificacion_pdfRepository.save(acta_verificacion)
+
+			const acta_ultima_verificacion = await this.acta_verificacion_pdfRepository.createQueryBuilder('acta')
+				.addSelect('acta.id')
+				.orderBy('acta.act_id', 'DESC')
+				.getOne();
+
+			//CONSULTAR LA ULTIMA ACTA QUE SE ASIGNARA A LA ENTIDAD DATOS ENCONTRADOS
+			const acta = await this.acta_verificacion_pdfRepository.findOne({ where: { id: acta_ultima_verificacion.id } })
+
+			//CREAMOS EL DTO ENVIADO POR PARAMETRO Y ASIGNAMOS LA RELACIÓN CON LA ACTA CREADA
+			const datos_verificados = this.datosverificadosRepository.create(dto_verificados)
+
+			//ASIGNACION DE LA RELACION DE DATOS VERIFICADOS CON ACTA
+			datos_verificados.acta_verificacion_datos_encontrados = acta
+
+			//GUARDAR EN LA ENTIDAD DATOS-VERIFICADOS
+			await this.datosverificadosRepository.save(datos_verificados)
+
+			const eva_creado = acta_ultima_verificacion.act_creado;  //Fecha de creación del acta
+			const eva_acta_prestador = acta_ultima_verificacion.act_cod_habilitacion; // Valor del ID del prestador
+
+			//CONSULTAR EL PRESTADOR QUE TIENE EL ACTA
+			const prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: eva_acta_prestador } })
+
+			//ASIGNAMOS LOS DATOS AL DTO EVALUACION-VERIFICACION
+			const evaluacionDto: EvaluacionResolucionVerificacionDto = {
+				eva_creado
+			}
+
+			//CREAMOS EL DTO EVALUACION_VERIFICACION
+			const evaluacion_verificacion = await this.evaluacionVerificacionRepository.create(evaluacionDto)
+
+			//ASIGNACION DE FORANEA ACTA UNO A UNO
+			evaluacion_verificacion.eval_acta_veri = acta
+			//ASIGNACION DE FORANEA PRESTADOR UNO A MUCHOS
+			evaluacion_verificacion.eval_verificacion_prestador = prestador
+
+			//GUARDAMOS EN LA ENTIDAD EVALUACION-VERIFICACION DE LA BASE DATOS
+			await this.evaluacionVerificacionRepository.save(evaluacion_verificacion)
+
+			//CREACION DEL DTO DE USUARIOS VERIFICADORES
+			const usuario_verificadores = this.usuarioRepository.create(dto_usuarios_seleccionados);
+
+			//Obtener los usuarios basados en sus IDs
+			const usuariosAsignados = await this.usuarioRepository.findByIds(Object.values(dto_usuarios_seleccionados));
+
+			// Asignar la relación ManyToMany
+			acta.verificacion_usuario = usuariosAsignados;
+
+			// Guardar la relación ManyToMany en la base de datos
+			await this.acta_verificacion_pdfRepository.save(acta);
+
+
+			//ASIGNAR LA AUDITORIA DEL ACTA CREADA
+			await this.auditoria_registro_services.logCreateActaVerificacion(
+				payloadInterface.usu_nombre,
+				payloadInterface.usu_apellido,
+				'ip',
+				dto_acta.act_id,
+				year,
+				dto_acta.act_prestador,
+				dto_acta.act_cod_habilitacion
+			);
+
+			return { error: false, message: 'El acta ha sido creada' };
+
+		} catch (error) {
+			// Devuelve un mensaje de error apropiado
+			return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
+		}
+	}
 }

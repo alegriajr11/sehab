@@ -4,7 +4,7 @@ import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, 
 import { ProfesionalApoyoEntity } from "../profesional/profesional.entity";
 import { DatosVisitVErificadoEntity } from "../visita-verificacion/datos-visit-verificado.entity";
 import { ConceptoResEntity } from "src/resolucion/requisitos_condiciones_habilitacion/concepto_res.entity";
-import { EvaluacionResEntity } from "src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity";
 
 @Entity({ name: 'acta-verificacion' })
 export class ActaVerificacionEntity {
@@ -115,6 +115,6 @@ export class ActaVerificacionEntity {
     acta_verificacion_concepto3100: ConceptoResEntity;
 
     //Relacion UNO a UNO EVALUACION VERIFICACION - ACTA VERIFICACION
-    @OneToOne(() => EvaluacionResEntity, evaluacion_verificacion => evaluacion_verificacion.eval_acta_veri)
-    act_eval_veri: EvaluacionResEntity;
+    @OneToOne(() => EvaluacionResVerificacionEntity, evaluacion_verificacion => evaluacion_verificacion.eval_acta_veri)
+    act_eval_veri: EvaluacionResVerificacionEntity;
 }
