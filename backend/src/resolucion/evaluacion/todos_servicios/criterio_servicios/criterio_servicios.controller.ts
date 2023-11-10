@@ -29,7 +29,6 @@ export class CriterioServiciosController {
     //@UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOneCriterio(@Param('id', ParseIntPipe) id: number) {
-        console.log(id)
         return await this.criterioServiciosService.getCriterioForEstandar(id)
     }
 

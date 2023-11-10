@@ -54,6 +54,7 @@ import { EvaluacionIndependientesEntity } from "src/sp/sp_ind/evaluacion-indepen
 import { EvaluacionSicEntity } from "src/sic/evaluacionsic.entity";
 import { SedeEntity } from "./sede/sede.entity";
 import { EvaluacionipsCreadasEntity } from "src/sp/sp_ips/evaluacion_ips_creada.entity";
+import { ConceptoResEntity } from "src/resolucion/requisitos_condiciones_habilitacion/concepto_res.entity";
 
 
 
@@ -305,4 +306,8 @@ export class PrestadorEntity {
     //Relación Uno a Muchos PRESTADORES - CUMPLIMIENTO HOSPITALIZACION
     @OneToMany(type => CumplimientoHospitalizacionEntity, cump_hospitalizacion => cump_hospitalizacion.prestador)
     cump_hospitalizacion: CumplimientoHospitalizacionEntity
+
+
+
+
 }

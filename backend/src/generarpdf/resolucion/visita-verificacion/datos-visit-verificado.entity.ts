@@ -10,44 +10,20 @@ export class DatosVisitVErificadoEntity {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column({type: 'varchar', length: 20, nullable: false})
-    act_municipio: string;
-
-    @Column({type: 'varchar', length: 100, nullable: false})
-    act_prestador: string;
-
-    @Column({type: 'varchar', length: 11, nullable: false})
-    act_nit: string;
-
-    @Column({type: 'varchar', length: 100, nullable: false})
-    act_sede: string;
-
-    @Column({type: 'varchar', length: 55, nullable: false})
-    act_direccion: string;
-
-    @Column({type: 'varchar', length: 70, nullable: false})
-    act_clasificacion: string;
-
-    @Column({type: 'varchar', length: 12, nullable: false})
-    act_cod_habilitacion: string;
-
-    @Column({type: 'varchar', length: 12, nullable: false})
-    act_cod_sede: string;
-
     @Column({type: 'varchar', length: 85, nullable: false})
     act_telefono: string;
 
     @Column({type: 'varchar', length: 55, nullable: false})
-    act_representante: string;
-    
-    @Column({type: 'varchar', length: 55, nullable: false})
-    act_gerente: string;
+    act_direccion: string;
 
     @Column({type: 'varchar', length: 50, nullable: false})
     act_correo: string;
 
+    @Column({type: 'varchar', length: 255, nullable: false})
+    act_observaciones: string;
 
-    // RELACION UNO A UNO ACTA VERIFICACION - DATOS VCERIFICADOS ENCONTRADOS
+
+    // RELACION UNO A UNO ACTA VERIFICACION - DATOS VERIFICADOS ENCONTRADOS
     @OneToOne(() => ActaVerificacionEntity, actaVerificacion => actaVerificacion.act_datos_encontrados_verificacion)
     @JoinColumn()
     acta_verificacion_datos_encontrados: ActaVerificacionEntity;

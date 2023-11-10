@@ -216,7 +216,7 @@ export class AuditoriaRegistroService {
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Creación Pamec Acta ',
+            'Creación Acta Pamec',
             details,
             direccionIp,
         );

@@ -64,7 +64,7 @@ export class SpIpsController {
         return this.sp_IpsService.cerrarActa(id, payload);
     }
 
-    @Get('sp/ips/evaluacion/:id')
+    @Get('sp/ips/evaluacion')
     async descargarPdfCriterioIps(@Query('evaips_id') evaips_id: number,
         @Query('acta_id') acta_id: number,
         @Res() res): Promise<void> {

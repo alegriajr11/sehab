@@ -3,6 +3,7 @@ import { UsuarioEntity } from "src/usuario/usuario.entity";
 import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
 import { ProfesionalApoyoEntity } from "../profesional/profesional.entity";
 import { DatosVisitVErificadoEntity } from "../visita-verificacion/datos-visit-verificado.entity";
+import { ConceptoResEntity } from "src/resolucion/requisitos_condiciones_habilitacion/concepto_res.entity";
 
 @Entity({ name: 'acta-verificacion' })
 export class ActaVerificacionEntity {
@@ -65,12 +66,15 @@ export class ActaVerificacionEntity {
     act_fecha_fin: Date;
 
     @Column({ type: 'varchar', length: 200, nullable: false })
-    act_observaciones
+    act_observaciones: string
 
     @Column({ type: 'text', nullable: false })
     act_firma_prestador: string;
 
-    @Column({ type: 'varchar', nullable: false,  default:true})
+    @Column({ type: 'varchar', length: 85, nullable: false })
+    act_funcionario_prestador: string
+
+    @Column({ type: 'varchar', nullable: false, default: true })
     act_estado: string;
 
     @Column({ type: 'date' })
@@ -80,6 +84,12 @@ export class ActaVerificacionEntity {
     async setDate() {
         this.act_creado = new Date();
     }
+
+    @Column({ type: 'varchar', length: 10, nullable: true, default: 'true' })
+    act_recibe_visita: string;
+
+    @Column({ type: 'varchar', length: 10, nullable: true, default: 'false' })
+    noFirmaActa: string;
 
     // RELACION UNO A UNO ACTA VERIFICACION - SEDE
     @OneToOne(() => SedeEntity, sede => sede.acta_verificacion_sede)
@@ -95,9 +105,14 @@ export class ActaVerificacionEntity {
         joinColumn: { name: 'verif_usu_id' },
         inverseJoinColumn: { name: 'usu_verif_id' }
     })
-    verificacion_usuario: SedeEntity[];
+    verificacion_usuario: UsuarioEntity[];
 
     @ManyToMany(type => ProfesionalApoyoEntity, profecional => profecional.profesional_verificacion)
     verificacion_profecional: ProfesionalApoyoEntity;
 
+
+    // CUMPLIMIENTO DE REQUISITOS DE  LAS CONDICIONES  DE  HABILITACIÓN
+    //Relación MUCHOS a MUCHOS ACTA-VERIFICACION - ConceptoResEntity
+    @ManyToMany(type => ConceptoResEntity, concepto_3100_codiciones => concepto_3100_codiciones.concepto3100_acta_verificacion)
+    acta_verificacion_condiciones: ConceptoResEntity
 }

@@ -120,6 +120,7 @@ import { CalificacionipsImplementacionModule } from './sp/sp_ips/calificacion/ca
 import { CalificacionipsPlaneacionModule } from './sp/sp_ips/calificacion/calificacionips_planeacion/calificacionips_planeacion.module';
 import { CalificacionipsVerificacionModule } from './sp/sp_ips/calificacion/calificacionips_verificacion/calificacionips_verificacion.module';
 import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.module';
+import { RequisitosCondicionesHabilitacionModule } from './resolucion/requisitos_condiciones_habilitacion/requisitos_condiciones_habilitacion.module';
 
 
 
@@ -142,7 +143,7 @@ import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.m
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
-        logging: false 
+        logging: false
         
       }),
       inject: [ConfigService],
@@ -219,6 +220,7 @@ import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.m
     CalificacionipsPlaneacionModule,
     CalificacionipsVerificacionModule,
     EvaluacionpamecModule,
+    RequisitosCondicionesHabilitacionModule,
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 

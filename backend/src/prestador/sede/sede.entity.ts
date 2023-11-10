@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn,  ManyToOne,  OneToOne, PrimaryGeneratedColu
 import { PrestadorEntity } from "../prestador.entity";
 import { ActaVerificacionEntity } from "src/generarpdf/resolucion/verificacion/acta-verificacion.entity";
 import { SedeMunicipioEntity } from "./sede_municipio/sede-municipio.entity";
+import { ActaIvcEntity } from "src/generarpdf/resolucion/ivc/acta-ivc.entity";
 
 @Entity({ name: 'sede' })
 export class SedeEntity {
@@ -44,6 +45,10 @@ export class SedeEntity {
      //Relacion Uno a uno SEDE - ACTA VERIFICACION 
     @OneToOne(() => ActaVerificacionEntity, actaVerificacion => actaVerificacion.act_sede_veri)
     acta_verificacion_sede: ActaVerificacionEntity;
+
+     //Relacion Uno a uno SEDE - ACTA IVC 
+    @OneToOne(() => ActaIvcEntity, actaIvc => actaIvc.act_sede_ivc)
+    acta_ivc_sede: ActaIvcEntity;
 
     @ManyToOne(type => SedeMunicipioEntity, sede_municipio => sede_municipio.mun_sede_prestador)
     sede_municipio: SedeMunicipioEntity

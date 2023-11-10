@@ -8,14 +8,14 @@ import { TokenDto } from 'src/auth/dto/token.dto';
 export class PamecActaController {
     constructor(private readonly pamecActaService: PamecActaService) { }
 
-    //OBTENER TODOS LOS  PAMEC IPS ACTA PDF
+    //OBTENER TODOS LOS ACTA PAMEC PDF
     @UseGuards(JwtAuthGuard)
     @Get()
     getAll() {
         return this.pamecActaService.getallActas();
     }
 
-    //OBTENER UN PAMEC IPS ACTA PDF POR ID
+    //OBTENER UN ACTA PAMEC PDF POR ID
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOne(@Param('id', ParseIntPipe) id: number) {
@@ -37,7 +37,7 @@ export class PamecActaController {
         return this.pamecActaService.getLastestActa();
     }
 
-    //CREAR PAMEC IPS ACTA PDF
+    //CREAR ACTA PAMEC PDF
     @Post()
     async create(@Body() payload: { dto: ActaPamecDto, tokenDto: TokenDto }) {
         const { dto, tokenDto } = payload;

@@ -181,7 +181,6 @@ export class CriterioServiciosService {
             );
 
 
-
             return new MessageDto(`El criterio ha sido Actualizado`);
         } catch (error) {
             // Aquí puedes manejar el error como desees, por ejemplo, registrarlo o lanzar una excepción personalizada.

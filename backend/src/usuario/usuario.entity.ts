@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { hash } from "bcrypt";
+import { ActaIvcEntity } from "src/generarpdf/resolucion/ivc/acta-ivc.entity";
 import { ActaVerificacionEntity } from "src/generarpdf/resolucion/verificacion/acta-verificacion.entity";
 import { RolEntity } from "src/rol/rol.entity";
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn, Timestamp } from "typeorm";
@@ -63,6 +64,11 @@ export class UsuarioEntity {
         this.usu_password = await hash(this.usu_password, 10)
     }
 
+    //RELACION VERIFICADORES ACTA DE VERIFICACION
     @ManyToMany(type => ActaVerificacionEntity, verificacion => verificacion.verificacion_usuario)
     usuario_verificacion: ActaVerificacionEntity;
+
+    //RELACION VERIFICADORES ACTA DE IVC
+    @ManyToMany(type => ActaIvcEntity, ivc => ivc.ivc_usuario)
+    usuario_ivc: ActaIvcEntity;
 }

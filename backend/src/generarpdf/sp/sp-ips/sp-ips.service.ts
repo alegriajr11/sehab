@@ -77,7 +77,7 @@ export class SpIpsService {
     async findByActa(id: number): Promise<ActaSpIpsEntity> {
         const ips = await this.actaSpIpsRepository.createQueryBuilder('acta_ips')
             .select(['acta_ips'])
-            .where('acta_ips.id = :id_acta', {id_acta: id})
+            .where('acta_ips.id = :id_acta', { id_acta: id })
             .getOne()
         return ips;
     }
@@ -358,6 +358,7 @@ export class SpIpsService {
         }
     }
 
+
     //La función para generar el PDF con las tablas ajustadas
     async generarPdfEvaluacionIps(evaips_id: number, acta_id: number): Promise<Buffer> {
 
@@ -442,10 +443,11 @@ export class SpIpsService {
                     nombreprestador = acta.act_nombre_prestador;
                     nombrefuncionario = acta.act_nombre_funcionario;
                     cargoprestador = acta.act_cargo_prestador;
-                    cargofuncionario=acta.act_cargo_funcionario
+                    cargofuncionario = acta.act_cargo_funcionario
                 });
             });
             doc.text(eva)
+
 
             // Agregar las tablas a las páginas
             if (planeacion.length) {
@@ -575,26 +577,26 @@ export class SpIpsService {
 
 
 
-                doc.moveDown();
+            doc.moveDown();
 
-                const tableOptions2 = {
-                    columnsSize: [ 225, 225],
-                    headerAlign: 'center',
-                    align: 'center',
-                    rowHeight: 15,
-                };
+            const tableOptions2 = {
+                columnsSize: [225, 225],
+                headerAlign: 'center',
+                align: 'center',
+                rowHeight: 15,
+            };
 
-                const tablefirmas = {
-                        headers: [ "POR EL PRESTADOR", "POR LA SECRETARIA DE SALUD"],
-                        rows:[[`NOMBRE: ${nombreprestador}`,`NOMBRE: ${nombrefuncionario}`],
-                            [`CARGO: ${cargoprestador}`,`CARGO: ${cargofuncionario}`],
-                            ["FIRMA","FIRMA  :"]]
-                    };
+            const tablefirmas = {
+                headers: ["POR EL PRESTADOR", "POR LA SECRETARIA DE SALUD"],
+                rows: [[`NOMBRE: ${nombreprestador}`, `NOMBRE: ${nombrefuncionario}`],
+                [`CARGO: ${cargoprestador}`, `CARGO: ${cargofuncionario}`],
+                ["FIRMA", "FIRMA  :"]]
+            };
 
 
-                    doc.moveDown();
+            doc.moveDown();
 
-                    doc.table(tablefirmas, tableOptions2);
+            doc.table(tablefirmas, tableOptions2);
 
             const buffer = [];
             doc.on('data', buffer.push.bind(buffer));
