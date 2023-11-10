@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { Actividad } from 'src/app/models/Pamec/actividad.dto';
 import { CriterioPam } from 'src/app/models/Pamec/criteriopam.dto';
 import { ActividadService } from 'src/app/services/Pamec/actividad.service';
@@ -6,6 +6,8 @@ import { CriteriopamService } from 'src/app/services/Pamec/criteriopam.service';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { ToastrService } from 'ngx-toastr';
+import { SharedServiceService } from 'src/app/services/shared-service.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-evaluacion-pamec',
@@ -23,8 +25,11 @@ export class EvaluacionPamecComponent {
   captCargoUsuario: string
   captCargoPres: string
 
-  aplica: string
-  calificacion: number
+  eva_pam_id: number
+  cri_pam_id: number
+
+  //NOMBRE DEL PRESTADOR
+  nombre_prestador: string = ''
 
   controlCriterio = false;
 
@@ -40,18 +45,22 @@ export class EvaluacionPamecComponent {
     { value: 1, nota: 1 },
   ];
 
+
+  public modalRef: BsModalRef;
+
   constructor(
     private criteriopamService: CriteriopamService,
+    public sharedService: SharedServiceService,
+    private modalService: BsModalService,
     private actividadService: ActividadService,
   ) { }
 
   ngOnInit(): void {
-    this.capturarNombres()
+    this.capturarNombrePrestador()
     this.cargarActividad()
-    this.activarSelect()
   }
 
-  cargarActividad(): void{
+  cargarActividad(): void {
     this.actividadService.lista().subscribe(
       data => {
         this.actividad = data;
@@ -63,7 +72,7 @@ export class EvaluacionPamecComponent {
     )
   }
 
-  cargarCriterios(): void{
+  cargarCriterios(): void {
     var id = (document.getElementById('act_id')) as HTMLSelectElement
     var sel = id.selectedIndex;
     var opt = id.options[sel]
@@ -81,112 +90,47 @@ export class EvaluacionPamecComponent {
     this.controlCriterio = true;
   }
 
-  disableItem(): void {
-    var id = (document.getElementById('act_id')) as HTMLSelectElement
-    var sel = id.selectedIndex;
-    var opt = id.options[sel]
-    var Valor = (<HTMLSelectElement><unknown>opt).value;
-
-
-    
+  //PROTEGER LA RUTA AL SALIR DEL EDITAR
+  async deshabilitarRutaEditar() {
+    localStorage.removeItem('boton-acta-pamec');
+    localStorage.removeItem('nombre-pres-pamec');
+    //localStorage.removeItem('id_acta_pamec');
+    this.sharedService.criteriosPamecGuardados = [];
+    this.cri_pam_id = null
+    this.eva_pam_id = null
   }
 
-  capturarNombres(): void {
+  //ESTABLECER LOS COLORES POR CUMPLIMIENTO
+  getClassForCriterio(criterio: any): string {
+    if (this.sharedService.criteriosIndGuardados.includes(criterio.cri_id)) {
+      return 'btn-success';
+    }
+    return 'btn-outline-dark';
+  }
+
+  capturarNombrePrestador(): void {
     //CAPURAR NOMBRE DEL PRESTADOR
-    var copy = document.getElementById("nombre-prestador");
-    var captPrestador = sessionStorage.getItem("nombre-pres-pamec");
-    copy.textContent = " " + captPrestador + "."
-
-    //CAPTURAR NOMBRE DE USUARIO
-    this.captUsuario = sessionStorage.getItem("nombre-usuario-pamec");
-
-    //CAPTURAR CARGO DEL USUARIO
-    this.captCargoUsuario = sessionStorage.getItem("cargo-usuario-pamec");
-
-    //CAPTURAR CARGO DEL PRESTADOR
-    this.captCargoPres = sessionStorage.getItem("cargo-prestador-pamec")
+    var captPrestador = localStorage.getItem("nombre-pres-pamec");
+    this.nombre_prestador = captPrestador
+    console.log(captPrestador)
 
   }
 
-  activarSelect(): void {
-    var table = (document.getElementById('tabla-evaluacion')) as HTMLTableElement
 
-    for(let i = 1; i<= this.criteriopam.length; i++){
-      var valorIdAplica = '#sel-aplica-'
-      var valorIdCalificacion = '#sel-calificacion-'
-      var selAplica = (table.querySelector(valorIdAplica + i)) as HTMLSelectElement
-      var selCalificacion = (table.querySelector(valorIdCalificacion + i)) as HTMLSelectElement
-      if(selAplica.value === 'no'){
-        selCalificacion.disabled = true
-        selCalificacion.value = ""
-      }else {
-        selCalificacion.disabled = false
+  openModal(modalTemplate: TemplateRef<any>, id: number, eva_pamec_id: number) {
+    this.sharedService.setIdPamecEvaluacion(eva_pamec_id)
+    this.eva_pam_id = eva_pamec_id
+    this.sharedService.setIdCriterioPamec(id)
+    this.cri_pam_id = id
+    console.log(this.cri_pam_id)
+    this.modalRef = this.modalService.show(modalTemplate,
+      {
+        class: 'modal-dialogue-centered modal-md',
+        backdrop: true,
+        keyboard: true
       }
-    }
-
-
+    );
   }
-
-  obtenerValor(): void {
-    var table = (document.getElementById('tabla-evaluacion')) as HTMLTableElement
-    for (let i = 1; i <= this.criteriopam.length; i++) {
-      var valorIdAplica = '#sel-aplica-'
-      var valorIdCalificacion = '#sel-calificacion-'
-      var selAplica = (table.querySelector(valorIdAplica + i)) as HTMLSelectElement
-      var selCalificacion = (table.querySelector(valorIdCalificacion + i)) as HTMLSelectElement
-      if (selAplica.value) {
-        var id = (document.getElementById('act_id')) as HTMLSelectElement
-        var sel = id.selectedIndex;
-        var opt = id.options[sel]
-        var ValorActividad = (<HTMLSelectElement><unknown>opt).value;
-
-        const doc = new jsPDF()
-
-        if(ValorActividad === '1'){
-          let array1 = []
-          array1.push(selAplica.value, selCalificacion.value)
-          doc.text("AUTOEVALUACIÓN", 65, 85);
-          autoTable(doc,{
-            margin: { top: 72 },
-            body: [{aplica: array1[0], calificacion: array1[1]}],
-            columns: [
-              { header: 'Aplica', dataKey: 'aplica' },
-              { header: 'Calificacion', dataKey: 'calificacion' },]
-          })
-          doc.text("ACTIVIDADES PREVIAS", 65, 45);
-          
-          
-          // console.log('Array Posicion 0 -', array[0])
-          // console.log('Array Posicion 1 -', array[1])
-        }
-
-        if(ValorActividad === '2'){
-          let array2 = []
-          array2.push(selAplica.value, selCalificacion.value)
-          doc.text("AUTOEVALUACIÓN", 65, 85);
-          autoTable(doc,{
-            margin: { top: 72 },
-            body: [{aplica: array2[0], calificacion: array2[1]}],
-            columns: [
-              { header: 'Aplica', dataKey: 'aplica' },
-              { header: 'Calificacion', dataKey: 'calificacion' },]
-          })
-        }        
-        
-
-        if(ValorActividad === '3'){
-          let array3 = []
-          array3.push(selAplica.value, selCalificacion.value)
-          console.log(array3)
-        }
-        
-        // console.log(selAplica.value)
-      }
-
-      // var resultado = console.log(sel.value)
-    }
-  }
-
 
   onRegister(): void {
 

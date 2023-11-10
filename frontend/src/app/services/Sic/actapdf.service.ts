@@ -119,7 +119,7 @@ export class ActapdfService {
   }
 
 
-  //SOLICITUD ULTIMA ACTA DEL ROL SP_IND
+  //SOLICITUD ULTIMA ACTA DEL ROL PAMEC
   public listaUltimaPamec(): Observable<ActaPamecDto> {
     return this.httpClient.get<ActaPamecDto>(this.actaPamec_pdf_url + 'ultima/acta/pamec')
   }

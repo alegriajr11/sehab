@@ -54,7 +54,14 @@ export class InformesRealizadosResolucionComponent {
     const selectAnio = document.getElementById("select-anio") as HTMLSelectElement;
     const fechaActual = new Date();
     const anioActual = fechaActual.getFullYear();
-    
+
+    // Agregar una opción en blanco (vacía)
+    const optionVacia = document.createElement("option");
+    optionVacia.text = ""; // Texto vacío
+    optionVacia.value = ""; // Valor vacío
+    selectAnio.add(optionVacia);
+
+
     for (let i = anioActual; i >= 1900; i--) {
       const option = document.createElement("option");
       option.text = i.toString();

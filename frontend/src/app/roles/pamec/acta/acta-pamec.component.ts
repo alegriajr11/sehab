@@ -18,6 +18,8 @@ import { TokenService } from 'src/app/services/token.service';
 import { GenerarPdfActaPamecService } from 'src/app/services/Pamec/generar-pdf-acta-pamec.service';
 import { TokenDto } from 'src/app/models/token.dto';
 import { ActaPamecDto } from 'src/app/models/Actas/actaPamePdf.dto';
+import { SedesPrestadorService } from 'src/app/services/sedes-prestador.service';
+import { SedesDto } from 'src/app/models/sedes.dto';
 
 
 @Component({
@@ -42,9 +44,10 @@ export class ActaPamecComponent implements OnInit {
   usuario_uno: Usuario[];
   usuario_dos: Usuario[];
   municipio: Municipio[];
+  sede: SedesDto[];
 
   //DTO DEL PDF ACTA
-  actaPdf: ActaPamecDto = null;
+  actaPamecPdf: ActaPamecDto = null;
 
 
   //Habilitar la Fecha Final
@@ -63,6 +66,9 @@ export class ActaPamecComponent implements OnInit {
   //VARIABLES PARA TRANSPORTAR EL DTO
   act_id: number;
   act_tipo_visita: string;
+  //ATRIBUTOS POR TIPO DE VISITA:
+  act_ano_formulacion: string
+  act_ciclo_mejoramiento: string
   act_fecha_visita: string;
   act_municipio: string
   act_prestador: string
@@ -73,16 +79,20 @@ export class ActaPamecComponent implements OnInit {
   act_email: string
   act_representante: string
   act_cod_prestador: string
-  act_sede_principal: string
-  act_sede_localidad: string
+  act_sede: string
+  act_sede_barrio: string
   act_sede_direccion: string
   act_obj_visita: string
   act_nombre_funcionario1: string
   act_cargo_funcionario1: string
   act_firma_funcionario1: string
+  act_id_funcionario1: number
+
   act_nombre_funcionario2: string
   act_cargo_funcionario2: string
   act_firma_funcionario2: string
+  act_id_funcionario2: number
+
   act_nombre_prestador: string
   act_cargo_prestador: string
   act_firma_prestador: string
@@ -93,10 +103,13 @@ export class ActaPamecComponent implements OnInit {
   act_funcionarioId: string
   act_funcionarioId2: string
   act_tipo_visitaId: string
-  
+  act_sede_principalId: string
+
 
   firma: string;
 
+  //Habilitar Select Sede Principal
+  habilitarSelectSede: boolean = false;
 
   //ATRIBUTOS CONTROLAR MENSAJES VALIDACION
   showTipoVisitaMessage: boolean = false;
@@ -123,6 +136,7 @@ export class ActaPamecComponent implements OnInit {
     public sharedService: SharedServiceService,
     private generarPdfActaPamec: GenerarPdfActaPamecService,
     private tokenService: TokenService,
+    private sedesServices: SedesPrestadorService,
     private router: Router
   ) { }
 
@@ -157,9 +171,9 @@ export class ActaPamecComponent implements OnInit {
   mostrarActaId(): void {
     this.actaPdfService.listaUltimaPamec().subscribe(
       data => {
-        this.actaPdf = data
+        this.actaPamecPdf = data
         var acta = (document.getElementById('acta')) as HTMLSelectElement
-        acta.value = this.actaPdf.act_id.toString()
+        acta.value = this.actaPamecPdf.act_id.toString()
       }
     )
   }
@@ -178,6 +192,85 @@ export class ActaPamecComponent implements OnInit {
     this.act_prestadorId = ''
   }
 
+  habilitarSede() {
+    this.habilitarSelectSede = true;
+  }
+
+
+  //LISTAR SEDES POR SELECCION DE PRESTADOR
+  cargarSedesByPrestador() {
+    this.sedesServices.listaSedesNombre(this.act_prestadorId).subscribe(
+      async data => {
+        this.sede = data
+        for (const pres of this.prestador) {
+          if (pres.pre_cod_habilitacion === this.act_prestadorId) {
+            for (const pres_barrio of data) {
+              //ENCONTRAR EL PRESTADOR SELECCIONADO Y ASIGNAR EL BARRIO QUE SE ENCUENTRA EN LA ENTIDAD SEDE DE LA BD
+              const idPrestadorSeleccionado = this.act_prestadorId;
+              const pres = await this.prestadorService.listaOne(idPrestadorSeleccionado).toPromise();
+              this.act_prestador = pres.pre_nombre
+              if (this.act_prestador === pres_barrio.sede_nombre) {
+                var barrio_prestador_asignado = pres_barrio.sede_barrio
+                this.act_barrio = barrio_prestador_asignado
+              }
+
+            }
+          }
+        }
+        this.listaVacia = undefined
+      },
+      err => {
+        this.listaVacia = err.error.message;
+        this.act_sede_principalId = '';
+        // Eliminar todas las opciones del select
+        this.sede = [];
+      }
+    );
+    //ASIGANAR LOS INPUT BARRIO, DIRECCION Y CODIGO_SEDE EN VACIO - SI SE SELECCIONA OTRO PRESTADOR
+    //BARRIO DE LA SEDE
+    var sede_barrio = (document.getElementById('barrioSede')) as HTMLSelectElement
+    sede_barrio.value = ''
+    //DIRECCIÓN DE LA SEDE
+    var sede_direccion = (document.getElementById('direccionSede')) as HTMLSelectElement
+    sede_direccion.value = ''
+
+  }
+
+
+  //OBTENER LOCALIDAD Y DIRECCION DE LA SEDE SELECCIONADA
+  sedeSeleccionada() {
+    this.sedesServices.listaOneSede(this.act_sede_principalId).subscribe(
+      data => {
+        //ASIGANACION DEL NOMBRE DE LA SEDE AL DTO
+        this.act_sede = data.sede_nombre
+
+        const barrio = data.sede_barrio
+        const direccion = data.sede_direccion
+        //ASIGANCION DE LOS BARRIOS DE LA SEDE AL DTO
+        this.act_sede_direccion = direccion
+        this.act_sede_barrio = barrio
+
+        var sede_barrio = (document.getElementById('barrioSede')) as HTMLSelectElement
+        sede_barrio.value = barrio
+
+        var sede_direccion = (document.getElementById('direccionSede')) as HTMLSelectElement
+        sede_direccion.value = direccion
+
+      }
+    )
+  }
+
+  convertirFecha(fecha: string) {
+    // Convierte la cadena de fecha en un objeto Date, ajustando la zona horaria a UTC
+    const fechaObj = new Date(fecha + "T00:00:00Z");
+    // Obtiene el día, mes y año de la fecha
+    const dia = fechaObj.getUTCDate();
+    const mes = fechaObj.getUTCMonth() + 1; // Los meses son 0-indexados, por lo que sumamos 1
+    const año = fechaObj.getUTCFullYear();
+    // Formatea la fecha en DD/MM/AAAA
+    const fechaEnFormatoDeseado = `${dia.toString().padStart(2, "0")}/${mes.toString().padStart(2, "0")}/${año}`;
+    return fechaEnFormatoDeseado;
+  }
 
   llenarCampos() {
     var id = (document.getElementById('prestador')) as HTMLSelectElement
@@ -205,7 +298,7 @@ export class ActaPamecComponent implements OnInit {
 
             var nombre_prestador = (document.getElementById('nombrePrestador')) as HTMLSelectElement
             nombre_prestador.value = pres.pre_representante
-            
+
           }
         }
       },
@@ -248,6 +341,7 @@ export class ActaPamecComponent implements OnInit {
       const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
       const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
       this.act_nombre_funcionario1 = func.usu_nombre + ' ' + func.usu_apellido
+      this.act_id_funcionario1 = parseInt(this.act_funcionarioId, 10)
     }
 
     if (this.act_funcionarioId2) {
@@ -256,6 +350,7 @@ export class ActaPamecComponent implements OnInit {
       const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
       const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
       this.act_nombre_funcionario2 = func.usu_nombre + ' ' + func.usu_apellido
+      this.act_id_funcionario2 = parseInt(this.act_funcionarioId2, 10)
     }
 
     if (this.act_tipo_visitaId) {
@@ -268,25 +363,25 @@ export class ActaPamecComponent implements OnInit {
     }
   }
 
-  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
-  async obtenerFirmaFuncionario1(): Promise<void> {
-    if (this.act_funcionarioId) {
-      const idFuncionarioSeleccionado = this.act_funcionarioId
-      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
-      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
-      this.act_firma_funcionario1 = func.usu_firma
-    }
-  }
+  // //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
+  // async obtenerFirmaFuncionario1(): Promise<void> {
+  //   if (this.act_funcionarioId) {
+  //     const idFuncionarioSeleccionado = this.act_funcionarioId
+  //     const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
+  //     const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
+  //     this.act_firma_funcionario1 = func.usu_firma
+  //   }
+  // }
 
-  //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
-  async obtenerFirmaFuncionario2(): Promise<void> {
-    if (this.act_funcionarioId2) {
-      const idFuncionarioSeleccionado = this.act_funcionarioId2
-      const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
-      const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
-      this.act_firma_funcionario2 = func.usu_firma
-    }
-  }
+  // //OBTENER LA FIRMA DEL FUNCIONARIO Y ASIGNAR AL ATRIBTUO act_firma_funcionario
+  // async obtenerFirmaFuncionario2(): Promise<void> {
+  //   if (this.act_funcionarioId2) {
+  //     const idFuncionarioSeleccionado = this.act_funcionarioId2
+  //     const idFuncionarioComoNumero = parseInt(idFuncionarioSeleccionado, 10);
+  //     const func = await this.usuarioService.oneUser(idFuncionarioComoNumero).toPromise();
+  //     this.act_firma_funcionario2 = func.usu_firma
+  //   }
+  // }
 
   //MENSAJES DE VALIDACION DIVS
   ocultarMensajes() {
@@ -403,6 +498,7 @@ export class ActaPamecComponent implements OnInit {
         this.listaVacia = err.error.message;
       }
     )
+    this.act_funcionarioId = ''
   }
 
   //COMPLETAR INPUT_CARGO POR USUARIO SELECCIONADO
@@ -450,13 +546,12 @@ export class ActaPamecComponent implements OnInit {
   ultimaActaId(): void {
     this.actaPdfService.listaUltimaPamec().subscribe(
       data => {
-        this.actaPdf = data
+        this.actaPamecPdf = data
         var acta = (document.getElementById('acta')) as HTMLSelectElement
-        acta.value = this.actaPdf.act_id.toString()
+        acta.value = this.actaPamecPdf.act_id.toString()
       }
     )
   }
-
 
 
   obtenerNombres(): void {
@@ -485,8 +580,9 @@ export class ActaPamecComponent implements OnInit {
     if (this.formulacion) {
       var valorFormulacion = ""
       //AÑO FORMULACIÓN
-      var formulacion = (document.getElementById('año_formulacion')) as HTMLInputElement
+      var formulacion = (document.getElementById('ano_formulacion')) as HTMLInputElement
       valorFormulacion = formulacion.value
+      this.act_ano_formulacion = valorFormulacion
     }
 
 
@@ -497,6 +593,7 @@ export class ActaPamecComponent implements OnInit {
       var selmejo = idmejo.selectedIndex;
       var optmejo = idmejo.options[selmejo]
       valorMejoramiento = (<HTMLSelectElement><unknown>optmejo).textContent;
+      this.act_ciclo_mejoramiento = valorMejoramiento
     }
 
     //INPUTS BLOQUEADOS Y SE ASIGNA A LAS VARIABLES DEL DTO
@@ -540,9 +637,9 @@ export class ActaPamecComponent implements OnInit {
     //OBTENER NOMBRES DE LOS SELECTS
     await this.obtenerNombreSelects();
 
-    //OBTENER FIRMA FUNCIONARIOS
-    await this.obtenerFirmaFuncionario1();
-    await this.obtenerFirmaFuncionario2();
+    // //OBTENER FIRMA FUNCIONARIOS
+    // await this.obtenerFirmaFuncionario1();
+    // await this.obtenerFirmaFuncionario2();
 
 
     //ASIGNANDO LOS VALORES DEL ACTA PARA ASIGNARLAS EN EL DTO
@@ -557,10 +654,16 @@ export class ActaPamecComponent implements OnInit {
     this.act_nombre_prestador = valorPresNombre
     this.act_firma_prestador = this.firma
 
-    //REGISTRO DE LA INFORMACIÓN RECOPILADA A LA CLASE DTO - ACTASICDTO
-    this.actaPdf = new ActaPamecDto(
+    //ORGANIZAR LA FECHA DE VISITA
+    const fecha_visita = this.convertirFecha(this.act_fecha_visita)
+    this.act_fecha_visita = fecha_visita
+
+    //REGISTRO DE LA INFORMACIÓN RECOPILADA A LA CLASE DTO - ACTAPAMECDTO
+    this.actaPamecPdf = new ActaPamecDto(
       this.act_id,
       this.act_tipo_visita,
+      this.act_ano_formulacion,
+      this.act_ciclo_mejoramiento,
       this.act_fecha_visita,
       this.act_municipio,
       this.act_prestador,
@@ -571,16 +674,20 @@ export class ActaPamecComponent implements OnInit {
       this.act_email,
       this.act_representante,
       this.act_cod_prestador,
-      this.act_sede_principal,
-      this.act_sede_localidad,
+      this.act_sede,
+      this.act_sede_barrio,
       this.act_sede_direccion,
       this.act_obj_visita,
       this.act_nombre_funcionario1,
       this.act_cargo_funcionario1,
       this.act_firma_funcionario1,
+      this.act_id_funcionario1,
+
       this.act_nombre_funcionario2,
       this.act_cargo_funcionario2,
       this.act_firma_funcionario2,
+      this.act_id_funcionario2,
+
       this.act_nombre_prestador,
       this.act_cargo_prestador,
       this.act_firma_prestador
@@ -593,9 +700,144 @@ export class ActaPamecComponent implements OnInit {
     const tokenDto: TokenDto = new TokenDto(token);
 
     //VALIDAR QUE LOS CAMPOR NO ESTÉN VACIOS
-    console.log(this.actaPdf)
+    if (
+      !this.act_fecha_visita ||
+      !this.act_tipo_visita ||
+      !this.act_municipio ||
+      !this.act_prestador ||
+      !this.act_barrio ||
+      !this.act_nombre_funcionario1 ||
+      !this.act_nombre_prestador ||
+      !this.act_cargo_prestador ||
+      !this.act_obj_visita
+    ) {
+      //ASIGNANDO LOS RESPECTIVOS MENSAJES EN CASO DE ENTRAR AL IF DE VALIDACIÓN
+      let mensajeError = 'Por favor, complete los siguientes campos:';
+
+      if (!this.act_fecha_visita) {
+        mensajeError += ' Fecha de Visita,';
+        this.showTipoVisitaMessage = true
+      }
+
+      if (!this.act_tipo_visita) {
+        mensajeError += ' Tipo de Visita,';
+        this.showTipoVisitaMessage = true
+      }
+
+      if (!this.act_municipio) {
+        mensajeError += ' Municipio,';
+        this.showTipoVisitaMessage = true
+      }
+
+      if (!this.act_prestador) {
+        mensajeError += ' Prestador,';
+        this.showTipoVisitaMessage = true
+      }
+
+      if (!this.act_barrio) {
+        mensajeError += ' Barrio,';
+        this.showTipoVisitaMessage = true
+      }
+
+      if (!this.act_nombre_funcionario1) {
+        mensajeError += ' Verificador SOGCS,';
+        this.showTipoVisitaMessage = true
+      }
+
+      if (!this.act_nombre_prestador) {
+        mensajeError += ' Nombre del Prestador,';
+        this.showPresadorNombreMessage = true
+      }
+
+      if (!this.act_cargo_prestador) {
+        mensajeError += ' Cargo Prestador,';
+        this.showPrestadorCargoMessage = true
+      }
+
+      if (!this.act_obj_visita) {
+        mensajeError += ' Objeto de la Visita,';
+        this.showPrestadorCargoMessage = true
+      }
+
+      mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA
+
+      //MOSTRAR MENSAJE POR MEDIO DE TOASTR_SERVICE
+      this.toastrService.error(mensajeError, 'Error', {
+        timeOut: 3000,
+        positionClass: 'toast-top-center',
+      });
+
+    }
+    else {
+      //SOLICITUD DE REGISTRO DE ACTA ENVIANDO COMO PARAMETRO LA ACTA_DTO Y EL TOKEN_DTO
+      this.authService.registroActaPamecPdf(this.actaPamecPdf, tokenDto).subscribe(
+        data => {
+          if (!data.error) {
+            localStorage.setItem('boton-acta-pamec', 'true')
+            if(this.act_sede){
+              localStorage.setItem('nombre-pres-pamec', this.act_sede)
+            } else {
+              localStorage.setItem('nombre-pres-pamec', this.act_prestador)
+            }
+
+            //DESPUÉS DE REGISTRAR EL ACTA, SE SOLICITA LA ÚLTIMA ACTA
+            this.actaPdfService.listaUltimaPamec().subscribe(
+              ultimaActa => {
+                //VERIFICA QUE EXISTA EL ACTA REGISTRADA
+                if (ultimaActa && ultimaActa.id) {
+                  this.id_acta = ultimaActa.id;
+
+                  Swal.fire({
+                    title: '¿Desea descargar el acta?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                  }).then((result) => {
+                    //SOLICITUD AL SERVICIO QUE GENERA EL ACTA_PDF PASANDO COMO PARAMETRO LA ULTIMA ACTA REGISTRADA
+                    if (result.value) {
+                      this.generarPdfActaPamec.ActaPdf(this.id_acta);
+                      this.router.navigate(['/pamec/evaluacion']);
+                      window.scrollTo(0, 0);
+                    } else {
+                      this.router.navigate(['/pamec/evaluacion']);
+                      window.scrollTo(0, 0);
+                    }
+                  });
+                }
+                else {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo obtener el ID del acta.'
+                  });
+                }
+              }
+            )
+            //TOASTR PARA ENVIAR MENSAJE DE ÉXITO
+            this.toastrService.success(data.message, 'Éxito', {
+              timeOut: 3000,
+              positionClass: 'toast-top-center',
+            });
+          }
+          else {
+            //TOASTR PARA ENVIAR MENSAJE DE ERROR
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.message
+            });
+          }
+        },
+        err => {
+          //MANEJAR EL ERROR DEL SUSCRIBE DATA - registroActaPamecPdf
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err.error.message
+          });
+        }
+      );
+    }
   }
-
-
 
 }

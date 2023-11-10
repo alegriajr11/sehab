@@ -51,6 +51,7 @@ export class EvaluacionesSpIpsComponent implements OnInit {
     this.obtenerAnios();
   }
 
+  //CARGAR TODAS LAS ACTAS REALIZANDO LA SOLICITUD AL SERVICIO IPS
   cargarActas(): void {
     const token = this.tokenService.getToken()
     this.actapdfService.listaSpIps(token).subscribe(

@@ -16,9 +16,11 @@
 </div>
 
 
+<ng-template #modalTemplate>
+    <app-modal-cumplimiento-requisitos [dataFromParent]="modalRef"></app-modal-cumplimiento-requisitos>
+</ng-template>
 
 <div class="wrapper">
-
     <div class="container">
         <div class="table-wrapper">
             <div class="table-title">
@@ -37,22 +39,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><strong>1.</strong></td>
-                        <td routerLink="/servicios-capacidad"> INSCRIPCIÓN EN EL REGISTRO ESPECIAL DE PRESTADORES DE
-                            SERVICIOS DE SALUD (DOCUMENTOS)</td>
-                        <td>
-                            <button class="btn btn-outline-dark">
+                    <tr
+                        *ngFor="let condiciones of condiciones_habilitacion | filter: searchText | paginate: { itemsPerPage: 10, currentPage: page}; let i = index">
+                        <td class="text-center"><strong>{{i+1}}</strong></td>
+                        <td>{{condiciones.conc_nombre}}</td>
+                        <td class="text-center">
+                            <button class="btn" [ngClass]="getClassForCodicion(condiciones)"
+                                (click)="openModal(modalTemplate, condiciones.conc_id, condiciones.conc_nombre)">
                                 <i class="fa fa-check"></i>
                             </button>
                         </td>
-                        <!-- <td>
-                            <button class="btn" [ngClass]="getClassForCriterio(criterio)"
-                                [disabled]="sharedService.criteriosSicGuardados.includes(criterio.crie_id)"
-                                (click)="openModal(modalTemplate, criterio.crie_id, eva_id)">
-                                <i class="fa fa-check"></i>
-                            </button>
-                        </td> -->
                     </tr>
                 </tbody>
             </table>

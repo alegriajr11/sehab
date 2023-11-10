@@ -1,79 +1,81 @@
 <app-menu></app-menu>
-<div class="container">
-    <h1>Programa de auditoria para el mejoramiento de la calidad (PAMEC)</h1>
+<div class="col">
+    <div class="row">
+        <div class="col-md-2">
+            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/pamec/evaluaciones"
+                (click)="deshabilitarRutaEditar()">
+                <i class="fa fa-reply fa-lg"></i>
+            </button>
+        </div>
+        <div class="col-md-8">
+            <h1 class="text-center">Programa de auditoria para el mejoramiento de la calidad (PAMEC)</h1>
+        </div>
+    </div>
 </div>
 
-<div class="t2">
+<div>
     <h2>VERIFICACIÓN AL PAMEC DE LAS INSTITUCIONES PRESTADORAS DE SERVICIOS DE SALUD - IPS</h2>
 </div>
-<div class="container size">
+<ng-template #modalTemplate>
+    <app-modal-calificacion-pamec [dataFromParent]="modalRef"></app-modal-calificacion-pamec>
+</ng-template>
+
+
+<div class="container">
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-6">
                     <h5><b>Prestador:</b></h5>
-                    <span id="nombre-prestador">a</span>
+                    <span id="nombre-prestador">{{nombre_prestador}}</span>
                 </div>
                 <div class="col-md-6">
                     <h5><b>Actividad:</b></h5>
                     <select class="form-control" name="act_id" id="act_id" (change)="cargarCriterios()">
                         <option hidden selected value="">Selecciona la Actividad...</option>
-                        <option *ngFor="let actividad of actividad" value="{{actividad.act_id}}">{{actividad.act_nombre}}</option>
+                        <option *ngFor="let actividad of actividad" value="{{actividad.act_id}}">
+                            {{actividad.act_nombre}}</option>
                     </select>
                 </div>
                 <div class="col-sm-7"></div>
             </div>
         </div>
-        <form class="row g-3" #f="ngForm" novalidate (ngSubmit)="onRegister()">
-            <table id="tabla-evaluacion">
-                <thead>
-                    <tr *ngIf="controlCriterio">
-                        <th class="col-md-1 borderHorizontal" scope="col">Nro</th>
-                        <th class="col-md-3 borderVertical borderHorizontal" scope="col">Criterio</th>
-                        <th class="col-md-3 borderVertical borderHorizontal" scope="col">Desarrollo por Etapas</th>
-                        <th class="col-md-1 borderVertical borderHorizontal" scope="col">Aplica</th>
-                        <th class="col-md-1 borderVertical borderHorizontal" scope="col">Calificación</th>
-                        <th class="col-md-7 borderVertical borderHorizontal" scope="col">Observaciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let criterio of criteriopam; let i = index">
-                        <td style="border-top: 1px solid black;" class="borderHorizontal num">{{i+1}}</td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
-                            {{criterio.crip_nombre}}</td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
-                            {{criterio.crip_desarrollo_etapas}}</td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
-                            <select id="sel-aplica-{{i+1}}" class="form-control" name="" (change)="activarSelect()">
-                                <option hidden></option>
-                                <option *ngFor="let aplica of optionsAplica" [value]="aplica.value">{{aplica.label}}
-                                </option>
-                            </select>
-                        </td>
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical">
-                            <select class="form-control" name="" id="sel-calificacion-{{i+1}}">
-                                <option hidden></option>
-                                <option *ngFor="let calificacion of optionsCalificacion" [value]="calificacion.value">{{calificacion.nota}}</option>
-                            </select>
-                        </td>
+        <table class="table table-wrapper table-hover">
+            <div class="col-sm-12 text-center" *ngIf="!controlCriterio">
+                <h5><b>Selecciona una actividad a evaluar</b></h5>
+            </div>
+            <thead>
+                <tr *ngIf="controlCriterio">
+                    <th scope="col">Nro</th>
+                    <th scope="col">Criterio</th>
+                    <th scope="col">Calificación</th>
+                </tr>
+            </thead>
 
-                        <td style="border-top: 1px solid black;" class="borderHorizontal borderVertical"> <textarea
-                                type="text" class="form-control" name="crip_desarrollo_etapas"
-                                id="crip_desarrollo_etapas" required autocomplete="off"></textarea></td>
-                    </tr>
+            <tbody>
+                <tr *ngFor="let criterio of criteriopam; let i = index">
+                    <td class="text-center">{{i+1}}</td>
+                    <td style="text-align: justify;">
+                        {{criterio.crip_nombre}}</td>
 
-                    <div class="col-12" *ngIf="controlCriterio">
-                        <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit"
-                            [disabled]="!f.valid" (click)="disableItem()">
-                            <i class='fa fa-save fa-lg'></i></button>
-                    </div>
-                    <div class="col-12">
-                        <button (click)="obtenerValor()">Probando</button>
-                    </div>
-                </tbody>
-            </table>
+                    <td class="text-center">
+                        <button class="btn" [ngClass]="getClassForCriterio(criterio)"
+                            [disabled]="sharedService.criteriosPamecGuardados.includes(criterio.crip_id)"
+                            (click)="openModal(modalTemplate, criterio.crip_id, eva_pam_id)">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </td>
+                </tr>
 
-        </form>
+                <div class="col-12" *ngIf="controlCriterio">
+                    <button class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit">
+                        <i class='fa fa-save fa-lg'></i></button>
+                </div>
+
+            </tbody>
+        </table>
+
+
         <div class="container" *ngIf="listaVacia">
             <div class="p-3 mb-2 bg-dark text-white text-center">
                 <h2>{{ listaVacia }}</h2>

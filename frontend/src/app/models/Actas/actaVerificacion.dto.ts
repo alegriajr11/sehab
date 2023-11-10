@@ -16,6 +16,7 @@ export class ActaVerificacionDto {
     act_gerente: string
     act_cod_habilitacion: string
     act_sede: string
+    act_tipo_prestador: string
     act_cod_sede: string
     act_observaciones: string
     act_firma_prestador: string
@@ -41,6 +42,7 @@ export class ActaVerificacionDto {
         act_gerente: string,
         act_cod_habilitacion: string,
         act_sede: string,
+        act_tipo_prestador: string,
         act_cod_sede: string,
         act_observaciones: string,
         act_firma_prestador: string,
@@ -62,6 +64,7 @@ export class ActaVerificacionDto {
         this.act_gerente = act_gerente
         this.act_cod_habilitacion = act_cod_habilitacion
         this.act_sede = act_sede
+        this.act_tipo_prestador = act_tipo_prestador
         this.act_cod_sede = act_cod_sede
         this.act_observaciones = act_observaciones
         this.act_firma_prestador = act_firma_prestador

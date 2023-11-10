@@ -104,6 +104,7 @@
                         [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="sedeSeleccionada()"
                         [disabled]="!habilitarSelectSede">
                         <option value="" disabled selected hidden>Selecciona una Sede...</option>
+                        <option value=""></option>
                         <option *ngFor="let list_sede of sede" [value]="list_sede.sede_id">
                             {{ list_sede.sede_nombre }}
                         </option>
@@ -114,7 +115,7 @@
                     <label for="" class="form-label">Tipo de Prestador:</label>
                     <input type="text" class="form-control" id="clasificacionPrestador" placeholder="Tipo de Prestador"
                         readonly>
-                    <input type="hidden" name="act_clasificacion" [(ngModel)]="act_clasificacion">
+                    <input type="hidden" name="act_tipo_prestador" [(ngModel)]="act_tipo_prestador">
                 </div>
 
                 <div class="col-md-6">
@@ -298,12 +299,12 @@
                 <div class="col-12">
                     <label for="" class="form-label">Funcionario Recibe Visita:</label>
                     <input type="text" class="form-control" id="nombreFuncionarioPrestador" name="act_nombre_prestador"
-                        placeholder="Funcionario Visita..." [(ngModel)]="act_recibe_visita">
+                        placeholder="Funcionario Visita..." [(ngModel)]="act_funcionario_prestador">
                 </div>
 
                 <div class="col-12">
                     <button id="boton-acta-sic" class="btn btn-dark esp btn-circle btn-xl" title="Guardar"
-                        type="submit" routerLink="/reso/lista-verificacion">
+                        type="submit" >
                         <i class='fa fa-save fa-lg'></i>
                     </button>
                 </div>

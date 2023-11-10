@@ -61,6 +61,7 @@ export class EditarActaSpProComponent {
         this.actaSpInd = data;
         this.act_nombre_prestador = data.act_nombre_prestador
         this.noFirmaActa = data.noFirmaActa
+        console.log(data.act_fecha_inicial)
       },
       err => {
         this.toastr.error(err.error.message, 'Fail', {
@@ -305,7 +306,7 @@ export class EditarActaSpProComponent {
     this.router.navigate(['/sp/evaluaciones-pro']);
   }
 
-  //Manejo de errores en toastr al actualizar un Acta Sic
+  //Manejo de errores en toastr al actualizar un Acta Independientes
   private handleError(errorMessage: string): void {
     this.toastr.error(errorMessage, 'Fail', {
       timeOut: 3000, positionClass: 'toast-top-center',

@@ -7,6 +7,15 @@ h4 {
     font-weight: bold;
 }
 
+span{
+    font-weight: bold;
+}
+
+/*NOMBRE FUNCIONARIO SUBRAYADO*/
+.underlined {
+    text-decoration: underline;
+}
+
 
 .btn-dark:hover {
     transform: scale(1.1);

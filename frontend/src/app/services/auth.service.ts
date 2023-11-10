@@ -11,6 +11,7 @@ import { NuevoUsuarioAdminDto } from '../models/nuevo-usuario-admin.dto';
 import { ActaSicPdfDto } from '../models/Actas/actaSicpdf.dto';
 import { ActaSpPdfDto } from '../models/Actas/actaSpPdf.dto';
 import { ActaSpIndPdfDto } from '../models/Actas/actaSpIndPdf.dto';
+import { ActaPamecDto } from '../models/Actas/actaPamePdf.dto';
 
 
 @Injectable({
@@ -25,6 +26,7 @@ export class AuthService {
   restablecerContraseña = environment.restablecerContraseña;
   usuario = environment.usuarioURL;
   acta_sic_pdfUrl = environment.actaSic_pdf_URL;
+  acta_Pamec_pdfUrl = environment.actaPamec_pdf_url;
   acta_SpIps_pdfUrl = environment.actaSpIps_pdf_URL;
   acta_SpInd_pdfUrl = environment.actaSpInd_pdf_URL;
 
@@ -88,7 +90,6 @@ export class AuthService {
       evaluacionesIds: evaluacionesIds,
       tokenDto: tokenDto
     }
-    console.log(body)
     return this.httpClient.post<any>(this.acta_SpIps_pdfUrl, body);
   }
 
@@ -99,5 +100,15 @@ export class AuthService {
       tokenDto: tokenDto
     }
     return this.httpClient.post<any>(this.acta_SpInd_pdfUrl, body);
+  }
+
+
+  //REGISTRO ACTA PDF SIC
+  registroActaPamecPdf(dto: ActaPamecDto, tokenDto: TokenDto): Observable<any> {
+    const body = {
+      dto: dto,
+      tokenDto: tokenDto
+    }
+    return this.httpClient.post<any>(this.acta_Pamec_pdfUrl, body);
   }
 }

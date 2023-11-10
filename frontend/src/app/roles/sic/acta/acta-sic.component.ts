@@ -171,7 +171,6 @@ export class ActaSicComponent implements OnInit {
       }
     )
     this.act_municipioId = ''
-
   }
 
   //INPUTS VACIO SI SE SELECCIONA OTRO MUNICIPIO
@@ -706,6 +705,7 @@ export class ActaSicComponent implements OnInit {
         mensajeError += ' Fecha Inicial,';
         this.showFechaInicialMessage = true
       }
+
       if (this.act_fecha_inicial && !this.act_fecha_final) {
         mensajeError += ' Fecha Final,';
         this.showFechaFinalMessage = true
