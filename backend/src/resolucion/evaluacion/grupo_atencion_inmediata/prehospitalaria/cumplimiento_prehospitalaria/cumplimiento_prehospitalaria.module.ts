@@ -4,10 +4,11 @@ import { CumplimientoPrehospitalariaController } from './cumplimiento_prehospita
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioPrehospitalariaEntity } from '../criterio_prehospitalaria.entity';
 import { CumplimientoPrehospitalariaEntity } from '../cumplimiento_prehospitalaria.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioPrehospitalariaEntity, CumplimientoPrehospitalariaEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioPrehospitalariaEntity, CumplimientoPrehospitalariaEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoPrehospitalariaService],
   providers: [CumplimientoPrehospitalariaService],
   controllers: [CumplimientoPrehospitalariaController]

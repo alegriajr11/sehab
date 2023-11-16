@@ -5,9 +5,9 @@ import { CumplimientoHermoIntervenEntity } from '../cumplimiento_hemo_inter.enti
 import { CumplimientoHermoIntervenRepository } from '../cumplimiento_hemo_inter.repository';
 import { CriterioHermoIntervenEntity } from '../criterio_hemo_inter.entity';
 import { CriterioHermoIntervenRepository } from '../criterio_hemo_inter.repository';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CumplimientoHermodinamiaIntervenDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/hemodinamia_intervencionismo_dto/cumplimiento_hemo_inter.dto.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoHemodIntervenService {
@@ -17,8 +17,8 @@ export class CumplimientoHemodIntervenService {
         private readonly cumplimientoHermoIntervenRepository: CumplimientoHermoIntervenRepository,
         @InjectRepository(CriterioHermoIntervenEntity)
         private readonly criterioHermoIntervenRepository: CriterioHermoIntervenRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

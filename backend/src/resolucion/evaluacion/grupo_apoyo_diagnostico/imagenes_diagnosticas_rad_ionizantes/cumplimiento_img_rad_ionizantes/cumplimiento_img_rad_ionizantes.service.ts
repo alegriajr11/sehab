@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CumplimientoImgRadIonizanteEntity } from '../cumplimiento_img_rad_ionizantes.entity';
 import { CumplimientoImgRadIonizanteRepository } from '../cumplimiento_img_rad_ionizantes.repository';
 import { CriterioImgRadIonizantesEntity } from '../criterio_img_rad_ionizantes.entity';
 import { CriterioImgRadIonizanteRepository } from '../criterio_img_rad_ionizantes.repository';
 import { CumplimientoImgRadIonizantesDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/imagenes_diagnosticas_rad_ionizantes_dto/cumplimiento_img_rad_ionizantes.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoImgRadIonizantesService {
@@ -17,8 +17,8 @@ export class CumplimientoImgRadIonizantesService {
         private readonly cumplimientoImgRadIonizanteRepository: CumplimientoImgRadIonizanteRepository,
         @InjectRepository(CriterioImgRadIonizantesEntity)
         private readonly criterioImgRadIonizanteRepository: CriterioImgRadIonizanteRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

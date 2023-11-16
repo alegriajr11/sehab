@@ -4,10 +4,11 @@ import { CumplimientoImgRadNoionizantesController } from './cumplimiento_img_rad
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioImgRadNoIonizantesEntity } from '../criterio_img_rad_noionizantes.entity';
 import { CumplimientoImgRadNoIonizanteEntity } from '../cumplimiento_img_rad_noionizantes.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioImgRadNoIonizantesEntity, CumplimientoImgRadNoIonizanteEntity,EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioImgRadNoIonizantesEntity, CumplimientoImgRadNoIonizanteEntity,EvaluacionResVerificacionEntity])],
   exports: [CumplimientoImgRadNoionizantesService],
   providers: [CumplimientoImgRadNoionizantesService],
   controllers: [CumplimientoImgRadNoionizantesController]

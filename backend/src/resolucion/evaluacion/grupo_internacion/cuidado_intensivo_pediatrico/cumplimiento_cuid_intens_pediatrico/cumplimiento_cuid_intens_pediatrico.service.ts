@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioCuidIntePediatricoEntity } from '../criterio_cuid_intens_pediatrico.entity';
 import { CriterioCuidIntePediatricoRepository } from '../criterio_cuid_intens_pediatrico.repository';
 import { CumplimientoCuidIntPediatricoEntity } from '../cumplimiento_cuid_intens_pediatrico.entity';
 import { CumplimientoCuidIntPediatricoRepository } from '../cumplimiento_cuid_intens_pediatrico.repository';
 import { CumplimientoCuidIntePediatricoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_intensivo_pediatrico_dto/cumplimiento_cuid_intens_pediatrico.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoCuidIntensPediatricoService {
@@ -17,8 +17,8 @@ export class CumplimientoCuidIntensPediatricoService {
         private readonly cumplimientoCuidIntPediatricoRepository: CumplimientoCuidIntPediatricoRepository,
         @InjectRepository(CriterioCuidIntePediatricoEntity)
         private readonly criterioCuidIntePediatricoRepository: CriterioCuidIntePediatricoRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioQuimioterapiaEntity } from '../criterio_quimioterapia.entity';
 import { CriterioQuimioterapiaRepository } from '../criterio_quimioterapia.repository';
 import { CumplimientoQuimioterapiaEntity } from '../cumplimiento_quimioterapia.entity';
 import { CumplimientoQuimioterapiaRepository } from '../cumplimiento_quimioterapia.repository';
 import { CumplimientoQuimioterapiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/quimioterapia_dto/cumplimiento_quimioterapia.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoQuimioterapiaService {
@@ -17,8 +17,8 @@ export class CumplimientoQuimioterapiaService {
         private readonly cumplimientoQuimioterapiaRepository: CumplimientoQuimioterapiaRepository,
         @InjectRepository(CriterioQuimioterapiaEntity)
         private readonly criterioQuimioterapiaRepository: CriterioQuimioterapiaRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

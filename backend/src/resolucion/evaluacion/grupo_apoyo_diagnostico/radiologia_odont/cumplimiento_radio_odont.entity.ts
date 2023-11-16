@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { PrestadorEntity } from "src/prestador/prestador.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity,  ManyToOne,  PrimaryGeneratedColumn } from "typeorm";
 import { CriterioRadiologiaOdontoEntity } from "./criterio_radio_odont.entity";
-import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "../../evaluacion_resolucion_verificacion/evaluacion_res.entity";
+
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -35,7 +35,7 @@ export class CumplimientoRadOdontologicaEntity {
     criterio_rad_odontologica: CriterioRadiologiaOdontoEntity
 
     //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
-    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_radio_odont)
-    cump_eva_radio_odont: EvaluacionResEntity
+    @ManyToOne(type => EvaluacionResVerificacionEntity, eva_res => eva_res.eva_cumplimiento_radio_odont)
+    cump_eva_radio_odont: EvaluacionResVerificacionEntity
 
 }

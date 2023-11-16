@@ -4,10 +4,11 @@ import { CumplimientoExtEspecializadaController } from './cumplimiento_ext_espec
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioEspecializadaEntity } from '../criterio_especializada.entity';
 import { CumplimientoEspecializadaEntity } from '../cumplimiento_especializada.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioEspecializadaEntity, CumplimientoEspecializadaEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioEspecializadaEntity, CumplimientoEspecializadaEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoExtEspecializadaService],
   providers: [CumplimientoExtEspecializadaService],
   controllers: [CumplimientoExtEspecializadaController]

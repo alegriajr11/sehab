@@ -4,10 +4,10 @@ import { CumplimientoHospitalizacionEntity } from '../cumplimiento_hospitalizaci
 import { CumplimientoHospitalizacionRepository } from '../cumplimiento_hospitalizacion.repository';
 import { CriterioHospitalizacionEntity } from '../criterio_hospitalizacion.entity';
 import { CriterioHospitalizacionRepository } from '../criterio_hospitalizacion.repository';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { CumplimientoHospitalizacionDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/hospitalizacion_dto/cumplimiento_hospitalizacion.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoHospitalizacionService {
@@ -17,8 +17,8 @@ export class CumplimientoHospitalizacionService {
         private readonly cumplimientoHospitalizacionRepository: CumplimientoHospitalizacionRepository,
         @InjectRepository(CriterioHospitalizacionEntity)
         private readonly criterioHospitalizacionRepository: CriterioHospitalizacionRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

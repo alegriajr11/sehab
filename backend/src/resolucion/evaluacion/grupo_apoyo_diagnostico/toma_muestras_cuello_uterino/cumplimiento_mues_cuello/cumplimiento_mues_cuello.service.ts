@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioCuelloUterinoEntity } from '../criterio_tom_muest_cuello.entity';
 import { CriterioCuelloUterinoRepository } from '../criterio_tom_muest_cuello.repository';
 import { CumplimientoCuelloUterinoEntity } from '../cumplimiento_tom_muest_cuello.entity';
 import { CumplimientoCuelloUterinoRepository } from '../cumplimiento_tom_muest_cuello.repository';
 import { CumplimientoCuelloUterinoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/toma_muestras_cuello_uterino_dto/cumplimiento_tom_muest_cuello.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoMuesCuelloService {
@@ -17,8 +17,8 @@ export class CumplimientoMuesCuelloService {
         private readonly cumplimientoCuelloUterinoRepository: CumplimientoCuelloUterinoRepository,
         @InjectRepository(CriterioCuelloUterinoEntity)
         private readonly criterioCuelloUterinoRepository: CriterioCuelloUterinoRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

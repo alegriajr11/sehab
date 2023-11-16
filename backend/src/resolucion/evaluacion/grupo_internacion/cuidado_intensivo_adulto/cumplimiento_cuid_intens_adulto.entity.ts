@@ -2,7 +2,8 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioCuidIntensAdultoEntity } from "./criterio_cuid_intens_adulto.entity";
-import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "../../evaluacion_resolucion_verificacion/evaluacion_res.entity";
+
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -36,7 +37,7 @@ export class CumplimientoIntAdultoEntity {
     criterio_cuid_int_adulto: CriterioCuidIntensAdultoEntity
 
     //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
-    @ManyToOne(type => EvaluacionResEntity, evasic => evasic.eva_intens_adul_cumplimiento)
-    cump_eva_intens_adul: EvaluacionResEntity
+    @ManyToOne(type => EvaluacionResVerificacionEntity, eva_res => eva_res.eva_intens_adul_cumplimiento)
+    cump_eva_intens_adul: EvaluacionResVerificacionEntity
 
 }

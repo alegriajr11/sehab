@@ -2,7 +2,8 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioCuidIntermNeonatalEntity } from "./criterio_cuid_inter_neonatal.entity";
-import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "../../evaluacion_resolucion_verificacion/evaluacion_res.entity";
+
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -36,7 +37,7 @@ export class CumplimientoCuidInterNeonatalEntity {
     criterio_cuid_inter_neona: CriterioCuidIntermNeonatalEntity
 
     //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
-    @ManyToOne(type => EvaluacionResEntity, evasic => evasic.eva_inter_neo_cumplimiento)
-    cump_eva_inter_neo: EvaluacionResEntity
+    @ManyToOne(type => EvaluacionResVerificacionEntity, eva_res => eva_res.eva_inter_neo_cumplimiento)
+    cump_eva_inter_neo: EvaluacionResVerificacionEntity
 
 }

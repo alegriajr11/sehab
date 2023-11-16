@@ -2,7 +2,8 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioEspecializadaEntity } from "./criterio_especializada.entity";
-import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "../../evaluacion_resolucion_verificacion/evaluacion_res.entity";
+
 
 
 
@@ -32,6 +33,6 @@ export class CumplimientoEspecializadaEntity {
     criterio_externa_especializada: CriterioEspecializadaEntity
 
     //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
-    @ManyToOne(type => EvaluacionResEntity, evasic => evasic.eva_espec_cumplimiento)
-    cump_eva_espe: EvaluacionResEntity
+    @ManyToOne(type => EvaluacionResVerificacionEntity, eva_sic => eva_sic.eva_espec_cumplimiento)
+    cump_eva_espe: EvaluacionResVerificacionEntity
 }

@@ -1,13 +1,12 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from '../../evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from '../../evaluacion_res/evaluacion_res.repository';
 import { Criterio_servicios } from '../servicios/criterio_servicios.entity';
 import { CriterioServiciosRepository } from '../servicios/criterio_servicios.repository';
 import { CumplimientoServiciosEntity } from '../servicios/cumplimiento_servicios.entity';
 import { CumplimientoServiciosRepository } from '../servicios/cumplimiento_servicios.repository';
 import { CumplimientoServiciosDto } from 'src/resolucion/dtos/evaluacion_dtos/todos_servicios_dto/servicios_dto/cumplimiento_servicios.dto';
+import { EvaluacionResVerificacionRepository } from '../../evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoTodosServiciosService {
@@ -17,8 +16,8 @@ export class CumplimientoTodosServiciosService {
         private readonly cumplimientoServiciosRepository: CumplimientoServiciosRepository,
         @InjectRepository(Criterio_servicios)
         private readonly criterioServiciosRepository: CriterioServiciosRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionRepository)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

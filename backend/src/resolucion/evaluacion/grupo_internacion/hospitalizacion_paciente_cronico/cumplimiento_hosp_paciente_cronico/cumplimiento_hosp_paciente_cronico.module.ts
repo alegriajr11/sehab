@@ -4,10 +4,11 @@ import { CumplimientoHospPacienteCronicoController } from './cumplimiento_hosp_p
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioHospitCronicoEntity } from '../criterio_hosp_paciente_cron.entity';
 import { CumplimientoHospitCronicoEntity } from '../cumplimiento_hosp_paciente_cron.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioHospitCronicoEntity, CumplimientoHospitCronicoEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioHospitCronicoEntity, CumplimientoHospitCronicoEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoHospPacienteCronicoService],
   providers: [CumplimientoHospPacienteCronicoService],
   controllers: [CumplimientoHospPacienteCronicoController]

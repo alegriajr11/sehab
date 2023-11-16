@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioTerapiaEntity } from '../criterios_terapias.entity';
 import { CriterioTerapiaRepository } from '../criterios_terapias.repository';
 import { CumplimientoTerapiaEntity } from '../cumplimiento_terapias.entity';
 import { CumplimientoTerapiaRepository } from '../cumplimiento_terapias.repository';
 import { CumplimientoTerapiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/terapias_dto/cumplimiento_terapia.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoTerapiasService {
@@ -17,8 +17,8 @@ export class CumplimientoTerapiasService {
         private readonly cumplimientoTerapiaRepository: CumplimientoTerapiaRepository,
         @InjectRepository(CriterioTerapiaEntity)
         private readonly criterioTerapiaRepository: CriterioTerapiaRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

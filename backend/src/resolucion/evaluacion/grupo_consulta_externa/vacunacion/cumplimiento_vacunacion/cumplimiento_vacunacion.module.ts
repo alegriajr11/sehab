@@ -4,10 +4,11 @@ import { CumplimientoVacunacionController } from './cumplimiento_vacunacion.cont
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioVacunacionEntity } from '../criterio_vacunacion.entity';
 import { CumplimientoVacunacionEntity } from '../cumplimiento_vacunacion.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioVacunacionEntity, CumplimientoVacunacionEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioVacunacionEntity, CumplimientoVacunacionEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoVacunacionService],
   providers: [CumplimientoVacunacionService],
   controllers: [CumplimientoVacunacionController]

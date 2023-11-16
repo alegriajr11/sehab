@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioTranspAsistencialEntity } from '../criterio_trans_asistencial.entity';
 import { CriterioTranspAsistencialRepository } from '../criterio_trans_asistencial.repository';
 import { CumplimientoTranspAsistencialEntity } from '../cumplimiento_trans_asistencial.entity';
 import { CumplimientoTranspAsistencialRepository } from '../cumplimiento_trans_asistencial.repository';
 import { CumplimientoTranspAsistencialDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_atencion_inmediata_dtos/transporte_asistencial_dto/cumplimiento_trans_asistencial.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoTransAsistencialService {
@@ -17,8 +17,8 @@ export class CumplimientoTransAsistencialService {
         private readonly cumplimientoTranspAsistencialRepository: CumplimientoTranspAsistencialRepository,
         @InjectRepository(CriterioTranspAsistencialEntity)
         private readonly criterioTranspAsistencialRepository: CriterioTranspAsistencialRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

@@ -4,10 +4,10 @@ import { CumplimientoDialisisController } from './cumplimiento_dialisis.controll
 import { CriterioDialisisEntity } from '../criterio_dialisis.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CumplimientoDialisisEntity } from '../cumplimiento_dialisis.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioDialisisEntity, CumplimientoDialisisEntity,EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioDialisisEntity, CumplimientoDialisisEntity,EvaluacionResVerificacionEntity])],
   providers: [CumplimientoDialisisService],
   controllers: [CumplimientoDialisisController],
   exports: [CumplimientoDialisisService]
