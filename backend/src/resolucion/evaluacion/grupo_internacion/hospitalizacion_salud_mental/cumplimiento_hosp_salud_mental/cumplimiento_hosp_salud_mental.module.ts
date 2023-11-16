@@ -4,11 +4,11 @@ import { CumplimientoHospSaludMentalController } from './cumplimiento_hosp_salud
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioHospitalizacionMentalEntity } from '../criterio_hosp_salud_mental.entity';
 import { CumplimientoHospitalizacionMentalEntity } from '../cumplimiento_hosp_salud_mental.entity';
-import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioHospitalizacionMentalEntity, CumplimientoHospitalizacionMentalEntity, EvaluacionResVerificacionRepository])],
+  imports: [TypeOrmModule.forFeature([CriterioHospitalizacionMentalEntity, CumplimientoHospitalizacionMentalEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoHospSaludMentalService],
   providers: [CumplimientoHospSaludMentalService],
   controllers: [CumplimientoHospSaludMentalController]

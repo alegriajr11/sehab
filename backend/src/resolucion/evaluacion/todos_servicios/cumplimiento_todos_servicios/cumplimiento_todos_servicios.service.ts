@@ -7,6 +7,7 @@ import { CumplimientoServiciosEntity } from '../servicios/cumplimiento_servicios
 import { CumplimientoServiciosRepository } from '../servicios/cumplimiento_servicios.repository';
 import { CumplimientoServiciosDto } from 'src/resolucion/dtos/evaluacion_dtos/todos_servicios_dto/servicios_dto/cumplimiento_servicios.dto';
 import { EvaluacionResVerificacionRepository } from '../../evaluacion_resolucion_verificacion/evaluacion_res.repository';
+import { EvaluacionResVerificacionEntity } from '../../evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 @Injectable()
 export class CumplimientoTodosServiciosService {
@@ -16,7 +17,7 @@ export class CumplimientoTodosServiciosService {
         private readonly cumplimientoServiciosRepository: CumplimientoServiciosRepository,
         @InjectRepository(Criterio_servicios)
         private readonly criterioServiciosRepository: CriterioServiciosRepository,
-        @InjectRepository(EvaluacionResVerificacionRepository)
+        @InjectRepository(EvaluacionResVerificacionEntity)
         private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     

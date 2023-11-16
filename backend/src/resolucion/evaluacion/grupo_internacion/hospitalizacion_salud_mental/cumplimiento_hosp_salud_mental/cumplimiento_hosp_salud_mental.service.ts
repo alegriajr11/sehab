@@ -7,6 +7,7 @@ import { CumplimientoHospitalizacionMentalEntity } from '../cumplimiento_hosp_sa
 import { CumplimientoHospitalizacionMentalRepository } from '../cumplimiento_hosp_salud_mental.repository';
 import { CumplimientoHospitalizacionMentalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/hospitalizacion_salud_mental_dto/cumplimiento_hosp_salud_mental.dto';
 import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 @Injectable()
 export class CumplimientoHospSaludMentalService {
@@ -16,7 +17,7 @@ export class CumplimientoHospSaludMentalService {
         private readonly cumplimientoHospitalizacionMentalRepository: CumplimientoHospitalizacionMentalRepository,
         @InjectRepository(CriterioHospitalizacionMentalEntity)
         private readonly criterioHospitalizacionMentalRepository: CriterioHospitalizacionMentalRepository,
-        @InjectRepository(EvaluacionResVerificacionRepository)
+        @InjectRepository(EvaluacionResVerificacionEntity)
         private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     

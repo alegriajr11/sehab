@@ -7,6 +7,7 @@ import { CumplimientoCirugiaEntity } from '../cumplimiento_cirugia.entity';
 import { CumplimientoCirugiaRepository } from '../cumplimiento_cirugia.repository';
 import { CumplimientoCirugiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_quirurgico_dtos/cirugia_dto/cumplimiento_cirugia.dto';
 import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 @Injectable()
 export class CumplimientoCirugiaService {
@@ -16,7 +17,7 @@ export class CumplimientoCirugiaService {
         private readonly cumplimientoCirugiaRepository: CumplimientoCirugiaRepository,
         @InjectRepository(CriterioCirugiaEntity)
         private readonly criterioCirugiaRepository: CriterioCirugiaRepository,
-        @InjectRepository(EvaluacionResVerificacionRepository)
+        @InjectRepository(EvaluacionResVerificacionEntity)
         private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
