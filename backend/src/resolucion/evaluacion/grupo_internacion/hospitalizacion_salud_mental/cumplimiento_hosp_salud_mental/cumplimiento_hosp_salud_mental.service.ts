@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioHospitalizacionMentalEntity } from '../criterio_hosp_salud_mental.entity';
 import { CriterioHospitalizacionMentalRepository } from '../criterio_hosp_salud_mental.repository';
 import { CumplimientoHospitalizacionMentalEntity } from '../cumplimiento_hosp_salud_mental.entity';
 import { CumplimientoHospitalizacionMentalRepository } from '../cumplimiento_hosp_salud_mental.repository';
 import { CumplimientoHospitalizacionMentalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/hospitalizacion_salud_mental_dto/cumplimiento_hosp_salud_mental.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoHospSaludMentalService {
@@ -17,8 +17,8 @@ export class CumplimientoHospSaludMentalService {
         private readonly cumplimientoHospitalizacionMentalRepository: CumplimientoHospitalizacionMentalRepository,
         @InjectRepository(CriterioHospitalizacionMentalEntity)
         private readonly criterioHospitalizacionMentalRepository: CriterioHospitalizacionMentalRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

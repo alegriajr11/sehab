@@ -27,9 +27,11 @@ export class PamecActaController {
     async findAllBusqueda(@Query('year') year: number,
         @Query('acta_id') act_id: number,
         @Query('act_prestador') act_prestador: string,
-        @Query('act_nit') act_nit: string) {
-        return this.pamecActaService.findAllBusqueda(year, act_id, act_prestador, act_nit);
+        @Query('act_nit') act_nit: string,
+        @Query('tokenDto') tokenDto: string) {
+        return this.pamecActaService.findAllBusqueda(year, act_id, act_prestador, act_nit, tokenDto);
     }
+
 
     @UseGuards(JwtAuthGuard)
     @Get('ultima/acta/pamec')

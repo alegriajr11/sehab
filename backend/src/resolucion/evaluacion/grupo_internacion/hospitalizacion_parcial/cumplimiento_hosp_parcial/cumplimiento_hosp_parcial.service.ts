@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioHospitalizacionParcialEntity } from '../criterio_hosp_parcial.entity';
 import { CriterioHospitalizacionParcialRepository } from '../criterio_hosp_parcial.repository';
 import { CumplimientoHospitalizacionParcialEntity } from '../cumplimiento_hosp_parcial.entity';
 import { CumplimientoHospitalizacionParcialRepository } from '../cumplimiento_hosp_parcial.repository';
 import { CumplimientoHospitalizacionParcialDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/hospitalizacion_parcial_dto/cumplimiento_hosp_parcial.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoHospParcialService {
@@ -17,8 +17,8 @@ export class CumplimientoHospParcialService {
         private readonly cumplimientoHospitalizacionParcialRepository: CumplimientoHospitalizacionParcialRepository,
         @InjectRepository(CriterioHospitalizacionParcialEntity)
         private readonly criterioHospitalizacionParcialRepository: CriterioHospitalizacionParcialRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO
