@@ -19,7 +19,7 @@ export class DatosVisitVErificadoEntity {
     @Column({type: 'varchar', length: 50, nullable: false})
     dat_encontrado_correo: string;
 
-    @Column({type: 'varchar', length: 255, nullable: false})
+    @Column({type: 'varchar', length: 255, nullable: true})
     act_observaciones: string;
 
 

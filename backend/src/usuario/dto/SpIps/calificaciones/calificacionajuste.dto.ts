@@ -5,7 +5,7 @@ import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 
 export class CalificacionAjusteDto {
     
-    @IsNotBlank()
+    @IsNumber()
     cal_nota: number;
 
     @IsString()
@@ -13,12 +13,13 @@ export class CalificacionAjusteDto {
     cal_observaciones: string
 
     @IsNumber()
-    cri_aju_id:number
-
+    cri_ips_id: number;
+    
     @IsNumber()
-    cal_acta: number
-
+    eva_ips_id: number;
+    
     @IsNumber()
-    cal_evaluacion: number
+    acta_ips: number;
+
 
 }

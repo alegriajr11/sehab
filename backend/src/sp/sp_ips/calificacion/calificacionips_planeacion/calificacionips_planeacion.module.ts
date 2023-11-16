@@ -10,9 +10,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuditoriaActualizacionModule } from 'src/auditoria/auditoria_actualizacion/auditoria_actualizacion.module';
 import { AuditoriaEliminacionModule } from 'src/auditoria/auditoria_eliminacion/auditoria_eliminacion.module';
+import { EvaluacionipsEntity } from '../../evaluacionips.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioPlaneacionEntity,CalificacionPlaneacionIpsEntity]),
+  imports: [TypeOrmModule.forFeature([CriterioPlaneacionEntity, CalificacionPlaneacionIpsEntity, EvaluacionipsEntity]),
   AuditoriaRegistroModule,AuditoriaActualizacionModule, AuditoriaEliminacionModule,
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),

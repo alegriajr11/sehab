@@ -98,7 +98,7 @@ export class PamecActaService {
         }
 
         if (year) {
-            if (numActa) {
+            if (numActa || nomPresta || nit) {
                 query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
             } else {
                 query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
@@ -106,11 +106,19 @@ export class PamecActaService {
         }
 
         if (nomPresta) {
-            query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            if(year || numActa || nit){
+                query = query.andWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            } else {
+                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            }
         }
 
         if (nit) {
-            query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            if(year || numActa || nomPresta){
+                query = query.andWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            } else {
+                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            }
         }
 
         const actas = await query.getMany();

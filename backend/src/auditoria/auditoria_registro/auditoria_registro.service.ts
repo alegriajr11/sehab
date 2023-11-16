@@ -971,7 +971,7 @@ export class AuditoriaRegistroService {
     }
 
     //CREACION DE CALIFICACION
-    //CONTROLAR LA ACTUALIZACIÓN DE  SP INDEPENDIENTE ACTA
+    //CONTROLAR LA CREACIÓN DE  SP INDEPENDIENTE ACTA
     async logcreatecalificacion(
         usu_nombre: string,
         usu_apellido: string,
@@ -1025,7 +1025,7 @@ export class AuditoriaRegistroService {
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Calificacion Sp Independientes',
+            'Creación Calificacion Sp Independientes',
             details,
             direccionIp,
         );
@@ -1038,14 +1038,15 @@ export class AuditoriaRegistroService {
         direccionIp: string,
         cal_nota: number,
         cri_nombre: string,
-        //act_id: number,
+        nombre_evaluacion: string,
+        act_id: number,
         anio: string,
     ): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha asignado una calificacion Sp Ips de: (${cal_nota}) al criterio "${cri_nombre}" del acta No. del año ${anio}`;
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha asignado una calificacion Sp Ips con nota: (${cal_nota}) al criterio "${cri_nombre}" de la evaluacion: "${nombre_evaluacion}" del acta No. ${act_id} del año ${anio}`;
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Calificacion Sp Independientes',
+            'Creación Calificacion Sp Ips',
             details,
             direccionIp,
         );
@@ -1067,7 +1068,7 @@ export class AuditoriaRegistroService {
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Calificacion Pamec',
+            'Creación Calificacion Pamec',
             details,
             direccionIp,
         );
@@ -1087,7 +1088,7 @@ export class AuditoriaRegistroService {
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Criterio Pamec',
+            'Creación Criterio Pamec',
             details,
             direccionIp,
         );

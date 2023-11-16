@@ -55,7 +55,7 @@ export class ActaVerificacionDto {
     act_fecha_inicio: string
 
     @IsString()
-    act_fecha_fin: string;
+    act_fecha_final: string;
 
     @IsString()
     act_observaciones: string

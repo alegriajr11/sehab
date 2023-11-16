@@ -20,7 +20,10 @@ export class CalificacionAjusteIpsEntity {
     cal_observaciones: string;
 
     @Column({type: 'int'})
-    cal_evaluacion: number;
+    eva_ips_id: number;
+
+    @Column({type: 'int'})
+    acta_ips: number;
 
     
     //Relacion Muchos a Uno CALIFICACION_IPS - CRITERIO_AJUSTE

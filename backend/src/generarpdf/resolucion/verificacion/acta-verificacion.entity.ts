@@ -33,19 +33,19 @@ export class ActaVerificacionEntity {
     @Column({ type: 'varchar', length: 11, nullable: false })
     act_nit: string;
 
-    @Column({ type: 'varchar', length: 100, nullable: false })
+    @Column({ type: 'varchar', length: 100, nullable: true })
     act_sede: string;
 
     @Column({ type: 'varchar', length: 55, nullable: false })
     act_direccion: string;
 
-    @Column({ type: 'varchar', length: 70, nullable: false })
+    @Column({ type: 'varchar', length: 70, nullable: true })
     act_cargo_prestador: string;
 
     @Column({ type: 'varchar', length: 12, nullable: false })
     act_cod_habilitacion: string;
 
-    @Column({ type: 'varchar', length: 12, nullable: false })
+    @Column({ type: 'varchar', length: 12, nullable: true })
     act_cod_sede: string;
 
     @Column({ type: 'varchar', length: 85, nullable: false })
@@ -64,12 +64,12 @@ export class ActaVerificacionEntity {
     act_fecha_inicio: Date;
 
     @Column({ type: 'date' })
-    act_fecha_fin: Date;
+    act_fecha_final: Date;
 
-    @Column({ type: 'varchar', length: 200, nullable: false })
+    @Column({ type: 'varchar', length: 200, nullable: true })
     act_observaciones: string
 
-    @Column({ type: 'text', nullable: false })
+    @Column({ type: 'text', nullable: true })
     act_firma_prestador: string;
 
     @Column({ type: 'varchar', length: 85, nullable: false })
@@ -104,7 +104,7 @@ export class ActaVerificacionEntity {
     @JoinTable({
         name: 'verif_usuario',
         joinColumn: { name: 'verif_usu_id' },
-        inverseJoinColumn: { name: 'usu_verif_id' }
+        inverseJoinColumn: { name: 'usu_verif_id' },
     })
     verificacion_usuario: UsuarioEntity[];
 

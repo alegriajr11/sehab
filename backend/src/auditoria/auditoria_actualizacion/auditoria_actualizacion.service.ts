@@ -202,7 +202,7 @@ export class AuditoriaActualizacionService {
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Calificacion Pamec',
+            'Actualización Calificacion Pamec',
             details,
             direccionIp,
         );
@@ -218,31 +218,32 @@ export class AuditoriaActualizacionService {
         act_id: number,
         anio: string,
     ): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha actualizado una calificacion Sp Indepenndiente (${cal_nota}) al criterio "${cri_nombre}" del acta No. ${act_id} del año ${anio}`;
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha actualizado una calificacion Seguridad del Paciente - Indepenndientes (${cal_nota}) al criterio "${cri_nombre}" del acta No. ${act_id} del año ${anio}`;
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Calificacion Sp Independiente',
+            'Actualización Calificacion SP Independientes',
             details,
             direccionIp,
         );
     }
 
-    //CONTROLAR LA ACTUALIZACIÓN DE UNA CALIFICACION PAMEC
+    //CONTROLAR LA ACTUALIZACIÓN DE UNA CALIFICACION SP IPS
     async logUpdateCalificacionSpIps(
         usu_nombre: string,
         usu_apellido: string,
         direccionIp: string,
         cal_nota: number,
         cri_nombre: string,
-        //act_id: number,
+        nombre_evaluacion: string,
+        act_id: number,
         anio: string,
     ): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha actualizado una calificacion Sp Ips (${cal_nota}) al criterio "${cri_nombre}" del acta No. acta del año ${anio}`;
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha actualizado una calificacion Sp Ips con nota: (${cal_nota}) al criterio "${cri_nombre}" de la evaluación: "${nombre_evaluacion}" y del acta No. ${act_id} del año ${anio}`;
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Calificacion Sp Ips',
+            'Actualización Calificacion SP IPS',
             details,
             direccionIp,
         );
@@ -262,7 +263,7 @@ export class AuditoriaActualizacionService {
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Cumplimiento Sic',
+            'Actualización Cumplimiento Sic',
             details,
             direccionIp,
         );

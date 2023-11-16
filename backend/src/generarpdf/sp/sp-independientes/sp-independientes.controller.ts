@@ -9,7 +9,7 @@ export class SpIndependientesController {
 
     constructor(private readonly sp_IndependientesService: SpIndependientesService) { }
 
-    //OBTENER TODOS LOS  SP INDEPENDIENTE ACTA PDF
+    //OBTENER TODOS LAS ACTAS SP INDEPENDIENTE
     @UseGuards(JwtAuthGuard)
     @Get()
     getAll(@Query('tokenDto') tokenDto: string) {

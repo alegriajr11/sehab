@@ -20,6 +20,7 @@ import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/audit
 import { UsuariosSeleccionadosDto } from './dto/usuarios-seleccionados.dto';
 import { UsuarioEntity } from 'src/usuario/usuario.entity';
 import { UsuarioRepository } from 'src/usuario/usuario.repository';
+import { UsuarioDto } from 'src/usuario/dto/usuario.dto';
 
 @Injectable()
 export class VerificacionService {
@@ -38,6 +39,70 @@ export class VerificacionService {
 		private readonly jwtService: JwtService,
 		private readonly auditoria_registro_services: AuditoriaRegistroService,
 	) { }
+
+
+	//LISTAR TODOS LOS USUARIOS QUE TIENEN ASIGNADA EL ID DEL ACTA
+	async listarTodosLosUsuariosPorIdDeActa(id_acta: number): Promise<UsuarioEntity[]> {
+		try {
+			const acta_usuarios = await this.usuarioRepository
+				.createQueryBuilder('usuarios')
+				.innerJoinAndSelect('usuarios.usuario_verificacion','usuario_verificacion')
+				.where("usuario_verificacion.id= :id",{ id: id_acta })
+				.getMany()
+
+				if(!acta_usuarios){
+					throw new NotFoundException(new MessageDto('No Hay Usuarios'));
+				}
+
+			return acta_usuarios;
+		} catch (error) {
+			console.error('Error al obtener los usuarios del acta asignada:', error);
+			return undefined;
+		}
+	}
+
+
+	//LISTAR TODAS LAS ACTAS DE VERIFICACION
+	async getAllActasVerificacion(tokenDto: string): Promise<ActaVerificacionEntity[]> {
+		const usuario = await this.jwtService.decode(tokenDto);
+
+		const payloadInterface: PayloadInterface = {
+			usu_id: usuario[`usu_id`],
+			usu_nombre: usuario[`usu_nombre`],
+			usu_apellido: usuario[`usu_apellido`],
+			usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+			usu_email: usuario[`usu_email`],
+			usu_estado: usuario[`usu_estado`],
+			usu_roles: usuario[`usu_roles`]
+		};
+
+		if (!payloadInterface.usu_roles.includes('admin')) {
+			const acta = await this.acta_verificacion_pdfRepository.createQueryBuilder('acta_verificacion')
+				.select(['acta_verificacion'])
+				.innerJoinAndSelect('acta_verificacion.verificacion_usuario', 'verificacion_usuario')
+				.where('verificacion_usuario.usu_id = :id_usuario', { id_usuario: payloadInterface.usu_id })
+				.orderBy("CASE WHEN acta_verificacion.act_estado = '1' THEN 0 ELSE 1 END, acta_verificacion.act_estado")
+				.getMany()
+			if (acta.length === 0) throw new NotFoundException(new MessageDto('No tienes evaluaciones asignadas'))
+			return acta;
+		} else {
+			const acta = await this.acta_verificacion_pdfRepository.createQueryBuilder('acta_verificacion')
+				.select(['acta_verificacion'])
+				.orderBy("CASE WHEN acta_verificacion.act_estado = '1' THEN 0 ELSE 1 END, acta_verificacion.act_estado")
+				.getMany()
+			if (acta.length === 0) throw new NotFoundException(new MessageDto('No hay evaluaciones asignadas'))
+			return acta;
+		}
+	}
+
+	//LISTAR ACTA POR ID
+	async findByActa(id: number): Promise<ActaVerificacionEntity> {
+		const acta_verificacion = await this.acta_verificacion_pdfRepository.findOne({ where: { id } });
+		if (!acta_verificacion) {
+			throw new NotFoundException(new MessageDto('No Existe'));
+		}
+		return acta_verificacion;
+	}
 
 	//LISTAR ULTIMO ACTA_ID POR TIPO DE VISITA
 	async getLastActa(tipo_visita: string): Promise<ActaVerificacionEntity> {
@@ -119,6 +184,34 @@ export class VerificacionService {
 
 	}
 
+	//ÚLTIMA ACTA REGISTRADA ALL
+	async getLastestActa(): Promise<ActaVerificacionEntity | undefined> {
+		try {
+			const ultimaActaId = await this.acta_verificacion_pdfRepository
+				.createQueryBuilder('acta')
+				.select('MAX(acta.act_id)', 'maxId')
+				.getRawOne();
+
+			if (!ultimaActaId || !ultimaActaId.maxId) {
+				return undefined; // No hay actas en la base de datos
+			}
+
+			const ultimaActa = await this.acta_verificacion_pdfRepository
+				.createQueryBuilder('acta')
+				.where('acta.act_id = :maxId', { maxId: ultimaActaId.maxId })
+				.getOne();
+
+			return ultimaActa;
+		} catch (error) {
+			console.error('Error al obtener la última acta:', error);
+			return undefined;
+		}
+	}
+
+
+
+
+
 	//CONSULTA CREAR UN ACTA VERIFICACIÓN
 	async create(payloads: {
 		dto_acta: ActaVerificacionDto, dto_verificados: DatosVerificadosDto,
@@ -147,7 +240,7 @@ export class VerificacionService {
 
 			const acta_ultima_verificacion = await this.acta_verificacion_pdfRepository.createQueryBuilder('acta')
 				.addSelect('acta.id')
-				.orderBy('acta.act_id', 'DESC')
+				.orderBy('acta.id', 'DESC')
 				.getOne();
 
 			//CONSULTAR LA ULTIMA ACTA QUE SE ASIGNARA A LA ENTIDAD DATOS ENCONTRADOS
@@ -190,6 +283,7 @@ export class VerificacionService {
 			//Obtener los usuarios basados en sus IDs
 			const usuariosAsignados = await this.usuarioRepository.findByIds(Object.values(dto_usuarios_seleccionados));
 
+
 			// Asignar la relación ManyToMany
 			acta.verificacion_usuario = usuariosAsignados;
 
@@ -212,6 +306,7 @@ export class VerificacionService {
 
 		} catch (error) {
 			// Devuelve un mensaje de error apropiado
+			console.log(error)
 			return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
 		}
 	}

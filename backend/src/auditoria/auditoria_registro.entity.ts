@@ -14,7 +14,7 @@ export class AuditoriaRegistroEntity {
     @Column()
     accion: string;
 
-    @Column({type: 'varchar', length: 455, nullable: false})
+    @Column({type: 'text', nullable: false})
     detalles: string;
 
     @Column()
