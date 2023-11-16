@@ -88,6 +88,8 @@ import { EditarEvaluacionSpIpsComponent } from './roles/sp/sp-ips/evaluaciones-i
 import { CumplimientoRequisitosComponent } from './roles/reso/cumplimiento-requisitos/cumplimiento-requisitos.component';
 import { ConclusionesRecomendacionesComponent } from './roles/reso/conclusiones-recomendaciones/conclusiones-recomendaciones.component';
 import { EquipoVerificadoresComponent } from './roles/reso/equipo-verificadores/equipo-verificadores.component';
+import { EditarActaPamecComponent } from './roles/pamec/evaluaciones/editar-acta-pamec/editar-acta-pamec.component';
+import { EditarActaPamecGuard } from './guards/editar-acta-pamec.guard';
 
 
 const routes: Routes = [
@@ -152,7 +154,7 @@ const routes: Routes = [
 
   //RUTAS SP-IPS EDITAR-ACTA
   { path: 'sp-ips/acta/editar/:id', component: EditarActaSpIpsComponent, canActivate: [UsuarioGuard, EditarActaSpIpsGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  
+
   //RUTAS SP-IND EDITAR-ACTA
   { path: 'sp-ind/acta/editar/:id', component: EditarActaSpProComponent, canActivate: [UsuarioGuard, EditarActaSpIndGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
   //Rutas SP - PROFESIONALES
@@ -160,12 +162,14 @@ const routes: Routes = [
   { path: 'sp/evaluaciones-pro', component: EvaluacionesSpProComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/evaluacion-pro', component: EvaluacionSpProComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
   { path: 'sp/evaluacion-pro/editar/:id', component: EditarEvaluacionSpProComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
-  
+
   //Rutas PAMEC
   { path: 'pamec', component: HomePamecComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'pamec'] } },
   { path: 'pamec/acta', component: ActaPamecComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'pamec'] } },
   { path: 'pamec/evaluaciones', component: EvaluacionesPamecComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'pamec'] } },
-  { path: 'pamec/evaluacion', component: EvaluacionPamecComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'pamec'] } },
+  { path: 'pamec/evaluacion', component: EvaluacionPamecComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'pamec'] } },
+  //RUTAS PAMEC EDITAR-ACTA
+  { path: 'pamec/acta/editar/:id', component: EditarActaPamecComponent, canActivate: [UsuarioGuard, EditarActaPamecGuard, ButtonGuard], data: { expectedRol: ['admin', 'sp'] } },
 
 
   //Rutas RESOLUCIÓN
@@ -178,13 +182,13 @@ const routes: Routes = [
 
   //RUTA CONCLUSIONES Y RECOMENDACIONES
   { path: 'conclusiones-recomendaciones', component: ConclusionesRecomendacionesComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
-  
+
   //RUTA EQUIPO DE VERIFICADORES
   { path: 'equipo-verificadores', component: EquipoVerificadoresComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
 
 
   //RUTA CONTADOR - RESOLUION 3100
-  { path: 'reso/contador', component: ContadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'resolucion/contador', component: ContadorComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
 
   //RUTAS ACTA - RESOLUCIÓN 3100
   { path: 'reso/visita-verificacion', component: ActaVisitaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'coordinador'] } },

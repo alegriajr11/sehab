@@ -16,8 +16,10 @@ export class CalificacionVerificacionIpsEntity {
     cal_observaciones: string;
 
     @Column({type: 'int'})
-    cal_evaluacion: number;
+    eva_ips_id: number;
 
+    @Column({type: 'int'})
+    acta_ips: number;
     
     //Relacion Muchos a Uno CALIFICACION_IPS_VERIFICACION - CRITERIO_VERIFICACION
     @ManyToOne(type => CriterioVerificacionEntity, calificacion_verificacion_ips => calificacion_verificacion_ips.criterio_verificacion_cal)

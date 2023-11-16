@@ -123,4 +123,9 @@ span{
     font-size: xx-large;
 }
 
-
+/*ELIMINAR LOS SPIN EN EL INPUT DE TIPO NUMBER*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

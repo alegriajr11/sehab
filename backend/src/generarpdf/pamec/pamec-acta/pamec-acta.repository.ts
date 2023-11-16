@@ -6,6 +6,6 @@ import { ActaPamecEntity } from "./pamec-acta.entity";
 
 
 @EntityRepository(ActaPamecEntity)
-export class ActaPamecIpsRepository extends Repository<ActaPamecEntity> {
+export class ActaPamecRepository extends Repository<ActaPamecEntity> {
         
 }

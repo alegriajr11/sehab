@@ -24,18 +24,34 @@ export class SharedServiceService {
   cri_ind_id: number
   /**FIN ATRIBUTOS SP-INDEPENDIENTES */
 
+  /**ID_CRITERIO - CALIFICACION ROL PAMEC */
+  cri_pamec_id: number
+  /**FIN ATRIBUTOS PAMEC */
+
   /**ID_CRITERIO - CALIFICACION ROL SP-IPS */
   cri_ips_id: number
   /**FIN ATRIBUTOS SP-IPS */
 
   //ARRAY CRITERIOS SIC
   criteriosSicGuardados: any[] = [];
+
   //ARRAY CRITERIOS SP-IND
   criteriosIndGuardados: any[] = [];
-  //ARRAY CRITERIOS SP-IND
+
+  //ARRAY CRITERIOS SP-IPS
   criteriosIpsGuardados: any[] = [];
 
+  //ARRAY CRITERIOS SP-IND
+  criteriosPamecGuardados: any[] = [];
+
+  //ARRAY CRITERIOS SP-IND
+  condicionesHabilitacionGuardados: any[] = [];
+
   nombreUsuario: string;
+
+  //CONDICIONES DE HABILITACIÓN
+  nombre_condicion_habilitacion: string //Almacenar el nombre de la condicion de habilitacion para el modal
+  id_condicion_hablitacion: number
 
   private firmaActaSic: string;
   private firmaActaSpIpsPrestador: string;
@@ -59,7 +75,7 @@ export class SharedServiceService {
 
   constructor() { }
 
-  //METODOS SET
+  //METODOS SET ACTAS
   setFirmaActaSic(firmaActaSic: string) {
     this.firmaActaSic = firmaActaSic
   }
@@ -133,6 +149,8 @@ export class SharedServiceService {
   }
 
 
+
+  //METODOS SET EVALUACIONES Y CRITERIOS
   setIdEvaluacionSic(id: number) {
     this.id_evaluacion_sic = id;
   }
@@ -149,6 +167,10 @@ export class SharedServiceService {
     this.cri_ind_id = id;
   }
 
+  setIdCriterioPamec(id: number) {
+    this.cri_pamec_id = id;
+  }
+
 
   setIdEvaluacionSpIps(id: number) {
     this.id_evaluacion_sp_ips = id;
@@ -158,7 +180,7 @@ export class SharedServiceService {
     this.id_evaluacion_sp_ind = id;
   }
 
-  setIdPamec(id: number) {
+  setIdPamecEvaluacion(id: number) {
     this.id_evaluacion_pamec = id;
   }
 
@@ -177,6 +199,16 @@ export class SharedServiceService {
 
   setCumpleAsignado(cumpleAsignado: string) {
     this.cumplAsignadoSubject.next(cumpleAsignado);
+  }
+
+
+  //CONDICIONES REQUISITOS DE HABILITACION:
+  setNombreCondicionHabilitacion(nombre_condicion: string){
+    this.nombre_condicion_habilitacion= nombre_condicion;
+  }
+
+  setIdCodicionHabilitacion(id: number){
+    this.id_condicion_hablitacion= id;
   }
 
 }

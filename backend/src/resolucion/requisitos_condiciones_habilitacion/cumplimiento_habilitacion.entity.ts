@@ -15,7 +15,7 @@ export class CumplimientoHabilitacionEntity {
     @ManyToOne(type => ConceptoResEntity, conceptoRes => conceptoRes.cumplimientohab)
     conceptos_res: ConceptoResEntity;
 
-
+    
 
 
 }

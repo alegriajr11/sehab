@@ -25,6 +25,9 @@ export class ModalEvaluacionesPamecComponent {
   //VARIABLE SI ES ADMIN
   isAdmin: boolean;
 
+  nombre_funcionario: string
+  cod_prestador: string
+
   //ESTADO DE ACTA
   estado_acta: string;
 
@@ -45,6 +48,8 @@ export class ModalEvaluacionesPamecComponent {
   ngOnInit(): void {
     this.id_evaluacion = this.sharedService.id_evaluacion_pamec
     this.nombre_prestador = this.sharedService.pres_nombre
+    this.nombre_funcionario = this.sharedService.funcionario_nombre
+    this.cod_prestador = this.sharedService.pre_cod_habilitacion
     this.isAdmin = this.tokenService.isAdmin();
     this.estadoActa();
     console.log(this.id_evaluacion)
@@ -69,13 +74,14 @@ export class ModalEvaluacionesPamecComponent {
     this.router.navigate(['/pamec/evaluaciones']);
   }
 
+  async habilitarRutaEditar() {
+    localStorage.setItem('boton-editar-acta-pamec', 'true')
+  }
+
   async estadoActa() {
     // Obtener el estado actual del acta
     const data = await this.actaPdfService.oneActaPamec(this.id_evaluacion).toPromise();
     this.estado_acta = data.act_estado;
-    if(this.estado_acta === '1'){
-      localStorage.setItem('boton-editar-acta-pamec','true')
-    }
   }
 
   async cerrarActa() {

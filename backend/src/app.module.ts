@@ -120,6 +120,7 @@ import { CalificacionipsImplementacionModule } from './sp/sp_ips/calificacion/ca
 import { CalificacionipsPlaneacionModule } from './sp/sp_ips/calificacion/calificacionips_planeacion/calificacionips_planeacion.module';
 import { CalificacionipsVerificacionModule } from './sp/sp_ips/calificacion/calificacionips_verificacion/calificacionips_verificacion.module';
 import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.module';
+<<<<<<< HEAD
 import { CumplimientoDiagVascularModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/cumplimiento_diag_vascular/cumplimiento_diag_vascular.module';
 import { CumplimientoDiagVascularController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/cumplimiento_diag_vascular/cumplimiento_diag_vascular.controller';
 import { CumplimientoDialisisModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/cumplimiento_dialisis/cumplimiento_dialisis.module';
@@ -159,6 +160,11 @@ import { CumplimientoHospParcialModule } from './resolucion/evaluacion/grupo_int
 import { CumplimientoHospSaludMentalModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/cumplimiento_hosp_salud_mental/cumplimiento_hosp_salud_mental.module';
 import { CumplimientoCirugiaModule } from './resolucion/evaluacion/grupo_quirurgico/cirugia/cumplimiento_cirugia/cumplimiento_cirugia.module';
 import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_servicios/cumplimiento_todos_servicios/cumplimiento_todos_servicios.module';
+=======
+import { RequisitosCondicionesHabilitacionModule } from './resolucion/requisitos_condiciones_habilitacion/requisitos_condiciones_habilitacion.module';
+
+
+>>>>>>> 8250098d729b265710a51f18ad6ffa432364d161
 
 
 
@@ -179,8 +185,13 @@ import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
+<<<<<<< HEAD
         logging: false 
       
+=======
+        logging: false
+
+>>>>>>> 8250098d729b265710a51f18ad6ffa432364d161
       }),
       inject: [ConfigService],
     }),
@@ -256,6 +267,7 @@ import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_
     CalificacionipsPlaneacionModule,
     CalificacionipsVerificacionModule,
     EvaluacionpamecModule,
+<<<<<<< HEAD
     CumplimientoDiagVascularModule,
     CumplimientoDialisisModule,
     CumplimientoGestionPretransModule,
@@ -295,6 +307,9 @@ import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_
     CumplimientoCirugiaModule,
     CumplimientoTodosServiciosModule,
 
+=======
+    RequisitosCondicionesHabilitacionModule,
+>>>>>>> 8250098d729b265710a51f18ad6ffa432364d161
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 

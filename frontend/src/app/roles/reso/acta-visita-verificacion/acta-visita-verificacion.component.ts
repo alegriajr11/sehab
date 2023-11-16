@@ -52,8 +52,8 @@ export class ActaVisitaVerificacionComponent {
   act_prestador: string
   act_nit: string
   act_sede: string
+  act_tipo_prestador: string
   act_direccion: string
-  act_clasificacion: string
   act_cod_habilitacion: string
   act_cod_sede: string
   act_telefono: string
@@ -65,6 +65,7 @@ export class ActaVisitaVerificacionComponent {
   //OBSERVACIONES DEL ACTA
   act_observaciones: string
 
+  act_funcionario_prestador: string
   act_cargo_prestador: string
 
   act_recibe_visita: string
@@ -259,19 +260,21 @@ export class ActaVisitaVerificacionComponent {
   }
 
   async sedeSeleccionada() {
-    this.sedesServices.listaOneSede(this.act_sede_principalId).subscribe(
-      async data => {
-        const cod_habilitacion = this.act_prestadorId
-
-        var codigo_sede = (document.getElementById('codhabsede')) as HTMLSelectElement
-        codigo_sede.value = ' ' + cod_habilitacion
-
-        var gerente = (document.getElementById('gerente')) as HTMLSelectElement;
-        gerente.value = data.sede_gerente
-
-        this.act_sede = data.sede_nombre
-      }
-    )
+    if(this.act_sede_principalId){
+      this.sedesServices.listaOneSede(this.act_sede_principalId).subscribe(
+        async data => {
+          const cod_habilitacion = this.act_prestadorId
+  
+          var codigo_sede = (document.getElementById('codhabsede')) as HTMLSelectElement
+          codigo_sede.value = ' ' + cod_habilitacion
+  
+          var gerente = (document.getElementById('gerente')) as HTMLSelectElement;
+          gerente.value = data.sede_gerente
+  
+          this.act_sede = data.sede_nombre
+        }
+      )
+    }
   }
 
   //LISTAR USUARIOS
@@ -328,6 +331,7 @@ export class ActaVisitaVerificacionComponent {
             //TIPO PRESTADOR
             var tipo_prestador = (document.getElementById('clasificacionPrestador')) as HTMLSelectElement;
             tipo_prestador.value = data.pre_clasificacion.cla_nombre;
+            this.act_tipo_prestador = data.pre_clasificacion.cla_nombre
 
             //ASIGNACION CODIGO HABILITACION PRESTADOR
             var cod_habilitacion = (document.getElementById('codhabilitacion')) as HTMLSelectElement;
@@ -474,6 +478,7 @@ export class ActaVisitaVerificacionComponent {
       this.act_gerente,
       this.act_cod_habilitacion,
       this.act_sede,
+      this.act_tipo_prestador,
       this.act_cod_sede,
       this.act_observaciones,
       this.act_firma_prestador,

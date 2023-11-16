@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, ManyToMany, JoinTable, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import { GrupoEvaluacionEntity } from '../grupo_evaluacion/grupo_evaluacion.entity';
 
-@Entity({ name: 'servicio' })
+@Entity({ name: 'servicios' })
 export class ServicioEntity {
     @PrimaryGeneratedColumn()
     id: number;

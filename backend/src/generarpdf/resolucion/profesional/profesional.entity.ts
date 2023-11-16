@@ -15,7 +15,7 @@ export class ProfesionalApoyoEntity {
     @Column({type: 'varchar', length: 60, nullable: false})
     prof_cargo: string;
 
-    @ManyToMany(type => ActaVerificacionEntity, actaveri => actaveri.verificacion_profecional, { eager: true })
+    @ManyToMany(type => ActaVerificacionEntity, actaveri => actaveri.verificacion_profesional, { eager: true })
     @JoinTable({
         name: 'profe_veri',
         joinColumn: { name: 'prof_veri_id' },

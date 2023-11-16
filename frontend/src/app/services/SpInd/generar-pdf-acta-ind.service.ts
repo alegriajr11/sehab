@@ -56,9 +56,8 @@ export class GenerarPdfActaIndService {
 
   ngOnInit(): void { }
 
-  //GENERAR PDF ULTIMA ACTA CREADA
+  //GENERAR PDF ACTA CREADA
   async ActaPdf(id_acta: number): Promise<void> {
-    console.log(id_acta)
     this.actapdfService.oneActaSpInd(id_acta).subscribe(
       async data => {
         this.actaPdf = data;

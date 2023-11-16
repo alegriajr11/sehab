@@ -84,6 +84,7 @@ export class AuditoriaComponent {
         this.auditoria = []
       }
     )
+    this.page = 1;
   }
 
   //CARGAR AUDITORIAS POR NOMBRE DE USUARIO
@@ -101,11 +102,13 @@ export class AuditoriaComponent {
     if(!this.nombre_usuario){
       this.getAllAuditorias();
     }
+    this.page = 1;
   }
 
   // Método para calcular el ID global
   calcularIDGlobal(index: number, currentPage: number, itemsPerPage: number): number {
     return index + 1 + (currentPage - 1) * itemsPerPage;
   }
+
 
 }

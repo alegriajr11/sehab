@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { CalificacionipsImplementacionService } from './calificacionips_implementacion.service';
 import { CalificacionImpleDto } from 'src/usuario/dto/SpIps/calificaciones/calificacionimplementacion.dto';
 import { TokenDto } from 'src/auth/dto/token.dto';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('calificacionips-implementacion')
 export class CalificacionipsImplementacionController {
@@ -9,51 +10,51 @@ export class CalificacionipsImplementacionController {
     constructor(private readonly calificacionipsImplementacionService: CalificacionipsImplementacionService) {
     }
 
-    //listar calificaciones por criterio
-    //@UseGuards(JwtAuthGuard)
-    @Get('/criterio/:id')
-    async getOne(@Param('id', ParseIntPipe) id: number) {
-        return await this.calificacionipsImplementacionService.findByCri(id);
+
+    //LISTAR CALIFICACION POR ID_CRITERIO Y ID_EVALUACIÓN - ETAPA AJUSTE
+    @Get()
+    async getCriterioEvaluacion(
+        @Query('cri_id') cri_id: number,
+        @Query('eva_id') eva_id: number,
+        @Query('id_acta') id_acta: number
+    ) {
+        return await this.calificacionipsImplementacionService.getCriterioByIdEva(cri_id, eva_id, id_acta)
     }
 
-    //listar una calificacion
-    //@UseGuards(JwtAuthGuard)
-    @Get(':id')
-    async getOneAjuste(@Param('id', ParseIntPipe) id: number) {
-        return await this.calificacionipsImplementacionService.findByCal(id);
+    //SOLICITAR LAS CALIFICACIONES QUE LE PERTENECEN AL ACTA 
+    @UseGuards(JwtAuthGuard)
+    @Get('/calificaciones/evaluacion/acta')
+    async getCalificaciones(
+        @Query('evips_id') evips_id: number,
+        @Query('id_acta') id_acta: number
+    ) {
+        return await this.calificacionipsImplementacionService.listarTodasLasCalificacionesPorIdActa(evips_id, id_acta)
     }
 
     //actualizar calificacion
     //@UseGuards(JwtAuthGuard)
     //@UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body()payload: { dto: CalificacionImpleDto, tokenDto: TokenDto}) {
-        const { dto, tokenDto } = payload;
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto_calificacion: CalificacionImpleDto, tokenDto: TokenDto }) {
+        const { dto_calificacion, tokenDto } = payload;
         return await this.calificacionipsImplementacionService.update(id, payload);
     }
 
     //eliminar calificacion
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async delete(@Param('id', ParseIntPipe) id: number) {
         return await this.calificacionipsImplementacionService.delete(id);
     }
 
     //creacion de la calificacion
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     //@UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
-    @Post('calificacion/:id')
+    @Post('calificacion')
     async create(
-    @Body()payload: { dto: CalificacionImpleDto, tokenDto: TokenDto}   ) {
-        const { dto, tokenDto } = payload;
+        @Body() payload: { dto_calificacion: CalificacionImpleDto, tokenDto: TokenDto }) {
+        const { dto_calificacion, tokenDto } = payload;
         return await this.calificacionipsImplementacionService.create(payload);
     }
 
-
-    //lista las calificaciones con sus criterios
-    @Get('calificacion/evaluacion/acta')
-    async getcalcri(@Query('evips_id') evips_id: number,
-    @Query('act_id') act_id: number) {
-        return await this.calificacionipsImplementacionService.getallCalCrixEva(evips_id, act_id);
-    }
 }

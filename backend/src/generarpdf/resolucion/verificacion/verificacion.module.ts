@@ -9,9 +9,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DatosVisitVErificadoEntity } from '../visita-verificacion/datos-visit-verificado.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { UsuarioEntity } from 'src/usuario/usuario.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ActaVerificacionEntity, PrestadorEntity]),
+  imports: [TypeOrmModule.forFeature([ActaVerificacionEntity, PrestadorEntity, 
+    DatosVisitVErificadoEntity, EvaluacionResVerificacionEntity, UsuarioEntity]),
     AuditoriaRegistroModule, AuditoriaActualizacionModule,
   //MODULO JwtService
   PassportModule.register({ defaultStrategy: 'jwt' }),

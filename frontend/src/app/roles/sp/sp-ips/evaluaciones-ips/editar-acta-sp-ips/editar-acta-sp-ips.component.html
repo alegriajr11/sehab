@@ -212,13 +212,13 @@
                 </div>
 
                 <!--BOTON MODAL FIRMA ACOMPAÑANTE-->
-                <div class="col-12" *ngIf="!actaSp.act_firma_prestador_acompanante && noFirmaActa === 'false'">
+                <div class="col-6" *ngIf="!actaSp.act_firma_prestador_acompanante && noFirmaActa === 'false'">
                     <span class="button-like btn-span" (click)="openModalAcompanante(modalTemplateAcompanante)">Firma
                         Acompañante</span>
                 </div>
 
                 <!--BOTON NO FIRMA-->
-                <div class="col-12 text-center">
+                <div class="col-6">
                     <span class="button-like btn-span" *ngIf="noFirmaActa === 'false' && !actaSp.act_firma_prestador && 
                     !actaSp.act_firma_prestador_acompanante" 
                     (click)="noFirmaPrestador()">No

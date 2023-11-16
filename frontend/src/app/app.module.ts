@@ -123,6 +123,12 @@ import { ModalEditarCalificacionSpIpsComponent } from './roles/sp/sp-ips/evaluac
 import { CumplimientoRequisitosComponent } from './roles/reso/cumplimiento-requisitos/cumplimiento-requisitos.component';
 import { ConclusionesRecomendacionesComponent } from './roles/reso/conclusiones-recomendaciones/conclusiones-recomendaciones.component';
 import { EquipoVerificadoresComponent } from './roles/reso/equipo-verificadores/equipo-verificadores.component';
+import { ModalCalificacionPamecComponent } from './roles/pamec/evaluacion-pamec/modal-calificacion-pamec/modal-calificacion-pamec.component';
+import { EditarActaPamecComponent } from './roles/pamec/evaluaciones/editar-acta-pamec/editar-acta-pamec.component';
+import { EditarEvaluacionPamecComponent } from './roles/pamec/evaluaciones/editar-evaluacion-pamec/editar-evaluacion-pamec.component';
+import { ModalFirmaPamecPrestadorComponent } from './roles/pamec/evaluaciones/editar-acta-pamec/modal-firma-pamec-prestador/modal-firma-pamec-prestador.component';
+import { ListaProcesosIvcComponent } from './roles/reso/lista-procesos-ivc/lista-procesos-ivc.component';
+import { ModalCumplimientoRequisitosComponent } from './roles/reso/cumplimiento-requisitos/modal-cumplimiento-requisitos/modal-cumplimiento-requisitos.component';
 
 
 
@@ -233,7 +239,13 @@ import { EquipoVerificadoresComponent } from './roles/reso/equipo-verificadores/
     ModalEditarCalificacionSpIpsComponent,
     CumplimientoRequisitosComponent,
     ConclusionesRecomendacionesComponent,
-    EquipoVerificadoresComponent
+    EquipoVerificadoresComponent,
+    ModalCalificacionPamecComponent,
+    EditarActaPamecComponent,
+    EditarEvaluacionPamecComponent,
+    ModalFirmaPamecPrestadorComponent,
+    ListaProcesosIvcComponent,
+    ModalCumplimientoRequisitosComponent
 
   ],
   imports: [

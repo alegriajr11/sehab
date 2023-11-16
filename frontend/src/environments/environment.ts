@@ -77,7 +77,13 @@ export const environment = {
   //ACTA-VERIFICACION
   actaVerificacion: 'http://localhost:8080/verificacion/',
 
+  //CONDICIONES DE CAPACIDAD TECNOLOGICA Y CIENTIFICA 
   todos_serviciosURL: 'http://localhost:8080/criterio-servicios/',
+
+
+  //CUMPLIMIENTO DE REQUISITOS DE LAS CONDICIONES DE HABILITACIÓN 
+  condiciones_habilitacion: 'http://localhost:8080/requisitos-condiciones-habilitacion',
+
 
   //PRESTADOR
   municipioURL: 'http://localhost:8080/municipio/',

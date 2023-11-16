@@ -21,8 +21,6 @@ export class SedeService {
         private readonly prestadorRepository: PrestadorRepository,
         @InjectRepository(SedeMunicipioEntity)
         private readonly municipioRepository: SedeMunicipioRepository,
-
-
     ) { }
 
 

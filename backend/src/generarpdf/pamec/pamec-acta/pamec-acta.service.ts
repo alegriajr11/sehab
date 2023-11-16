@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ActaPamecEntity } from './pamec-acta.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ActaPamecIpsRepository } from './pamec-acta.repository';
+import { ActaPamecRepository } from './pamec-acta.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuditoriaRegistroService } from 'src/auditoria/auditoria_registro/auditoria_registro.service';
@@ -26,7 +26,7 @@ const PDFDocument = require('pdfkit-table')
 export class PamecActaService {
     constructor(
         @InjectRepository(ActaPamecEntity)
-        private readonly actaPamecRepository: ActaPamecIpsRepository,
+        private readonly actaPamecRepository: ActaPamecRepository,
         private readonly jwtService: JwtService,
         private readonly auditoria_registro_services: AuditoriaRegistroService,
         @InjectRepository(PrestadorEntity)
@@ -42,7 +42,7 @@ export class PamecActaService {
         private readonly evaluacionpamecService: EvaluacionpamecService,
     ) { }
 
-    //LISTAR TODAS PAMEC IPS ACTA PDF
+    //LISTAR TODAS ACTAS PAMEC PDF
     async getallActas(): Promise<ActaPamecEntity[]> {
         const indep = await this.actaPamecRepository.createQueryBuilder('acta')
             .select(['acta'])
@@ -53,11 +53,11 @@ export class PamecActaService {
 
     //ENCONTRAR POR ACTA
     async findByActa(id: number): Promise<ActaPamecEntity> {
-        const ips = await this.actaPamecRepository.findOne({ where: { id } });
-        if (!ips) {
+        const acta_pamec = await this.actaPamecRepository.findOne({ where: { id } });
+        if (!acta_pamec) {
             throw new NotFoundException(new MessageDto('No Existe'));
         }
-        return ips;
+        return acta_pamec;
     }
 
 
@@ -98,7 +98,7 @@ export class PamecActaService {
         }
 
         if (year) {
-            if (numActa) {
+            if (numActa || nomPresta || nit) {
                 query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
             } else {
                 query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
@@ -106,11 +106,19 @@ export class PamecActaService {
         }
 
         if (nomPresta) {
-            query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            if(year || numActa || nit){
+                query = query.andWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            } else {
+                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+            }
         }
 
         if (nit) {
-            query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            if(year || numActa || nomPresta){
+                query = query.andWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            } else {
+                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+            }
         }
 
         const actas = await query.getMany();
@@ -122,12 +130,13 @@ export class PamecActaService {
         return actas;
     }
 
-
+    //CREAR ACTA PAMEC
     async create(payloads: { dto: ActaPamecDto, tokenDto: TokenDto }): Promise<any> {
         const { dto, tokenDto } = payloads;
-
+        console.log(dto.act_tipo_visita)
         try {
-            const acta_sicpdf = this.actaPamecRepository.create(dto);
+            const acta_pamecpdf = this.actaPamecRepository.create(dto);
+
             const usuario = await this.jwtService.decode(tokenDto.token);
 
             const payloadInterface: PayloadInterface = {
@@ -142,7 +151,7 @@ export class PamecActaService {
 
             const year = new Date().getFullYear().toString();
 
-            await this.actaPamecRepository.save(acta_sicpdf);
+            await this.actaPamecRepository.save(acta_pamecpdf);
 
             const acta_ultima = await this.actaPamecRepository.createQueryBuilder('acta')
                 .addSelect('acta.id')
@@ -173,26 +182,20 @@ export class PamecActaService {
             //ASIGNACION DE FORANEA PRESTADOR UNO A MUCHOS
             evaluacion_pamec.eval_prestador = prestador
 
-            //GUARDAMOS EN LA ENTIDAD EVALUACION-INDEPENDIENTES
+            //GUARDAMOS EN LA ENTIDAD EVALUACION-PAMEC
             await this.evaluacionPamecRepository.save(evaluacion_pamec)
 
-            //CONSULTAR LA ÚLTIMA EVALUACIÓN EXISTENTE
-            const evaluacion_ultima = await this.evaluacionPamecRepository.createQueryBuilder('evaluacion')
-                .addSelect('evaluacion.eva_id')
-                .orderBy('evaluacion.eva_id', 'DESC')
-                .getOne();
+            // //CONSULTAR LA ÚLTIMA EVALUACIÓN EXISTENTE
+            // const evaluacion_ultima = await this.evaluacionPamecRepository.createQueryBuilder('evaluacion')
+            //     .addSelect('evaluacion.eva_id')
+            //     .orderBy('evaluacion.eva_id', 'DESC')
+            //     .getOne();
 
-            //CONSULTAR LAS ETAPAS EXISTENTES
-            const actividad = await this.actividadRepository.find()
-
-            //ASIGNAR LA EVALUACIÓN A LAS ETAPAS
-            //evaluacion_ultima.eval_actividadpam = actividad
-
-            //GUARDAR LA RELACIÓN ENTRE EVALUACIÓN Y ETAPAS
-            await this.evaluacionPamecRepository.save(evaluacion_ultima);
+            // //GUARDAR LA RELACIÓN ENTRE EVALUACIÓN Y ETAPAS
+            // await this.evaluacionPamecRepository.save(evaluacion_ultima);
 
             //ASIGNAR LA AUDITORIA DEL ACTA CREADA
-            await this.auditoria_registro_services.logCreateActaSpIndep(
+            await this.auditoria_registro_services.logCreateActaPamec(
                 payloadInterface.usu_nombre,
                 payloadInterface.usu_apellido,
                 'ip',
@@ -202,11 +205,11 @@ export class PamecActaService {
                 dto.act_cod_prestador
             );
 
-
             return { error: false, message: 'El acta ha sido creada' };
 
         } catch (error) {
             // Devuelve un mensaje de error apropiado
+            console.log(error)
             return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
         }
 
@@ -233,15 +236,15 @@ export class PamecActaService {
         dto.act_email ? ips.act_email = dto.act_email : ips.act_email = ips.act_email;
         dto.act_representante ? ips.act_representante = dto.act_representante : ips.act_representante = ips.act_representante;
         dto.act_cod_prestador ? ips.act_cod_prestador = dto.act_cod_prestador : ips.act_cod_prestador = ips.act_cod_prestador;
-        dto.act_nombre_funcionario ? ips.act_nombre_funcionario = dto.act_nombre_funcionario : ips.act_nombre_funcionario = ips.act_nombre_funcionario;
-        dto.act_cargo_funcionario ? ips.act_cargo_funcionario = dto.act_cargo_funcionario : ips.act_cargo_funcionario = ips.act_cargo_funcionario;
+        dto.act_nombre_funcionario1 ? ips.act_nombre_funcionario1 = dto.act_nombre_funcionario1 : ips.act_nombre_funcionario1 = ips.act_nombre_funcionario1;
+        dto.act_cargo_funcionario1 ? ips.act_cargo_funcionario1 = dto.act_cargo_funcionario1 : ips.act_cargo_funcionario1 = ips.act_cargo_funcionario1;
         dto.act_nombre_funcionario2 = dto.act_nombre_funcionario2 !== undefined ? dto.act_nombre_funcionario2 : "";
         dto.act_cargo_funcionario2 = dto.act_cargo_funcionario2 !== undefined ? dto.act_cargo_funcionario2 : "";
         dto.act_nombre_prestador ? ips.act_nombre_prestador = dto.act_nombre_prestador : ips.act_nombre_prestador = ips.act_nombre_prestador;
         dto.act_cargo_prestador ? ips.act_cargo_prestador = dto.act_cargo_prestador : ips.act_cargo_prestador = ips.act_cargo_prestador;
         dto.act_obj_visita ? ips.act_obj_visita = dto.act_obj_visita : ips.act_obj_visita = ips.act_obj_visita;
         dto.act_firma_prestador ? ips.act_firma_prestador = dto.act_firma_prestador : ips.act_firma_prestador = ips.act_firma_prestador;
-        dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
+        // dto.act_firma_funcionario ? ips.act_firma_funcionario = dto.act_firma_funcionario : ips.act_firma_funcionario = ips.act_firma_funcionario;
 
         const usuario = await this.jwtService.decode(tokenDto.token);
 
@@ -358,9 +361,9 @@ export class PamecActaService {
             acta.forEach(acta => {
                 prestadorPrincipal = acta.eval_acta_pamec.act_prestador;
                 nombreprestador = acta.eval_acta_pamec.act_nombre_prestador;
-                nombrefuncionario = acta.eval_acta_pamec.act_nombre_funcionario;
+                nombrefuncionario = acta.eval_acta_pamec.act_nombre_funcionario1;
                 cargoprestador = acta.eval_acta_pamec.act_cargo_prestador;
-                cargofuncionario = acta.eval_acta_pamec.act_cargo_funcionario;
+                cargofuncionario = acta.eval_acta_pamec.act_cargo_funcionario1;
             })
             doc.text(prestadorPrincipal)
 

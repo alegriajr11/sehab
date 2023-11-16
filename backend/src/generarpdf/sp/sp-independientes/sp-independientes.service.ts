@@ -491,17 +491,17 @@ export class SpIndependientesService {
             doc.text('PRESTADOR: ', 260, 140);
             // Obtener la longitud del texto
             const textWidth = doc.widthOfString(prestadorPrincipal);
-            
+
             // Coordenadas del Prestador Principal
             let x = 185;
             //ESTABLECER CORDENADAS DE X DEPENDIENDO EL TAMAÑO DE textWidth
-            if(textWidth > 290){
+            if (textWidth > 290) {
                 x = 160
-            } else if(textWidth <= 264 && textWidth >= 237 ){
+            } else if (textWidth <= 264 && textWidth >= 237) {
                 x = 170
-            } else if(textWidth <= 183 ){
+            } else if (textWidth <= 183) {
                 x = 212
-            } 
+            }
 
             let y = 160;
             doc.moveDown();
@@ -517,7 +517,6 @@ export class SpIndependientesService {
                 .lineTo(underlineX2, underlineY)
                 .lineWidth(1) // Grosor del subrayado
                 .stroke();
-
 
 
             //DAR INICIO A LA TABLA DESDE LA POSICIÓN X = 50
@@ -545,7 +544,10 @@ export class SpIndependientesService {
                     totalCalificacionesEtapa1 += item.cal_nota
                     totalCalificacionesCountEtapa1++; // Incrementar el contador
 
-                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+
+                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion,
+                    item.cal_observaciones === null ? '' : item.cal_observaciones // Verificar si cal_observaciones es nulo
+                    ];
                     rows_elements.push(temp_list)
                 })
 
@@ -610,7 +612,10 @@ export class SpIndependientesService {
                 titulo_dos.forEach(item => {
                     totalCalificacionesEtapa2 += item.cal_nota
                     totalCalificacionesCountEtapa2++; // Incrementar el contador
-                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+
+                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion,
+                    item.cal_observaciones === null ? '' : item.cal_observaciones // Verificar si cal_observaciones es nulo
+                    ];
                     rows_elements.push(temp_list)
                 })
 
@@ -672,7 +677,10 @@ export class SpIndependientesService {
                 titulo_tres.forEach(item => {
                     totalCalificacionesEtapa3 += item.cal_nota
                     totalCalificacionesCountEtapa3++; // Incrementar el contador
-                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+
+                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion,
+                    item.cal_observaciones === null ? '' : item.cal_observaciones // Verificar si cal_observaciones es nulo
+                    ];
                     rows_elements.push(temp_list)
                 })
 
@@ -733,8 +741,12 @@ export class SpIndependientesService {
                 titulo_cuatro.forEach(item => {
                     totalCalificacionesEtapa4 += item.cal_nota;
                     totalCalificacionesCountEtapa4++; // Incrementar el contador
-                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion, item.cal_observaciones];
+
+                    var temp_list = [item.criterio_cal.cri_id, item.criterio_cal.cri_nombre, '            ' + item.cal_nota, item.criterio_cal.cri_verificacion,
+                    item.cal_observaciones === null ? '' : item.cal_observaciones // Verificar si cal_observaciones es nulo
+                    ];
                     rows_elements.push(temp_list);
+
                 });
 
                 const tableOptions = {

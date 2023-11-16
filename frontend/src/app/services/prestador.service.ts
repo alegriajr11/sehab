@@ -21,36 +21,42 @@ export class PrestadorService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public lista(): Observable<PrestadorDto[]>{
+  //SOLICITUD LISTAR TODOS LOS PRESTADORES
+  public lista(): Observable<PrestadorDto[]> {
     return this.httpClient.get<PrestadorDto[]>(`${this.prestadorURL}`)
   }
 
-  public listaOne(id: string): Observable<any>{
+  //SOLICITUD LISTAR UN PRESTADOR POR ID
+  public listaOne(id: string): Observable<any> {
     return this.httpClient.get<any>(`${this.prestadorURL}` + id)
   }
 
-
-  public listMun(mun: string): Observable<PrestadorDto[]>{
+  //LISTAR PRESTADORES POR MUNICIPIO
+  public listMun(mun: string): Observable<PrestadorDto[]> {
     return this.httpClient.get<PrestadorDto[]>(this.prestadorMunicipioURL + mun)
   }
 
-  public listMunPamec(mun: string): Observable<PrestadorDto[]>{
+  //LISTAR PRESTADORES POR MUNICIPIO PARA ROL PAMEC
+  public listMunPamec(mun: string): Observable<PrestadorDto[]> {
     return this.httpClient.get<PrestadorDto[]>(this.prestadorPamecMunicipioURL + mun)
   }
 
-  public listMunIps(mun: string): Observable<PrestadorDto[]>{
+  //LISTAR PRESTADORES POR MUNICIPIO PARA EL ROL SP-IPS
+  public listMunIps(mun: string): Observable<PrestadorDto[]> {
     return this.httpClient.get<PrestadorDto[]>(this.prestadorIpsMunicipioURL + mun)
   }
 
-  public listMunInd(mun: string): Observable<PrestadorDto[]>{
+  //LISTAR PRESTADORES POR MUNICIPIO PARA EL ROL SP-INDEPENDIENTES
+  public listMunInd(mun: string): Observable<PrestadorDto[]> {
     return this.httpClient.get<PrestadorDto[]>(this.prestadorIndMunicipioURL + mun)
   }
 
-
+  //SOLICITUD REGISTRAR UN PRESTADOR
   public registroPrestador(prestador: PrestadorDto): Observable<any> {
     return this.httpClient.post<any>(`${this.prestadorURL}`, prestador);
   }
-  
+
+  //SOLICITUD ACTUALIZAR UN PRESTADOR
   public update(id: string, prestador: PrestadorDto): Observable<any> {
     return this.httpClient.put<any>(`${this.prestadorURL}${id}`, prestador);
   }

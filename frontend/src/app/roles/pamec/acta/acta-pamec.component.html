@@ -59,10 +59,10 @@
                 <div class="col-3" *ngIf="formulacion">
                     <label for="" class="form-label text-center">AÑO DE FORMULACION:</label>
                     <input type="number" class="form-control" onkeypress="if(this.value.length==4) return false;"
-                        id="año_formulacion" placeholder="Año de formulación...">
+                        id="ano_formulacion" placeholder="Año de formulación...">
                 </div>
 
-                <div class="col-3" *ngIf="mejoramiento">
+                <div class="col-4" *ngIf="mejoramiento">
                     <label for="" class="form-label text-center">CICLO DE MEJORAMIENTO</label>
                     <select id="id_mejoramiento" class="form-select form-control">
                         <option hidden selected>Selecciona el Ciclo...</option>
@@ -98,7 +98,8 @@
                 <div class="col-md-6">
                     <label for="inputAddress" class="form-label">Prestador:</label>
                     <select id="prestador" name="prestador" class="form-select form-control" (change)="llenarCampos()"
-                        [(ngModel)]="act_prestadorId" ngDefaultControl (change)="ocultarMensajes()">
+                        [(ngModel)]="act_prestadorId" ngDefaultControl
+                        (change)="ocultarMensajes(); habilitarSede(); cargarSedesByPrestador()">
                         <option value="" disabled selected hidden>Selecciona un Prestador...</option>
                         <option *ngFor="let prest of prestador" [value]="prest.pre_cod_habilitacion">
                             {{ prest.pre_nombre }}
@@ -153,26 +154,29 @@
                     </div>
                 </div>
 
-                <div class="col-12">
-                    <label for="principal" class="form-label">Sede Principal:</label>
 
-                    <select id="sedep" class="form-select form-control" [(ngModel)]="act_sede_principal"
-                        [ngModelOptions]="{standalone: true}" ngDefaultControl (change)="ocultarMensajes()">
-                        <option disabled selected hidden>Sede Principal...</option>
-                        <option value="si">Si</option>
-                        <option value="no">No</option>
+                <div class="col-12">
+                    <label for="principal" class="form-label">Sede:</label>
+
+                    <select id="sedep" class="form-select form-control" [(ngModel)]="act_sede_principalId"
+                        [ngModelOptions]="{standalone: true}" ngDefaultControl
+                        (change)="ocultarMensajes(); sedeSeleccionada()" [disabled]="!habilitarSelectSede">
+                        <option value="" disabled selected hidden>Selecciona una Sede...</option>
+                        <option *ngFor="let list_sede of sede" [value]="list_sede.sede_id">
+                            {{ list_sede.sede_nombre }}
+                        </option>
                     </select>
                     <div *ngIf="showSedeMessage" class="validation-message-sede ">Seleccione la Sede.</div>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="inputAddress2" class="form-label">Localidad:</label>
-                    <input type="text" class="form-control" id="localidad" name="act_sede_localidad"
-                        placeholder="Localidad" disabled [(ngModel)]="act_sede_localidad">
+                    <label for="inputAddress2" class="form-label">Barrio Sede:</label>
+                    <input type="text" class="form-control" id="barrioSede" name="act_sede_barrio"
+                        placeholder="Localidad" disabled [(ngModel)]="act_sede_barrio">
                 </div>
                 <div class="col-md-6">
-                    <label for="inputAddress2" class="form-label">Dirección:</label>
-                    <input type="text" class="form-control" id="dirubic" name="act_sede_direccion"
+                    <label for="inputAddress2" class="form-label">Dirección Sede:</label>
+                    <input type="text" class="form-control" id="direccionSede" name="act_sede_direccion"
                         placeholder="Dirección" disabled [(ngModel)]="act_sede_direccion">
                 </div>
 

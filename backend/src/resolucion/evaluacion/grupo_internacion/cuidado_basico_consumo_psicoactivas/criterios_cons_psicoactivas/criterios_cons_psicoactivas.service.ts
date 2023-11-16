@@ -102,6 +102,7 @@ export class CriteriosConsPsicoactivasService {
         return criterio_cons_psic;
     }
 
+
     //ELIMINAR CRITERIO  CUIDADO BASICO PSICOACTIVAS
     async delete(id: number, tokenDto: TokenDto): Promise<any> {
         try {

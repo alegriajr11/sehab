@@ -218,6 +218,7 @@ export class GenerarPdfActaService {
           }
         })
 
+        //BARRIO Y DIRECCIÓN DE LA SEDE SELECCIONADA
         autoTable(doc, {
           startY: 145,
           columnStyles: { sede: { halign: 'left' } },
@@ -237,8 +238,6 @@ export class GenerarPdfActaService {
             fontSize: 10
           }
         })
-
-
 
 
         //REPRESENTANTE LEGAL, CODIGO PRESTADOR, CODIGO SEDE VISITADA

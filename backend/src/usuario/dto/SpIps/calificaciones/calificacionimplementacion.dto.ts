@@ -5,20 +5,20 @@ import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 
 export class CalificacionImpleDto {
     
-    @IsNotBlank()
+    @IsNumber()
     cal_nota: number;
-
 
     @IsString()
     @MaxLength(255, {message: 'La observacion debe tener: longitud máxima de 255 caracteres'})
     cal_observaciones: string
 
     @IsNumber()
-    cri_imp_id:number
-
+    cri_ips_id: number;
+    
     @IsNumber()
-    cal_acta: number
-
+    eva_ips_id: number;
+    
     @IsNumber()
-    cal_evaluacion: number
+    acta_ips: number;
+
 }

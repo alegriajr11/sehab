@@ -47,10 +47,7 @@ export class UsuarioInterceptor implements HttpInterceptor {
           title: '¡Sesión expirada!',
           text: 'Tu sesión ha expirado debido a la inactividad.',
         }).then((result) => {
-          if (result.isConfirmed) {
-            this.router.navigate(['/login']); // Redirigir a la página de inicio de sesión
-            this.modalRef.hide()
-          }
+          location.reload()
         });
 
       }
