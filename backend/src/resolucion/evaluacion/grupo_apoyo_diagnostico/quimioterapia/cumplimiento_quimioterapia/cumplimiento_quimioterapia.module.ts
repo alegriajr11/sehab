@@ -4,10 +4,10 @@ import { CumplimientoQuimioterapiaController } from './cumplimiento_quimioterapi
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioQuimioterapiaEntity } from '../criterio_quimioterapia.entity';
 import { CumplimientoQuimioterapiaEntity } from '../cumplimiento_quimioterapia.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioQuimioterapiaEntity, CumplimientoQuimioterapiaEntity,EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioQuimioterapiaEntity, CumplimientoQuimioterapiaEntity,EvaluacionResVerificacionEntity])],
   exports: [CumplimientoQuimioterapiaService],
   providers: [CumplimientoQuimioterapiaService],
   controllers: [CumplimientoQuimioterapiaController]

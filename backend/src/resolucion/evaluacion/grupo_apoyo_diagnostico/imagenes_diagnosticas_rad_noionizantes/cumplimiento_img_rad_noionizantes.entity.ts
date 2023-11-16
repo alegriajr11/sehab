@@ -2,7 +2,8 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioImgRadNoIonizantesEntity } from "./criterio_img_rad_noionizantes.entity";
-import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "../../evaluacion_resolucion_verificacion/evaluacion_res.entity";
+
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -35,6 +36,6 @@ export class CumplimientoImgRadNoIonizanteEntity {
     criterio_img_rad_noion: CriterioImgRadNoIonizantesEntity
 
     //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
-    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_ima_noioniza)
-    cump_eva_ima_noioniza: EvaluacionResEntity
+    @ManyToOne(type => EvaluacionResVerificacionEntity, eva_res => eva_res.eva_cumplimiento_ima_noioniza)
+    cump_eva_ima_noioniza: EvaluacionResVerificacionEntity
 }

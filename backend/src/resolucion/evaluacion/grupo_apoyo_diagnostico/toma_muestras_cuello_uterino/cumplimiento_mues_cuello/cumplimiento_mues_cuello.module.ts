@@ -4,10 +4,11 @@ import { CumplimientoMuesCuelloController } from './cumplimiento_mues_cuello.con
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioCuelloUterinoEntity } from '../criterio_tom_muest_cuello.entity';
 import { CumplimientoCuelloUterinoEntity } from '../cumplimiento_tom_muest_cuello.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioCuelloUterinoEntity, CumplimientoCuelloUterinoEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioCuelloUterinoEntity, CumplimientoCuelloUterinoEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoMuesCuelloService],
   providers: [CumplimientoMuesCuelloService],
   controllers: [CumplimientoMuesCuelloController]

@@ -4,10 +4,10 @@ import { MessageDto } from 'src/common/message.dto';
 import { CumplimientoDiagnosticoVascularEntity } from '../cumplimiento_diagnost_vascular.entity';
 import { CriterioDiagnostVascularEntity } from '../criterio_diagnost_vascular.entity';
 import { CriterioDiagnostVascularRepository } from '../criterio_diagnost_vascular.repository';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CumplimientoDiagnRepository } from '../cumplimiento_diagnost_vascular.repository';
 import {CumplimientoDiagnostiVascularDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/diagnostico_vascular_dto/cumplimiento_diagnostico_vascular.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoDiagVascularService {
@@ -17,8 +17,8 @@ export class CumplimientoDiagVascularService {
         private readonly cumplimientoDiagnostVascularRepository: CumplimientoDiagnRepository,
         @InjectRepository(CriterioDiagnostVascularEntity)
         private readonly criterioDiagnostVascularRepository: CriterioDiagnostVascularRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

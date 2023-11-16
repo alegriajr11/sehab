@@ -4,10 +4,10 @@ import { CumplimientoTerapiasController } from './cumplimiento_terapias.controll
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioTerapiaEntity } from '../criterios_terapias.entity';
 import { CumplimientoTerapiaEntity } from '../cumplimiento_terapias.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioTerapiaEntity, CumplimientoTerapiaEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioTerapiaEntity, CumplimientoTerapiaEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoTerapiasService],
   providers: [CumplimientoTerapiasService],
   controllers: [CumplimientoTerapiasController]

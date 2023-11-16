@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioSerFarmaceuticoEntity } from '../criterios_s_farmaceutico.entity';
 import { CriterioSerFarmaceuticoRepository } from '../criterios_s_farmaceutico.repository';
 import { CumplimientoSerFarmaceuticoEntity } from '../cumplimiento_s_farmaceutico.entity';
 import { CumplimientoSerFarmaceuticoRepository } from '../cumplimiento_s_farmaceutico.repository';
 import { CumplimientoSerFarmaceuticoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/servicio_farmaceutico_dto/cumplimiento_s_farmaceutico.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoServicioFarmaceuticoService {
@@ -17,8 +17,8 @@ export class CumplimientoServicioFarmaceuticoService {
         private readonly cumplimientoSerFarmaceuticoRepository: CumplimientoSerFarmaceuticoRepository,
         @InjectRepository(CriterioSerFarmaceuticoEntity)
         private readonly criterioSerFarmaceuticoRepository: CriterioSerFarmaceuticoRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

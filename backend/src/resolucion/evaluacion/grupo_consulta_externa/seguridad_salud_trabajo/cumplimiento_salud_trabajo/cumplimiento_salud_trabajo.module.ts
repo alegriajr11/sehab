@@ -4,10 +4,11 @@ import { CumplimientoSaludTrabajoController } from './cumplimiento_salud_trabajo
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioSaludTrabajoEntity } from '../criterios_salud_trabajo.entity';
 import { CumplimientoSaludTrabajoEntity } from '../cumplimiento_salud_trabajo.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioSaludTrabajoEntity, CumplimientoSaludTrabajoEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioSaludTrabajoEntity, CumplimientoSaludTrabajoEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoSaludTrabajoService],
   providers: [CumplimientoSaludTrabajoService],
   controllers: [CumplimientoSaludTrabajoController]

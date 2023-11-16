@@ -4,10 +4,11 @@ import { CumplimientoPatologiaController } from './cumplimiento_patologia.contro
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioPatologiaEntity } from '../criterio_patologia.entity';
 import { CumplimientoPatologiaEntity } from '../cumplimiento_patologia.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioPatologiaEntity, CumplimientoPatologiaEntity,EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioPatologiaEntity, CumplimientoPatologiaEntity,EvaluacionResVerificacionEntity])],
   exports: [CumplimientoPatologiaService],
   providers: [CumplimientoPatologiaService],
   controllers: [CumplimientoPatologiaController]

@@ -10,10 +10,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CriterioDiagnostVascularEntity } from '../criterio_diagnost_vascular.entity';
 import { CumplimientoDiagnosticoVascularEntity } from '../cumplimiento_diagnost_vascular.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioDiagnostVascularEntity, CumplimientoDiagnosticoVascularEntity,EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioDiagnostVascularEntity, CumplimientoDiagnosticoVascularEntity,EvaluacionResVerificacionEntity])],
   providers: [CumplimientoDiagVascularService],
   controllers: [CumplimientoDiagVascularController],
   exports: [CumplimientoDiagVascularService]

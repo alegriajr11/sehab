@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioMuestraLabClinicoEntity } from '../criterio_tom_muestras.entity';
 import { CriterioMuestraLabClinicoRepository } from '../criterio_tom_muestras.repository';
 import { CumplimientoMuestLabClinicoEntity } from '../cumplimiento_tom_muestras.entity';
 import { CumplimientoMuestLabClinicoRepository } from '../cumplimiento_tom_muestras.repository';
 import { CumplimientoMuestraLabClinicoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/toma_muestras_laboratorio_clinico_dto/cumplimiento_tom_muestras.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoTomMuestrasService {
@@ -17,8 +17,8 @@ export class CumplimientoTomMuestrasService {
         private readonly cumplimientoMuestLabClinicoRepository: CumplimientoMuestLabClinicoRepository,
         @InjectRepository(CriterioMuestraLabClinicoEntity)
         private readonly criterioMuestraLabClinicoRepository: CriterioMuestraLabClinicoRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

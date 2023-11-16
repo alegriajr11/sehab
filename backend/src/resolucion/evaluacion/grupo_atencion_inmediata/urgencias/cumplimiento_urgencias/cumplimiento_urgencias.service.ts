@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioUrgenciasEntity } from '../criterio_urgencias.entity';
 import { CriterioUrgenciasRepository } from '../criterio_urgencias.repository';
 import { CumplimientoUrgenciasEntity } from '../cumplimiento_urgencias.entity';
 import { CumplimientoUrgenciasRepository } from '../cumplimiento_urgencias.repository';
 import { CumplimientoUrgenciasDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_atencion_inmediata_dtos/urgencias_dto/cumplimiento_urgencias.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoUrgenciasService {
@@ -18,8 +18,8 @@ export class CumplimientoUrgenciasService {
         private readonly criterioUrgenciasRepository: CriterioUrgenciasRepository,
         @InjectRepository(CumplimientoUrgenciasEntity)
         private readonly cumplimientoUrgenciasRepository: CumplimientoUrgenciasRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

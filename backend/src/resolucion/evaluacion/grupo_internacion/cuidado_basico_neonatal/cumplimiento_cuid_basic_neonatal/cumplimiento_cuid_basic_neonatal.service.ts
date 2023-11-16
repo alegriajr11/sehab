@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioCuidBasNeonatalEntity } from '../criterio_cuid_basic_neonatal.entity';
 import { CriterioCuidBasNeonatalRepository } from '../criterio_cuid_basic_neonatal.repository';
 import { CumplimientoCuidBasNeonatalEntity } from '../cumplimiento_cuid_basic_neonatal.entity';
 import { CumplimientoCuidBasNeonatalRepository } from '../cumplimiento_cuid_basic_neonatal.repository';
 import { CumplimientoCuidBasNeonatalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/cuidado_basico_neonatal_dto/cumplimiento_cuid_basic_neonatal.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoCuidBasicNeonatalService {
@@ -17,8 +17,8 @@ export class CumplimientoCuidBasicNeonatalService {
         private readonly cumplimientoCuidBasNeonatalRepository: CumplimientoCuidBasNeonatalRepository,
         @InjectRepository(CriterioCuidBasNeonatalEntity)
         private readonly criterioCuidBasNeonatalRepository: CriterioCuidBasNeonatalRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

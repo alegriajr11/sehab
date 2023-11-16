@@ -4,10 +4,11 @@ import { CumplimientoHospParcialController } from './cumplimiento_hosp_parcial.c
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioHospitalizacionParcialEntity } from '../criterio_hosp_parcial.entity';
 import { CumplimientoHospitalizacionParcialEntity } from '../cumplimiento_hosp_parcial.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioHospitalizacionParcialEntity, CumplimientoHospitalizacionParcialEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioHospitalizacionParcialEntity, CumplimientoHospitalizacionParcialEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoHospParcialService],
   providers: [CumplimientoHospParcialService],
   controllers: [CumplimientoHospParcialController]

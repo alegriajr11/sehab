@@ -4,10 +4,10 @@ import { CumplimientoMedicinaNuclearController } from './cumplimiento_medicina_n
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioMedicinaNuclearEntity } from '../criterio_medicina_nuclear.entity';
 import { CumplimientoMedNuclearEntity } from '../cumplimineto_medicina_nuclear.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioMedicinaNuclearEntity, CumplimientoMedNuclearEntity,EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioMedicinaNuclearEntity, CumplimientoMedNuclearEntity,EvaluacionResVerificacionEntity])],
   exports: [CumplimientoMedicinaNuclearService],
   providers: [CumplimientoMedicinaNuclearService],
   controllers: [CumplimientoMedicinaNuclearController]

@@ -180,6 +180,7 @@ import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
         logging: false 
+      
       }),
       inject: [ConfigService],
     }),
@@ -293,6 +294,7 @@ import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_
     CumplimientoHospSaludMentalModule,
     CumplimientoCirugiaModule,
     CumplimientoTodosServiciosModule,
+
 
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 

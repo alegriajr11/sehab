@@ -4,11 +4,12 @@ import { CumplimientoHospitalizacionController } from './cumplimiento_hospitaliz
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioHospitalizacionEntity } from '../criterio_hospitalizacion.entity';
 import { CumplimientoHospitalizacionEntity } from '../cumplimiento_hospitalizacion.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioHospitalizacionEntity, CumplimientoHospitalizacionEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioHospitalizacionEntity, CumplimientoHospitalizacionEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoHospitalizacionService],
   providers: [CumplimientoHospitalizacionService],
   controllers: [CumplimientoHospitalizacionController]

@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioHospitCronicoEntity } from '../criterio_hosp_paciente_cron.entity';
 import { CriterioHospitCronicoRepository } from '../criterio_hosp_paciente_cron.repository';
 import { CumplimientoHospitCronicoEntity } from '../cumplimiento_hosp_paciente_cron.entity';
 import { CumplimientoHospitCronicoRepository } from '../cumplimiento_hosp_paciente_cron.repository';
 import { CumplimientoHospitCronicoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/hospitalizacion_paciente_cronico_dto/cumplimiento_hosp_paciente_cron.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoHospPacienteCronicoService {
@@ -17,8 +17,8 @@ export class CumplimientoHospPacienteCronicoService {
         private readonly CumplimientoHospitCronicoRepository: CumplimientoHospitCronicoRepository,
         @InjectRepository(CriterioHospitCronicoEntity)
         private readonly criterioHospitCronicoRepository: CriterioHospitCronicoRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

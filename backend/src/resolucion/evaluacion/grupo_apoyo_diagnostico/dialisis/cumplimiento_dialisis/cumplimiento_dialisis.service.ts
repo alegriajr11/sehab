@@ -4,10 +4,10 @@ import { CumplimientoDialisisEntity } from '../cumplimiento_dialisis.entity';
 import { CriterioDialisisRepository } from '../criterio_dialisis.repository';
 import { CumplimientoDialisisRepository } from '../cumplimiento_dialisis.repository';
 import { CriterioDialisisEntity } from '../criterio_dialisis.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { MessageDto } from 'src/common/message.dto';
 import { CumplimientoDialisisDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/dialisis_dto/cumplimiento_dialisis.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoDialisisService {
@@ -16,8 +16,8 @@ export class CumplimientoDialisisService {
         private readonly cumplimientoDialisisRepository: CumplimientoDialisisRepository,
         @InjectRepository(CriterioDialisisEntity)
         private readonly criterioDialisisRepository: CriterioDialisisRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

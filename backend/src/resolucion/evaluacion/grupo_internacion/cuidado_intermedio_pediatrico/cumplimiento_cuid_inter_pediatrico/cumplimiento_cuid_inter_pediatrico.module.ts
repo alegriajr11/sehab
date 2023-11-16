@@ -4,10 +4,11 @@ import { CumplimientoCuidInterPediatricoController } from './cumplimiento_cuid_i
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioCuidIntermPediatricoEntity } from '../criterio_cuid_inter_pediatrico.entity';
 import { CumplimientoCuidInterPediatricoEntity } from '../cumplimiento_cuid_inter_pediatrico.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioCuidIntermPediatricoEntity, CumplimientoCuidInterPediatricoEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioCuidIntermPediatricoEntity, CumplimientoCuidInterPediatricoEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoCuidInterPediatricoService],
   providers: [CumplimientoCuidInterPediatricoService],
   controllers: [CumplimientoCuidInterPediatricoController]

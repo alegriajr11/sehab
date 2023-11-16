@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioLabUterinaEntity } from '../criterio_lab_citologia_uterina.entity';
 import { CriterioLabUterinaRepository } from '../criterio_lab_citologia_uterina.repository';
 import { CumplimientoLabUterinaEntity } from '../cumplimiento_lab_citologia_uterina.entity';
 import { CumplimientoLabUterinaRepository } from '../cumplimiento_lab_citologia_uterina.repository';
 import { CumplimientoLabUterinaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/laboratorio_citologias_uterinas_dto/cumplimiento_lab_citologia_uterina.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoLabCitologiaService {
@@ -17,8 +17,8 @@ export class CumplimientoLabCitologiaService {
         private readonly cumplimientoLabUterinaRepository: CumplimientoLabUterinaRepository,
         @InjectRepository(CriterioLabUterinaEntity)
         private readonly criterioLabUterinaRepository: CriterioLabUterinaRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

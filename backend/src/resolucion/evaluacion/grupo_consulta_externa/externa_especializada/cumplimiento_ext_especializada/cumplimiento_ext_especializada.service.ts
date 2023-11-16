@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioEspecializadaEntity } from '../criterio_especializada.entity';
 import { CriterioEspecializadaRepository } from '../criterio_especializada.repository';
 import { CumplimientoEspecializadaEntity } from '../cumplimiento_especializada.entity';
 import { CumplimientoEspecializadaRepository } from '../cumplimiento_especializada.repository';
 import { CumplimientoEspecializadaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_consulta_externa_dtos/externa_especializada_dto/cumplimiento_especializada.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoExtEspecializadaService {
@@ -17,8 +17,8 @@ export class CumplimientoExtEspecializadaService {
         private readonly cumplimientoEspecializadaRepository: CumplimientoEspecializadaRepository,
         @InjectRepository(CriterioEspecializadaEntity)
         private readonly criterioEspecializadaRepository: CriterioEspecializadaRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

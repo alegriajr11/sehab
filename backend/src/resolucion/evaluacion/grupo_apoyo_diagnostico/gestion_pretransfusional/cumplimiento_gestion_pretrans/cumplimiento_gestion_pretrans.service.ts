@@ -2,12 +2,12 @@ import { Injectable, InternalServerErrorException, NotFoundException } from '@ne
 import { MessageDto } from 'src/common/message.dto';
 import { CriterioGestionPretransfusionalEntity } from '../criterio_gestion_pretrans.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CumplimientoGestionPretransfusionalEntity } from '../cumplimiento_gestion_pretrans.entity';
 import { CriterioGestionPretransfusionalRepository } from '../criterio_gestion_pretrans.repository';
 import { CumplimientoGestionPretransfusionalRepository } from '../cumplimiento_gestion_pretrans.repository';
 import { CumplimientoGestionPretransfusionalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/gestion_pretransfusional_dto/cumplimiento_gestion_pretrans.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoGestionPretransService {
@@ -17,8 +17,8 @@ export class CumplimientoGestionPretransService {
         private readonly cumplimientoGestionPretransfusionalRepository: CumplimientoGestionPretransfusionalRepository,
         @InjectRepository(CriterioGestionPretransfusionalEntity)
         private readonly criterioGestionPretransfusionalRepository: CriterioGestionPretransfusionalRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

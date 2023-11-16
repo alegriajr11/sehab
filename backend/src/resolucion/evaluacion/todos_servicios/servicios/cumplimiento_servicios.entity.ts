@@ -32,7 +32,7 @@ export class CumplimientoServiciosEntity {
     @JoinColumn()
     criterio_servicios: Criterio_servicios
 
-    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES-VERIFICACION
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
     @ManyToOne(type => EvaluacionResVerificacionEntity, evasic => evasic.eva_todos_servi_cumplimiento)
     cump_eva_todos_servi: EvaluacionResVerificacionEntity
 

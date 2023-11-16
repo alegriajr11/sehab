@@ -2,7 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioLabClinicoEntity } from "./criterio_lab_clinico.entity";
-import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "../../evaluacion_resolucion_verificacion/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -35,7 +35,7 @@ export class CumplimientoLabClinicoEntity {
     criterio_lab_clinico: CriterioLabClinicoEntity
 
     //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
-    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_lab_clinico)
-    cump_eva_lab_clinico: EvaluacionResEntity
+    @ManyToOne(type => EvaluacionResVerificacionEntity, eva_res => eva_res.eva_cumplimiento_lab_clinico)
+    cump_eva_lab_clinico: EvaluacionResVerificacionEntity
 
 }

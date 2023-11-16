@@ -2,7 +2,8 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioHospitalizacionEntity } from "./criterio_hospitalizacion.entity";
-import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "../../evaluacion_resolucion_verificacion/evaluacion_res.entity";
+
 
 
 
@@ -36,6 +37,6 @@ export class CumplimientoHospitalizacionEntity {
     criterio_hospitalizacion: CriterioHospitalizacionEntity
 
     //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
-    @ManyToOne(type => EvaluacionResEntity, evasic => evasic.eva_hospi_cumplimiento)
-    cump_eva_hospi: EvaluacionResEntity
+    @ManyToOne(type => EvaluacionResVerificacionEntity, eva_res => eva_res.eva_hospi_cumplimiento)
+    cump_eva_hospi: EvaluacionResVerificacionEntity
 }

@@ -1,13 +1,12 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioCirugiaEntity } from '../criterio_cirugia.entity';
 import { CriterioCirugiaRepository } from '../criterio_cirugia.repository';
 import { CumplimientoCirugiaEntity } from '../cumplimiento_cirugia.entity';
 import { CumplimientoCirugiaRepository } from '../cumplimiento_cirugia.repository';
 import { CumplimientoCirugiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_quirurgico_dtos/cirugia_dto/cumplimiento_cirugia.dto';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoCirugiaService {
@@ -17,8 +16,8 @@ export class CumplimientoCirugiaService {
         private readonly cumplimientoCirugiaRepository: CumplimientoCirugiaRepository,
         @InjectRepository(CriterioCirugiaEntity)
         private readonly criterioCirugiaRepository: CriterioCirugiaRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionRepository)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

@@ -4,10 +4,11 @@ import { CumplimientoConsPsicoactivasController } from './cumplimiento_cons_psic
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioConsumoPsicoactivasEntity } from '../criterio_cuid_cons_psicoact.entity';
 import { CumplimientoConsPsicoactivasEntity } from '../cumplimiento_cuid_cons_psicoact.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioConsumoPsicoactivasEntity, CumplimientoConsPsicoactivasEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioConsumoPsicoactivasEntity, CumplimientoConsPsicoactivasEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoConsPsicoactivasService],
   providers: [CumplimientoConsPsicoactivasService],
   controllers: [CumplimientoConsPsicoactivasController]

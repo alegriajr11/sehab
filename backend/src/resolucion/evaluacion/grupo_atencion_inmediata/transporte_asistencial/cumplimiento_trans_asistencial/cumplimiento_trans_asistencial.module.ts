@@ -4,10 +4,11 @@ import { CumplimientoTransAsistencialController } from './cumplimiento_trans_asi
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioTranspAsistencialEntity } from '../criterio_trans_asistencial.entity';
 import { CumplimientoTranspAsistencialEntity } from '../cumplimiento_trans_asistencial.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioTranspAsistencialEntity, CumplimientoTranspAsistencialEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioTranspAsistencialEntity, CumplimientoTranspAsistencialEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoTransAsistencialService],
   providers: [CumplimientoTransAsistencialService],
   controllers: [CumplimientoTransAsistencialController]

@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioSaludTrabajoEntity } from '../criterios_salud_trabajo.entity';
 import { CumplimientoSaludTrabajoEntity } from '../cumplimiento_salud_trabajo.entity';
 import { CumplimientoSaludTrabajoRepository } from '../cumplimiento_salud_trabajo.repository';
 import { CriterioSaludTrabajoRepository } from '../criterios_salud_trabajo.repository';
 import { CumplimientoSaludTrabajoDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_consulta_externa_dtos/seguridad_salud_trabajo_dto/cumplimiento_salud_trabajo.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoSaludTrabajoService {
@@ -17,8 +17,8 @@ export class CumplimientoSaludTrabajoService {
         private readonly cumplimientoSaludTrabajoRepository: CumplimientoSaludTrabajoRepository,
         @InjectRepository(CriterioSaludTrabajoEntity)
         private readonly criterioSaludTrabajoRepository: CriterioSaludTrabajoRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioMedicinaNuclearEntity } from '../criterio_medicina_nuclear.entity';
 import { CriterioMedicinaNuclearRepository } from '../criterio_medicina_nuclear.repository';
 import { CumplimientoMedNuclearEntity } from '../cumplimineto_medicina_nuclear.entity';
 import { CumplimientoMedNuclearRepository } from '../cumplimineto_medicina_nuclear.repository';
 import { CumplimientoMedicinaNuclearDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/medicina_nuclear_dto/cumplimiento_medicina_nuclear.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoMedicinaNuclearService {
@@ -17,8 +17,8 @@ export class CumplimientoMedicinaNuclearService {
         private readonly cumplimientoMedNuclearRepository: CumplimientoMedNuclearRepository,
         @InjectRepository(CriterioMedicinaNuclearEntity)
         private readonly criterioMedicinaNuclearRepository: CriterioMedicinaNuclearRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO

@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioPrehospitalariaEntity } from '../criterio_prehospitalaria.entity';
 import { CriterioPrehospitalariaRepository } from '../criterio_prehospitalaria.repository';
 import { CumplimientoPrehospitalariaEntity } from '../cumplimiento_prehospitalaria.entity';
 import { CumplimientoPrehospitalariaRepository } from '../cumplimiento_prehospitalaria.repository';
 import { CumplimientoPrehospitalariaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_atencion_inmediata_dtos/prehospitalaria_dto/cumplimiento_prehospitalaria.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoPrehospitalariaService {
@@ -17,8 +17,8 @@ export class CumplimientoPrehospitalariaService {
         private readonly cumplimientoPrehospitalariaRepository: CumplimientoPrehospitalariaRepository,
         @InjectRepository(CriterioPrehospitalariaEntity)
         private readonly criterioPrehospitalariaRepository: CriterioPrehospitalariaRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
     
     //ENCONTRAR POR ID - CUMPLIMIENTO

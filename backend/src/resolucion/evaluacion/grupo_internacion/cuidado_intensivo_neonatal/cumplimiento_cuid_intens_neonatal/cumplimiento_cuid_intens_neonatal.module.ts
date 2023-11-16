@@ -4,10 +4,11 @@ import { CumplimientoCuidIntensNeonatalController } from './cumplimiento_cuid_in
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioCuidInteNeonatalEntity } from '../criterio_cuid_intens_neonatal.entity';
 import { CumplimientoCuidIntNeonatalEntity } from '../cumplimiento_cuid_intens_neonatal.entity';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CriterioCuidInteNeonatalEntity, CumplimientoCuidIntNeonatalEntity, EvaluacionResEntity])],
+  imports: [TypeOrmModule.forFeature([CriterioCuidInteNeonatalEntity, CumplimientoCuidIntNeonatalEntity, EvaluacionResVerificacionEntity])],
   exports: [CumplimientoCuidIntensNeonatalService],
   providers: [CumplimientoCuidIntensNeonatalService],
   controllers: [CumplimientoCuidIntensNeonatalController]

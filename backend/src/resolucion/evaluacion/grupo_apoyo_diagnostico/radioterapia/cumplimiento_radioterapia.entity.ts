@@ -2,7 +2,8 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioRadioterapiaEntity } from "./criterio_radioterapia.entity";
-import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
+import { EvaluacionResVerificacionEntity } from "../../evaluacion_resolucion_verificacion/evaluacion_res.entity";
+
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -35,7 +36,7 @@ export class CumplimientoRadioterapiaEntity {
     criterio_radioterapia: CriterioRadioterapiaEntity
 
     //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
-    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_radio)
-    cump_eva_radio: EvaluacionResEntity
+    @ManyToOne(type => EvaluacionResVerificacionEntity, eva_res => eva_res.eva_cumplimiento_radio)
+    cump_eva_radio: EvaluacionResVerificacionEntity
 
 }

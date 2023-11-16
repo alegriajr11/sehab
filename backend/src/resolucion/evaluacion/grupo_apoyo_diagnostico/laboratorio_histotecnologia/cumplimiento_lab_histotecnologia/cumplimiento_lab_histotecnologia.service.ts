@@ -1,13 +1,13 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MessageDto } from 'src/common/message.dto';
-import { EvaluacionResEntity } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.entity';
-import { EvaluacionResRepository } from 'src/resolucion/evaluacion/evaluacion_res/evaluacion_res.repository';
 import { CriterioLabHistotecnologiaEntity } from '../criterio_lab_histotec.entity';
 import { CriterioLabHistotecnologiaRepository } from '../criterio_lab_histotec.repository';
 import { CumplimientoLabHistotecnEntity } from '../cumplimiento_lab_histotec.entity';
 import { CumplimientoLabHistotecnRepository } from '../cumplimiento_lab_histotec.repository';
 import { CumplimientoLabHistotecnologiaDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_apoyo_diagnostico_dtos/laboratorio_histotecnologia_dto/cumplimiento_lab_histotec.dto';
+import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 
 @Injectable()
 export class CumplimientoLabHistotecnologiaService {
@@ -17,8 +17,8 @@ export class CumplimientoLabHistotecnologiaService {
         private readonly cumplimientoLabHistotecnRepository: CumplimientoLabHistotecnRepository,
         @InjectRepository(CriterioLabHistotecnologiaEntity)
         private readonly criterioLabHistotecnologiaRepository: CriterioLabHistotecnologiaRepository,
-        @InjectRepository(EvaluacionResEntity)
-        private readonly evaluacionResRepository: EvaluacionResRepository,
+        @InjectRepository(EvaluacionResVerificacionEntity)
+        private readonly evaluacionResRepository: EvaluacionResVerificacionRepository,
     ) { }
 
     //ENCONTRAR POR ID - CUMPLIMIENTO
