@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioPartoEntity } from "./criterio_parto.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -33,5 +34,9 @@ export class CumplimientoPartoEntity {
     @OneToOne(() => CriterioPartoEntity)
     @JoinColumn()
     criterio_parto: CriterioPartoEntity
+
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
+    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_parto)
+    cump_eva_parto: EvaluacionResEntity
 
 }

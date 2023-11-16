@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioConsumoPsicoactivasEntity } from "./criterio_cuid_cons_psicoact.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -27,10 +28,15 @@ export class CumplimientoConsPsicoactivasEntity {
 
     @Column({ type: 'date', nullable: false, unique: false })
     cump_cons_psic_fecha_limite: string;
-    
-    
+
+
     @OneToOne(() => CriterioConsumoPsicoactivasEntity)
     @JoinColumn()
     criterio_cons_psico: CriterioConsumoPsicoactivasEntity
+
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
+    @ManyToOne(type => EvaluacionResEntity, evasic => evasic.eva_cons_psico_cumplimiento)
+    cump_eva_cons_psico: EvaluacionResEntity
+
 
 }

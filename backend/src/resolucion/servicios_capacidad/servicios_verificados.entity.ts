@@ -1,7 +1,5 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { ModalidadEntity } from "./modalidad.entity";
-import { ComplejidadEntity } from "./complejidad.entity";
 import { GrupoEvaluacionEntity } from "../grupo_evaluacion/grupo_evaluacion.entity";
 
 
@@ -17,18 +15,41 @@ export class ServiciosVerificadosEntity {
     @Column({ type: 'varchar', length: 40, nullable: false, unique: false })
     ser_nombre: string;
 
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    ambulatorio: string;
+
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    hospitalario: string;
+
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    unidad_movil: string;
+
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    domiciliario: string;
+
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    otras_extramural: string;
+
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    centro_referencia: string;
+
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
+    institucion_remisora: string;
+
+    @Column({ type: 'varchar', length: 5, nullable: false, unique: false })
+    complejidad_baja: string;
+
+    @Column({ type: 'varchar', length: 5, nullable: false, unique: false })
+    complejidad_media: string;
+
+    @Column({ type: 'varchar', length: 5, nullable: false, unique: false })
+    complejidad_alta: string;
+
+    
+
     //Relacion MUCHOS a UNO SERVICIOS VERIFICADOS- GRUPO EVALUACION
     @ManyToOne(type => GrupoEvaluacionEntity, gtup_eval => gtup_eval.seriv_verif_grup_eval)
     grup_evaluacion: GrupoEvaluacionEntity
-
-
-    //Relacion MUCHOS a UNO SERVICIOS VERIFICADOS- MODALIDAD
-    @ManyToOne(type => ModalidadEntity, modalidad => modalidad.seriv_verif_mod)
-    modalidad: ModalidadEntity;
-
-    //Relacion MUCHOS a UNO SERVICIOS VERIFICADOS- COMPLEJIDAD
-    @ManyToOne(type => ComplejidadEntity, complejidad => complejidad.seriv_verif_comp)
-    complejidad: ComplejidadEntity;
 
     @ManyToOne(type => PrestadorEntity, prestador => prestador.servicios_verificados)
     prestadores: PrestadorEntity

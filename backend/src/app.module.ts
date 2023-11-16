@@ -120,8 +120,45 @@ import { CalificacionipsImplementacionModule } from './sp/sp_ips/calificacion/ca
 import { CalificacionipsPlaneacionModule } from './sp/sp_ips/calificacion/calificacionips_planeacion/calificacionips_planeacion.module';
 import { CalificacionipsVerificacionModule } from './sp/sp_ips/calificacion/calificacionips_verificacion/calificacionips_verificacion.module';
 import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.module';
-
-
+import { CumplimientoDiagVascularModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/cumplimiento_diag_vascular/cumplimiento_diag_vascular.module';
+import { CumplimientoDiagVascularController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/cumplimiento_diag_vascular/cumplimiento_diag_vascular.controller';
+import { CumplimientoDialisisModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/cumplimiento_dialisis/cumplimiento_dialisis.module';
+import { CumplimientoGestionPretransModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/gestion_pretransfusional/cumplimiento_gestion_pretrans/cumplimiento_gestion_pretrans.module';
+import { CumplimientoHemodIntervenModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/hemodinamia_intervencionismo/cumplimiento_hemod_interven/cumplimiento_hemod_interven.module';
+import { CumplimientoImgRadIonizantesModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/imagenes_diagnosticas_rad_ionizantes/cumplimiento_img_rad_ionizantes/cumplimiento_img_rad_ionizantes.module';
+import { CumplimientoImgRadNoionizantesModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/imagenes_diagnosticas_rad_noionizantes/cumplimiento_img_rad_noionizantes/cumplimiento_img_rad_noionizantes.module';
+import { CumplimientoLabCitologiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_citologias_uterinas/cumplimiento_lab_citologia/cumplimiento_lab_citologia.module';
+import { CumplimientoLabClinicoModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_clinico/cumplimiento_lab_clinico/cumplimiento_lab_clinico.module';
+import { CumplimientoLabHistotecnologiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_histotecnologia/cumplimiento_lab_histotecnologia/cumplimiento_lab_histotecnologia.module';
+import { CumplimientoMedicinaNuclearModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/medicina_nuclear/cumplimiento_medicina_nuclear/cumplimiento_medicina_nuclear.module';
+import { CumplimientoPatologiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/patologia/cumplimiento_patologia/cumplimiento_patologia.module';
+import { CumplimientoQuimioterapiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/quimioterapia/cumplimiento_quimioterapia/cumplimiento_quimioterapia.module';
+import { CumplimientoServicioFarmaceuticoModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/servicio_farmaceutico/cumplimiento_servicio_farmaceutico/cumplimiento_servicio_farmaceutico.module';
+import { CumplimientoTerapiasModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/terapias/cumplimiento_terapias/cumplimiento_terapias.module';
+import { CumplimientoMuesCuelloModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_cuello_uterino/cumplimiento_mues_cuello/cumplimiento_mues_cuello.module';
+import { CumplimientoTomMuestrasModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_laboratorio_clinico/cumplimiento_tom_muestras/cumplimiento_tom_muestras.module';
+import { CumplimientoPartoModule } from './resolucion/evaluacion/grupo_atencion_inmediata/parto/cumplimiento_parto/cumplimiento_parto.module';
+import { CumplimientoPrehospitalariaModule } from './resolucion/evaluacion/grupo_atencion_inmediata/prehospitalaria/cumplimiento_prehospitalaria/cumplimiento_prehospitalaria.module';
+import { CumplimientoTransAsistencialModule } from './resolucion/evaluacion/grupo_atencion_inmediata/transporte_asistencial/cumplimiento_trans_asistencial/cumplimiento_trans_asistencial.module';
+import { CumplimientoUrgenciasModule } from './resolucion/evaluacion/grupo_atencion_inmediata/urgencias/cumplimiento_urgencias/cumplimiento_urgencias.module';
+import { CumplimientoExtEspecializadaModule } from './resolucion/evaluacion/grupo_consulta_externa/externa_especializada/cumplimiento_ext_especializada/cumplimiento_ext_especializada.module';
+import { CumplimientoExtGeneralModule } from './resolucion/evaluacion/grupo_consulta_externa/externa_general/cumplimiento_ext_general/cumplimiento_ext_general.module';
+import { CumplimientoSaludTrabajoModule } from './resolucion/evaluacion/grupo_consulta_externa/seguridad_salud_trabajo/cumplimiento_salud_trabajo/cumplimiento_salud_trabajo.module';
+import { CumplimientoVacunacionModule } from './resolucion/evaluacion/grupo_consulta_externa/vacunacion/cumplimiento_vacunacion/cumplimiento_vacunacion.module';
+import { CumplimientoConsPsicoactivasModule } from './resolucion/evaluacion/grupo_internacion/cuidado_basico_consumo_psicoactivas/cumplimiento_cons_psicoactivas/cumplimiento_cons_psicoactivas.module';
+import { CumplimientoCuidBasicNeonatalModule } from './resolucion/evaluacion/grupo_internacion/cuidado_basico_neonatal/cumplimiento_cuid_basic_neonatal/cumplimiento_cuid_basic_neonatal.module';
+import { CumplimientoCuidIntensAdultoModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_adulto/cumplimiento_cuid_intens_adulto/cumplimiento_cuid_intens_adulto.module';
+import { CumplimientoCuidIntensNeonatalModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_neonatal/cumplimiento_cuid_intens_neonatal/cumplimiento_cuid_intens_neonatal.module';
+import { CumplimientoCuidIntensPediatricoModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intensivo_pediatrico/cumplimiento_cuid_intens_pediatrico/cumplimiento_cuid_intens_pediatrico.module';
+import { CumplimientoCuidInterAdultoModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_adulto/cumplimiento_cuid_inter_adulto/cumplimiento_cuid_inter_adulto.module';
+import { CumplimientoCuidInterNeonatalModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_neonatal/cumplimiento_cuid_inter_neonatal/cumplimiento_cuid_inter_neonatal.module';
+import { CumplimientoCuidInterPediatricoModule } from './resolucion/evaluacion/grupo_internacion/cuidado_intermedio_pediatrico/cumplimiento_cuid_inter_pediatrico/cumplimiento_cuid_inter_pediatrico.module';
+import { CumplimientoHospitalizacionModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion/cumplimiento_hospitalizacion/cumplimiento_hospitalizacion.module';
+import { CumplimientoHospPacienteCronicoModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/cumplimiento_hosp_paciente_cronico/cumplimiento_hosp_paciente_cronico.module';
+import { CumplimientoHospParcialModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_parcial/cumplimiento_hosp_parcial/cumplimiento_hosp_parcial.module';
+import { CumplimientoHospSaludMentalModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/cumplimiento_hosp_salud_mental/cumplimiento_hosp_salud_mental.module';
+import { CumplimientoCirugiaModule } from './resolucion/evaluacion/grupo_quirurgico/cirugia/cumplimiento_cirugia/cumplimiento_cirugia.module';
+import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_servicios/cumplimiento_todos_servicios/cumplimiento_todos_servicios.module';
 
 
 
@@ -143,7 +180,7 @@ import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.m
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
         logging: false 
-        
+      
       }),
       inject: [ConfigService],
     }),
@@ -219,6 +256,45 @@ import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.m
     CalificacionipsPlaneacionModule,
     CalificacionipsVerificacionModule,
     EvaluacionpamecModule,
+    CumplimientoDiagVascularModule,
+    CumplimientoDialisisModule,
+    CumplimientoGestionPretransModule,
+    CumplimientoHemodIntervenModule,
+    CumplimientoImgRadIonizantesModule,
+    CumplimientoImgRadNoionizantesModule,
+    CumplimientoLabCitologiaModule,
+    CumplimientoLabClinicoModule,
+    CumplimientoLabHistotecnologiaModule,
+    CumplimientoMedicinaNuclearModule,
+    CumplimientoPatologiaModule,
+    CumplimientoQuimioterapiaModule,
+    CumplimientoServicioFarmaceuticoModule,
+    CumplimientoTerapiasModule,
+    CumplimientoMuesCuelloModule,
+    CumplimientoTomMuestrasModule,
+    CumplimientoPartoModule,
+    CumplimientoPrehospitalariaModule,
+    CumplimientoTransAsistencialModule,
+    CumplimientoUrgenciasModule,
+    CumplimientoExtEspecializadaModule,
+    CumplimientoExtGeneralModule,
+    CumplimientoSaludTrabajoModule,
+    CumplimientoVacunacionModule,
+    CumplimientoConsPsicoactivasModule,
+    CumplimientoCuidBasicNeonatalModule,
+    CumplimientoCuidIntensAdultoModule,
+    CumplimientoCuidIntensNeonatalModule,
+    CumplimientoCuidIntensPediatricoModule,
+    CumplimientoCuidInterAdultoModule,
+    CumplimientoCuidInterNeonatalModule,
+    CumplimientoCuidInterPediatricoModule,
+    CumplimientoHospitalizacionModule,
+    CumplimientoHospPacienteCronicoModule,
+    CumplimientoHospParcialModule,
+    CumplimientoHospSaludMentalModule,
+    CumplimientoCirugiaModule,
+    CumplimientoTodosServiciosModule,
+
   ],
   controllers: [AppController, CriterioServiciosController, CriteriosExtGeneralController, CriteriosExtEspecializadaController, CriteriosVacunacionController, 
     CriteriosSaludTrabajoController, CriterioTerapiasController, CriterioSFarmaceuticoController, CriterioRadioOdontController, CriterioImgRadIonizantesController, 

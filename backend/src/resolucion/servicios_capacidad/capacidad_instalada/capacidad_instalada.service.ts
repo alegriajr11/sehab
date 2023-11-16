@@ -19,9 +19,9 @@ export class CapacidadInstaladaService {
     //LISTANDO CAPACIDAD POR PRESTADOR
 async getServicioForPrestador(id: string): Promise<CapacidadInstaladaEntity[]> {
     const servicio_prestador = await this.capacidadInstaladaRepository.createQueryBuilder('servicio')
-    .select(['servicio', 'prestador.pre_nombre'])
-    .innerJoin('servicio.prestador', 'prestador')
-    .where('prestador.pre_cod_habilitacion = :servi_pres', { servi_pres : id})
+    .select(['servicio', 'prestadores.pre_nombre'])
+    .innerJoin('servicio.prestadores', 'prestadores')
+    .where('prestadores.pre_cod_habilitacion = :servi_pres', { servi_pres : id})
     .getMany()
     if (!servicio_prestador) throw new NotFoundException(new MessageDto('No Existe en la lista'))
     return servicio_prestador
@@ -62,6 +62,8 @@ async updateCapacidad(id: number, dto: CapacidadInstaladaDto): Promise<any> {
     if (!capacidad_instalada) {
         throw new NotFoundException(new MessageDto('La capacidad no existe'))
     }
+    dto.cap_grupo_nombre ? capacidad_instalada.cap_grupo_nombre = dto.cap_grupo_nombre : capacidad_instalada.cap_grupo_nombre = capacidad_instalada.cap_grupo_nombre;
+    dto.cap_tipo ? capacidad_instalada.cap_tipo = dto.cap_tipo : capacidad_instalada.cap_tipo = capacidad_instalada.cap_tipo;
     dto.cap_num_placa ? capacidad_instalada.cap_num_placa = dto.cap_num_placa : capacidad_instalada.cap_num_placa = capacidad_instalada.cap_num_placa;
     dto.cap_movilidad ? capacidad_instalada.cap_movilidad = dto.cap_movilidad : capacidad_instalada.cap_movilidad = capacidad_instalada.cap_movilidad;
     dto.cap_modelo ? capacidad_instalada.cap_modelo = dto.cap_modelo : capacidad_instalada.cap_modelo = capacidad_instalada.cap_modelo;

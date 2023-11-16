@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioSerFarmaceuticoEntity } from "./criterios_s_farmaceutico.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -32,5 +33,9 @@ export class CumplimientoSerFarmaceuticoEntity {
     @OneToOne(() => CriterioSerFarmaceuticoEntity)
     @JoinColumn()
     criterio_ser_farmaceutico: CriterioSerFarmaceuticoEntity
+
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
+    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_serv_farma)
+    cump_eva_serv_farma: EvaluacionResEntity
 
 }

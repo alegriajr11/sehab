@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioGestionPretransfusionalEntity } from "./criterio_gestion_pretrans.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -33,4 +34,7 @@ export class CumplimientoGestionPretransfusionalEntity {
     @JoinColumn()
     criterio_gest_pretransfusional: CriterioGestionPretransfusionalEntity
 
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
+    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_pretrans)
+    cump_eva_pretrans: EvaluacionResEntity
 }

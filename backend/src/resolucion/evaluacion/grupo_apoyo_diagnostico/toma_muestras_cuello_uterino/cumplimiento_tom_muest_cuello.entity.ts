@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioCuelloUterinoEntity } from "./criterio_tom_muest_cuello.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -28,10 +29,13 @@ export class CumplimientoCuelloUterinoEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_cue_uter_fecha_limite: string;
 
-    
+
 
     @OneToOne(() => CriterioCuelloUterinoEntity)
     @JoinColumn()
     criterio_cuello_uterino: CriterioCuelloUterinoEntity
 
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
+    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_cuello_uterino)
+    cump_eva_cuello_uterino: EvaluacionResEntity
 }

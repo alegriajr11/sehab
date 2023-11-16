@@ -2,10 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioDiagnostVascularEntity } from "./criterio_diagnost_vascular.entity";
-
-
-// import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
-
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 @Entity({ name: 'cumplimiento_diagnostico_vascular' })
@@ -13,7 +10,7 @@ export class CumplimientoDiagnosticoVascularEntity {
     @PrimaryGeneratedColumn('increment')
     cump_diagv_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_diagv_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })
@@ -28,10 +25,13 @@ export class CumplimientoDiagnosticoVascularEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_diagv_fecha_limite: string;
 
-    
 
-    @OneToOne(() => CriterioDiagnostVascularEntity)
-    @JoinColumn()
+
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
+    @ManyToOne(type => CriterioDiagnostVascularEntity, criterio => criterio.cumplimiento)
     criterio_diag_vascular: CriterioDiagnostVascularEntity
 
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
+    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_espec_cumplimiento)
+    cump_eva_diag_vas: EvaluacionResEntity
 }

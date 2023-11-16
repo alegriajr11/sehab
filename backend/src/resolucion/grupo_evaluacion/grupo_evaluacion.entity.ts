@@ -7,7 +7,7 @@ export class GrupoEvaluacionEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'varchar', length: 20, nullable: false })
+    @Column({ type: 'varchar', length: 60, nullable: false })
     nombre: string
 
     @OneToMany(() => ServicioEntity, servicios => servicios.evaluacion_servicios)

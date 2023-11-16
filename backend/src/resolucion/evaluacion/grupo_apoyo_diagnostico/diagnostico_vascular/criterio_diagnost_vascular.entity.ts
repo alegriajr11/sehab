@@ -1,7 +1,6 @@
 true/* eslint-disable prettier/prettier */
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { DiagnosticoVascularEntity } from "./diagnostico_vascular.entity";
-import { CumplimientoDiagnostVascularRepository } from "./cumplimiento_diagnost_vascular.repository";
 import { CumplimientoDiagnosticoVascularEntity } from "./cumplimiento_diagnost_vascular.entity";
 import { ApartadoEntity } from "../../seccion-apartado/apartado.entity";
 import { SeccionEntity } from "../../seccion-apartado/seccion.entity";
@@ -31,7 +30,7 @@ export class CriterioDiagnostVascularEntity {
     diagnostico_vascular: DiagnosticoVascularEntity;
 
     //RELACION ONTE TO ONE criterio_diagnost_vascular A cumplimiento_diagnostico_vascular
-    @OneToOne(() => CumplimientoDiagnosticoVascularEntity, cumplimiento => cumplimiento.criterio_diag_vascular)
+    @OneToMany(() => CumplimientoDiagnosticoVascularEntity, cumplimiento => cumplimiento.criterio_diag_vascular)
     cumplimiento: CumplimientoDiagnosticoVascularEntity;
 
     //Relacion MUCHOS a UNO CRITERIOS_DIAGNOSTICO_VASCULAR - SECCION

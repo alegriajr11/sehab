@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioCuidInteNeonatalEntity } from "./criterio_cuid_intens_neonatal.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -28,10 +29,14 @@ export class CumplimientoCuidIntNeonatalEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_int_neon_fecha_limite: string;
 
-    
+
 
     @OneToOne(() => CriterioCuidInteNeonatalEntity)
     @JoinColumn()
     criterio_cuid_int_neonatal: CriterioCuidInteNeonatalEntity
+
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-SIC
+    @ManyToOne(type => EvaluacionResEntity, evasic => evasic.eva_intens_neo_cumplimiento)
+    cump_eva_intens_neo: EvaluacionResEntity
 
 }

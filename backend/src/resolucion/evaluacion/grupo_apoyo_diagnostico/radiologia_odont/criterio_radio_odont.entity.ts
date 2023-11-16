@@ -30,7 +30,7 @@ export class CriterioRadiologiaOdontoEntity {
     rad_odontologica: RadiologiaOdontoEntity;
 
     //RELACION ONTE TO ONE CRITERIOS RADIOLOGIA_ODONTOLOGICA A CUMPLIMIENTO RADIOLOGIA_ODONTOLOGICA
-    @OneToOne(() => CumplimientoRadOdontologicaEntity, cumplimiento => cumplimiento.criterio_rad_odontologica)
+    @OneToMany(() => CumplimientoRadOdontologicaEntity, cumplimiento => cumplimiento.criterio_rad_odontologica)
     cumplimiento: CumplimientoRadOdontologicaEntity;
 
     //Relacion MUCHOS a UNO CRITERIOS RADIOLOGIA_ODONTOLOGICA - SECCION

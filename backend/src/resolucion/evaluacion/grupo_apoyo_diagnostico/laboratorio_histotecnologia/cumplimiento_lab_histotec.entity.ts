@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioLabHistotecnologiaEntity } from "./criterio_lab_histotec.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -32,5 +33,9 @@ export class CumplimientoLabHistotecnEntity {
     @OneToOne(() => CriterioLabHistotecnologiaEntity)
     @JoinColumn()
     criterio_lab_histotecnologia: CriterioLabHistotecnologiaEntity
+
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
+    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_lab_histotec)
+    cump_eva_lab_histotec: EvaluacionResEntity
 
 }

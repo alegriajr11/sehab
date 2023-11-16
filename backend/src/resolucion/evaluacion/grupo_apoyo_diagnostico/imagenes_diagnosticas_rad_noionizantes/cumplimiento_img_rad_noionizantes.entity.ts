@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioImgRadNoIonizantesEntity } from "./criterio_img_rad_noionizantes.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -28,9 +29,12 @@ export class CumplimientoImgRadNoIonizanteEntity {
     @Column({ type: 'date', nullable: false, unique: false })
     cump_img_noion_fecha_limite: string;
 
-    
+
     @OneToOne(() => CriterioImgRadNoIonizantesEntity)
     @JoinColumn()
     criterio_img_rad_noion: CriterioImgRadNoIonizantesEntity
 
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
+    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_ima_noioniza)
+    cump_eva_ima_noioniza: EvaluacionResEntity
 }

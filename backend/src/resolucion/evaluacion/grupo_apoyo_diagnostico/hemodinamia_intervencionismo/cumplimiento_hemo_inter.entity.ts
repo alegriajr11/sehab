@@ -2,6 +2,7 @@
 import { PrestadorEntity } from "src/prestador/prestador.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioHermoIntervenEntity } from "./criterio_hemo_inter.entity";
+import { EvaluacionResEntity } from "../../evaluacion_res/evaluacion_res.entity";
 
 
 // import { CumplimientoEstandarSicEntity } from "./cumplimientoestandar.entity";
@@ -32,5 +33,9 @@ export class CumplimientoHermoIntervenEntity {
     @OneToOne(() => CriterioHermoIntervenEntity)
     @JoinColumn()
     criterio_hermo_interven: CriterioHermoIntervenEntity
+
+    //Relacion Muchos a CUMPLIMIENTO - EVALUACION-RES
+    @ManyToOne(type => EvaluacionResEntity, eva_res => eva_res.eva_cumplimiento_hemo_inter)
+    cump_eva_hemo_inter: EvaluacionResEntity
 
 }
