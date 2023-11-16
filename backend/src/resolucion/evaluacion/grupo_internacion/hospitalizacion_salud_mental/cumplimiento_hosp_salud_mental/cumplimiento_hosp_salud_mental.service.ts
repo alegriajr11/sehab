@@ -6,8 +6,9 @@ import { CriterioHospitalizacionMentalRepository } from '../criterio_hosp_salud_
 import { CumplimientoHospitalizacionMentalEntity } from '../cumplimiento_hosp_salud_mental.entity';
 import { CumplimientoHospitalizacionMentalRepository } from '../cumplimiento_hosp_salud_mental.repository';
 import { CumplimientoHospitalizacionMentalDto } from 'src/resolucion/dtos/evaluacion_dtos/grupo_internacion_dtos/hospitalizacion_salud_mental_dto/cumplimiento_hosp_salud_mental.dto';
-import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
 import { EvaluacionResVerificacionEntity } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from 'src/resolucion/evaluacion/evaluacion_resolucion_verificacion/evaluacion_res.repository';
+
 
 @Injectable()
 export class CumplimientoHospSaludMentalService {

@@ -6,8 +6,9 @@ import { CriterioServiciosRepository } from '../servicios/criterio_servicios.rep
 import { CumplimientoServiciosEntity } from '../servicios/cumplimiento_servicios.entity';
 import { CumplimientoServiciosRepository } from '../servicios/cumplimiento_servicios.repository';
 import { CumplimientoServiciosDto } from 'src/resolucion/dtos/evaluacion_dtos/todos_servicios_dto/servicios_dto/cumplimiento_servicios.dto';
-import { EvaluacionResVerificacionRepository } from '../../evaluacion_resolucion_verificacion/evaluacion_res.repository';
 import { EvaluacionResVerificacionEntity } from '../../evaluacion_resolucion_verificacion/evaluacion_res.entity';
+import { EvaluacionResVerificacionRepository } from '../../evaluacion_resolucion_verificacion/evaluacion_res.repository';
+
 
 @Injectable()
 export class CumplimientoTodosServiciosService {

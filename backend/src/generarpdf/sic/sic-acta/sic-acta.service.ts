@@ -136,7 +136,6 @@ export class SicActaService {
 
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
     async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string, tokenDto?: string): Promise<ActaSicPdfEntity[]> {
-
         const usuario = await this.jwtService.decode(tokenDto);
 
         const payloadInterface: PayloadInterface = {
@@ -159,7 +158,7 @@ export class SicActaService {
             }
 
             if (year) {
-                if (numActa) {
+                if (numActa || nomPresta || nit) { //CONDICION SI EXISTE UNO DE LAS CONDICIONES DEL IF SE BUSQUE POR AND
                     query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
                     query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
                 } else {
@@ -169,13 +168,23 @@ export class SicActaService {
             }
 
             if (nomPresta) {
+                if (year || numActa || nit) { //CONDICION SI EXISTE UNO DE LAS CONDICIONES DEL IF SE BUSQUE POR AND
+                    query = query.andWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                }
                 query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
                 query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
             }
 
+            //LISTAR SI EXISTE EL NIT
             if (nit) {
-                query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
-                query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                if (year || numActa || nomPresta) { //CONDICION SI EXISTE UNO DE LAS CONDICIONES DEL IF SE BUSQUE POR AND
+                    query = query.andWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                } else {
+                    query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+                    query.andWhere('acta.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                }
             }
 
             //LISTAR POR ID DE FUNCIONARIO SI ALGUN CAMPO ES VACIO
@@ -198,7 +207,7 @@ export class SicActaService {
             }
 
             if (year) {
-                if (numActa) {
+                if (numActa || nomPresta || nit) { //CONDICION SI EXISTE UNO DE LAS CONDICIONES DEL IF SE BUSQUE POR AND
                     query = query.andWhere('YEAR(acta.act_creado) = :year', { year });
                 } else {
                     query = query.orWhere('YEAR(acta.act_creado) = :year', { year });
@@ -206,10 +215,17 @@ export class SicActaService {
             }
 
             if (nomPresta) {
-                query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+                if (year || numActa || nit) { //CONDICION SI EXISTE UNO DE LAS CONDICIONES DEL IF SE BUSQUE POR AND
+                    query = query.andWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+                } else {
+                    query = query.orWhere('acta.act_prestador LIKE :nomPresta', { nomPresta: `%${nomPresta}%` });
+                }
             }
 
             if (nit) {
+                if (year || numActa || nomPresta) { //CONDICION SI EXISTE UNO DE LAS CONDICIONES DEL IF SE BUSQUE POR AND
+                    query = query.andWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
+                }
                 query = query.orWhere('acta.act_nit LIKE :nit', { nit: `%${nit}%` });
             }
 

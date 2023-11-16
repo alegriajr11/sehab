@@ -4,7 +4,6 @@ import { CumplimientoTodosServiciosController } from './cumplimiento_todos_servi
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Criterio_servicios } from '../servicios/criterio_servicios.entity';
 import { CumplimientoServiciosEntity } from '../servicios/cumplimiento_servicios.entity';
-import { EvaluacionResVerificacionRepository } from '../../evaluacion_resolucion_verificacion/evaluacion_res.repository';
 import { EvaluacionResVerificacionEntity } from '../../evaluacion_resolucion_verificacion/evaluacion_res.entity';
 
 
