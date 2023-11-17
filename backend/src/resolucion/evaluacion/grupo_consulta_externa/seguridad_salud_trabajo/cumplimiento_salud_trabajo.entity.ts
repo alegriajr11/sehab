@@ -14,7 +14,7 @@ export class CumplimientoSaludTrabajoEntity {
     @PrimaryGeneratedColumn('increment')
     cump_saltra_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_saltra_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

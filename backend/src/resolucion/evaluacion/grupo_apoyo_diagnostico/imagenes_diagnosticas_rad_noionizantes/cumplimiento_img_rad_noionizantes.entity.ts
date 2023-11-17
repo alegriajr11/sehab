@@ -15,7 +15,7 @@ export class CumplimientoImgRadNoIonizanteEntity {
     @PrimaryGeneratedColumn('increment')
     cump_img_noion_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_img_noion_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

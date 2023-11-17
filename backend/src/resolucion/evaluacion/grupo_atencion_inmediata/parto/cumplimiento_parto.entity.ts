@@ -15,7 +15,7 @@ export class CumplimientoPartoEntity {
     @PrimaryGeneratedColumn('increment')
     cump_parto_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_parto_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

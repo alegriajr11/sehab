@@ -15,7 +15,7 @@ export class CumplimientoMuestLabClinicoEntity {
     @PrimaryGeneratedColumn('increment')
     cump_mues_clin_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_mues_clin_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

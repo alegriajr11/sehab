@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { CriterioDiagnostVascularEntity } from "../grupo_apoyo_diagnostico/diagnostico_vascular/criterio_diagnost_vascular.entity";
 import { CriterioDialisisEntity } from "../grupo_apoyo_diagnostico/dialisis/criterio_dialisis.entity";
 import { CriterioGestionPretransfusionalEntity } from "../grupo_apoyo_diagnostico/gestion_pretransfusional/criterio_gestion_pretrans.entity";
@@ -42,13 +42,10 @@ import { Criterio_servicios } from "../todos_servicios/servicios/criterio_servic
 
 
 
-@Entity({ name: 'apartado' })
+@Entity({ name: 'apartado' }) 
 export class ApartadoEntity {
-    @PrimaryGeneratedColumn('increment')
-    apa_id: number;
-
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
-    apa_number: string;
+    @PrimaryColumn({ type: 'varchar', length: 10, nullable: false, unique: false })
+    apa_codigo: string;
 
     //Relacion UNO a MUCHOS APARTADO -CRITERIOS_DIAGNOSTICO_VASCULAR
     @OneToMany(type => CriterioDiagnostVascularEntity, diag_vas => diag_vas.diag_apartado)

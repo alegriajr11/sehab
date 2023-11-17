@@ -9,7 +9,7 @@ export class CumplimientoExternaGeneralEntity {
     @PrimaryGeneratedColumn('increment')
     cump_extg_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_extg_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

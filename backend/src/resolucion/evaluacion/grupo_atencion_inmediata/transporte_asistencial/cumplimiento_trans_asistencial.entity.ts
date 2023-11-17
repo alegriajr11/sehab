@@ -14,7 +14,7 @@ export class CumplimientoTranspAsistencialEntity {
     @PrimaryGeneratedColumn('increment')
     cump_trans_asis_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_trans_asis_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

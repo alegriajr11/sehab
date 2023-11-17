@@ -12,7 +12,7 @@ export class CumplimientoEspecializadaEntity {
     @PrimaryGeneratedColumn('increment')
     cump_exte_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_exte_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

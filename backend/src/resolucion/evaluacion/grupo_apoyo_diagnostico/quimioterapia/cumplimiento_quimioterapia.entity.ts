@@ -15,7 +15,7 @@ export class CumplimientoQuimioterapiaEntity {
     @PrimaryGeneratedColumn('increment')
     cump_quim_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_quim_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })
