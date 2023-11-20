@@ -88,6 +88,13 @@ export class IpsDto {
     noFirmaActa: string;    
 
     //ATRIBUTOS COMPROMISOS
+    @IsString()
+    act_compromiso_actividad: string
+    @IsString()
+    act_compromiso_fecha: string
+    @IsString()
+    act_compromiso_responsable: string
+
 
     @IsString()
     act_estado: string;

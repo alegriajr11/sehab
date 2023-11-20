@@ -88,6 +88,52 @@ export class PamecActaService {
         return acta;
     }
 
+    //CERRAR ACTA PAMEC
+    async cerrarActa(id: number, payload: { tokenDto: TokenDto }): Promise<any> {
+
+        const { tokenDto } = payload;
+
+        try {
+            const acta = await this.findByActa(id);
+
+            if (!acta) {
+                throw new NotFoundException(new MessageDto('El Acta no existe'));
+            }
+
+            acta.act_estado = '0'
+
+            const usuario = await this.jwtService.decode(tokenDto.token);
+
+            const payloadInterface: PayloadInterface = {
+                usu_id: usuario[`usu_id`],
+                usu_nombre: usuario[`usu_nombre`],
+                usu_apellido: usuario[`usu_apellido`],
+                usu_nombreUsuario: usuario[`usu_nombreUsuario`],
+                usu_email: usuario[`usu_email`],
+                usu_estado: usuario[`usu_estado`],
+                usu_roles: usuario[`usu_roles`]
+            };
+
+            const year = new Date().getFullYear().toString();
+
+            await this.actaPamecRepository.save(acta);
+            await this.auditoria_registro_services.logCierreActaSpInd(
+                payloadInterface.usu_nombre,
+                payloadInterface.usu_apellido,
+                'ip',
+                acta.act_id,
+                year,
+                acta.act_prestador,
+                acta.act_cod_prestador
+            );
+
+            return new MessageDto('El Acta ha sido Cerrada');
+        } catch (error) {
+            // Devuelve un mensaje de error apropiado
+            return { error: true, message: 'Ocurrió un error al cerrar el Acta' };
+        }
+    }
+
 
     //ENCONTRAR ACTAS POR FECHA EXACTA Y/O NUMERO DE ACTA Y/O NOMBRE PRESTADOR Y/O NIT
     async findAllBusqueda(year?: number, numActa?: number, nomPresta?: string, nit?: string, tokenDto?: string): Promise<ActaPamecEntity[]> {
@@ -498,7 +544,7 @@ export class PamecActaService {
                 // doc.text(`Calificación Promedio: ${promedioRedondeado}`);
             }
 
-            
+
 
             doc.moveDown();
             if (titulo_dos.length) {

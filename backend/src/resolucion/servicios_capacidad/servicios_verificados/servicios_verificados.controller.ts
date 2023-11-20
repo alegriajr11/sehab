@@ -9,15 +9,14 @@ export class ServiciosVerificadosController {
 
     constructor(private readonly servicios_Verificados_Service: ServiciosVerificadosService) { }
     
-    //OBTENER LA CAPACIDAD POR PRESTADOR
+    //OBTENER LOS SERVICIOS VERIFICADOS POR PRESTADOR
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getOneCriterio(@Param('id', ParseIntPipe) id: string) {
         return await this.servicios_Verificados_Service.getServicioForPrestador(id)
     }
 
-
-    //CREAR CAPACIDAD INSTALADA
+    //CREAR SERVICIOS VERIFICADOS
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe({ whitelist: true }))
     @Post(':id')

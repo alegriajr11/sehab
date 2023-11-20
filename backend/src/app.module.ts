@@ -159,6 +159,7 @@ import { CumplimientoHospParcialModule } from './resolucion/evaluacion/grupo_int
 import { CumplimientoHospSaludMentalModule } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_salud_mental/cumplimiento_hosp_salud_mental/cumplimiento_hosp_salud_mental.module';
 import { CumplimientoCirugiaModule } from './resolucion/evaluacion/grupo_quirurgico/cirugia/cumplimiento_cirugia/cumplimiento_cirugia.module';
 import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_servicios/cumplimiento_todos_servicios/cumplimiento_todos_servicios.module';
+import { RequisitosCondicionesHabilitacionModule } from './resolucion/requisitos_condiciones_habilitacion/requisitos_condiciones_habilitacion.module';
 
 
 
@@ -179,7 +180,7 @@ import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_
         database: configService.get<string>(DB_DATABASE),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
-        logging: false 
+        logging: false
       
       }),
       inject: [ConfigService],
@@ -294,6 +295,8 @@ import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_
     CumplimientoHospSaludMentalModule,
     CumplimientoCirugiaModule,
     CumplimientoTodosServiciosModule,
+    RequisitosCondicionesHabilitacionModule,
+    
 
 
   ],

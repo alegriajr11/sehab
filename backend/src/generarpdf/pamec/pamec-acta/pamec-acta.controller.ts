@@ -32,6 +32,14 @@ export class PamecActaController {
         return this.pamecActaService.findAllBusqueda(year, act_id, act_prestador, act_nit, tokenDto);
     }
 
+    //CERRAR ACTA SP-IND
+    @Put('cerrar/:id')
+    async cerrarActa(
+        @Param('id', ParseIntPipe) id: number, @Body() payload: { tokenDto: TokenDto }) {
+        return this.pamecActaService.cerrarActa(id, payload);
+    }
+
+
 
     @UseGuards(JwtAuthGuard)
     @Get('ultima/acta/pamec')
@@ -49,13 +57,13 @@ export class PamecActaController {
     //ACTUALIZAR PAMEC IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async update(@Param('id', ParseIntPipe)id: number, @Body() payload: {dto: ActaPamecDto, tokenDto: TokenDto }) {
-        const { dto,tokenDto}= payload;
-        return await this.pamecActaService.updateActaipspam(id,payload);
+    async update(@Param('id', ParseIntPipe) id: number, @Body() payload: { dto: ActaPamecDto, tokenDto: TokenDto }) {
+        const { dto, tokenDto } = payload;
+        return await this.pamecActaService.updateActaipspam(id, payload);
     }
 
     @Get('pamec/evaluacion/:id')
-    async descargarPdfCriterioPamec(@Param('id') id: number,@Res() res): Promise<void> {
+    async descargarPdfCriterioPamec(@Param('id') id: number, @Res() res): Promise<void> {
         const buffer = await this.pamecActaService.generarPdfEvaluacionPamec(id)
         res.setHeader('Content-Disposition', 'attachment; filename="evaluacion_sp_ind_sogcs.pdf"');
         res.set({
@@ -64,5 +72,5 @@ export class PamecActaController {
         res.end(buffer)
     }
 
-    
+
 }

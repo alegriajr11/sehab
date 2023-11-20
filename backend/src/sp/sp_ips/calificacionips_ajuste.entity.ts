@@ -16,7 +16,7 @@ export class CalificacionAjusteIpsEntity {
     @Column({type: 'int'})
     cal_nota: number;
 
-    @Column({type: 'varchar', length: 255, nullable: false, unique: false})
+    @Column({type: 'varchar', length: 255, nullable: true, unique: false})
     cal_observaciones: string;
 
     @Column({type: 'int'})

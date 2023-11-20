@@ -121,7 +121,6 @@ export class CalificacionipsPlaneacionService {
             );
             return new MessageDto('La calificacion ha sido Creada');
         } catch (error) {
-            console.log(error)
             throw new InternalServerErrorException(new MessageDto(error.message));
         }
     }

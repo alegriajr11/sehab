@@ -13,5 +13,4 @@ export class RequisitosCondicionesHabilitacionController {
     getAllCondiciones() {
         return this.condiciones_habilitacionService.getAllCondiciones();
     }
-
 }

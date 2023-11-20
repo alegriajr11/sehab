@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { RequisitosCondicionesHabilitacionController } from './requisitos_condiciones_habilitacion.controller';
 import { RequisitosCondicionesHabilitacionService } from './requisitos_condiciones_habilitacion.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { RequisitosCondicionesHabilitacionController } from './requisitos_condiciones_habilitacion.controller';
 import { ConceptoResEntity } from './concepto_res.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ConceptoResEntity])],
-  controllers: [RequisitosCondicionesHabilitacionController],
-  providers: [RequisitosCondicionesHabilitacionService]
+  providers: [RequisitosCondicionesHabilitacionService],
+  controllers: [RequisitosCondicionesHabilitacionController]
 })
 export class RequisitosCondicionesHabilitacionModule {}

@@ -75,11 +75,11 @@ export class AuditoriaActualizacionService {
         usu_nombre2: string,
         usu_nombreUsuario: string,
     ): Promise<void> {
-        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un usuario RES: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
+        const details = `El usuario ${usu_nombre} ${usu_apellido} ha Actualizado un usuario RESOLUCIÓN 3100: ${usu_nombre2} con nombre de usuario ${usu_nombreUsuario}`;
         await this.logActivity(
             usu_nombre,
             usu_apellido,
-            'Actualización Usuario RES',
+            'Actualización Usuario RESOLUCIÓN 3100',
             details,
             direccionIp,
         );

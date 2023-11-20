@@ -25,13 +25,14 @@ export class ServiciosVerificadosService {
         const servicio_prestador = await this.serviciosVerificadosRepository.createQueryBuilder('servicio')
             .select(['servicio', 'prestadores.pre_nombre'])
             .innerJoin('servicio.prestadores', 'prestadores')
+            .innerJoinAndSelect('servicio.grup_evaluacion', 'grup_evaluacion')
             .where('prestadores.pre_cod_habilitacion = :servi_pres', { servi_pres: id })
             .getMany()
         if (!servicio_prestador) throw new NotFoundException(new MessageDto('No Existe en la lista'))
         return servicio_prestador
     }
 
-    //METODO AGREGAR CASPACIDAD
+    //METODO AGREGAR SERVICIO
     async create(pre_cod_habilitacion: string, dto: ServiciosVerificadosDto): Promise<any> {
         const servicio_prestador = await this.prestadorRepository.findOne({ where: { pre_cod_habilitacion: pre_cod_habilitacion } });
         if (!servicio_prestador) throw new InternalServerErrorException(new MessageDto('El Prestador no ha sido creado'))
@@ -41,8 +42,6 @@ export class ServiciosVerificadosService {
         if (!grupo_id) {
             throw new Error('El grupo no ha sido creado');
         }
-
-
 
         //CREAMOS EL DTO PARA TRANSFERIR LOS DATOS
         const servicioverificado = this.serviciosVerificadosRepository.create(dto)

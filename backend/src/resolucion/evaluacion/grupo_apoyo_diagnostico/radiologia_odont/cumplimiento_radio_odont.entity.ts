@@ -14,7 +14,7 @@ export class CumplimientoRadOdontologicaEntity {
     @PrimaryGeneratedColumn('increment')
     cump_rad_odont_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_rad_odont_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

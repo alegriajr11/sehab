@@ -56,12 +56,14 @@ export class SpIpsService {
             const acta_ips = await this.actaSpIpsRepository.createQueryBuilder('acta_ips')
                 .select(['acta_ips'])
                 .where('acta_ips.act_id_funcionario = :id_funcionario', { id_funcionario: payloadInterface.usu_id })
+                .orderBy("CASE WHEN acta_ips.act_estado = '1' THEN 0 ELSE 1 END, acta_ips.act_estado")
                 .getMany()
             if (acta_ips.length === 0) throw new NotFoundException(new MessageDto('No hay Evaluaciones Asignadas'))
             return acta_ips;
         } else {
             const acta_ips = await this.actaSpIpsRepository.createQueryBuilder('acta_ips')
                 .select(['acta_ips'])
+                .orderBy("CASE WHEN acta_ips.act_estado = '1' THEN 0 ELSE 1 END, acta_ips.act_estado")
                 .getMany()
             if (acta_ips.length === 0) throw new NotFoundException(new MessageDto('No hay evaluaciones asignadas'))
             return acta_ips;
@@ -286,6 +288,11 @@ export class SpIpsService {
         dto.act_representante ? acta_ips.act_representante = dto.act_representante : acta_ips.act_representante = acta_ips.act_representante;
         dto.act_cod_prestador ? acta_ips.act_cod_prestador = dto.act_cod_prestador : acta_ips.act_cod_prestador = acta_ips.act_cod_prestador;
         dto.act_obj_visita ? acta_ips.act_obj_visita = dto.act_obj_visita : acta_ips.act_obj_visita = acta_ips.act_obj_visita;
+        //ASIGNACIÓN DE LOS COMPROMISOS:
+        dto.act_compromiso_actividad ? acta_ips.act_compromiso_actividad = dto.act_compromiso_actividad : acta_ips.act_compromiso_actividad = acta_ips.act_compromiso_actividad;
+        dto.act_compromiso_fecha ? acta_ips.act_compromiso_fecha = dto.act_compromiso_fecha : acta_ips.act_compromiso_fecha = acta_ips.act_compromiso_fecha;
+        dto.act_compromiso_responsable ? acta_ips.act_compromiso_responsable = dto.act_compromiso_responsable : acta_ips.act_compromiso_responsable = acta_ips.act_compromiso_responsable;
+
         dto.act_nombre_funcionario ? acta_ips.act_nombre_funcionario = dto.act_nombre_funcionario : acta_ips.act_nombre_funcionario = acta_ips.act_nombre_funcionario;
         dto.act_cargo_funcionario ? acta_ips.act_cargo_funcionario = dto.act_cargo_funcionario : acta_ips.act_cargo_funcionario = acta_ips.act_cargo_funcionario;
         dto.act_firma_funcionario ? acta_ips.act_firma_funcionario = dto.act_firma_funcionario : acta_ips.act_firma_funcionario = acta_ips.act_firma_funcionario;

@@ -1,15 +1,20 @@
 /* eslint-disable prettier/prettier */
-import { IsNumber, IsString, MaxLength} from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, MaxLength, ValidationArguments} from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 
 
 export class CalificacionAjusteDto {
     
-    @IsNumber()
+    @IsNotEmpty({ message: 'Es obligatorio asignar una calificación' })
+    @IsNumber({}, { message: (args: ValidationArguments) => {
+        if (typeof args.value !== 'undefined') {
+            return 'La calificación debe ser un número';
+        }
+        return 'Es obligatorio asignar una calificación';
+    }})
     cal_nota: number;
 
     @IsString()
-    @MaxLength(255, {message: 'La observacion debe tener: longitud máxima de 255 caracteres'})
     cal_observaciones: string
 
     @IsNumber()
@@ -20,6 +25,5 @@ export class CalificacionAjusteDto {
     
     @IsNumber()
     acta_ips: number;
-
 
 }

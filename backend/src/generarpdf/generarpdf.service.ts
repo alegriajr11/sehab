@@ -39,7 +39,7 @@ export class GenerarpdfService {
         private readonly criteriopamService: CriteriopamService,
         @Inject(SpIndService)
         private readonly spIndService: SpIndService,
-        
+
 
     ) { }
 
@@ -47,7 +47,7 @@ export class GenerarpdfService {
     async generarPdfUsuarios(): Promise<Buffer> {
         const usuario = await this.usuarioService.getall()
 
-        const pdfBuffer: Buffer = await new Promise(resolve => {    
+        const pdfBuffer: Buffer = await new Promise(resolve => {
 
             const doc = new PDFDocument(
                 {
@@ -120,7 +120,9 @@ export class GenerarpdfService {
                 } else if (item.usu_estado === 'false') {
                     item.usu_estado = 'Inactivo'
                 }
-                let roles = item.roles.map(rol => rol.rol_nombre).join(', '); // Concatena los nombres de los roles
+                let roles = item.roles.map(rol => {
+                    return rol.rol_nombre === 'res' ? 'resolución 3100' : rol.rol_nombre;
+                }).join(', '); // Concatena los nombres de los roles
 
 
                 var temp_list = [item.usu_nombre, item.usu_apellido, item.usu_email, item.usu_nombreUsuario, item.usu_estado, roles];

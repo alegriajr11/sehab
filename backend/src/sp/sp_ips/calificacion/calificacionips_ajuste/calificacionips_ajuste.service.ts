@@ -123,7 +123,6 @@ export class CalificacionipsAjusteService {
             );
             return new MessageDto('La calificacion ha sido Creada');
         } catch (error) {
-            console.log(error)
             throw new InternalServerErrorException(new MessageDto(error.message));
         }
     }
@@ -187,7 +186,6 @@ export class CalificacionipsAjusteService {
             );
             return new MessageDto(`La calificacion  ha sido Actualizada`);
         } catch (error) {
-            console.log(error)
             throw new InternalServerErrorException(new MessageDto(error.message));
         }
     }

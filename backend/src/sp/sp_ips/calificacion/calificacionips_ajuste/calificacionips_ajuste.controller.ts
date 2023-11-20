@@ -50,7 +50,7 @@ export class CalificacionipsAjusteController {
 
     //creacion de la calificacion
     @UseGuards(JwtAuthGuard)
-    //@UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
+    @UsePipes(new ValidationPipe({ whitelist: true, transformOptions: { enableImplicitConversion: true } }))
     @Post('calificacion')
     async create(
         @Body() payload: { dto_calificacion: CalificacionAjusteDto, tokenDto: TokenDto }) {
