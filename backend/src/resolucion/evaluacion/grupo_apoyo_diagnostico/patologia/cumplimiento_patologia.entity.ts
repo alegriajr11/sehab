@@ -15,7 +15,7 @@ export class CumplimientoPatologiaEntity {
     @PrimaryGeneratedColumn('increment')
     cump_pato_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_pato_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

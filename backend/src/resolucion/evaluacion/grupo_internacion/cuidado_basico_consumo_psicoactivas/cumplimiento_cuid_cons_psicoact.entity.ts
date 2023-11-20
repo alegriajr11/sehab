@@ -15,7 +15,7 @@ export class CumplimientoConsPsicoactivasEntity {
     @PrimaryGeneratedColumn('increment')
     cump_cons_psic_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_cons_psic_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

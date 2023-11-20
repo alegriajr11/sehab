@@ -15,7 +15,7 @@ export class CumplimientoSerFarmaceuticoEntity {
     @PrimaryGeneratedColumn('increment')
     cump_ser_farm_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_ser_farm_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

@@ -13,7 +13,7 @@ export class CumplimientoGestionPretransfusionalEntity {
     @PrimaryGeneratedColumn('increment')
     cump_gestpre_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_gestpre_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

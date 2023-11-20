@@ -15,7 +15,7 @@ export class CumplimientoCuidBasNeonatalEntity {
     @PrimaryGeneratedColumn('increment')
     cump_cui_neona_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_cui_neona_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

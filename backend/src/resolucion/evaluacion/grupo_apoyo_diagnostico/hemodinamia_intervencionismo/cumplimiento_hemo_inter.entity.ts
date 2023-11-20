@@ -15,7 +15,7 @@ export class CumplimientoHermoIntervenEntity {
     @PrimaryGeneratedColumn('increment')
     cump_herminter_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_herminter_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

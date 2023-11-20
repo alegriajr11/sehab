@@ -15,7 +15,7 @@ export class CumplimientoCuelloUterinoEntity {
     @PrimaryGeneratedColumn('increment')
     cump_cue_uter_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_cue_uter_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

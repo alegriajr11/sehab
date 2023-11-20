@@ -15,7 +15,7 @@ export class CumplimientoPrehospitalariaEntity {
     @PrimaryGeneratedColumn('increment')
     cump_preh_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_preh_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

@@ -16,7 +16,7 @@ export class CumplimientoCirugiaEntity {
     @PrimaryGeneratedColumn('increment')
     cump_ciru_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_ciru_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

@@ -15,7 +15,7 @@ export class CumplimientoMedNuclearEntity {
     @PrimaryGeneratedColumn('increment')
     cump_med_nucl_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_med_nucl_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })

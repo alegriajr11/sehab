@@ -15,7 +15,7 @@ export class CumplimientoHospitalizacionParcialEntity {
     @PrimaryGeneratedColumn('increment')
     cump_hosp_parc_id: number;
 
-    @Column({ type: 'varchar', length: 10, nullable: false, unique: true })
+    @Column({ type: 'varchar', length: 10, nullable: false, unique: false })
     cump_hosp_parc_cumple: string;
 
     @Column({ type: 'varchar', length: 60, nullable: false, unique: false })
