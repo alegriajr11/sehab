@@ -4,6 +4,10 @@ h1 {
     color: white;
     
 }
+/*SUBRRAYADO PARA ACTA Y PRESTADOR*/
+.underlined {
+    text-decoration: underline;
+}
 
 .table-wrapper {
     background: #fff;

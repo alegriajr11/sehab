@@ -84,6 +84,7 @@ export class ModalEvaluacionesPamecComponent {
     this.estado_acta = data.act_estado;
   }
 
+  //SOLICITUD PARA CERRAR EL ACTA
   async cerrarActa() {
     const token = this.tokenService.getToken();
     const tokenDto: TokenDto = new TokenDto(token);
@@ -99,24 +100,69 @@ export class ModalEvaluacionesPamecComponent {
       });
 
       if (result.isConfirmed) {
-        // Cerrar el acta
-        await this.actaPdfService.cerrarActaPamec(this.id_evaluacion, tokenDto).toPromise();
-
         // Obtener el estado actualizado del acta
         const data = await this.actaPdfService.oneActaPamec(this.id_evaluacion).toPromise();
-        this.estado_acta = data.act_estado;
+        if (data.noFirmaActa === 'true') {
+          if (!data.act_firma_funcionario1) {
+            Swal.fire(
+              `Lo siento, no es posible cerrar el acta en este momento.`,
+              `Para proceder, necesitamos que ${data.act_nombre_funcionario1} firme el acta.`,
+              'error'
+            );
+          } else {
+            //SOLICITUD FIRMAR EL ACTA SI YA ESTA FIRMADA POR EL FUNCIONARIO Y EL PRESTADOR NO FIRMA
+            await this.actaPdfService.cerrarActaPamec(this.id_evaluacion, tokenDto).toPromise();
+            this.estado_acta = data.act_estado;
+            // Mostrar notificación Acta cerrada
+            this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
+              timeOut: 3000,
+              positionClass: 'toast-top-center',
+            });
+            this.modalRef.hide();
+            localStorage.setItem('boton-acta-sp-ind', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
+          }
 
-        // Mostrar notificación Acta cerrada
-        this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
-          timeOut: 3000,
-          positionClass: 'toast-top-center',
-        });
-        this.modalRef.hide();
+        }
+        else if (!data.act_firma_prestador || !data.act_firma_funcionario1) {
+          if (!data.act_firma_prestador && !data.act_firma_funcionario1) {
+            Swal.fire(
+              'No se puede cerrar el acta porque no está firmada por ninguna de las partes',
+              `Tanto ${data.act_nombre_funcionario1} como ${data.act_nombre_prestador} deben firmar el acta para poder cerrarla.`,
+              'error'
+            );
+            //VALIDAR SI EL PRESTADOR YA FIRMO EL ACTA
+          }
+          else if (!data.act_firma_prestador) {
+            Swal.fire(
+              `No se puede cerrar el acta porque no está firmada por el representante.`,
+              `Es necesario que  ${data.act_nombre_prestador} firme el acta para poder cerrarla.`,
+              'error'
+            );
+            //VALIDAR SI EL FUNCIONARIO YA FIRMO EL ACTA
+          }
+          else if (!data.act_firma_funcionario1) {
+            Swal.fire(
+              `No se puede cerrar el acta porque no está firmada por el funcionario ${data.act_nombre_funcionario1}`,
+              `Es necesario que firmes el acta para poder cerrarla.`,
+              'error'
+            );
+          }
+        }
+        //CERRAR EL ACTA SI ESTÁ FIRMADA
+        else {
+          await this.actaPdfService.cerrarActaSpInd(this.id_evaluacion, tokenDto).toPromise();
+          this.estado_acta = data.act_estado;
+          // Mostrar notificación Acta cerrada
+          this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
+            timeOut: 3000,
+            positionClass: 'toast-top-center',
+          });
+          this.modalRef.hide();
 
-        localStorage.setItem('boton-acta-sic', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SIC
-
-        console.log(this.estado_acta);
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
+          localStorage.setItem('boton-acta-sp-ind', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
+        }
+      }
+      else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire(
           'Cancelado',
           'Acta sin Cerrar',
@@ -128,7 +174,6 @@ export class ModalEvaluacionesPamecComponent {
         timeOut: 3000,
         positionClass: 'toast-top-center',
       });
-      console.log(error);
     }
   }
 

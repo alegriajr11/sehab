@@ -19,6 +19,10 @@ h3 {
     margin-bottom: 0.19rem;
 }
 
+textarea {
+    resize: none;
+}
+
 label {
     color: black;
     font-weight: bold;

@@ -90,9 +90,7 @@ import { ActaVisitaVerificacionComponent } from './roles/reso/acta-visita-verifi
 import { ActaVisitaIvcComponent } from './roles/reso/acta-visita-ivc/acta-visita-ivc.component';
 import { ModalFirmaVerificacionComponent } from './roles/reso/acta-visita-verificacion/modal-firma-verificacion/modal-firma-verificacion.component';
 import { InformeResolucionComponent } from './roles/reso/informe-resolucion/informe-resolucion.component';
-import { InformesRealizadosResolucionComponent } from './roles/reso/informes-realizados-resolucion/informes-realizados-resolucion.component';
 import { ModalInformeResolucionComponent } from './roles/reso/informe-resolucion/modal-informe-resolucion/modal-informe-resolucion.component';
-import { ModalInformesRealizadosResComponent } from './roles/reso/informes-realizados-resolucion/modal-informes-realizados-res/modal-informes-realizados-res.component';
 import { AgregarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/agregar-sedes-prestador/agregar-sedes-prestador.component';
 import { ModalFirmaActaSpProComponent } from './roles/sp/sp-profesionales/acta-pro/modal-firma-acta-sp-pro/modal-firma-acta-sp-pro.component';
 import { ModalFirmaActaPamecComponent } from './roles/pamec/acta/modal-firma-acta-pamec/modal-firma-acta-pamec.component';
@@ -129,6 +127,7 @@ import { EditarEvaluacionPamecComponent } from './roles/pamec/evaluaciones/edita
 import { ModalFirmaPamecPrestadorComponent } from './roles/pamec/evaluaciones/editar-acta-pamec/modal-firma-pamec-prestador/modal-firma-pamec-prestador.component';
 import { ListaProcesosIvcComponent } from './roles/reso/lista-procesos-ivc/lista-procesos-ivc.component';
 import { ModalCumplimientoRequisitosComponent } from './roles/reso/cumplimiento-requisitos/modal-cumplimiento-requisitos/modal-cumplimiento-requisitos.component';
+import { ModalCalificacionIpsComponent } from './roles/sp/sp-ips/home-evaluacion-ips/evaluacion-sp-ips/modal-calificacion-ips/modal-calificacion-ips.component';
 
 
 
@@ -209,9 +208,7 @@ import { ModalCumplimientoRequisitosComponent } from './roles/reso/cumplimiento-
     ActaVisitaIvcComponent,
     ModalFirmaVerificacionComponent,
     InformeResolucionComponent,
-    InformesRealizadosResolucionComponent,
     ModalInformeResolucionComponent,
-    ModalInformesRealizadosResComponent,
     AgregarSedesPrestadorComponent,
     ModalFirmaActaSpProComponent,
     ModalFirmaActaPamecComponent,
@@ -245,7 +242,8 @@ import { ModalCumplimientoRequisitosComponent } from './roles/reso/cumplimiento-
     EditarEvaluacionPamecComponent,
     ModalFirmaPamecPrestadorComponent,
     ListaProcesosIvcComponent,
-    ModalCumplimientoRequisitosComponent
+    ModalCumplimientoRequisitosComponent,
+    ModalCalificacionIpsComponent
 
   ],
   imports: [

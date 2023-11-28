@@ -83,17 +83,30 @@ export class AuthService {
     return this.httpClient.post<any>(this.acta_sic_pdfUrl, body);
   }
 
-  //REGISTRO ACTA PDF SP_IPS
+  // REGISTRO ACTA PDF SP_IPS
   registroActaSpIpsPdf(dto: ActaSpPdfDto, evaluacionesIds: number[], tokenDto: TokenDto): Observable<any> {
     const body = {
       dto: dto,
       evaluacionesIds: evaluacionesIds,
       tokenDto: tokenDto
     }
-    return this.httpClient.post<any>(this.acta_SpIps_pdfUrl, body);
+    return this.httpClient.post<any>(this.acta_SpIps_pdfUrl + 'crear', body);
   }
 
-  //REGISTRO ACTA PDF SP_IPS
+  //SOLICITUD REGISTRAR IMAGEN EN EL SERVIDOR
+  registroImagen(imagen: File, actaId: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', imagen, imagen.name);
+    formData.append('actaId', actaId);
+  
+    return this.httpClient.post<any>(this.acta_SpIps_pdfUrl + 'cargar-imagen', formData);
+  }
+  
+  
+  
+  
+
+  //REGISTRO ACTA PDF SP_IND
   registroActaSpIndPdf(dto: ActaSpIndPdfDto, tokenDto: TokenDto): Observable<any> {
     const body = {
       dto: dto,

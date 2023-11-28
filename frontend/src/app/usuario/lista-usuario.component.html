@@ -12,9 +12,13 @@
             <i class="material-icons">&#xE147;</i>
             <span>Agregar Nuevo Usuario</span></button>
 
-            <button class="btn btn-secondary" title="Exportar Pdf" (click)="crearPDF()">
-              <i class="material-icons">&#xE24D;</i>
-              <span>Exportar a Pdf</span></button>
+          <button class="btn btn-secondary" title="Exportar Pdf" (click)="crearPDF()">
+            <i class="material-icons">&#xE24D;</i>
+            <span>Exportar a Pdf</span></button>
+
+          <button class="btn btn-secondary" title="Backup Base de Datos" (click)="downloadBackup()">
+            <i class="fas fa-database"></i>
+            <span>Backup</span></button>
 
         </div>
       </div>
@@ -41,21 +45,29 @@
           <td>{{ usuario.usu_apellido }}</td>
           <td class="usu" style="text-align: center;">{{ usuario.usu_nombreUsuario }}</td>
           <!-- <td>Rol</td> -->
-          <td *ngFor="let rol of this.usuario.roles"  style="display: block; text-align: center;">{{rol.rol_nombre | uppercase}}</td>
+          <td *ngFor="let rol of usuario.roles" style="display: block; text-align: center;">
+            <ng-container *ngIf="rol.rol_nombre === 'res'">RESOLUCIÓN 3100</ng-container>
+            <ng-container *ngIf="rol.rol_nombre !== 'res'">{{ rol.rol_nombre | uppercase }}</ng-container>
+          </td>
+
           <td *ngIf="usuario.usu_estado == 'true'" style="text-align: center;"><span class="active">ACTIVO</span></td>
-          <td *ngIf="usuario.usu_estado == 'false'" style="text-align: center;"><span class="inactive">INACTIVO</span></td>
+          <td *ngIf="usuario.usu_estado == 'false'" style="text-align: center;"><span class="inactive">INACTIVO</span>
+          </td>
           <td style="text-align: center;">{{usuario.usu_creado | date: 'dd/MM/yyyy' }}</td>
           <td *ngIf="isAdmin" style="text-align: center;">
-            <button class="btn btn-outline-warning" [routerLink]="['/usuarios/editar']" [queryParams]="{ id: usuario.usu_id }">
+            <button class="btn btn-outline-warning" [routerLink]="['/usuarios/editar']"
+              [queryParams]="{ id: usuario.usu_id }">
               <i class="far fa-edit"></i>
             </button>
           </td>
           <td *ngIf="isAdmin" style="text-align: center;">
-            <button class="btn btn-outline-primary" [routerLink]="['/usuarios/restablecer']" [queryParams]="{ id: usuario.usu_id }" (click)="restablecer(usuario.usu_id, usuario.usu_nombre, usuario.usu_apellido)">
+            <button class="btn btn-outline-primary" [routerLink]="['/usuarios/restablecer']"
+              [queryParams]="{ id: usuario.usu_id }"
+              (click)="restablecer(usuario.usu_id, usuario.usu_nombre, usuario.usu_apellido)">
               <i class='fa fa-key'></i>
             </button>
           </td>
-        </tr> 
+        </tr>
       </tbody>
     </table>
   </div>

@@ -21,11 +21,11 @@
             <div class="row">
                 <div class="col-sm-6">
                     <h5><b>Prestador:</b></h5>
-                    <span id="pre_nombre">NOMBRE DEL PRESTADOR DEL ACTA DE VERIFICACION ASIGNADA</span>
+                    <span>{{nombre_prestador}}</span>
                 </div>
                 <div class="col-sm-6">
                     <h5><b>Municipio:</b></h5>
-                    <span id="mun_nombre">Municipio</span>
+                    <span>{{nombre_municipio}}</span>
                 </div>
 
                 <div class="col-sm-12" style="padding-top: 2rem;">
@@ -45,15 +45,40 @@
                 <th>COMPLEJIDAD</th>
             </thead>
             <tbody>
-                <tr>
-                    <td><strong>1.</strong></td>
-                    <td>304</td>
-                    <td>Consulta Externa</td>
-                    <td>Cirugía General</td>
-                    <td>Intramural</td>
-                    <td>Mediana</td>
-                </tr>
+                <tr *ngFor="let servicios of servicios_verificados; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{servicios.ser_codigo}}</td>
+                    <td>{{servicios.grup_evaluacion.nombre}}</td>
+                    <td>{{servicios.ser_nombre}}</td>
+                    <!-- DETERMINAR LA MODALIDAD -->
+                    <td>
+                        {{
+                        separarConComas(servicios.ambulatorio === 'SI' ? 'AMBULATORIO' : '') +
+                        separarConComas(servicios.hospitalario === 'SI' ? 'HOSPITALARIO' : '') +
+                        separarConComas(servicios.unidad_movil === 'SI' ? 'UNIDAD MOVIL' : '') +
+                        separarConComas(servicios.domiciliario === 'SI' ? 'DOMICILIARIO' : '') +
+                        separarConComas(servicios.otras_extramural === 'SI' ? 'EXTRAMURAL' : '') +
+                        separarConComas(servicios.centro_referencia === 'SI' ? 'CENTRO DE REFERENCIA' : '') +
+                        separarConComas(servicios.institucion_remisora === 'SI' ? 'INSTITUCIÓN REMISORA' : '')
+                        }}
+                    </td>
 
+                    <!-- DETERMINAR SI LA MODALIDAD SE ENCUNTRA SIN ESPECIFICAR -->
+                    <td *ngIf="servicios.ambulatorio === 'SD' && servicios.hospitalario === 'SD' 
+                        && servicios.unidad_movil === 'SD' && servicios.domiciliario === 'SD' && servicios.otras_extramural === 'SD'
+                        && servicios.centro_referencia === 'SD' && servicios.institucion_remisora === 'SD'">SIN
+                        ESPECIFICAR
+                    </td>
+
+                    <!-- DETERMINAR SI LA COMPLEJIDAD ES SI -->
+                    <td style="text-align: center;" *ngIf="servicios.complejidad_baja === 'SI'">BAJA</td>
+                    <td style="text-align: center;" *ngIf="servicios.complejidad_media === 'SI'">MEDIA</td>
+                    <td style="text-align: center;" *ngIf="servicios.complejidad_alta === 'SI'">ALTA</td>
+                    <!-- DETERMINAR SI LA COMPLEJIDAD ES SD - SIN DETERMINAR -->
+                    <td *ngIf="servicios.complejidad_baja === 'SD' && servicios.complejidad_media === 'SD' 
+                        && servicios.complejidad_alta === 'SD'">
+                        SIN ESPECIFICAR</td>
+                </tr>
             </tbody>
         </table>
 

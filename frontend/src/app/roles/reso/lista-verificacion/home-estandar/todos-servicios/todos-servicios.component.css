@@ -52,12 +52,23 @@ table.table tr th:last-child {
     border-radius: 3px 3px 0 0;
 }
 
+/*SUBRAYADO AL NOMBRE DEL ESTANDAR SELECCIONADO*/
+.underlined {
+    text-decoration: underline;
+}
+
 /*LABELS*/
 label{
     font-size: medium;
     font-weight: bold;
 }
 
+/*TEXTAREA NO REDIMENSIONABLE*/
+textarea{
+    height: 100px; /* Altura deseada */
+    resize: none; /* Desactiva el redimensionamiento */
+    /* Otros estilos opcionales */
+}
 
 
 

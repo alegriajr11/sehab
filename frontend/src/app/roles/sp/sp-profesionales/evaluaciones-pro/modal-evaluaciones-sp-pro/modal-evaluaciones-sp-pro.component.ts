@@ -107,19 +107,21 @@ export class ModalEvaluacionesSpProComponent {
               `Para proceder, necesitamos que ${data.act_nombre_funcionario} firme el acta.`,
               'error'
             );
+          } else {
+
+            //SOLICITUD FIRMAR EL ACTA SI YA ESTA FIRMADA POR EL FUNCIONARIO Y EL PRESTADOR NO FIRMA
+            await this.actaPdfService.cerrarActaSpInd(this.id_evaluacion, tokenDto).toPromise();
+            this.estado_acta = data.act_estado;
+            // Mostrar notificación Acta cerrada
+            this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
+              timeOut: 3000,
+              positionClass: 'toast-top-center',
+            });
+            this.modalRef.hide();
+            localStorage.setItem('boton-acta-sp-ind', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
+
           }
 
-          //SOLICITUD FIRMAR EL ACTA SI YA ESTA FIRMADA POR EL FUNCIONARIO Y EL PRESTADOR NO FIRMA
-          await this.actaPdfService.cerrarActaSpInd(this.id_evaluacion, tokenDto).toPromise();
-          this.estado_acta = data.act_estado;
-          // Mostrar notificación Acta cerrada
-          this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
-            timeOut: 3000,
-            positionClass: 'toast-top-center',
-          });
-          this.modalRef.hide();
-          localStorage.setItem('boton-acta-sp-ind', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
-          
         }
         else if (!data.act_firma_prestador || !data.act_firma_funcionario) {
           if (!data.act_firma_prestador && !data.act_firma_funcionario) {

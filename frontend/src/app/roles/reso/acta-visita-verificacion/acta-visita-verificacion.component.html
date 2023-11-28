@@ -30,7 +30,7 @@
                     <label for="previa" class="form-label">VISITA PREVIA</label>
                     <label class="switch">
                         <input type="checkbox" id="previa" onclick="unsoloCheckbox()" name="act_visita_previa"
-                            [(ngModel)]="act_visita_previa">
+                            [(ngModel)]="act_visita_previa_bool">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -39,7 +39,7 @@
                     <label for="segumiento" class="form-label">VISITA DE CERTIFICACION</label>
                     <label class="switch">
                         <input type="checkbox" id="segumiento" onclick="unsoloCheckbox()" name="act_visita_seguimiento"
-                            [(ngModel)]="act_visita_seguimiento">
+                            [(ngModel)]="act_visita_seguimiento_bool">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -48,7 +48,7 @@
                     <label for="reactivacion" class="form-label">VISITA DE REACTIVACION</label>
                     <label class="switch">
                         <input type="checkbox" id="reactivacion" onclick="unsoloCheckbox()"
-                            name="act_visita_reactivacion" [(ngModel)]="act_visita_reactivacion">
+                            name="act_visita_reactivacion" [(ngModel)]="act_visita_reactivacion_bool">
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -165,7 +165,7 @@
                 <div class="col-12">
                     <label for="email" class="form-label">Correo Electrónico:</label>
                     <input type="email" class="form-control" id="email" placeholder="E-mail" readonly>
-                    <input type="hidden" name="act_email" [(ngModel)]="act_email">
+                    <input type="hidden" name="act_correo" [(ngModel)]="act_correo">
                 </div>
 
                 <div class="col-12">

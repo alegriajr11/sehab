@@ -35,7 +35,7 @@ export class CriteriopamecComponent implements OnInit {
     this.cargarCriteriosPam();
   }
 
-  cargarActividad(): void{
+  cargarActividad(): void {
     this.actividadService.lista().subscribe(
       data => {
         this.actividad = data;
@@ -47,10 +47,10 @@ export class CriteriopamecComponent implements OnInit {
     )
   }
 
-    // Método para calcular el ID global
-    calcularIDGlobal(index: number, currentPage: number, itemsPerPage: number): number {
-      return index + 1 + (currentPage - 1) * itemsPerPage;
-    }
+  // Método para calcular el ID global
+  calcularIDGlobal(index: number, currentPage: number, itemsPerPage: number): number {
+    return index + 1 + (currentPage - 1) * itemsPerPage;
+  }
 
   cargarCriteriosPam() {
     this.criteriopamService.lista().subscribe(
@@ -65,7 +65,7 @@ export class CriteriopamecComponent implements OnInit {
   }
 
   //CARGAR CRITERIOS POR ID ACTIVIDAD
-  cargarCriteriosIdActividad(): void{
+  cargarCriteriosIdActividad(): void {
     var id = (document.getElementById('act_id')) as HTMLSelectElement
     var sel = id.selectedIndex;
     var opt = id.options[sel]
@@ -84,7 +84,7 @@ export class CriteriopamecComponent implements OnInit {
     this.titleActividad = true;
   }
 
-  llenarSpan(): void{
+  llenarSpan(): void {
     var id = (document.getElementById('act_id')) as HTMLSelectElement
     var sel = id.selectedIndex;
     var opt = id.options[sel]
@@ -93,8 +93,8 @@ export class CriteriopamecComponent implements OnInit {
 
     this.actividadService.listByAct(ValorAct).subscribe(
       data => {
-        for(const acts of this.actividad){
-          if(acts.act_id.toString() === ValorAct){
+        for (const acts of this.actividad) {
+          if (acts.act_id.toString() === ValorAct) {
             var act_nombre = (document.getElementById('act_nombre')) as HTMLSpanElement
             act_nombre.textContent = acts.act_nombre
           }
@@ -131,7 +131,7 @@ export class CriteriopamecComponent implements OnInit {
     });
   }
 
-  obtenerNombreActividad(): void{
+  obtenerNombreActividad(): void {
     var original = document.getElementById("act_nombre");
     sessionStorage.setItem("elementId", original.textContent);
   }

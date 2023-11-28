@@ -1,3 +1,5 @@
+import { Usuario } from "../usuario";
+
 export class ActaVerificacionDto {
 	id?: number;
     act_id?: number;
@@ -11,7 +13,7 @@ export class ActaVerificacionDto {
     act_nit: string;
     act_direccion: string
     act_telefono: string
-    act_email: string
+    act_correo: string
     act_representante: string
     act_gerente: string
     act_cod_habilitacion: string
@@ -20,10 +22,12 @@ export class ActaVerificacionDto {
     act_cod_sede: string
     act_observaciones: string
     act_firma_prestador: string
+    act_funcionario_prestador: string
     act_cargo_prestador: string
 
     act_estado: string;
 
+    verificacion_usuario: Usuario
 
     constructor(
         act_id: number,
@@ -37,7 +41,7 @@ export class ActaVerificacionDto {
         act_nit: string,
         act_direccion: string,
         act_telefono: string,
-        act_email: string,
+        act_correo: string,
         act_representante: string,
         act_gerente: string,
         act_cod_habilitacion: string,
@@ -46,6 +50,7 @@ export class ActaVerificacionDto {
         act_cod_sede: string,
         act_observaciones: string,
         act_firma_prestador: string,
+        act_funcionario_prestador: string,
         act_cargo_prestador: string,
     ) {
         this.act_id = act_id
@@ -59,7 +64,7 @@ export class ActaVerificacionDto {
         this.act_nit = act_nit
         this.act_direccion = act_direccion
         this.act_telefono = act_telefono
-        this.act_email = act_email
+        this.act_correo = act_correo
         this.act_representante = act_representante
         this.act_gerente = act_gerente
         this.act_cod_habilitacion = act_cod_habilitacion
@@ -68,6 +73,7 @@ export class ActaVerificacionDto {
         this.act_cod_sede = act_cod_sede
         this.act_observaciones = act_observaciones
         this.act_firma_prestador = act_firma_prestador
+        this.act_funcionario_prestador = act_funcionario_prestador
         this.act_cargo_prestador = act_cargo_prestador
     }
 }

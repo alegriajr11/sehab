@@ -160,7 +160,7 @@ export class ActapdfService {
   }
 
 
-  //FILTRAR ACTA POR FECHA - No ACTA - PRESTADOR - NIT
+  //FILTRAR ACTA POR FECHA - No ACTA - PRESTADOR - NIT (SEGURIDAD DEL PACIENTE IPS)
   public listaActasSpIpsFilter(year: number, act_id: number, act_prestador: string, act_nit: string, tokenDto: string): Observable<ActaSpPdfDto[]> {
     let url = `${this.actasp_ips_pdfurl}busqueda/fecha/acta/prestador/nit?`;
 
@@ -186,8 +186,8 @@ export class ActapdfService {
 
 
   //FILTRAR ACTA POR FECHA - No ACTA - PRESTADOR - NIT
-  public listaActasPamec(year: number, act_id: number, act_prestador: string, act_nit: string): Observable<ActaPamecDto[]> {
-    let url = `${this.actaPamec_pdf_url}busqueda/fecha/acta/prestador/nit?`;
+  public listaActasPamecFilter(year: number, act_id: number, act_prestador: string, act_nit: string, tokenDto: string): Observable<ActaPamecDto[]> {
+    let url = `${this.actasp_ips_pdfurl}busqueda/fecha/acta/prestador/nit?`;
 
     if (year) {
       url += `year=${year}&`;
@@ -201,6 +201,11 @@ export class ActapdfService {
     if (act_nit) {
       url += `act_nit=${act_nit}&`;
     }
+
+    if (tokenDto) {
+      url += `tokenDto=${tokenDto}&`;
+    }
+
 
     return this.httpClient.get<ActaPamecDto[]>(url);
   }

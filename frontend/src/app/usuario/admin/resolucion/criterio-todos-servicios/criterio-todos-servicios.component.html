@@ -14,9 +14,11 @@
         <label for="">Estandar Todos Servicios:</label>
         <select class="form-control" name="tod_id" id="tod_id" (change)="cargarCriterios()" (change)="llenarSpan()">
             <option hidden selected value="">Selecciona el Estandar...</option>
-            <option *ngFor="let estandar_servicios of estandar_servicios" value="{{estandar_servicios.tod_id}}">{{estandar_servicios.tod_nombre_estandar}}</option>
+            <option *ngFor="let estandar_servicios of estandar_servicios" value="{{estandar_servicios.tod_id}}">
+                {{estandar_servicios.tod_nombre_estandar}}</option>
         </select>
     </div>
+
 </div>
 
 
@@ -37,11 +39,12 @@
             </div>
         </div>
         <div class="search-hero">
-            <input class="form-control" type="text" name="search" [(ngModel)]="searchText" placeholder="Buscar Criterio">
+            <input class="form-control" type="text" name="search" [(ngModel)]="searchText"
+                placeholder="Buscar Criterio">
         </div>
         <table class="table table-wrapper table-hover">
             <thead>
-                <tr *ngIf="controlCriterio">
+                <tr>
                     <th scope="col">Cod</th>
                     <th scope="col">Modalidad</th>
                     <th scope="col">Articulo</th>
@@ -53,39 +56,37 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let criterio of criterio_servicios | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page};" >
-                    <td>{{criterio.cris_id}}</td>
+                <tr
+                    *ngFor="let criterio of criterio_servicios | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page}; let i = index">
+                    <td>{{calcularIDGlobal(i, page, 10)}}</td>
                     <td>{{criterio.cris_modalidad}}</td>
                     <td>{{criterio.cris_articulo}}</td>
-                    <td>{{criterio.cris_seccion}}</td>
-                    <td>{{criterio.cris_apartado}}</td>
-                    <td>{{criterio.cris_nombre_criterio}}</td>
+                    <td>{{criterio.todos_servi_seccion.sec_number}}</td>
+                    <td>{{criterio.todos_servi_aparto.apa_codigo}}</td>
+                    <td style="text-align: justify;">{{criterio.cris_nombre_criterio}}</td>
                     <td>
-                        <button class="btn btn-outline-warning" >
-                        <i class="far fa-edit"></i>
+                        <button class="btn btn-outline-warning">
+                            <i class="far fa-edit"></i>
                         </button>
                     </td>
                     <td>
                         <button class="btn btn-outline-danger">
-                        <i class="far fa-trash-alt"></i>
+                            <i class="far fa-trash-alt"></i>
                         </button>
                     </td>
                 </tr>
             </tbody>
+            <div class="container" *ngIf="listaVacia">
+                <div class="p-3 mb-2 bg-dark text-white text-center">
+                    <h2>{{ listaVacia }}</h2>
+                </div>
+            </div>
         </table>
-        <pagination-controls
-        (pageChange) ="page =$event"
-        previousLabel="Anterior"
-        nextLabel="Siguiente">
+        <pagination-controls (pageChange)="page =$event" previousLabel="Anterior" nextLabel="Siguiente">
         </pagination-controls>
     </div>
 </div>
 
-<div class="container" *ngIf="listaVacia">
-    <div class="p-3 mb-2 bg-dark text-white text-center">
-        <h2>{{ listaVacia }}</h2>
-    </div>
-</div>
+
 
 <app-footer></app-footer>
-

@@ -5,6 +5,11 @@ h1 {
     
 }
 
+/*SUBRAYADO AL TIPO DE VISITA*/
+.underlined {
+    text-decoration: underline;
+}
+
 
 .table-wrapper {
     background: #fff;

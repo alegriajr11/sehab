@@ -81,7 +81,9 @@ export class EvaluacionesPamecComponent implements OnInit {
 
   //CARGAR ACTAS POR ID_ACTA O AÑO O NOMBRE DE PRESTADOR O NIT
   cargarActasFilter() {
-    this.actapdfService.listaActasPamec(this.year, this.act_id, this.act_prestador, this.act_nit).subscribe(
+    //OBTENER EL TOKEN DEL USUARIO 
+    const token = this.tokenService.getToken()
+    this.actapdfService.listaActasPamecFilter(this.year, this.act_id, this.act_prestador, this.act_nit, token).subscribe(
       data => {
         this.evaluaciones = data
         this.listaVacia = undefined

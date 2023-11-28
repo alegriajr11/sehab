@@ -41,7 +41,10 @@ export class EvaluacionesSpIpsComponent implements OnInit {
     // Escuchar el evento popstate del navegador
     window.addEventListener('popstate', () => {
       // Eliminar el elemento al navegar hacia atrás
-      localStorage.removeItem('boton-editar-acta-sic');
+      localStorage.removeItem('boton-editar-evaluacion-sp-ips');
+      localStorage.removeItem('id_evaluacion_ips');
+      localStorage.removeItem('nombre-pres-sp-ips');
+      localStorage.removeItem('id_acta')
     });
     this.incializarMetodos();
   }
@@ -67,10 +70,11 @@ export class EvaluacionesSpIpsComponent implements OnInit {
   }
 
 
-  openModal(modalTemplate: TemplateRef<any>, id: number, name: string, name_funcionario: string) {
-    this.sharedService.setIdEvaluacionSpIps(id)
+  openModal(modalTemplate: TemplateRef<any>, id: number, name: string, name_funcionario: string, cod_prestador: string) {
+    this.sharedService.setIdActaIps(id) //Envia el id del Acta
     this.sharedService.setNombrePrestador(name)
     this.sharedService.setNombreFuncionario(name_funcionario)
+    this.sharedService.setIdPrestador(cod_prestador)
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',

@@ -22,33 +22,35 @@
         </div>
         <div class="form-group">
             <label for="standardSelect">Selecciona un Estándar:</label>
-            <select id="standardSelect" class="form-control" [(ngModel)]="selectedStandard">
-                <option value="">Selecciona un Estándar</option>
-                <option *ngFor="let standard of standards" [value]="standard.id">{{ standard.name }}</option>
+            <select name="tod_id" id="tod_id" class="form-control" [(ngModel)]="selectedStandard"
+                (change)="cargarCriterios(); onStandardChange()">
+                <option hidden selected value="">Selecciona el Estandar...</option>
+                <option *ngFor="let standard of estandar_servicios" [value]="standard.tod_id">{{
+                    standard.tod_nombre_estandar }}</option>
             </select>
         </div>
 
         <div *ngIf="selectedStandard">
-            <h3>ESTANDAR DE {{ getStandardName(selectedStandard) }}</h3>
+            <h3 class="underlined">ESTANDAR DE {{ nombre_estadar }}</h3>
             <div class="criteria-list rounded">
                 <div class="criteria custom-background rounded"
-                    *ngFor="let criterion of getCriterions(selectedStandard);"
-                    [ngStyle]="{'background-color': criterion.guardado ? (criterion.state === 'Cumple' ? 'rgb(183, 225, 205)' : 'rgb(234, 153, 153)') : ''}">
-                    <h4>{{criterion.id}} {{ criterion.name }}</h4>
+                    *ngFor="let criterio of criterio_servicios; let i = index">
+                    <h4>{{criterio.todos_servi_aparto.apa_codigo + ')'}} {{ criterio.cris_nombre_criterio }}</h4>
                     <div class="form-group">
                         <label for="stateSelect">Estado:</label>
-                        <select id="stateSelect" class="form-control" [(ngModel)]="criterion.state">
+                        <select id="stateSelect" class="form-control">
+                            <option hidden selected value="">Selecciona el cumplimiento...</option>
                             <option value="Cumple">Cumple</option>
                             <option value="No Cumple">No Cumple</option>
+                            <option value="No Aplica">NA</option>
+                            <option value=" "></option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="observationsTextarea">Observaciones:</label>
-                        <textarea id="observationsTextarea" class="form-control"
-                            [(ngModel)]="criterion.observations"></textarea>
+                        <textarea id="observationsTextarea" class="form-control"></textarea>
                     </div>
-                    <button class="btn btn-dark esp btn-circle" (click)="guardarCriterio(criterion)"
-                        *ngIf="!criterion.guardado">Asignar</button>
+                    <button class="btn btn-dark esp btn-circle">Asignar</button>
                 </div>
             </div>
             <hr>

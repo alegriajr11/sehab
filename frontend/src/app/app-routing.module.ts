@@ -70,7 +70,6 @@ import { EvaluacionSpIpsComponent } from './roles/sp/sp-ips/home-evaluacion-ips/
 import { ActaVisitaVerificacionComponent } from './roles/reso/acta-visita-verificacion/acta-visita-verificacion.component';
 import { ActaVisitaIvcComponent } from './roles/reso/acta-visita-ivc/acta-visita-ivc.component';
 import { InformeResolucionComponent } from './roles/reso/informe-resolucion/informe-resolucion.component';
-import { InformesRealizadosResolucionComponent } from './roles/reso/informes-realizados-resolucion/informes-realizados-resolucion.component';
 import { AgregarSedesPrestadorComponent } from './prestador/modal-sedes-prestador/agregar-sedes-prestador/agregar-sedes-prestador.component';
 import { EditarActaSicComponent } from './roles/sic/evaluaciones/editar-acta-sic/editar-acta-sic.component';
 import { EditarEvaluacionSicComponent } from './roles/sic/evaluaciones/editar-evaluacion-sic/editar-evaluacion-sic.component';
@@ -174,7 +173,7 @@ const routes: Routes = [
 
   //Rutas RESOLUCIÓN
   { path: 'reso', component: HomeResoComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res', 'contador'] } },
-  { path: 'reso/lista-verificacion', component: ListaVerificacionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
+  { path: 'reso/lista-verificacion', component: ListaVerificacionComponent, canActivate: [UsuarioGuard, ButtonGuard], data: { expectedRol: ['admin', 'res'] } },
   { path: 'servicios-capacidad', component: CapacidadInstaladaComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res'] } },
 
   //RUTA CUMPLIMIENTO DE REQUISITOS DE LAS CONDICIONES DE HABILITACIÓN
@@ -216,7 +215,6 @@ const routes: Routes = [
 
   //INFORME RESOLUCION - 3100 2019
   { path: 'reso/informe', component: InformeResolucionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res', 'contador'] } },
-  { path: 'reso/informes-realizados', component: InformesRealizadosResolucionComponent, canActivate: [UsuarioGuard], data: { expectedRol: ['admin', 'res', 'contador'] } },
 
 
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },

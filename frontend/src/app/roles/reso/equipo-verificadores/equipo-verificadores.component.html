@@ -28,6 +28,14 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <h5>ACTA: <strong class="underlined">{{numero_acta}}</strong></h5>
+                </div>
+                <div class="col-sm-10">
+                    <h5>PRESTADOR: <strong class="underlined">{{nombre_prestador}}</strong></h5>
+                </div>
+            </div>
             <table class="table table-wrapper table-hover">
                 <thead>
                     <tr>
@@ -41,9 +49,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td routerLink="/servicios-capacidad"><strong>1.</strong> SERVICIOS VERIFICADOS Y CAPACIDAD
-                            INSTALADA</td>
+                    <tr
+                        *ngFor="let usuarios of usuarios_verificadores | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page} let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{usuarios.usu_nombre}}</td>
+                        <td>{{usuarios.usu_apellido}}</td>
+                        <td>{{usuarios.usu_nombreUsuario}}</td>
+                        <td>{{usuarios.usu_cargo}}</td>
+                        <td>{{usuarios.usu_area_profesional}}</td>
+                        <td>
+                            <button class="btn btn-outline-warning">
+                                <i class="far fa-edit"></i>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>

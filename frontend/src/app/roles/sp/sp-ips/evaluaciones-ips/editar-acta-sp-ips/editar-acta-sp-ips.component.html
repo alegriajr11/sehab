@@ -119,7 +119,6 @@
                 </div>
 
 
-
                 <div class="col-md-6">
                     <label for="" class="form-label">Representante Legal:</label>
                     <input type="text" class="form-control" id="repleg" placeholder="Representante Legal" readonly
@@ -144,6 +143,40 @@
                         [(ngModel)]="actaSp.act_obj_visita">
                 </div>
 
+                <!--LINEA-->
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
+
+                <div class="col-12">
+                    <h3 class="text-center sizeh3">COMPROMISOS:</h3>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="compromiso_actividad" class="form-label">Actividad:</label>
+                    <br>
+                    <textarea name="act_compromiso_actividad" id="compromiso_actividad" cols="55" rows="4"
+                        [(ngModel)]="actaSp.act_compromiso_actividad" maxlength="255"></textarea>
+                    <p>Caracteres restantes: {{ 255 - (actaSp.act_compromiso_actividad ? actaSp.act_compromiso_actividad.length : 0) }}</p>
+                </div>
+                
+
+                <div class="col-md-3">
+                    <label for="fecha_compromiso" class="form-label">Fecha Compromiso:</label>
+                    <input type="date" class="form-control" id="fecha_compromiso" name="act_compromiso_fecha"
+                        [(ngModel)]="actaSp.act_compromiso_fecha">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="responsable" class="form-label">Responsables:</label>
+                    <input type="text" class="form-control" id="responsable" name="act_compromiso_responsable"
+                        [(ngModel)]="actaSp.act_compromiso_responsable">
+                </div>
+
+                <!--LINEA-->
+                <div class="col-12">
+                    <hr class="medio">
+                </div>
 
                 <div class="col-12">
                     <h3 class="text-center sizeh3">FIRMAS</h3>
@@ -220,8 +253,7 @@
                 <!--BOTON NO FIRMA-->
                 <div class="col-6">
                     <span class="button-like btn-span" *ngIf="noFirmaActa === 'false' && !actaSp.act_firma_prestador && 
-                    !actaSp.act_firma_prestador_acompanante" 
-                    (click)="noFirmaPrestador()">No
+                    !actaSp.act_firma_prestador_acompanante" (click)="noFirmaPrestador()">No
                         Firma Prestador</span>
                 </div>
 

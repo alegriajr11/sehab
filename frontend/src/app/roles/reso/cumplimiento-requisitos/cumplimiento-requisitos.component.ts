@@ -21,6 +21,11 @@ export class CumplimientoRequisitosComponent {
 
   public modalRef: BsModalRef;
 
+    //ATRIBUTOS PRESTADOR
+    nombre_prestador: string
+    nombre_municipio: string
+    id_acta_verificacion: number
+
   constructor(
     private readonly condicionesHabilitacionService: CondicionesHabilitacionService,
     private modalService: BsModalService,
@@ -29,6 +34,7 @@ export class CumplimientoRequisitosComponent {
 
   ngOnInit(): void {
     this.incializarMetodos();
+    this.capturarActa();
   }
 
   incializarMetodos() {
@@ -66,5 +72,10 @@ export class CumplimientoRequisitosComponent {
         keyboard: true
       }
     );
+  }
+
+  capturarActa() {
+    this.nombre_prestador = localStorage.getItem('nombre-pres-verificacion')
+    this.id_acta_verificacion = parseInt(localStorage.getItem('id_acta_verificacion'))
   }
 }

@@ -34,7 +34,7 @@ export class ModalEditarCumplimientoSpIndComponent {
     private toastrService: ToastrService,
     private calificacionIndService: CalificacionIndService,
     private tokenService: TokenService
-  ){}
+  ) { }
 
   ngOnInit(): void {
     //CAPTURAR LOS ID DEL CRITERIO Y EVALUACION DEL SERVICIO COMPARTIDO
@@ -44,7 +44,7 @@ export class ModalEditarCumplimientoSpIndComponent {
     this.calificacionIndService.getCriterioByEvaluacion(this.cri_ind_id, this.eva_ind_id).subscribe(
       async data => {
         this.calificacionInd = data
-        if(data && data.cal_id){
+        if (data && data.cal_id) {
           this.cal_id = data.cal_id
           this.cal_nota = data.cal_nota
           this.cal_observaciones = data.cal_observaciones
@@ -67,14 +67,19 @@ export class ModalEditarCumplimientoSpIndComponent {
 
   onUpdate(): void {
     //SOLICITUD UPDATE DE CALIFICACIÓN SI isEditing ES TRUE
-    if(this.isEditing){
+    if (this.isEditing) {
       const calificacionActualizada = new CalificacionIndDto(
         this.cal_nota,
         this.cal_observaciones,
         this.cri_ind_id,
         this.eva_ind_id
       );
-      this.calificacionIndService.update(this.cal_id, calificacionActualizada).subscribe(
+      //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ EDITANDO EL CUMPLIMIENTO
+      const token = this.tokenService.getToken()
+      //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
+      const tokenDto: TokenDto = new TokenDto(token);
+
+      this.calificacionIndService.update(this.cal_id, calificacionActualizada, tokenDto).subscribe(
         data => {
           this.toastrService.success(data.message, 'OK', {
             timeOut: 3000, positionClass: 'toast-top-center'
@@ -83,7 +88,7 @@ export class ModalEditarCumplimientoSpIndComponent {
         },
         err => {
           this.toastrService.error(err.error.message, 'Fail', {
-            timeOut: 3000,  positionClass: 'toast-top-center',
+            timeOut: 3000, positionClass: 'toast-top-center',
           });
         }
       )
@@ -96,12 +101,12 @@ export class ModalEditarCumplimientoSpIndComponent {
         this.cri_ind_id,
         this.eva_ind_id
       );
-  
+
       //OBTENER EL TOKEN DEL USUARIO QUE ESTÁ REGISTRANDO EL CUMPLIMIENTO
       const token = this.tokenService.getToken()
       //ASIGNANDO TOKEN A LA CLASE DTO - TOKENDTO
       const tokenDto: TokenDto = new TokenDto(token);
-  
+
       //SOLICITUD CREAR CALIFICACIÓN
       this.calificacionIndService.createCalificacionInd(this.calificacionInd, tokenDto).subscribe(
         async (data) => {
@@ -111,7 +116,7 @@ export class ModalEditarCumplimientoSpIndComponent {
           });
           //ENVIAR POR EL SERVICIO COMPARTIDO LOS ID AGREGADOS A LA BASE DE DATOS
           this.sharedService.criteriosIndGuardados.push(this.cri_ind_id)
-  
+
           //CERRAR EL MODAL
           this.modalRef.hide();
         },

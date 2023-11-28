@@ -53,7 +53,7 @@
                 <div class="col-md-3">
                     <label class="form-label">FECHA INICIAL</label>
                     <input type="date" class="form-control" id="fecha-inicial" pattern="dd/MM/yyyy" name="fecha_inicial"
-                        [(ngModel)]="fecha_inicial" [ngModelOptions]="{standalone: true}" ngDefaultControl
+                        [(ngModel)]="act_fecha_inicial" [ngModelOptions]="{standalone: true}" ngDefaultControl
                         (change)="ocultarMensajes(); habilitarFechaFinal()">
                     <div *ngIf="showFechaInicialMessage" class="validation-message">Seleccione la Fecha
                         Inicial.</div>
@@ -62,8 +62,8 @@
                 <div class="col-md-3">
                     <label class="form-label">FECHA FINAL</label>
                     <input type="date" class="form-control" id="fecha-final" pattern="dd/MM/yyyy" name="fecha_final"
-                        [(ngModel)]="fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
-                        [disabled]="!habilitarfechaFin" [min]="fecha_inicial" (change)="ocultarMensajes()">
+                        [(ngModel)]="act_fecha_final" [ngModelOptions]="{standalone: true}" ngDefaultControl
+                        [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial" (change)="ocultarMensajes()">
                     <div *ngIf="showFechaFinalMessage" class="validation-message">Seleccione la Fecha
                         Final.</div>
                 </div>
@@ -178,7 +178,7 @@
                 <div class="col-md-3">
                     <label for="fecha" class="form-label">Fecha:</label>
                     <input type="date" class="form-control" id="fecha_orden" name="fecha_orden"
-                        [(ngModel)]="fecha_orden" [disabled]="!habilitarfechaFin" [min]="fecha_inicial">
+                        [(ngModel)]="act_fecha_orden" [disabled]="!habilitarfechaFin" [min]="act_fecha_inicial">
                 </div>
 
                 <div class="col-md-3">
@@ -196,13 +196,14 @@
                 <div class="col-md-6">
                     <label for="" class="form-label">Fecha de Oficio:</label>
                     <input type="date" class="form-control" id="fecha_oficio" placeholder="Fecha de oficio"
-                        name="fecha_oficio" [(ngModel)]="fecha_oficio" [max]="fecha_orden">
+                        name="fecha_oficio" [(ngModel)]="act_fecha_oficio" [max]="act_fecha_orden">
                 </div>
 
                 <div class="col-md-6">
                     <label for="" class="form-label">Fecha Envío de Oficio:</label>
                     <input type="date" class="form-control" id="fecha_envio_oficio" placeholder="Fecha Envío de oficio"
-                        name="fecha_envio_oficio" [(ngModel)]="fecha_envio_oficio" [min]="fecha_oficio" [max]="fecha_inicial">
+                        name="fecha_envio_oficio" [(ngModel)]="act_fecha_envio_oficio" [min]="act_fecha_oficio"
+                        [max]="act_fecha_inicial">
                 </div>
 
                 <div class="col-12">
@@ -324,34 +325,6 @@
                 </div>
 
                 <div class="col-12">
-                    <h3 class="text-center sizeh3">COMPROMISOS:</h3>
-                </div>
-
-                <div class="col-md-6">
-                    <label for="compromiso_actividad" class="form-label">Actividad:</label>
-                    <textarea name="act_compromiso_actividad" id="compromiso_actividad" cols="30" rows="2"
-                        [(ngModel)]="act_compromiso_actividad"></textarea>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="fecha_compromiso" class="form-label">Fecha Compromiso:</label>
-                    <input type="date" class="form-control" id="fecha_compromiso" name="act_compromiso_fecha"
-                        [(ngModel)]="act_compromiso_fecha">
-                </div>
-
-                <div class="col-md-3">
-                    <label for="responsable" class="form-label">Responsables:</label>
-                    <input type="text" class="form-control" id="responsable" name="act_compromiso_responsable"
-                        [(ngModel)]="act_compromiso_responsable">
-                </div>
-
-                <!--LINEA-->
-                <div class="col-12">
-                    <hr class="medio">
-                </div>
-
-
-                <div class="col-12">
                     <h3 class="text-center sizeh3">FIRMAS</h3>
                 </div>
 
@@ -385,9 +358,8 @@
                 <div class="col-md-6">
                     <label for="" class="form-label">Representante:</label>
                     <input type="text" class="form-control" id="nombrePrestador" name="act_nombre_prestador"
-                        placeholder="Prestador..." [(ngModel)]="act_nombre_prestador" 
-                        (input)="act_nombre_prestador = act_nombre_prestador.toUpperCase()"
-                        (input)="ocultarMensajes()">
+                        placeholder="Prestador..." [(ngModel)]="act_nombre_prestador"
+                        (input)="act_nombre_prestador = act_nombre_prestador.toUpperCase()" (input)="ocultarMensajes()">
                     <div *ngIf="showPresadorNombreMessage" class="validation-message-ovpc">Ingresa el Nombre
                         Representante a
                         cargo.
@@ -397,9 +369,8 @@
                 <div class="col-md-6">
                     <label for="" class="form-label">Cargo:</label>
                     <input type="text" class="form-control" id="cargoPres" name="act_cargo_prestador"
-                        placeholder="Cargo..." [(ngModel)]="act_cargo_prestador" 
-                        (input)="act_cargo_prestador = act_cargo_prestador.toUpperCase()"
-                        (input)="ocultarMensajes()">
+                        placeholder="Cargo..." [(ngModel)]="act_cargo_prestador"
+                        (input)="act_cargo_prestador = act_cargo_prestador.toUpperCase()" (input)="ocultarMensajes()">
                     <div *ngIf="showPrestadorCargoMessage" class="validation-message-ovpc">Ingresa el Cargo del
                         Representante.
                     </div>

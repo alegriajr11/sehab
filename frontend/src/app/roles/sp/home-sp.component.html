@@ -2,42 +2,60 @@
 <div class="col">
     <div class="row">
         <div class="col-md-2">
-            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/"><i class='fa fa-reply fa-lg'></i></button>
+            <button class="btn btn-light esp btn-circle btn-xl" routerLink="/"><i
+                    class='fa fa-reply fa-lg'></i></button>
         </div>
     </div>
 </div>
 
-        
 
-    <div class="wrapper">
-        <div class="container">
-            <div class="jumbotron">
-                <hr class="my-4">
-                <h1 class="display-4 text-center">Evaluación Seguridad del Paciente - Instituciones Prestadoras de Servicios de Salud</h1>
-                <hr class="my-4">
-                <div class="abs-center">
-                    <button class="btn btn-dark esp btn-circle btn-xl" routerLink="/sp/evaluaciones-ips" title="Evaluaciónes Realizadas"><i
-                            class='fas fa-clipboard-list fa-lg'></i></button>
-                    <button class="btn btn-dark esp btn-circle btn-xl" title="Evaluación" routerLink="/sp/acta-ips">
-                        <i class='fa fa-file-text fa-lg'></i></button>
-                </div>
-            </div>
-        </div>
 
-        <div class="container">
-            <div class="jumbotron">
-                <hr class="my-4">
-                <h1 class="display-4 text-center">Evaluación Seguridad del Paciente - Profesionales Independientes</h1>
-                <hr class="my-4">
-                <div class="abs-center">
-                    <button class="btn btn-dark esp btn-circle btn-xl" routerLink="/sp/evaluaciones-pro" title="Evaluaciónes Realizadas"><i
-                            class='fas fa-clipboard-list fa-lg'></i></button>
-                    <button class="btn btn-dark esp btn-circle btn-xl" title="Evaluación" routerLink="/sp/acta-pro">
-                        <i class='fa fa-file-text fa-lg'></i></button>
+<div class="wrapper">
+    <div class="container">
+        <div class="jumbotron">
+            <hr class="my-4">
+            <h1 class="display-4 text-center">Evaluación Seguridad del Paciente - Instituciones Prestadoras de Servicios
+                de Salud</h1>
+            <hr class="my-4">
+            <div class="abs-center">
+                <div class="button-container">
+                    <button class="btn btn-dark esp btn-circle btn-xl" routerLink="/sp/evaluaciones-ips"
+                        title="Evaluaciónes Realizadas"><i class='fas fa-clipboard-list fa-lg'></i></button>
+                    <label class="tittle-label">Evaluaciones Realizadas</label>
                 </div>
+
+                <div class="button-container">
+                    <button class="btn btn-dark esp btn-circle btn-xl" title="Crear Acta" routerLink="/sp/acta-ips">
+                        <i class='fa fa-file-text fa-lg'></i></button>
+                    <label class="tittle-label">Crear Acta</label>
+                </div>
+
             </div>
         </div>
     </div>
-    <!--Fin Div Container-->
+
+    <div class="container">
+        <div class="jumbotron">
+            <hr class="my-4">
+            <h1 class="display-4 text-center">Evaluación Seguridad del Paciente - Profesionales Independientes</h1>
+            <hr class="my-4">
+            <div class="abs-center">
+                <div class="button-container">
+                    <button class="btn btn-dark esp btn-circle btn-xl" routerLink="/sp/evaluaciones-pro"
+                        title="Evaluaciónes Realizadas"><i class='fas fa-clipboard-list fa-lg'></i></button>
+                    <label class="tittle-label">Evaluaciones Realizadas</label>
+                </div>
+
+                <div class="button-container">
+                    <button class="btn btn-dark esp btn-circle btn-xl" title="Crear Acta" routerLink="/sp/acta-pro">
+                        <i class='fa fa-file-text fa-lg'></i></button>
+                    <label class="tittle-label">Crear Acta</label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--Fin Div Container-->
 
 <app-footer></app-footer>

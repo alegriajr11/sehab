@@ -36,7 +36,7 @@
         </div>
 
         <div class="table-title-sub">
-            <span class="title-item">PLANEACIÓN</span>
+            <span class="title-item">AJUSTE</span>
         </div>
 
         <table class="table table-wrapper table-hover">
@@ -52,8 +52,8 @@
                     <td>{{i+1}}</td>
                     <td>{{criterio_ajuste.cri_aju_nombre}}</td>
                     <td>
-                        <button class="btn" [ngClass]="getClassForCriterio(criterio_ajuste)"
-                            (click)="openModal(modalTemplate, criterio_ajuste.cri_aju_id, this.id_evaluacion_ips)">
+                        <button class="btn" [ngClass]="getClassForCriterio(criterio_ajuste, 'ajuste')"
+                            (click)="openModal(modalTemplate, criterio_ajuste.cri_aju_id, id_evaluacion_ips, 'ajuste', id_acta)">
                             <i class="fa fa-check"></i>
                         </button>
                     </td>
@@ -61,6 +61,7 @@
             </tbody>
         </table>
         <hr>
+        
 
         <div class="table-title-sub">
             <span class="title-item">IMPLEMENTACIÓN</span>
@@ -79,14 +80,10 @@
                     <td>{{i+1}}</td>
                     <td>{{criterio_implementacion.cri_imp_nombre}}</td>
                     <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
+                        <button class="btn" [ngClass]="getClassForCriterio(criterio_implementacion, 'implementacion')"
+                            (click)="openModal(modalTemplate, criterio_implementacion.cri_imp_id, id_evaluacion_ips, 'implementacion', id_acta)">
+                            <i class="fa fa-check"></i>
                         </button>
-                        <!-- <button class="btn btn-outline-dark"
-                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-                            (click)="openModal(modalTemplate, criterio.crie_id)">
-                            <i class='fa fa-check'></i>
-                        </button> -->
                     </td>
                 </tr>
             </tbody>
@@ -111,14 +108,10 @@
                     <td>{{i+1}}</td>
                     <td>{{criterio_planeacion.cri_pla_nombre}}</td>
                     <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
+                        <button class="btn" [ngClass]="getClassForCriterio(criterio_planeacion, 'planeacion')"
+                            (click)="openModal(modalTemplate, criterio_planeacion.cri_pla_id, this.id_evaluacion_ips, 'planeacion', id_acta)">
+                            <i class="fa fa-check"></i>
                         </button>
-                        <!-- <button class="btn btn-outline-dark"
-                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-                            (click)="openModal(modalTemplate, criterio.crie_id)">
-                            <i class='fa fa-check'></i>
-                        </button> -->
                     </td>
                 </tr>
             </tbody>
@@ -143,23 +136,15 @@
                     <td>{{i+1}}</td>
                     <td>{{criterio_verificacion.cri_ver_nombre}}</td>
                     <td>
-                        <button class="btn btn-outline-dark">
-                            <i class='fa fa-check'></i>
+                        <button class="btn" [ngClass]="getClassForCriterio(criterio_verificacion, 'verificacion')"
+                            (click)="openModal(modalTemplate, criterio_verificacion.cri_ver_id, id_evaluacion_ips, 'verificacion', id_acta)">
+                            <i class="fa fa-check"></i>
                         </button>
-                        <!-- <button class="btn btn-outline-dark"
-                            [class.btn-success]="sharedService.criteriosGuardados.includes(criterio.crie_id)"
-                            (click)="openModal(modalTemplate, criterio.crie_id)">
-                            <i class='fa fa-check'></i>
-                        </button> -->
                     </td>
                 </tr>
             </tbody>
         </table>
 
-
-        <!-- <ng-template #modalTemplate>
-            <app-modalsic [dataFromParent]="modalRef"></app-modalsic>
-        </ng-template> -->
 
         <button id="boton-acta-sp-ips" class="btn btn-dark esp btn-circle btn-xl" title="Guardar" type="submit">
             <i class='fa fa-file'></i>

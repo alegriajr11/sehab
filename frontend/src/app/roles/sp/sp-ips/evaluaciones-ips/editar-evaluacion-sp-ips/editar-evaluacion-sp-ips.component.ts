@@ -6,6 +6,7 @@ import { ImplementacionDto } from 'src/app/models/SpIps/criterioImplementacion.d
 import { PlaneacionDto } from 'src/app/models/SpIps/criterioPlaneacion.dto';
 import { VerificacionDto } from 'src/app/models/SpIps/criterioVerificacion.dto';
 import { AjusteService } from 'src/app/services/SpIps/ajuste.service';
+import { CalificacionIpsService } from 'src/app/services/SpIps/calificacion-ips.service';
 import { EvaluacionipsService } from 'src/app/services/SpIps/evaluacionips.service';
 import { ImplementacionService } from 'src/app/services/SpIps/implementacion.service';
 import { PlaneacionService } from 'src/app/services/SpIps/planeacion.service';
@@ -26,6 +27,7 @@ export class EditarEvaluacionSpIpsComponent {
   nombrePrestador: string = '';
 
   id_evaluacion_ips: number
+  id_acta: number
 
   listaVacia: any = undefined;
 
@@ -34,6 +36,7 @@ export class EditarEvaluacionSpIpsComponent {
   criteriosImplementacion: ImplementacionDto[]
   criteriosPlaneacion: PlaneacionDto[]
   criteriosVerificacion: VerificacionDto[]
+
 
   //MODAL
   public modalRef: BsModalRef;
@@ -46,32 +49,120 @@ export class EditarEvaluacionSpIpsComponent {
     private criteriosPlaneacionService: PlaneacionService,
     private criteriosVerificacionService: VerificacionService,
     private modalService: BsModalService,
+    private calificacionIpsService: CalificacionIpsService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.nombrePrestador = localStorage.getItem('nombre-pres-sp-ips')
-    const idEvaluacionStr = localStorage.getItem('id_evaluacion_ips'); // Obtener el valor de localStorage como una cadena
+    const idEvaluacionStr = localStorage.getItem('id_evaluacion_ips'); //Obtener el valor de localStorage como una cadena del id_evaluacion
     this.id_evaluacion_ips = parseInt(idEvaluacionStr, 10);
 
+    //CAPTURAR EL ID DEL ACTA ENVIADA POR EL LOCALSTORAGE
+    const idActaStr = localStorage.getItem('id_acta'); //Obtener el valor de localStorage como una cadena del id_acta
+    this.id_acta = parseInt(idActaStr, 10)
+
     this.inicializarMetodos();
+    this.solicitarCalificacionesEvaluacion();
+  }
+
+  //DESTRUIR LAS VARIABLES AL SALIR DEL COMPONENTE
+  ngOnDestroy() {
+    localStorage.removeItem('boton-editar-evaluacion-sp-ips');
+    localStorage.removeItem('id_evaluacion_ips');
+    localStorage.removeItem('nombre-pres-sp-ips');
+    localStorage.removeItem('id_acta');
+    this.sharedService.criteriosIpsAjusteGuardados = []
+    this.sharedService.criteriosIpsImplementacionGuardados = []
+    this.sharedService.criteriosIpsPlaneacionGuardados = []
+    this.sharedService.criteriosIpsVerificacionGuardados = []
+  }
+
+  solicitarCalificacionesEvaluacion() {
+    this.solicitudCalificacionesAjuste();
+    this.solicitudCalificacionesImplementacion();
+    this.solicitudCalificacionesPlaneacion();
+    this.solicitudCalificacionesVerificacion();
+  }
+
+  //SOLICITAR LAS CALIFICACIONES DE AJUSTE
+  solicitudCalificacionesAjuste() {
+    //SOLICITUD AL SERVICIO PARA OBTENER LAS CALIFICACIONES DE AJUSTE QUE LE PERTENECEN A EL ACTA
+    this.calificacionIpsService.getAllCalificacionesAjuste(this.id_evaluacion_ips, this.id_acta).subscribe(
+      data => {
+        for (const criterio of data) {
+          const cri_aju_id = criterio.calificacionipsAjuste.cri_aju_id
+          this.sharedService.criteriosIpsAjusteGuardados.push(cri_aju_id)
+        }
+      }
+    )
+  }
+
+  //SOLICITAR LAS CALIFICACIONES DE IMPLEMENTACION
+  solicitudCalificacionesImplementacion() {
+    //SOLICITUD AL SERVICIO PARA OBTENER LAS CALIFICACIONES DE IMPLEMENTACION QUE LE PERTENECEN A EL ACTA
+    this.calificacionIpsService.getAllCalificacionesImplementacion(this.id_evaluacion_ips, this.id_acta).subscribe(
+      data => {
+        for (const criterio of data) {
+          const cri_imp_id = criterio.calificacionipsImpl.cri_imp_id
+          this.sharedService.criteriosIpsImplementacionGuardados.push(cri_imp_id)
+        }
+      }
+    )
+  }
+
+  //SOLICITAR LAS CALIFICACIONES DE PLANEACION
+  solicitudCalificacionesPlaneacion() {
+    //SOLICITUD AL SERVICIO PARA OBTENER LAS CALIFICACIONES DE IMPLEMENTACION QUE LE PERTENECEN A EL ACTA
+    this.calificacionIpsService.getAllCalificacionesPlaneacion(this.id_evaluacion_ips, this.id_acta).subscribe(
+      data => {
+        for (const criterio of data) {
+          const cri_pla_id = criterio.calificacionipsPlaneacion.cri_pla_id
+          this.sharedService.criteriosIpsPlaneacionGuardados.push(cri_pla_id)
+        }
+      }
+    )
+  }
+
+  //SOLICITAR LAS CALIFICACIONES DE VERIFICACION
+  solicitudCalificacionesVerificacion() {
+    //SOLICITUD AL SERVICIO PARA OBTENER LAS CALIFICACIONES DE IMPLEMENTACION QUE LE PERTENECEN A EL ACTA
+    this.calificacionIpsService.getAllCalificacionesVerificacion(this.id_evaluacion_ips, this.id_acta).subscribe(
+      data => {
+        for (const criterio of data) {
+          const cri_ver_id = criterio.calificacionipsVerif.cri_ver_id
+          this.sharedService.criteriosIpsVerificacionGuardados.push(cri_ver_id)
+        }
+      }
+    )
   }
 
   //ESTABLECER LOS COLORES POR CALIFICACIÓN
-  getClassForCriterio(criterio: any): string {
-    if (this.sharedService.criteriosIpsGuardados.includes(criterio.cri_aju_id)) {
-      return 'btn-success';
+  getClassForCriterio(criterio: any, nombre_etapa: string): string {
+    switch (nombre_etapa) {
+      case 'ajuste':
+        return this.sharedService.criteriosIpsAjusteGuardados.includes(criterio.cri_aju_id) ? 'btn-success' : 'btn-outline-dark';
+      case 'implementacion':
+        return this.sharedService.criteriosIpsImplementacionGuardados.includes(criterio.cri_imp_id) ? 'btn-success' : 'btn-outline-dark';
+      case 'planeacion':
+        return this.sharedService.criteriosIpsPlaneacionGuardados.includes(criterio.cri_pla_id) ? 'btn-success' : 'btn-outline-dark';
+      case 'verificacion':
+        return this.sharedService.criteriosIpsVerificacionGuardados.includes(criterio.cri_ver_id) ? 'btn-success' : 'btn-outline-dark';
+      default:
+        return 'btn-outline-dark';
     }
-    return 'btn-outline-dark';
   }
 
 
+
   //METODO ABRIR MODAL PARA ASIGNAR UNA CALIFICACIÓN
-  openModal(modalTemplate: TemplateRef<any>, cri_id: number, eva_ind_id: number) {
-    this.sharedService.setIdSpIndEvaluacion(eva_ind_id)
-    // this.eva_ind_id = eva_ind_id
-    // this.sharedService.setIdCriterioInd(id)
-    // this.cri_ind_id = id
+  openModal(modalTemplate: TemplateRef<any>, cri_id: number, eva_ips_id: number, etapa: string, id_acta: number) {
+    this.sharedService.setIdEvaluacionSpIps(eva_ips_id)
+    this.sharedService.setIdCriterioSpIps(cri_id)
+    //Obtener el nombre de la etapa a calificar
+    this.sharedService.setNameEtapaSpIps(etapa)
+    //Enviar ID de Acta
+    this.sharedService.setIdActaIps(id_acta)
     this.modalRef = this.modalService.show(modalTemplate,
       {
         class: 'modal-dialogue-centered modal-md',
@@ -85,6 +176,12 @@ export class EditarEvaluacionSpIpsComponent {
     this.router.navigate(['/sp/evaluaciones-ips']);
     localStorage.removeItem('boton-editar-evaluacion-sp-ips')
     localStorage.removeItem('id_evaluacion_ips')
+    localStorage.removeItem('nombre-pres-sp-ips')
+    localStorage.removeItem('id_acta')
+    this.sharedService.criteriosIpsAjusteGuardados = []
+    this.sharedService.criteriosIpsImplementacionGuardados = []
+    this.sharedService.criteriosIpsPlaneacionGuardados = []
+    this.sharedService.criteriosIpsVerificacionGuardados = []
   }
 
   inicializarMetodos() {

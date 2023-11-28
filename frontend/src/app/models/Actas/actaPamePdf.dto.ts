@@ -30,8 +30,10 @@ export class ActaPamecDto {
     act_nombre_prestador: string
     act_cargo_prestador: string
     act_firma_prestador: string
+    
 
     act_estado: string;
+    noFirmaActa: string;
 
     constructor(
         act_id: number,

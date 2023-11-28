@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TokenDto } from '../models/token.dto';
 import { SharedServiceService } from '../services/shared-service.service';
+import { AuditoriaService } from '../services/Auditoria/auditoria.service';
 
 
 
@@ -42,6 +43,7 @@ export class ListaUsuarioComponent implements OnInit {
     private usuarioService: UsuarioService,
     private tokenService: TokenService,
     private authService: AuthService,
+    private auditoriaService: AuditoriaService,
     private sharedService: SharedServiceService,
     private toastrService: ToastrService,
     private router: Router
@@ -97,7 +99,7 @@ export class ListaUsuarioComponent implements OnInit {
     });
   }
 
-  restablecer(usu_id: number, usu_nombre: string, usu_apellido: string): void{
+  restablecer(usu_id: number, usu_nombre: string, usu_apellido: string): void {
     const nombreUsuarioCompleto = usu_nombre + ' ' + usu_apellido
     localStorage.setItem('nombreUsuario', nombreUsuarioCompleto);
     this.authService.requestPassword(usu_id).subscribe()
@@ -106,4 +108,18 @@ export class ListaUsuarioComponent implements OnInit {
   crearPDF(): void {
     this.usuarioService.pdf()
   }
+
+  downloadBackup() {
+    this.auditoriaService.createBackup().subscribe((data: any) => {
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'backup.sql');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+  
+
 }

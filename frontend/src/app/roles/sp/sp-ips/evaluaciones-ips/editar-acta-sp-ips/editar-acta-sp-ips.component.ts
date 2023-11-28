@@ -44,6 +44,11 @@ export class EditarActaSpIpsComponent {
 
   id_evaluacion: number
 
+  //VARIABLES COMPROMISOS
+  act_compromiso_actividad: string
+  act_compromiso_fecha: string
+  act_compromiso_responsable: string
+
   constructor(
     private actaPdfService: ActapdfService,
     private activatedRoute: ActivatedRoute,
@@ -76,6 +81,11 @@ export class EditarActaSpIpsComponent {
     this.estadoActa();
   }
 
+  //DESTRUIR LAS VARIABLES AL SALIR DEL COMPONENTE EDITAR ACTA
+  ngOnDestroy() {
+    localStorage.removeItem('boton-editar-acta-sp-ips')
+  }
+
   //Metodo Abrir Modal
   openModalFirmPrestador(modalTemplate: TemplateRef<any>) {
     this.modalRef = this.modalService.show(modalTemplate,
@@ -100,31 +110,31 @@ export class EditarActaSpIpsComponent {
     );
   }
 
-    //METODO CONTROLAR SI EL PRESTADOR NO FIRMA EL ACTA POR ENDE EL ACOMPAÑANTE TAMPOCO
-    noFirmaPrestador() {
-      Swal.fire({
-        title: `No firma el acta.`,
-        text: `¿Estás seguro de que ${this.act_nombre_prestador} no desea firmar el Acta?`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Si',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.value) {
-          this.noFirmaActa = 'true'
-          //SOLICITUD NO FIRMA ACTA EN TRUE A LA ENTIDAD ACTA
-          this.actaSp.noFirmaActa = this.noFirmaActa
-        }
-        else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire(
-            'Cancelado',
-            '',
-            'error'
-          );
-        }
-      })
-    }
-  
+  //METODO CONTROLAR SI EL PRESTADOR NO FIRMA EL ACTA POR ENDE EL ACOMPAÑANTE TAMPOCO
+  noFirmaPrestador() {
+    Swal.fire({
+      title: `No firma el acta.`,
+      text: `¿Estás seguro de que ${this.act_nombre_prestador} no desea firmar el Acta?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        this.noFirmaActa = 'true'
+        //SOLICITUD NO FIRMA ACTA EN TRUE A LA ENTIDAD ACTA
+        this.actaSp.noFirmaActa = this.noFirmaActa
+      }
+      else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    })
+  }
+
 
   habilitarFechaFinal() {
     this.habilitarfechaFin = true;
@@ -220,7 +230,7 @@ export class EditarActaSpIpsComponent {
     }
   }
 
-  
+
 
 
   onUpdate(): void {

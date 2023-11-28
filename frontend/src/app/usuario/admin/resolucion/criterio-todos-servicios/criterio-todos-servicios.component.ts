@@ -19,20 +19,21 @@ export class CriterioTodosServiciosComponent {
   listaVacia: any = undefined;
 
 
-  public page: number;
+  public page: number = 1;
   searchText: any;
 
   constructor(
     private todosServices: TodosServiciosService,
     private criterioTodosService: CriterioTodosServiciosService
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.cargarEstandar();
     this.cargarTodosCriterios();
   }
 
-  cargarEstandar(): void{
+  //
+  cargarEstandar(): void {
     this.todosServices.lista().subscribe(
       data => {
         this.estandar_servicios = data;
@@ -44,8 +45,8 @@ export class CriterioTodosServiciosComponent {
     )
   }
 
-
-  cargarCriterios(): void{
+  //CARGAR CRITERIOS POR ESTANDAR
+  cargarCriterios(): void {
     var id = (document.getElementById('tod_id')) as HTMLSelectElement
     var sel = id.selectedIndex;
     var opt = id.options[sel]
@@ -61,28 +62,36 @@ export class CriterioTodosServiciosComponent {
       }
     )
     this.controlCriterio = true;
+    this.page = 1
   }
 
 
-  cargarTodosCriterios(){
+  cargarTodosCriterios() {
     this.criterioTodosService.listaAllCriterios().subscribe(
       data => {
         this.criterio_servicios = data;
         this.listaVacia = undefined
+
       },
       err => {
         this.listaVacia = err.error.message;
       }
     )
+
   }
 
-  llenarSpan(): void{
+  // Método para calcular el ID global
+  calcularIDGlobal(index: number, currentPage: number, itemsPerPage: number): number {
+    return index + 1 + (currentPage - 1) * itemsPerPage;
+  }
+
+  llenarSpan(): void {
     var id = (document.getElementById('tod_id')) as HTMLSelectElement
     var sel = id.selectedIndex;
     var opt = id.options[sel]
     var ValorEstandar = (<HTMLSelectElement><unknown>opt).textContent;
 
-    
+
     var cris_nombre_criterio = (document.getElementById('tod_nombre_estandar')) as HTMLSpanElement
     cris_nombre_criterio.textContent = ValorEstandar
 

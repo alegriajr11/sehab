@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
 })
 export class ModalEvaluacionesSpIpsComponent {
 
-  id_evaluacion: number
+  id_acta: number
   nombre_prestador: string
   nombre_funcionario: string
 
@@ -57,12 +57,14 @@ export class ModalEvaluacionesSpIpsComponent {
   ) { }
 
   ngOnInit(): void {
-    this.id_evaluacion = this.sharedService.id_evaluacion_sp_ips
+
+    this.id_acta = this.sharedService.id_acta_ips //ALMACENA EL ID DEL ACTA
     this.nombre_prestador = this.sharedService.pres_nombre
     this.nombre_funcionario = this.sharedService.funcionario_nombre
     this.cod_prestador = this.sharedService.pre_cod_habilitacion
     this.isAdmin = this.tokenService.isAdmin();
-    console.log(this.id_evaluacion)
+
+
     this.estadoActa();
     this.cargarEvaluacions();
   }
@@ -77,24 +79,26 @@ export class ModalEvaluacionesSpIpsComponent {
   }
 
   async generarPdfActa(): Promise<void> {
-    await this.generarPdfActaSpIps.ActaPdf(this.id_evaluacion);
+    await this.generarPdfActaSpIps.ActaPdf(this.id_acta);
     this.modalRef.hide()
   }
 
+  //HABILITAR LA RUTA PARA EDITAR EL ACTA
   async habilitarRutaEditar() {
     localStorage.setItem('boton-editar-acta-sp-ips', 'true')
   }
 
+  //OBTENER EL ESTADO DEL ACTA
   async estadoActa() {
     // Obtener el estado actual del acta
-    const data = await this.actaPdfService.oneActaSpIps(this.id_evaluacion).toPromise();
+    const data = await this.actaPdfService.oneActaSpIps(this.id_acta).toPromise();
     this.estado_acta = data.act_estado;
   }
 
 
   //LISTAR EVALUACIONES QUE LE PERTENECEN AL PRESTADOR A EVALUAR
   cargarEvaluacions() {
-    this.evaluacionIpsService.listaEvaActId(this.id_evaluacion).subscribe(
+    this.evaluacionIpsService.listaEvaActId(this.id_acta).subscribe(
       data => {
         this.evaluacionesIps = data
         this.listaVacia = undefined;
@@ -105,10 +109,11 @@ export class ModalEvaluacionesSpIpsComponent {
     );
   }
 
-  //ENVIAR ID DE EVALUACIÓN IPS
+  //ENVIAR ID DE EVALUACIÓN IPS Y ACTA
   enviarIdEvaluacion(id_eva: number) {
     localStorage.setItem('boton-editar-evaluacion-sp-ips', 'true');
     localStorage.setItem('id_evaluacion_ips', id_eva.toString());
+    localStorage.setItem('id_acta', this.id_acta.toString())
     window.scrollTo(0, 0);
   }
 
@@ -117,7 +122,7 @@ export class ModalEvaluacionesSpIpsComponent {
     const idEva = document.getElementById('evips_id') as HTMLSelectElement;
     const selectedValueEva = idEva.value;
     this.selectedEvaluacion = parseInt(selectedValueEva, 10)
-    localStorage.setItem('nombre-pres-sp-ips', `${ this.nombre_prestador}`)
+    localStorage.setItem('nombre-pres-sp-ips', `${this.nombre_prestador}`)
   }
 
   //SOLICITUD PARA CERRAR EL ACTA
@@ -137,7 +142,7 @@ export class ModalEvaluacionesSpIpsComponent {
 
       if (result.isConfirmed) {
         // Obtener el estado actualizado del acta
-        const data = await this.actaPdfService.oneActaSpIps(this.id_evaluacion).toPromise();
+        const data = await this.actaPdfService.oneActaSpIps(this.id_acta).toPromise();
         if (data.noFirmaActa === 'true') {
           if (!data.act_firma_funcionario) {
             Swal.fire(
@@ -145,18 +150,19 @@ export class ModalEvaluacionesSpIpsComponent {
               `Para proceder, necesitamos que ${data.act_nombre_funcionario} firme el acta.`,
               'error'
             );
-          }
+          } else {
+            //SOLICITUD FIRMAR EL ACTA SI YA ESTA FIRMADA POR EL FUNCIONARIO Y EL PRESTADOR NO FIRMA
+            await this.actaPdfService.cerrarActaSpIps(this.id_acta, tokenDto).toPromise();
+            this.estado_acta = data.act_estado;
+            // Mostrar notificación Acta cerrada
+            this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
+              timeOut: 3000,
+              positionClass: 'toast-top-center',
+            });
+            this.modalRef.hide();
+            localStorage.setItem('boton-acta-sp-ips', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
 
-          //SOLICITUD FIRMAR EL ACTA SI YA ESTA FIRMADA POR EL FUNCIONARIO Y EL PRESTADOR NO FIRMA
-          await this.actaPdfService.cerrarActaSpIps(this.id_evaluacion, tokenDto).toPromise();
-          this.estado_acta = data.act_estado;
-          // Mostrar notificación Acta cerrada
-          this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
-            timeOut: 3000,
-            positionClass: 'toast-top-center',
-          });
-          this.modalRef.hide();
-          localStorage.setItem('boton-acta-sp-ips', 'false'); //RESTRINGIR LA RUTA - EVALUACIÓN_SP_INDEPENDIENTES
+          }
 
         }
         else if (!data.act_firma_prestador || !data.act_firma_funcionario || !data.act_firma_prestador_acompanante) {
@@ -221,7 +227,7 @@ export class ModalEvaluacionesSpIpsComponent {
         }
         //CERRAR EL ACTA SI ESTÁ FIRMADA
         else {
-          await this.actaPdfService.cerrarActaSpIps(this.id_evaluacion, tokenDto).toPromise();
+          await this.actaPdfService.cerrarActaSpIps(this.id_acta, tokenDto).toPromise();
           this.estado_acta = data.act_estado;
           // Mostrar notificación Acta cerrada
           this.toastrService.success('El Acta ha sido Cerrada', 'Éxito', {
@@ -247,4 +253,13 @@ export class ModalEvaluacionesSpIpsComponent {
       });
     }
   }
+
+
+  //DESCARGAR EVALUACION POR ID EVALUACION Y ID ACTA
+  descargarEvaluacionIps() {
+    this.evaluacionIpsService.descargarEvaluacionPdfIps(this.selectedEvaluacion, this.id_acta, this.cod_prestador)
+    this.router.navigate(['/sp/evaluaciones-ips']);
+    this.modalRef.hide()
+  }
+
 }

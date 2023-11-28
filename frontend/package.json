@@ -9,7 +9,6 @@
     "heroku-postbuild": "ng build --configuration=production --project frontend",
     "compodoc": "npx compodoc -p tsconfig.doc.json"
   },
-
   "private": true,
   "dependencies": {
     "@angular/animations": "^14.2.1",

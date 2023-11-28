@@ -57,6 +57,7 @@ export const environment = {
 
   //SEGURIDAD DEL PACIENTE - IPS
   evaluacionipsURL: 'http://localhost:8080/evaluacionips/',
+  generarEvaluacionUrl: 'http://localhost:8080/sp-ips/',
   itemipsURL: 'http://localhost:8080/itemips/',
   planeacionURL: 'http://localhost:8080/planeacion/',
   planeacionOneURL: 'http://localhost:8080/planeacion/criterio/',
@@ -66,6 +67,12 @@ export const environment = {
   ajusteDetailURL: 'http://localhost:8080/criterioajuste/ajuste/',
   verificacionURL: 'http://localhost:8080/criterioverif/',
   verificacionOneURL: 'http://localhost:8080/criterioverif/verificacion/',
+
+  //URL DE CALIFICACION POR ETAPA
+  calificacionIpsAjuste: 'http://localhost:8080/calificacionips-ajuste/',
+  calificacionIpsImplementacion: 'http://localhost:8080/calificacionips-implementacion/',
+  calificacionIpsPlaneacion: 'http://localhost:8080/calificacionips-planeacion/',
+  calificacionIpsVerificacion: 'http://localhost:8080/calificacionips-verificacion/',
 
   //SP-PDF
   actaSpIps_pdf_URL: 'http://localhost:8080/sp-ips/',
@@ -82,7 +89,10 @@ export const environment = {
 
 
   //CUMPLIMIENTO DE REQUISITOS DE LAS CONDICIONES DE HABILITACIÓN 
-  condiciones_habilitacion: 'http://localhost:8080/requisitos-condiciones-habilitacion',
+  condiciones_habilitacion: 'http://localhost:8080/requisitos-condiciones-habilitacion/',
+
+  //SERVICIOS VERIFICADOS - PRESTADOR RESOLUCION 3100
+  servicios_verificados: 'http://localhost:8080/servicios-verificados/',
 
 
   //PRESTADOR
@@ -92,7 +102,10 @@ export const environment = {
 
 
   //AUDITORIA
-  auditoriaUrl: 'http://localhost:8080/auditoria-registro/'
+  auditoriaUrl: 'http://localhost:8080/auditoria-registro/',
+
+  //BACKUP BASE DE DATOS
+  backupUrl: 'http://localhost:8080/'
 };
 
 /*

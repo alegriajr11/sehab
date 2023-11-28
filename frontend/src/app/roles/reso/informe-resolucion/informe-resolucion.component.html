@@ -8,7 +8,7 @@
             </button>
         </div>
         <div class="col-md-8">
-            <h1 class="text-center">Informe Visita - Resolución 3100</h1>
+            <h1 class="text-center">Informes Visitas - Resolución 3100</h1>
         </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-10">
-                        <h2><b>Visitas Pendientes de Cierre</b></h2>
+                        <h2><b>Visitas Pendientes - Completadas</b></h2>
                     </div>
                 </div>
             </div>
@@ -49,15 +49,16 @@
                     <select name="select-anio" id="select-anio" class="form-select form-control">
                         <option hidden selected>Tipo Visita...</option>
                         <option value=""></option>
-						<option value="">Visita Verificación</option>
-						<option value="">Visita IVC</option>
+                        <option value="">Visita Previa</option>
+                        <option value="">Visita Certificación</option>
+                        <option value="">Visita Reactivación</option>
+                        <option value="">Visita IVC</option>
                     </select>
                 </div>
 
                 <div class="col-md-5">
                     <label for="">Nombre de Prestador o NIT:</label>
-                    <input class="form-control" type="text" name="search"
-                        placeholder="Buscar Prestador">
+                    <input class="form-control" type="text" name="search" placeholder="Buscar Prestador">
                 </div>
 
             </div>
@@ -71,20 +72,26 @@
                         <th scope="col">TIPO DE VISITA</th>
                         <th scope="col">MUNICIPIO</th>
                         <th scope="col">FECHA</th>
+                        <th scope="col">ESTADO</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let informe of informes | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page}">
-                        <td class="text-center">{{informe.inf_id}}</td>
-                        <td>{{informe.inf_act_id}}</td>
-                        <td>{{informe.inf_prestador}}</td>
-                        <td>{{informe.tipo_visita}}</td>
-                        <td class="text-center">{{informe.inf_municipio}}</td>
-                        <td>{{informe.inf_fecha | date: 'dd/MM/yyyy' }}</td>
+                    <tr
+                        *ngFor="let actaVerificacion of actasVerificacion | filter:searchText | paginate: { itemsPerPage: 10, currentPage: page}">
+                        <td class="text-center">{{actaVerificacion.act_id}}</td>
+                        <td>{{actaVerificacion.act_prestador}}</td>
+                        <td class="underlined" *ngIf="actaVerificacion.act_visita_previa === 'X' ">Visita Previa</td>
+                        <td class="underlined" *ngIf="actaVerificacion.act_visita_seguimiento === 'X' ">Visita Certificación</td>
+                        <td class="underlined" *ngIf="actaVerificacion.act_visita_reactivacion === 'X' ">Visita Reactivación</td>
+                        <td class="text-center">{{actaVerificacion.act_municipio}}</td>
+                        <td>{{actaVerificacion.act_creado | date: 'dd/MM/yyyy' }}</td>
+                        <td *ngIf="actaVerificacion.act_estado === '1'" style="text-align: center;"><span
+                                class="fas fa-door-open" style="color: rgb(0, 128, 0);"></span></td>
+                        <td *ngIf="actaVerificacion.act_estado === '0'" style="text-align: center;"><span
+                                class="fas fa-door-closed" style="color: rgb(204, 0, 0);"></span></td>
                         <td>
-                            <button class="btn btn-outline-dark"
-                                (click)="openModal(modalTemplate)">
+                            <button class="btn btn-outline-dark" (click)="openModal(modalTemplate)">
                                 <span class="fas fa-clipboard-check"></span>
                             </button>
 
@@ -97,7 +104,7 @@
             <div class="container" *ngIf="listaVacia">
                 <div class="p-3 mb-2 bg-dark text-white text-center">
                     <h2>{{ listaVacia }}</h2>
-                    
+
                 </div>
             </div>
 

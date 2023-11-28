@@ -46,6 +46,7 @@ export class ActaSpProComponent implements OnInit {
 
   listaVacia: any = undefined;
 
+  //ALAMACENAR EL ID PK ACTA
   id_acta: number
 
   //VARIABLES PARA TRANSPORTAR EL DTO
@@ -528,7 +529,7 @@ export class ActaSpProComponent implements OnInit {
 
       mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA
 
-    //   //MOSTRAR MENSAJE POR MEDIO DE TOASTR_SERVICE
+    //MOSTRAR MENSAJE POR MEDIO DE TOASTR_SERVICE
       this.toastrService.error(mensajeError, 'Error', {
         timeOut: 3000,
         positionClass: 'toast-top-center',

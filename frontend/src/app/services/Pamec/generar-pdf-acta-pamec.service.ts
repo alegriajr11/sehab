@@ -60,7 +60,6 @@ export class GenerarPdfActaPamecService {
     this.actapdfService.oneActaPamec(id_acta).subscribe(
       async data => {
         this.actaPamecPdf = data;
-        console.log(this.actaPamecPdf)
         // Asignar los datos del actaPdf a las propiedades correspondientes
         this.act_id = this.actaPamecPdf.act_id
         this.act_tipo_visita = this.actaPamecPdf.act_tipo_visita

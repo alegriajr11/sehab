@@ -29,6 +29,10 @@ export class ActaSpIpsComponent implements OnInit {
 
   @ViewChild('richTextEditor', { static: true }) richTextEditor: ElementRef;
 
+  private imagenSeleccionada: File | null = null;
+
+  verificarImagenSeleccionada: boolean = false
+
   prestador: PrestadorDto[];
   usuario: Usuario[];
   municipio: Municipio[];
@@ -49,13 +53,6 @@ export class ActaSpIpsComponent implements OnInit {
   listaVacia: any = undefined;
 
   id_acta: number
-
-  //ALMACENAR LAS FECHAS DEL FORMULARIO
-  fecha_inicial: string
-  fecha_final: string
-  fecha_orden: string
-  fecha_oficio: string
-  fecha_envio_oficio: string
 
   //VARIABLES PARA TRANSPORTAR EL DTO
   act_id: number;
@@ -127,7 +124,6 @@ export class ActaSpIpsComponent implements OnInit {
   showEvaluacionMessage: boolean = false;
 
 
-
   constructor(
     private modalService: BsModalService,
     private prestadorService: PrestadorService,
@@ -147,6 +143,8 @@ export class ActaSpIpsComponent implements OnInit {
     this.inicializarDatos();
   }
 
+
+
   inicializarDatos() {
     this.cargarMunicipio();
     this.cargarUsuario();
@@ -157,7 +155,7 @@ export class ActaSpIpsComponent implements OnInit {
 
   habilitarFechaFinal() {
     this.habilitarfechaFin = true;
-    this.fecha_orden = this.fecha_inicial
+    this.act_fecha_orden = this.act_fecha_inicial
   }
 
 
@@ -185,6 +183,11 @@ export class ActaSpIpsComponent implements OnInit {
         if (labelElement) {
           labelElement.textContent = imagen.name;
         }
+
+        // Almacenar la imagen seleccionada
+        this.imagenSeleccionada = imagen;
+        // Validar verificarImagenSeleccionada a true
+        this.verificarImagenSeleccionada = true
       } else {
         // Mostrar mensaje de notificación
         this.imagenCargada = false;
@@ -296,17 +299,6 @@ export class ActaSpIpsComponent implements OnInit {
     )
   }
 
-  convertirFecha(fecha: string) {
-    // Convierte la cadena de fecha en un objeto Date, ajustando la zona horaria a UTC
-    const fechaObj = new Date(fecha + "T00:00:00Z");
-    // Obtiene el día, mes y año de la fecha
-    const dia = fechaObj.getUTCDate();
-    const mes = fechaObj.getUTCMonth() + 1; // Los meses son 0-indexados, por lo que sumamos 1
-    const año = fechaObj.getUTCFullYear();
-    // Formatea la fecha en DD/MM/AAAA
-    const fechaEnFormatoDeseado = `${dia.toString().padStart(2, "0")}/${mes.toString().padStart(2, "0")}/${año}`;
-    return fechaEnFormatoDeseado;
-  }
 
 
   //VERIFICAR QUE SOLO SE SELECCIONE UN CHECKBOX
@@ -547,12 +539,6 @@ export class ActaSpIpsComponent implements OnInit {
     await this.obtenerNombreSelects();
 
 
-    //CONVERTIR FECHAS A FORMATO DD/MM/AAAA
-    const fechaInicial = this.convertirFecha(this.fecha_inicial)
-    const fechaFinal = this.convertirFecha(this.fecha_final)
-    const fechaOrden = this.convertirFecha(this.fecha_orden)
-    const fechaOficio = this.convertirFecha(this.fecha_oficio)
-    const fechaEnvioOficio = this.convertirFecha(this.fecha_envio_oficio)
 
 
     //CONVERTIR EL FORMATO DE LA HORA A 12H
@@ -573,13 +559,12 @@ export class ActaSpIpsComponent implements OnInit {
     this.act_firma_prestador = this.firma
     //ID DEL FUNCIONARIO PARA CONTROLAR LA FIRMA
     this.act_id_funcionario = parseInt(this.act_funcionarioId, 10);
-    //ASIIGNAR LAS FECHAS FORMATEADAS
-    this.act_fecha_inicial = fechaInicial
-    this.act_fecha_final = fechaFinal
-    this.act_fecha_orden = fechaOrden
-    this.act_fecha_oficio = fechaOficio
-    this.act_fecha_envio_oficio = fechaEnvioOficio
-
+    //ASIIGNAR LAS FECHAS
+    this.act_fecha_inicial
+    this.act_fecha_final
+    this.act_fecha_orden
+    this.act_fecha_oficio
+    this.act_fecha_envio_oficio
     //REGISTRO DEL FORMULARIO A TABLA TEMPORAL BD
     this.actaPdf = new ActaSpPdfDto(
       this.act_id,
@@ -660,7 +645,7 @@ export class ActaSpIpsComponent implements OnInit {
       let mensajeError = 'Por favor, complete los siguientes campos:';
 
       console.log(this.act_fecha_oficio)
-      console.log(this.fecha_envio_oficio)
+      console.log(this.act_fecha_envio_oficio)
 
       if (!this.act_visita_inicial && !this.act_visita_seguimiento) {
         mensajeError += ' Tipo de Visita,';
@@ -729,12 +714,15 @@ export class ActaSpIpsComponent implements OnInit {
       }
 
       if (!this.act_fecha_envio_oficio) {
-
         mensajeError += ' Fecha de envio del Oficio,';
       }
 
       if (Object.keys(this.evaluacionesSeleccionadas).length === 0) {
         mensajeError += ' Selecciona al menos una evaluación,';
+      }
+
+      if (!this.verificarImagenSeleccionada) {
+        mensajeError += ' Captura de servicios del REPS,';
       }
 
       mensajeError = mensajeError.slice(0, -1); // VARIABLE PARA ELIMINAR LA ÚLTIMA COMA
@@ -760,7 +748,16 @@ export class ActaSpIpsComponent implements OnInit {
                   this.id_acta = ultimaActa.id;
 
                   localStorage.setItem('acta_id', this.id_acta.toString())//ENVIAR ID DEL ACTA EN EL LOCALSTORAGE
-                  
+
+                  this.authService.registroImagen(this.imagenSeleccionada, this.id_acta.toString()).subscribe(
+                    response => {
+                      console.log('Imagen cargada con éxito', response);
+                    },
+                    error => {
+                      console.error('Error al cargar la imagen', error);
+                    }
+                  );
+
                   Swal.fire({
                     title: '¿Desea descargar el acta?',
                     showCancelButton: true,

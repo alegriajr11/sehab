@@ -45,7 +45,7 @@
 
 			<div class="col-md-3" *ngIf="estado_acta === '1'">
 				<button class="btn btn-dark esp btn-circle btn-xl" title="Editar Acta"
-					routerLink="/sp-ips/acta/editar/{{id_evaluacion}}" (click)="modalRef.hide(); habilitarRutaEditar()">
+					routerLink="/sp-ips/acta/editar/{{id_acta}}" (click)="modalRef.hide(); habilitarRutaEditar()">
 					<i class='fa fa-edit fa-lg'></i>
 				</button>
 			</div>
@@ -82,7 +82,7 @@
 			<!-- Segunda Columna -->
 			<div class="col-3 mx-auto">
 				<button id="boton-evaluacion-sic" class="btn btn-dark esp btn-circle btn-xl"
-					title="Descargar Evaluación" *ngIf="eva_ips_id">
+					title="Descargar Evaluación" *ngIf="eva_ips_id" (click)="descargarEvaluacionIps()">
 					<i class='fas fa-file-download fa-lg'></i>
 				</button>
 			</div>

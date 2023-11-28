@@ -6,6 +6,9 @@ import { SharedServiceService } from '../shared-service.service';
 import { UsuarioService } from '../usuario.service';
 import { EvaluacionipsService } from './evaluacionips.service';
 import { ActaSpPdfDto } from 'src/app/models/Actas/actaSpPdf.dto';
+import { ImagenServicesService } from './imagen-services.service';
+import html2canvas from 'html2canvas';
+
 
 @Injectable({
   providedIn: 'root',
@@ -52,13 +55,25 @@ export class GenerarPdfActaIpsService {
   act_fecha_oficio: string
   act_fecha_envio_oficio: string
 
+  //VARIABLES COMPROMISOS
+  act_compromiso_actividad: string
+  act_compromiso_fecha: string
+  act_compromiso_responsable: string
+
   act_estado: string
+  //VARIABLES NO FIRMA ACTA
+  noFirmaActa: string
+  prestadorNoFirma: string = ''
+
+  //CAPTURA DE IMAGEN
+  act_captura_imagen: string
 
   constructor(
     private actapdfService: ActapdfService,
     private usuarioService: UsuarioService,
     private sharedService: SharedServiceService,
-    private evaluacionipsService: EvaluacionipsService
+    private evaluacionipsService: EvaluacionipsService,
+    private imagenService: ImagenServicesService
   ) { }
 
 
@@ -84,6 +99,46 @@ export class GenerarPdfActaIpsService {
     doc.addImage(marca_agua, 'PNG', 80, 168, 140, 115);
   }
 
+  convertirFecha(fecha: string) {
+    // Convierte la cadena de fecha en un objeto Date, ajustando la zona horaria a UTC
+    const fechaObj = new Date(fecha + "T00:00:00Z");
+    // Obtiene el día, mes y año de la fecha
+    const dia = fechaObj.getUTCDate();
+    const mes = fechaObj.getUTCMonth() + 1; // Los meses son 0-indexados, por lo que sumamos 1
+    const año = fechaObj.getUTCFullYear();
+    // Formatea la fecha en DD/MM/AAAA
+    const fechaEnFormatoDeseado = `${dia.toString().padStart(2, "0")}/${mes.toString().padStart(2, "0")}/${año}`;
+    return fechaEnFormatoDeseado;
+  }
+
+  async solicitarCaptura(doc: jsPDF, width: number) {
+    //SEPARAR EN PARTES LA RUTA
+    const partesRuta = this.act_captura_imagen.split('\\');
+
+    // Obtener la carpeta y el nombre del archivo
+    const folderName = partesRuta[partesRuta.length - 2]; // El segundo desde el final es el nombre de la carpeta
+    const imageName = partesRuta[partesRuta.length - 1]; // El último elemento es el nombre del archivo
+
+    // Obtener la imagen desde el servicio
+    const blobImage = await this.imagenService.getImage(folderName, imageName).toPromise();
+
+    // Crear una promesa para leer el contenido del blob como base64
+    const base64Promise = new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blobImage);
+    });
+
+    // Esperar a que se complete la conversión a base64
+    const base64Image = await base64Promise;
+    const imgString = base64Image.toString()
+
+    const imagen = this.getFileFromBase64(imgString)
+    doc.addImage(await imagen, 25.5, width, 159, 98)
+  }
+
+
   async InformacionPrestador(doc: jsPDF): Promise<void> {
     doc.setFontSize(9);
     doc.setTextColor(128, 128, 128);
@@ -98,6 +153,11 @@ export class GenerarPdfActaIpsService {
     doc.text('INSTITUCIONES PRESTADORAS DE SERVICIOS DE SALUD (IPS)', 59, 45);
 
     // Crear la inforlacion prestador en la primera página
+    //FORMALIZAR LAS FECHAS
+    const fechaInicial = this.convertirFecha(this.act_fecha_inicial)
+    const fechaFinal = this.convertirFecha(this.act_fecha_final)
+
+
     //INCIAL DEL ACTA
     autoTable(doc, {
       margin: { top: 52 },
@@ -111,8 +171,8 @@ export class GenerarPdfActaIpsService {
           acta: this.act_id,
           inicial: this.act_visita_inicial,
           segumiento: this.act_visita_seguimiento,
-          feinicio: this.act_fecha_inicial,
-          fefinal: this.act_fecha_final,
+          feinicio: fechaInicial,
+          fefinal: fechaFinal,
         },
       ],
       columns: [
@@ -364,6 +424,11 @@ export class GenerarPdfActaIpsService {
       tipo_visita = 'de Seguimiento'
     }
 
+    //FORMALIZAR LAS FECHAS DEL ORDEN DEL DÍA
+    const fechaOrden = this.convertirFecha(this.act_fecha_orden)
+    const fechaOficio = this.convertirFecha(this.act_fecha_oficio)
+    const fechaEnvioOficio = this.convertirFecha(this.act_fecha_envio_oficio)
+
     // 1. Presentación ante gerente y/o su delegado:
     autoTable(doc, {
       startY: 90,
@@ -371,9 +436,9 @@ export class GenerarPdfActaIpsService {
       body: [
         {
           objeto:
-            `Siendo las ${this.act_hora_orden} del día ${this.act_fecha_orden}, en las instalaciones ubicadas en ${this.act_direccion} se realiza ` +
+            `Siendo las ${this.act_hora_orden} del día ${fechaOrden}, en las instalaciones ubicadas en ${this.act_direccion} se realiza ` +
             `visita ${tipo_visita} al programa de seguridad del paciente a ${this.act_prestador} con Código de habilitación ${this.act_cod_prestador} ` +
-            `acorde al oficio Número. ${this.act_num_oficio} emitido el ${this.act_fecha_oficio} y enviado vía correo electrónico el ${this.act_fecha_envio_oficio}. ` +
+            `acorde al oficio Número. ${this.act_num_oficio} emitido el ${fechaOficio} y enviado vía correo electrónico el ${fechaEnvioOficio}. ` +
             `Se procede con la presentación por parte del Profesional de Apoyo ${usuarioAsignado} de la oficina de Aseguramiento y Prestación de Servicios - Sistema Obligatorio de Garantía de la Calidad en Salud - ` +
             `SOGC a quien reciben en la visita, ${this.act_nombre_prestador} y ${this.act_nombre_prestador_acompanante}. `
 
@@ -459,8 +524,9 @@ export class GenerarPdfActaIpsService {
       doc.addPage();
       // Aplicar las mismas configuraciones necesarias Header
       this.addHeader(doc);
-      const capturaReps = 'assets/img/captura.png';
-      doc.addImage(capturaReps, 'PNG', 25.5, 32, 159, 98);
+      const widthImage = 32
+      await this.solicitarCaptura(doc, widthImage)
+
       //VARIABLE PARA INCICIO DE ORDENES POSTERIORES
       let top_orden_pos = 135
       await this.ordenPoseterior(doc, top_orden_pos)
@@ -471,15 +537,14 @@ export class GenerarPdfActaIpsService {
       this.addHeader(doc);
       let top_table = 35;
       await this.ordenTres(doc, top_table);
-      // Agregar Captura
-      const capturaReps = 'assets/img/captura.png';
-      doc.addImage(capturaReps, 'PNG', 25.5, 58, 159, 98);
+
+      const widthImage = 58
+      await this.solicitarCaptura(doc, widthImage)
+
       //VARIABLE PARA INCICIO DE ORDENES POSTERIORES
       let top_orden_pos = 160
       await this.ordenPoseterior(doc, top_orden_pos)
     }
-
-
   }
 
   //ORDEN DE LA REUNIÓN - DOS
@@ -630,42 +695,148 @@ export class GenerarPdfActaIpsService {
       },
     });
 
-    doc.text('COMPROMISOS', 93, 219.5)
-    autoTable(doc, {
-      margin: { top: 52 },
-      columnStyles: {
-        acta: { halign: 'left' },
-        fecha: { halign: 'center' },
-        responsable: { halign: 'center' },
-      },
-      body: [
-        {
 
+    //TRANSFORMAR LA FECHA DEL COMPROMISO.
+    const fechaCompromiso = this.convertirFecha(this.act_compromiso_fecha)
+
+    //TABLA COMPROMISOS
+    //SI LA VARIABLE act_compromiso_actividad ES MAYOR A 170 CARACTERES PASAR LA TABLA A OTRA HOJA
+    if (this.act_compromiso_actividad && this.act_compromiso_actividad.length > 170) {
+      if (this.act_compromiso_actividad && fechaCompromiso && this.act_compromiso_responsable) {
+        //AGREGAR PAGINA SI SUPERA LOS 170 CARACTERES
+        doc.addPage();
+        // Aplicar las mismas configuraciones necesarias Header
+        this.addHeader(doc);
+        let top_table = 35;
+        autoTable(doc, {
+          margin: { top: top_table },
+          headStyles: {
+            fillColor: [220, 220, 220],
+            textColor: [0, 0, 0],
+            halign: 'center'
+          },
+          columns: [
+            { header: 'COMPROMISOS', dataKey: 'mensaje' },
+          ],
+          tableWidth: 'auto',
+        })
+
+        autoTable(doc, {
+          margin: { top: 52 },
+          columnStyles: {
+            acta: { halign: 'left' },
+            fecha: { halign: 'center' },
+            responsable: { halign: 'center' },
+          },
+          body: [
+            {
+              actividad: this.act_compromiso_actividad,
+              fecha: fechaCompromiso,
+              responsable: this.act_compromiso_responsable
+            },
+          ],
+          columns: [
+            { header: 'Actividad', dataKey: 'actividad' },
+            { header: 'Fecha', dataKey: 'fecha' },
+            { header: 'Responsables', dataKey: 'responsable' },
+          ],
+          headStyles: {
+            fillColor: [200, 200, 200],
+            textColor: [0, 0, 0],
+          },
+          bodyStyles: {
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0],
+          },
+          styles: {
+            fontSize: 10,
+          },
+        });
+        //AGREGAR TABLA FIRMAS CON INCIO EN 80 SI SUPERA LOS 175 CARACTERES
+        const top_firmas = 80
+        const posicionYFirmaPrestador = 103
+        const posicionYFirmaAcompanante = 116
+        const posicionYFirmaFuncionario = 153
+        await this.firmasActa(doc, top_firmas, posicionYFirmaPrestador, posicionYFirmaAcompanante, posicionYFirmaFuncionario)
+      }
+
+    } else if (this.act_compromiso_actividad && fechaCompromiso && this.act_compromiso_responsable) {
+      autoTable(doc, {
+        margin: { top: 52 },
+        headStyles: {
+          fillColor: [220, 220, 220],
+          textColor: [0, 0, 0],
+          halign: 'center'
         },
-      ],
-      columns: [
-        { header: 'Actividad', dataKey: 'actividad' },
-        { header: 'Fecha', dataKey: 'fecha' },
-        { header: 'Responsables', dataKey: 'responsable' },
-      ],
-      headStyles: {
-        fillColor: [200, 200, 200],
-        textColor: [0, 0, 0],
-      },
-      bodyStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0],
-      },
-      styles: {
-        fontSize: 10,
-      },
-    });
+        columns: [
+          { header: 'COMPROMISOS', dataKey: 'mensaje' },
+        ],
+        tableWidth: 'auto',
+      })
+
+      autoTable(doc, {
+        margin: { top: 52 },
+        columnStyles: {
+          acta: { halign: 'left' },
+          fecha: { halign: 'center' },
+          responsable: { halign: 'center' },
+        },
+        body: [
+          {
+            actividad: this.act_compromiso_actividad,
+            fecha: fechaCompromiso,
+            responsable: this.act_compromiso_responsable
+          },
+        ],
+        columns: [
+          { header: 'Actividad', dataKey: 'actividad' },
+          { header: 'Fecha', dataKey: 'fecha' },
+          { header: 'Responsables', dataKey: 'responsable' },
+        ],
+        headStyles: {
+          fillColor: [200, 200, 200],
+          textColor: [0, 0, 0],
+        },
+        bodyStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+        },
+        styles: {
+          fontSize: 10,
+        },
+      });
+      //AGREGAR PAGINA PARA LAS FIRMAS SI NO SUPERA LOS 175 CARACTERES
+      doc.addPage();
+      // Aplicar las mismas configuraciones necesarias Header
+      this.addHeader(doc);
+      const top_firmas = 35
+      //VARIABLES PARA POSICIONAR FIRMAS DEL METODO (FIRMAS ACTA)
+      const posicionYFirmaPrestador = 57
+      const posicionYFirmaAcompanante = 72
+      const posicionYFirmaFuncionario = 108
+      await this.firmasActa(doc, top_firmas, posicionYFirmaPrestador, posicionYFirmaAcompanante, posicionYFirmaFuncionario)
+
+    } else {
+      //AGREGAR LA TABLA FIRMAS POR SI NO HAY NINGUNA TABLA DE COMPROMISOS
+      //AGREGAR PAGINA PARA LAS FIRMAS SI NO SUPERA LOS 175 CARACTERES
+      doc.addPage();
+      // Aplicar las mismas configuraciones necesarias Header
+      this.addHeader(doc);
+      const top_firmas = 35
+      //VARIABLES PARA POSICIONAR FIRMAS DEL METODO (FIRMAS ACTA)
+      const posicionYFirmaPrestador = 57
+      const posicionYFirmaAcompanante = 72
+      const posicionYFirmaFuncionario = 108
+      await this.firmasActa(doc, top_firmas, posicionYFirmaPrestador, posicionYFirmaAcompanante, posicionYFirmaFuncionario)
+    }
+
   }
 
-  firmasActa(doc: jsPDF) {
+  firmasActa(doc: jsPDF, top: number, posicionYFirmaPrestador: number,
+    posicionYFirmaAcompanante: number, posicionYFirmaFuncionario: number) {
     //MENSAJE FIRMAS POR PRESTADOR
     autoTable(doc, {
-      margin: { top: 35 },
+      startY: top,
       headStyles: {
         fillColor: [220, 220, 220],
         textColor: [0, 0, 0],
@@ -677,15 +848,20 @@ export class GenerarPdfActaIpsService {
       tableWidth: 'auto',
     })
 
+    if (this.noFirmaActa === 'true') {
+      this.prestadorNoFirma = 'Declara no firmar el acta.'
+    } else {
+      this.prestadorNoFirma = ''
+    }
     //NOMBRE USUARIO1, CARGO USUARIO1 Y FIRMA1
     autoTable(doc, {
       margin: { top: 35 },
       columnStyles: { sede: { halign: 'left' } },
 
       body: [
-        { nombre: this.act_nombre_prestador, cargo: this.act_cargo_prestador, firma: '' },
+        { nombre: this.act_nombre_prestador, cargo: this.act_cargo_prestador, firma: this.prestadorNoFirma },
         { nombre: '', cargo: '', firma: '' },
-        { nombre: this.act_nombre_prestador_acompanante, cargo: this.act_cargo_prestador_acompanante, firma: '' },
+        { nombre: this.act_nombre_prestador_acompanante, cargo: this.act_cargo_prestador_acompanante, firma: this.prestadorNoFirma },
       ],
       columns: [
         { header: 'Nombre:', dataKey: 'nombre' },
@@ -739,32 +915,39 @@ export class GenerarPdfActaIpsService {
         fillColor: [255, 255, 255],
         textColor: [0, 0, 0]
       },
+      bodyStyles: {
+        fillColor: [248, 248, 248],
+        textColor: [0, 0, 0],
+      },
       styles: {
         fontSize: 10
       }
     })
 
     //FIRMA PRESTADOR
-    if (this.act_firma_prestador) {
-      // Convertir la firma prestador de base64 a Uint8Array
-      const firmaDataPrestador = atob(this.act_firma_prestador.split(',')[1]);
-      const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestador.length);
-      for (let i = 0; i < firmaDataPrestador.length; i++) {
-        firmaUint8ArrayPrestador[i] = firmaDataPrestador.charCodeAt(i);
+    if (this.noFirmaActa === 'false') {
+      if (this.act_firma_prestador) {
+        // Convertir la firma prestador de base64 a Uint8Array
+        const firmaDataPrestador = atob(this.act_firma_prestador.split(',')[1]);
+        const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestador.length);
+        for (let i = 0; i < firmaDataPrestador.length; i++) {
+          firmaUint8ArrayPrestador[i] = firmaDataPrestador.charCodeAt(i);
+        }
+        doc.addImage(firmaUint8ArrayPrestador, 'PNG', 175, posicionYFirmaPrestador, 25, 9.25)
       }
-      doc.addImage(firmaUint8ArrayPrestador, 'PNG', 175, 57, 25, 9.25)
+
+      //FIRMA PRESTADOR ACOMPAÑANTE
+      if (this.act_firma_prestador_acompanante) {
+        // Convertir la firma prestador de base64 a Uint8Array
+        const firmaDataPrestadorAcompanante = atob(this.act_firma_prestador_acompanante.split(',')[1]);
+        const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestadorAcompanante.length);
+        for (let i = 0; i < firmaDataPrestadorAcompanante.length; i++) {
+          firmaUint8ArrayPrestador[i] = firmaDataPrestadorAcompanante.charCodeAt(i);
+        }
+        doc.addImage(firmaUint8ArrayPrestador, 'PNG', 175, posicionYFirmaAcompanante, 25, 9.25)
+      }
     }
 
-    //FIRMA PRESTADOR ACOMPAÑANTE
-    if (this.act_firma_prestador_acompanante) {
-      // Convertir la firma prestador de base64 a Uint8Array
-      const firmaDataPrestadorAcompanante = atob(this.act_firma_prestador_acompanante.split(',')[1]);
-      const firmaUint8ArrayPrestador = new Uint8Array(firmaDataPrestadorAcompanante.length);
-      for (let i = 0; i < firmaDataPrestadorAcompanante.length; i++) {
-        firmaUint8ArrayPrestador[i] = firmaDataPrestadorAcompanante.charCodeAt(i);
-      }
-      doc.addImage(firmaUint8ArrayPrestador, 'PNG', 175, 72, 25, 9.25)
-    }
 
     //FIRMA FUNCIONARIO SSD
     // Convertir la firma usuario de base64 a Uint8Array
@@ -774,9 +957,16 @@ export class GenerarPdfActaIpsService {
       for (let i = 0; i < firmaDataFuncionario.length; i++) {
         firmaUint8ArrayFuncionario[i] = firmaDataFuncionario.charCodeAt(i);
       }
-      doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 175, 110, 25, 9.25)
+      doc.addImage(firmaUint8ArrayFuncionario, 'PNG', 177, posicionYFirmaFuncionario, 25, 9.25)
     }
   }
+
+  async getFileFromBase64(base64String: string) {
+    let img = new Image()
+    img.src = base64String
+    return img
+  }
+
 
   //GENERAR PDF ULTIMA ACTA CREADA
   async ActaPdf(id_acta: number): Promise<void> {
@@ -816,12 +1006,21 @@ export class GenerarPdfActaIpsService {
       this.act_fecha_oficio = this.actaPdf.act_fecha_oficio;
       this.act_fecha_envio_oficio = this.actaPdf.act_fecha_envio_oficio
 
+      //ASIGNAR LOS COMPROMISOS
+      this.act_compromiso_actividad = this.actaPdf.act_compromiso_actividad
+      this.act_compromiso_fecha = this.actaPdf.act_compromiso_fecha
+      this.act_compromiso_responsable = this.actaPdf.act_compromiso_responsable
+
       //ESTADO DEL ACTA
       this.act_estado = this.actaPdf.act_estado
+      //ESTADO FIRMA O NO EL ACTA
+      this.noFirmaActa = this.actaPdf.noFirmaActa
+
+      //ASIGNAR LA IMAGEN ENCONTRADA
+      this.act_captura_imagen = this.actaPdf.act_captura_imagen
 
       // Crear un nuevo documento PDF
       const doc = new jsPDF();
-
 
       // Agregar la primera página
       this.addHeader(doc);
@@ -834,12 +1033,6 @@ export class GenerarPdfActaIpsService {
       // Generar la informacion desarrollo de la reunion
       await this.generarDesarrolloOrden(doc, this.actaPdf)
 
-      //Agregar pagina necesario despues del desarrollo orden
-      doc.addPage();
-      this.addHeader(doc);
-      
-      //FIRMAS
-      await this.firmasActa(doc)
       // Agregar el pie de página en todas las páginas
       const totalPages = doc.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
@@ -849,6 +1042,7 @@ export class GenerarPdfActaIpsService {
           this.addMarcaAgua(doc)
         }
       }
+
 
       doc.save(this.act_cod_prestador + 'Sp_Ips')
     });

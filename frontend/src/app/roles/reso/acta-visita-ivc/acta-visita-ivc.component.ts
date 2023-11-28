@@ -149,6 +149,8 @@ export class ActaVisitaIvcComponent {
 
     if (ValorVisita === '6') {
       this.habilitar_motivo_visita = true
+    } else {
+      this.habilitar_motivo_visita = false
     }
   }
 

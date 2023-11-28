@@ -96,10 +96,6 @@ table.table td i {
     font-size: 19px;
 }
 
-table.table td  {
-    cursor: pointer;
-}
-
 table.table td span{
     font-size:30px;
 }

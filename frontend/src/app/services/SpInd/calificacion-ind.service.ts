@@ -12,8 +12,6 @@ export class CalificacionIndService {
 
   calificacionIndURL = environment.calificacionIndURL
 
-  evaluacionURL = environment.evaluacionSicUrl
-
   constructor(private httpClient: HttpClient) { }
 
   //REGISTRO CALIFICACION
@@ -26,21 +24,25 @@ export class CalificacionIndService {
     return this.httpClient.post<any>(this.calificacionIndURL, body);
   }
 
-    //LISTAR CALIFICACION POR ID_CRITERIO Y ID_EVALUACIÓN
-    getCriterioByEvaluacion(cri_id: number, eva_id: number): Observable<CalificacionIndDto>{
-      let url = `${this.calificacionIndURL}?cri_id=${cri_id}&eva_id=${eva_id}`;
+  //LISTAR CALIFICACION POR ID_CRITERIO Y ID_EVALUACIÓN
+  getCriterioByEvaluacion(cri_id: number, eva_id: number): Observable<CalificacionIndDto> {
+    let url = `${this.calificacionIndURL}?cri_id=${cri_id}&eva_id=${eva_id}`;
 
-      return this.httpClient.get<CalificacionIndDto>(url)
+    return this.httpClient.get<CalificacionIndDto>(url)
+  }
+
+  //LISTAR TODAS LAS CALIFICACIONES POR ID_EVALUACIÓN
+  getAllCalificacioneByEva(eva_id: number): Observable<CalificacionIndDto[]> {
+    return this.httpClient.get<CalificacionIndDto[]>(this.calificacionIndURL + 'lista/' + eva_id)
+  }
+
+
+  //SOLICITUD ACTUALIZAR CALIFICACION
+  public update(id: number, calificacionIndDto: CalificacionIndDto, tokenDto: TokenDto): Observable<any> {
+    const payloads = {
+      dto_calificacion: calificacionIndDto,
+      tokenDto: tokenDto
     }
-
-    //LISTAR TODAS LAS CALIFICACIONES POR ID_EVALUACIÓN
-    getAllCalificacioneByEva(eva_id: number): Observable<CalificacionIndDto[]>{
-      return this.httpClient.get<CalificacionIndDto[]>(this.calificacionIndURL + 'lista/' + eva_id)
-    }
-
-
-    //SOLICITUD ACTUALIZAR CALIFICACION
-    public update(id: number, calificacionInd: CalificacionIndDto): Observable<any> {
-      return this.httpClient.put<any>(`${this.calificacionIndURL}${id}`, calificacionInd);
-    }
+    return this.httpClient.put<any>(`${this.calificacionIndURL}${id}`, payloads);
+  }
 }

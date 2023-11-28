@@ -1,6 +1,9 @@
 import { Component, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ActaVerificacionDto } from 'src/app/models/Actas/actaVerificacion.dto';
+import { ActaVerificacionService } from 'src/app/services/Resolucion/acta-verificacion.service';
 import { SharedServiceService } from 'src/app/services/shared-service.service';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-informe-resolucion',
@@ -9,11 +12,13 @@ import { SharedServiceService } from 'src/app/services/shared-service.service';
 })
 export class InformeResolucionComponent {
 
-  informes: any[] = [];
+  actasVerificacion: ActaVerificacionDto[] = [];
 
   listaVacia: any = undefined;
 
   searchText: any;
+
+  tipo_visita: string
 
   public modalRef: BsModalRef;
 
@@ -24,6 +29,8 @@ export class InformeResolucionComponent {
   constructor(
     private modalService: BsModalService,
     public sharedService: SharedServiceService,
+    private actaVerificacionService: ActaVerificacionService,
+    private tokenService: TokenService,
   ) { }
 
   ngOnInit(): void {
@@ -32,6 +39,18 @@ export class InformeResolucionComponent {
   }
 
   cargarActas(): void {
+    const token = this.tokenService.getToken()
+    this.actaVerificacionService.listaActasVerificacion(token).subscribe(
+      data => {
+        this.actasVerificacion = data;
+        this.listaVacia = undefined;
+      },
+      err => {
+        this.listaVacia = err.error.message;
+      }
+    );
+    this.page = 1;
+    this.tipo_visita = 'Visita Verificación'
   }
 
 

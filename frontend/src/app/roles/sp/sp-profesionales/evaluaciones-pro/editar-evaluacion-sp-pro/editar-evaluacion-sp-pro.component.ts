@@ -72,13 +72,17 @@ export class EditarEvaluacionSpProComponent {
             this.nombre_prestador = criterio_id.cal_evaluacion_independientes.eval_acta_ind.act_prestador
           }
         }
-
       }
     )
 
     //INICIALIZAR LOS METODOS CORRESPONDIENTES
     this.inicializarMetodos();
   }
+
+  ngOnDestroy(){
+    localStorage.removeItem('boton-editar-acta-sp-ind');
+  }
+
 
   //PROTEGER LA RUTA AL SALIR DEL EDITAR
   async deshabilitarRutaEditar() {

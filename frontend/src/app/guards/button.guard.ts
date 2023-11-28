@@ -14,6 +14,7 @@ export class ButtonGuard implements CanActivate {
         const nombrePrestadorSic = localStorage.getItem('nombre-pres-sic')
         const nombrePrestadorIps = localStorage.getItem('nombre-pres-sp-ips')
         const nombrePrestadorPamec = localStorage.getItem('nombre-pres-pamec')
+        const nombrePrestadorVerificacion = localStorage.getItem('nombre-pres-verificacion')
         if (localStorage.getItem('boton-acta-sic') === 'true' && nombrePrestadorSic) {
             return true;
         }if (localStorage.getItem('boton-acta-sp-ips') === 'true' && nombrePrestadorIps) {
@@ -22,6 +23,9 @@ export class ButtonGuard implements CanActivate {
             return true;
         }
         if (localStorage.getItem('boton-acta-pamec') === 'true' && nombrePrestadorPamec) {
+            return true;
+        }
+        if (localStorage.getItem('boton-acta-verificacion') === 'true' && nombrePrestadorVerificacion) {
             return true;
         }
         if(localStorage.getItem('boton-editar-acta-sic') === 'true'){

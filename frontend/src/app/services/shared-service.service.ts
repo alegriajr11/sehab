@@ -7,6 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class SharedServiceService {
 
 
+  //ACTAS
   id_evaluacion_sic: number;
   id_evaluacion_sp_ind: number;
   id_evaluacion_sp_ips: number;
@@ -14,6 +15,7 @@ export class SharedServiceService {
   pre_cod_habilitacion: string;
 
   id_acta_sic: number
+  id_acta_ips: number
 
   /**CUMPLIMIENTO ROL SIC */
   crie_id: number
@@ -30,6 +32,7 @@ export class SharedServiceService {
 
   /**ID_CRITERIO - CALIFICACION ROL SP-IPS */
   cri_ips_id: number
+  nombre_etapa: string
   /**FIN ATRIBUTOS SP-IPS */
 
   //ARRAY CRITERIOS SIC
@@ -39,7 +42,10 @@ export class SharedServiceService {
   criteriosIndGuardados: any[] = [];
 
   //ARRAY CRITERIOS SP-IPS
-  criteriosIpsGuardados: any[] = [];
+  criteriosIpsAjusteGuardados: any[] = [];
+  criteriosIpsImplementacionGuardados: any[] = [];
+  criteriosIpsPlaneacionGuardados: any[] = [];
+  criteriosIpsVerificacionGuardados: any[] = [];
 
   //ARRAY CRITERIOS SP-IND
   criteriosPamecGuardados: any[] = [];
@@ -159,6 +165,10 @@ export class SharedServiceService {
     this.id_acta_sic = id
   }
 
+  setIdActaIps(id: number) {
+    this.id_acta_ips = id
+  }
+
   setIdCriterioSic(id: number) {
     this.crie_id = id;
   }
@@ -171,9 +181,17 @@ export class SharedServiceService {
     this.cri_pamec_id = id;
   }
 
+  setIdCriterioSpIps(id: number) {
+    this.cri_ips_id = id;
+  }
 
-  setIdEvaluacionSpIps(id: number) {
-    this.id_evaluacion_sp_ips = id;
+
+  setIdEvaluacionSpIps(id_eva: number) {
+    this.id_evaluacion_sp_ips = id_eva;
+  }
+
+  setNameEtapaSpIps(nombre_etapa: string) {
+    this.nombre_etapa = nombre_etapa;
   }
 
   setIdSpIndEvaluacion(id: number) {
