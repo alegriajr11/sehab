@@ -61,8 +61,11 @@ export class GenerarpdfService {
                 pageNumber++
                 let bottom = doc.page.margins.bottom;
 
-                doc.image(join(process.cwd(), "src/uploads/logoSecretaria.png"), doc.page.width - 160, 10, { fit: [120, 70], align: 'center' })
-                doc.image(join(process.cwd(), "src/uploads/logoGobernacion.png"), doc.page.width - 575, 1, { fit: [110, 50], align: 'center' })
+                const logo_secretaria = "src/uploads/encabezados/logoSecretaria.png"
+                const logo_gobernacion = "src/uploads/encabezados/logoGobernacion.png"
+
+                doc.image(join(process.cwd(), logo_secretaria), doc.page.width - 160, 10, { fit: [120, 70], align: 'center' })
+                doc.image(join(process.cwd(), logo_gobernacion), doc.page.width - 575, 1, { fit: [110, 50], align: 'center' })
                 doc.font("Helvetica-Bold").fontSize(5);
                 doc.text('NIT. 800.094.164-4', doc.page.width - 540, 50.5, { align: 'left' })
 

@@ -56,7 +56,6 @@ import { CriteriosGestionPretransController } from './resolucion/evaluacion/grup
 import { CriteriosGestionPretransModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/gestion_pretransfusional/criterios_gestion_pretrans/criterios_gestion_pretrans.module';
 import { CriteriosTomMuestrasController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_laboratorio_clinico/criterios_tom_muestras/criterios_tom_muestras.controller';
 import { CriteriosTomMuestrasModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_laboratorio_clinico/criterios_tom_muestras/criterios_tom_muestras.module';
-import { CriteriosLabClinicoService } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_clinico/criterios_lab_clinico/criterios_lab_clinico.service';
 import { CriteriosLabClinicoController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_clinico/criterios_lab_clinico/criterios_lab_clinico.controller';
 import { CriteriosLabClinicoModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_clinico/criterios_lab_clinico/criterios_lab_clinico.module';
 import { CriteriosMuesCuelloController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/toma_muestras_cuello_uterino/criterios_mues_cuello/criterios_mues_cuello.controller';
@@ -67,7 +66,6 @@ import { CriteriosLabHistotecnologiaController } from './resolucion/evaluacion/g
 import { CriteriosLabHistotecnologiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/laboratorio_histotecnologia/criterios_lab_histotecnologia/criterios_lab_histotecnologia.module';
 import { CriteriosPatologiaController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/patologia/criterios_patologia/criterios_patologia.controller';
 import { CriteriosPatologiaModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/patologia/criterios_patologia/criterios_patologia.module';
-import { CriteriosDialisisService } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.service';
 import { CriteriosDialisisController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.controller';
 import { CriteriosDialisisModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/criterios_dialisis/criterios_dialisis.module';
 import { CriteriosHospPacienteCronicoController } from './resolucion/evaluacion/grupo_internacion/hospitalizacion_paciente_cronico/criterios_hosp_paciente_cronico/criterios_hosp_paciente_cronico.controller';
@@ -121,7 +119,6 @@ import { CalificacionipsPlaneacionModule } from './sp/sp_ips/calificacion/califi
 import { CalificacionipsVerificacionModule } from './sp/sp_ips/calificacion/calificacionips_verificacion/calificacionips_verificacion.module';
 import { EvaluacionpamecModule } from './pamec/evaluacionpamec/evaluacionpamec.module';
 import { CumplimientoDiagVascularModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/cumplimiento_diag_vascular/cumplimiento_diag_vascular.module';
-import { CumplimientoDiagVascularController } from './resolucion/evaluacion/grupo_apoyo_diagnostico/diagnostico_vascular/cumplimiento_diag_vascular/cumplimiento_diag_vascular.controller';
 import { CumplimientoDialisisModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/dialisis/cumplimiento_dialisis/cumplimiento_dialisis.module';
 import { CumplimientoGestionPretransModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/gestion_pretransfusional/cumplimiento_gestion_pretrans/cumplimiento_gestion_pretrans.module';
 import { CumplimientoHemodIntervenModule } from './resolucion/evaluacion/grupo_apoyo_diagnostico/hemodinamia_intervencionismo/cumplimiento_hemod_interven/cumplimiento_hemod_interven.module';
@@ -160,7 +157,10 @@ import { CumplimientoHospSaludMentalModule } from './resolucion/evaluacion/grupo
 import { CumplimientoCirugiaModule } from './resolucion/evaluacion/grupo_quirurgico/cirugia/cumplimiento_cirugia/cumplimiento_cirugia.module';
 import { CumplimientoTodosServiciosModule } from './resolucion/evaluacion/todos_servicios/cumplimiento_todos_servicios/cumplimiento_todos_servicios.module';
 import { RequisitosCondicionesHabilitacionModule } from './resolucion/requisitos_condiciones_habilitacion/requisitos_condiciones_habilitacion.module';
-
+import { ControlarImagenesModule } from './controlar_imagenes/controlar_imagenes.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path'; // Importa join desde el módulo path
+import { BackupBdModule } from './backup_bd/backup_bd.module';
 
 
 @Module({
@@ -168,6 +168,10 @@ import { RequisitosCondicionesHabilitacionModule } from './resolucion/requisitos
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      serveRoot: '/uploads',
+      rootPath: join(__dirname, '..', 'uploads'), // Asegúrate de que la ruta sea correcta
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -296,6 +300,8 @@ import { RequisitosCondicionesHabilitacionModule } from './resolucion/requisitos
     CumplimientoCirugiaModule,
     CumplimientoTodosServiciosModule,
     RequisitosCondicionesHabilitacionModule,
+    ControlarImagenesModule,
+    BackupBdModule,
     
 
 

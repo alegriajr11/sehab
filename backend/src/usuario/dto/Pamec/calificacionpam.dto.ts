@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsNumber, IsString, MaxLength, MinLength } from "class-validator";
-import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
-import { Column } from "typeorm";
+
 
 
 export class CalificacionPamDto {

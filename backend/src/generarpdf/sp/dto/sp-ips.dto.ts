@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import { IsString } from "class-validator";
+import { IsString, MaxLength } from "class-validator";
 import { IsNotBlank } from "src/decorators/is-not-blank.decorator";
 import { Column } from "typeorm";
 
@@ -89,7 +89,8 @@ export class IpsDto {
 
     //ATRIBUTOS COMPROMISOS
     @IsString()
-    act_compromiso_actividad: string
+    @MaxLength(255, { message: 'La longitud de Actividad Compromiso no puede superar los 255 caracteres' })
+    act_compromiso_actividad: string;
     @IsString()
     act_compromiso_fecha: string
     @IsString()

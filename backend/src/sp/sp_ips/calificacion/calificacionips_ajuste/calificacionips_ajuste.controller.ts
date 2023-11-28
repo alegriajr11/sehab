@@ -22,7 +22,7 @@ export class CalificacionipsAjusteController {
     }
 
     //SOLICITAR LAS CALIFICACIONES QUE LE PERTENECEN AL ACTA 
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Get('/calificaciones/evaluacion/acta')
     async getCalificaciones(
         @Query('evips_id') evips_id: number,
@@ -55,9 +55,15 @@ export class CalificacionipsAjusteController {
     async create(
         @Body() payload: { dto_calificacion: CalificacionAjusteDto, tokenDto: TokenDto }) {
         const { dto_calificacion, tokenDto } = payload;
-        console.log(payload)
         return await this.calificacionipsAjusteService.create(payload);
     }
 
+    @Get('/prueba/de/prueba/de/prueba')
+    async getPruebaDePruebaDePrueba(
+        @Query('evips_id') evips_id: number,
+        @Query('id_acta') id_acta: number
+    ) {
+        return await this.calificacionipsAjusteService.getallCalCrixEva(evips_id, id_acta)
+    }
 
 }

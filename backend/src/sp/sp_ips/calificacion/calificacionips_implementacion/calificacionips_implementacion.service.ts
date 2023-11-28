@@ -201,8 +201,8 @@ export class CalificacionipsImplementacionService {
             .innerJoinAndSelect('calificacion.calificacionipsImpl', 'calificacionipsImpl')
             .innerJoinAndSelect('calificacionipsImpl.cri_imp_eva', 'cri_imp_eva')
             .innerJoinAndSelect('cri_imp_eva.actas_ips', 'actas_ips')
-            .where('actas_ips.id = :id_acta', { id_acta: act_id })
-            .andWhere('calificacion.cal_evaluacion = :id_eva', { id_eva: evips_id })
+            .where('calificacion.acta_ips = :id_acta', { id_acta: act_id })
+            .andWhere('calificacion.eva_ips_id = :id_eva', { id_eva: evips_id })
             .getMany()
 
         return criterio

@@ -471,7 +471,7 @@ export class SicActaService {
                 pageNumber++;
                 let bottom = doc.page.margins.bottom;
 
-                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                doc.image(join(process.cwd(), "src/uploads/encabezados/EncabezadoEvaluacionSic.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
                 doc.moveDown()
 
                 doc.page.margins.top = 115;

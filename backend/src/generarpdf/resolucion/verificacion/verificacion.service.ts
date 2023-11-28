@@ -305,9 +305,10 @@ export class VerificacionService {
 			return { error: false, message: 'El acta ha sido creada' };
 
 		} catch (error) {
-			// Devuelve un mensaje de error apropiado
-			console.log(error)
 			return { error: true, message: 'Error al crear el acta. Por favor, inténtelo de nuevo.' };
 		}
 	}
+
+
+	
 }

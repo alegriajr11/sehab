@@ -108,7 +108,7 @@ export class CalificacionipsVerificacionService {
             const acta_idIps = dto_calificacion.acta_ips
 
             await this.calificacionIpsVerificacionRepository.save(calificacion)
-            
+
             await this.auditoria_registro_services.logCreateCalificacionSpIps(
                 payloadInterface.usu_nombre,
                 payloadInterface.usu_apellido,
@@ -204,8 +204,8 @@ export class CalificacionipsVerificacionService {
             .innerJoinAndSelect('calificacion.calificacionipsVerif', 'calificacionipsVerif')
             .innerJoinAndSelect('calificacionipsVerif.cri_ver_eva', 'cri_ver_eva')
             .innerJoinAndSelect('cri_ver_eva.actas_ips', 'actas_ips')
-            .where('actas_ips.id = :id_acta', { id_acta: act_id })
-            .andWhere('calificacion.cal_evaluacion = :id_eva', { id_eva: evips_id })
+            .where('calificacion.acta_ips = :id_acta', { id_acta: act_id })
+            .andWhere('calificacion.eva_ips_id = :id_eva', { id_eva: evips_id })
             .getMany()
 
         return criterio

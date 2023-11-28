@@ -40,6 +40,8 @@ export class CriterioServiciosService {
         const cri_serv = await this.criterioServiciosRepository.createQueryBuilder('criterio')
             .select(['criterio', 'todos_servicios.tod_nombre_estandar'])
             .innerJoin('criterio.todos_servicios', 'todos_servicios')
+            .innerJoinAndSelect('criterio.todos_servi_seccion', 'todos_servi_seccion')
+            .innerJoinAndSelect('criterio.todos_servi_aparto', 'todos_servi_aparto')
             .where('todos_servicios.tod_id = :tod_ser_est', { tod_ser_est: id })
             .getMany()
         if (!cri_serv) throw new NotFoundException(new MessageDto('No Existe en la lista'))
@@ -50,6 +52,8 @@ export class CriterioServiciosService {
     async getall(): Promise<Criterio_servicios[]> {
         const criterio = await this.criterioServiciosRepository.createQueryBuilder('criterios')
             .select(['criterios'])
+            .innerJoinAndSelect('criterios.todos_servi_seccion', 'todos_servi_seccion')
+            .innerJoinAndSelect('criterios.todos_servi_aparto', 'todos_servi_aparto')
             .getMany()
         if (criterio.length === 0) throw new NotFoundException(new MessageDto('No hay criterios  en la lista'))
         return criterio;

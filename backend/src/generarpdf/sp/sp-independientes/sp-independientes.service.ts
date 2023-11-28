@@ -478,7 +478,7 @@ export class SpIndependientesService {
                 })
 
 
-                doc.image(join(process.cwd(), "src/uploads/EncabezadoEvaluacionSPInd.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
+                doc.image(join(process.cwd(), "src/uploads/encabezados/EncabezadoEvaluacionSPInd.png"), doc.page.width - 550, 20, { fit: [500, 500], align: 'center' })
                 doc.moveDown()
 
                 doc.page.margins.top = 115;

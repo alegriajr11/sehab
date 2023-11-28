@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query, Res, UploadedFile, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { SpIpsService } from './sp-ips.service';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { IpsDto } from 'src/generarpdf/sp/dto/sp-ips.dto';
 import { TokenDto } from 'src/auth/dto/token.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('sp-ips')
 export class SpIpsController {
@@ -23,7 +26,7 @@ export class SpIpsController {
     }
 
     //Obtener ultima acta
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @Get('ultima/acta/spips')
     getLastActa() {
         return this.sp_IpsService.getLastestActa();
@@ -39,14 +42,30 @@ export class SpIpsController {
         return this.sp_IpsService.findAllBusqueda(year, act_id, act_prestador, act_nit, tokenDto);
     }
 
-
-
     //CREAR ACTA SPIPS
-    @Post()
+    @Post('crear')
     async create(@Body() payloads: { dto: IpsDto, evaluacionesIds: number[], tokenDto: TokenDto }) {
         const { dto, evaluacionesIds, tokenDto } = payloads;
         return this.sp_IpsService.create(payloads);
     }
+
+    // Cargar Imagen
+    @Post('cargar-imagen')
+    @UseInterceptors(FileInterceptor('file'))
+    async cargarImagen(@UploadedFile() file: Express.Multer.File, @Body('actaId') actaId: string) {
+        if (!file) {
+            return { error: true, message: 'No se ha cargado ningún archivo.' };
+        }
+        try {
+            return this.sp_IpsService.cargarImagenActa(file, actaId);
+        } catch (error) {
+            return { error: true, message: 'Error al cargar la imagen. Por favor, inténtelo de nuevo.' };
+        }
+    }
+
+
+
+
 
     //ACTUALIZAR SP IPS ACTA PDF
     @UseGuards(JwtAuthGuard)
