@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --port 4200",
+    "start": "node server.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "heroku-postbuild": "ng build --configuration=production --project frontend",
+    "heroku-postbuild": "ng build --prod",
     "compodoc": "npx compodoc -p tsconfig.doc.json"
   },
   "private": true,

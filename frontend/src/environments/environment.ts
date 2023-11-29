@@ -41,6 +41,7 @@ export const environment = {
   actividadURL: 'http://localhost:8080/actividad/',
   criteriopamURL: 'http://localhost:8080/criteriopam/',
   criteriopam1URL: 'http://localhost:8080/criteriopam/criterio/',
+  calificacionPamecURL: 'http://localhost:8080/calificacionpamec/',
 
   //PAMEC-PDF
   actaPamec_pdf_url: 'http://localhost:8080/pamec-acta/',
